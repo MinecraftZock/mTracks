@@ -8,60 +8,81 @@ import info.mx.comlib.retrofit.service.model.SerieR
 import info.mx.comlib.retrofit.service.model.TrackBody
 import info.mx.comlib.retrofit.service.model.TrackR
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ITrackService {
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/tracks/changed/{from}")
     fun getTracksFrom(
-            @Path(value = "from") from: Long,
-            @Header("Authorization") authorization: String): Call<List<TrackR>>
+        @Path(value = "from") from: Long,
+        @Header("Authorization") authorization: String
+    ): Call<List<TrackR>>
 
     @Headers("Accept: application/json")
     @POST("/backend/MXServer/rest/tracks/change")
     fun getTracks(
         @Body body: TrackBody,
-        @Header("Authorization") authorization: String): Call<List<TrackR>>
+        @Header("Authorization") authorization: String
+    ): Call<List<TrackR>>
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/series/changed/{from}")
     fun getSeries(
-            @Path(value = "from") from: Long,
-            @Header("Authorization") authorization: String): Call<List<SerieR>>
+        @Path(value = "from") from: Long,
+        @Header("Authorization") authorization: String
+    ): Call<List<SerieR>>
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/pictures/changed/{from}")
     fun getPictures(
-            @Path(value = "from") from: Long,
-            @Header("Authorization") authorization: String): Call<List<PictureR>>
+        @Path(value = "from") from: Long,
+        @Header("Authorization") authorization: String
+    ): Call<List<PictureR>>
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/ratings/changed/{from}")
     fun getRatings(
-            @Path(value = "from") from: Long,
-            @Header("Authorization") authorization: String): Call<List<RatingR>>
+        @Path(value = "from") from: Long,
+        @Header("Authorization") authorization: String
+    ): Call<List<RatingR>>
+
+    @Headers("Accept: application/json")
+    @GET("/backend/MXServer/rest/ratings/track/{trackId}")
+    fun getRatingsForTrack(
+        @Path(value = "trackId") trackId: Long,
+        @Header("Authorization") authorization: String
+    ): Single<List<RatingR>>
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/weather/forTrack/{trackid}/{unit}/{lang}")
-    fun getWeather4Track(
-            @Path(value = "trackid") trackid: Long,
-            @Path(value = "unit") unit: String,
-            @Path(value = "lang") lang: String,
-            @Header("Authorization") authorization: String): Call<String>
+    fun getWeather4TrackSync(
+        @Path(value = "trackid") trackid: Long,
+        @Path(value = "unit") unit: String,
+        @Path(value = "lang") lang: String,
+        @Header("Authorization") authorization: String
+    ): Call<String>
 
     @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/tracks/changed/{from}")
     fun getTracksFromAsync(
-            @Path(value = "from") from: Long,
-            @Header("Authorization") authorization: String): Observable<List<TrackR>>
+        @Path(value = "from") from: Long,
+        @Header("Authorization") authorization: String
+    ): Observable<List<TrackR>>
 
     // TODO move to admin
     @POST("/backend/MXServer/rest/tracks/approved")
     @Headers("Accept: application/json")
     fun approveTrack(
-            @Body approve: Approved,
-            @Header("Authorization") authorization: String): Call<ApproveResponse>
+        @Body approve: Approved,
+        @Header("Authorization") authorization: String
+    ): Call<ApproveResponse>
 
 }

@@ -5,21 +5,23 @@ package info.mx.core_generated.sqlite;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.net.Uri;
-import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges;
-import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges.Builder;
-import com.robotoworks.mechanoid.util.Closeables;
-import com.robotoworks.mechanoid.db.ActiveRecord;
-import com.robotoworks.mechanoid.db.ActiveRecordFactory;
+
 import com.robotoworks.mechanoid.Mechanoid;
 import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
+import com.robotoworks.mechanoid.db.ActiveRecord;
+import com.robotoworks.mechanoid.db.ActiveRecordFactory;
+import com.robotoworks.mechanoid.util.Closeables;
+
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges.Builder;
 
 public class TracksgesRecord extends ActiveRecord implements Parcelable {
 
-	private static final ActiveRecordFactory<TracksgesRecord> sFactory = new ActiveRecordFactory<>() {
+    private static final ActiveRecordFactory<TracksgesRecord> sFactory = new ActiveRecordFactory<>() {
         @Override
         public TracksgesRecord create(Cursor c) {
             return fromCursor(c);
@@ -36,12 +38,12 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
         }
     };
 
-    			public static ActiveRecordFactory<TracksgesRecord> getFactory() {
-		return sFactory;
-	}
+    public static ActiveRecordFactory<TracksgesRecord> getFactory() {
+        return sFactory;
+    }
 
     public static final Creator<TracksgesRecord> CREATOR
-    	= new Creator<>() {
+            = new Creator<>() {
         public TracksgesRecord createFromParcel(Parcel in) {
             return new TracksgesRecord(in);
         }
@@ -50,129 +52,131 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
             return new TracksgesRecord[size];
         }
     };
-    
+
     public static String[] PROJECTION = {
-    	Tracksges.TRACKNAME,
-    	Tracksges.APPROVED,
-    	Tracksges.DISTANCE2LOCATION,
-    	Tracksges.OPENMONDAYS,
-    	Tracksges.OPENTUESDAYS,
-    	Tracksges.N_U_EVENTS,
-    	Tracksges.OPENWEDNESDAY,
-    	Tracksges.OPENTHURSDAY,
-    	Tracksges.OPENFRIDAY,
-    	Tracksges.OPENSATURDAY,
-    	Tracksges.OPENSUNDAY,
-    	Tracksges.COUNTRY,
-    	Tracksges.TRACKACCESS,
-    	Tracksges.REST_ID,
-    	Tracksges._ID,
-    	Tracksges.BRANDS,
-    	Tracksges.METATEXT,
-    	Tracksges.KIDSTRACK,
-    	Tracksges.SUPERCROSS,
-    	Tracksges.SHOWER,
-    	Tracksges.CLEANING,
-    	Tracksges.ELECTRICITY,
-    	Tracksges.CAMPING,
-    	Tracksges.LATITUDE,
-    	Tracksges.LONGITUDE,
-    	Tracksges.HOURSMONDAY,
-    	Tracksges.HOURSTUESDAY,
-    	Tracksges.HOURSWEDNESDAY,
-    	Tracksges.HOURSTHURSDAY,
-    	Tracksges.HOURSFRIDAY,
-    	Tracksges.HOURSSATURDAY,
-    	Tracksges.HOURSSUNDAY,
-    	Tracksges.VALIDUNTIL,
-    	Tracksges.URL,
-    	Tracksges.PHONE,
-    	Tracksges.CONTACT,
-    	Tracksges.NOTES,
-    	Tracksges.TRACKLENGTH,
-    	Tracksges.SOILTYPE,
-    	Tracksges.FACEBOOK,
-    	Tracksges.ADRESS,
-    	Tracksges.LICENCE,
-    	Tracksges.FEES,
-    	Tracksges.FEESCAMPING,
-    	Tracksges.DAYSOPEN,
-    	Tracksges.NOISELIMIT,
-    	Tracksges.CAMPINGRVRVHOOKUP,
-    	Tracksges.SINGLETRACKS,
-    	Tracksges.MXTRACK,
-    	Tracksges.A4X4,
-    	Tracksges.ENDRUO,
-    	Tracksges.UTV,
-    	Tracksges.QUAD,
-    	Tracksges.TRACKSTATUS,
-    	Tracksges.AREATYPE,
-    	Tracksges.SCHWIERIGKEIT,
-    	Tracksges.INDOOR,
-    	Tracksges.RATING
+            Tracksges.TRACKNAME,
+            Tracksges.APPROVED,
+            Tracksges.DISTANCE2LOCATION,
+            Tracksges.OPENMONDAYS,
+            Tracksges.OPENTUESDAYS,
+            Tracksges.N_U_EVENTS,
+            Tracksges.OPENWEDNESDAY,
+            Tracksges.OPENTHURSDAY,
+            Tracksges.OPENFRIDAY,
+            Tracksges.OPENSATURDAY,
+            Tracksges.OPENSUNDAY,
+            Tracksges.COUNTRY,
+            Tracksges.TRACKACCESS,
+            Tracksges.REST_ID,
+            Tracksges._ID,
+            Tracksges.BRANDS,
+            Tracksges.METATEXT,
+            Tracksges.KIDSTRACK,
+            Tracksges.SUPERCROSS,
+            Tracksges.SHOWER,
+            Tracksges.CLEANING,
+            Tracksges.ELECTRICITY,
+            Tracksges.CAMPING,
+            Tracksges.LATITUDE,
+            Tracksges.LONGITUDE,
+            Tracksges.HOURSMONDAY,
+            Tracksges.HOURSTUESDAY,
+            Tracksges.HOURSWEDNESDAY,
+            Tracksges.HOURSTHURSDAY,
+            Tracksges.HOURSFRIDAY,
+            Tracksges.HOURSSATURDAY,
+            Tracksges.HOURSSUNDAY,
+            Tracksges.VALIDUNTIL,
+            Tracksges.URL,
+            Tracksges.PHONE,
+            Tracksges.CONTACT,
+            Tracksges.NOTES,
+            Tracksges.TRACKLENGTH,
+            Tracksges.SOILTYPE,
+            Tracksges.FACEBOOK,
+            Tracksges.ADRESS,
+            Tracksges.LICENCE,
+            Tracksges.FEES,
+            Tracksges.FEESCAMPING,
+            Tracksges.DAYSOPEN,
+            Tracksges.NOISELIMIT,
+            Tracksges.CAMPINGRVRVHOOKUP,
+            Tracksges.SINGLETRACKS,
+            Tracksges.MXTRACK,
+            Tracksges.A4X4,
+            Tracksges.ENDRUO,
+            Tracksges.UTV,
+            Tracksges.QUAD,
+            Tracksges.TRACKSTATUS,
+            Tracksges.AREATYPE,
+            Tracksges.SCHWIERIGKEIT,
+            Tracksges.INDOOR,
+            Tracksges.RATING
     };
-    
+
     public interface Indices {
-    	int TRACKNAME = 0;
-    	int APPROVED = 1;
-    	int DISTANCE2LOCATION = 2;
-    	int OPENMONDAYS = 3;
-    	int OPENTUESDAYS = 4;
-    	int N_U_EVENTS = 5;
-    	int OPENWEDNESDAY = 6;
-    	int OPENTHURSDAY = 7;
-    	int OPENFRIDAY = 8;
-    	int OPENSATURDAY = 9;
-    	int OPENSUNDAY = 10;
-    	int COUNTRY = 11;
-    	int TRACKACCESS = 12;
-    	int REST_ID = 13;
-    	int _ID = 14;
-    	int BRANDS = 15;
-    	int METATEXT = 16;
-    	int KIDSTRACK = 17;
-    	int SUPERCROSS = 18;
-    	int SHOWER = 19;
-    	int CLEANING = 20;
-    	int ELECTRICITY = 21;
-    	int CAMPING = 22;
-    	int LATITUDE = 23;
-    	int LONGITUDE = 24;
-    	int HOURSMONDAY = 25;
-    	int HOURSTUESDAY = 26;
-    	int HOURSWEDNESDAY = 27;
-    	int HOURSTHURSDAY = 28;
-    	int HOURSFRIDAY = 29;
-    	int HOURSSATURDAY = 30;
-    	int HOURSSUNDAY = 31;
-    	int VALIDUNTIL = 32;
-    	int URL = 33;
-    	int PHONE = 34;
-    	int CONTACT = 35;
-    	int NOTES = 36;
-    	int TRACKLENGTH = 37;
-    	int SOILTYPE = 38;
-    	int FACEBOOK = 39;
-    	int ADRESS = 40;
-    	int LICENCE = 41;
-    	int FEES = 42;
-    	int FEESCAMPING = 43;
-    	int DAYSOPEN = 44;
-    	int NOISELIMIT = 45;
-    	int CAMPINGRVRVHOOKUP = 46;
-    	int SINGLETRACKS = 47;
-    	int MXTRACK = 48;
-    	int A4X4 = 49;
-    	int ENDRUO = 50;
-    	int UTV = 51;
-    	int QUAD = 52;
-    	int TRACKSTATUS = 53;
-    	int AREATYPE = 54;
-    	int SCHWIERIGKEIT = 55;
-    	int INDOOR = 56;
-    	int RATING = 57;
+        int TRACKNAME = 0;
+        int APPROVED = 1;
+        int DISTANCE2LOCATION = 2;
+        int OPENMONDAYS = 3;
+        int OPENTUESDAYS = 4;
+        int N_U_EVENTS = 5;
+        int OPENWEDNESDAY = 6;
+        int OPENTHURSDAY = 7;
+        int OPENFRIDAY = 8;
+        int OPENSATURDAY = 9;
+        int OPENSUNDAY = 10;
+        int COUNTRY = 11;
+        int TRACKACCESS = 12;
+        int REST_ID = 13;
+        int _ID = 14;
+        int BRANDS = 15;
+        int METATEXT = 16;
+        int KIDSTRACK = 17;
+        int SUPERCROSS = 18;
+        int SHOWER = 19;
+        int CLEANING = 20;
+        int ELECTRICITY = 21;
+        int CAMPING = 22;
+        int LATITUDE = 23;
+        int LONGITUDE = 24;
+        int HOURSMONDAY = 25;
+        int HOURSTUESDAY = 26;
+        int HOURSWEDNESDAY = 27;
+        int HOURSTHURSDAY = 28;
+        int HOURSFRIDAY = 29;
+        int HOURSSATURDAY = 30;
+        int HOURSSUNDAY = 31;
+        int VALIDUNTIL = 32;
+        int URL = 33;
+        int PHONE = 34;
+        int CONTACT = 35;
+        int NOTES = 36;
+        int TRACKLENGTH = 37;
+        int SOILTYPE = 38;
+        int FACEBOOK = 39;
+        int ADRESS = 40;
+        int LICENCE = 41;
+        int FEES = 42;
+        int FEESCAMPING = 43;
+        int DAYSOPEN = 44;
+        int NOISELIMIT = 45;
+        int CAMPINGRVRVHOOKUP = 46;
+        int SINGLETRACKS = 47;
+        int MXTRACK = 48;
+        int A4X4 = 49;
+        int ENDRUO = 50;
+        int UTV = 51;
+        int QUAD = 52;
+        int TRACKSTATUS = 53;
+        int AREATYPE = 54;
+        int SCHWIERIGKEIT = 55;
+        int INDOOR = 56;
+        int PICTURECOUNT = 57;
+        int EVENTCOUNT = 58;
+        int RATING = 57;
     }
-    
+
     private String mTrackname;
     private boolean mTracknameDirty;
     private long mApproved;
@@ -285,1063 +289,1152 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
     private boolean mSchwierigkeitDirty;
     private long mIndoor;
     private boolean mIndoorDirty;
+    private String mPicturecount;
+    private boolean mPicturecountDirty;
+    private String mEventcount;
+    private boolean mEventcountDirty;
     private String mRating;
     private boolean mRatingDirty;
-    
+
     @Override
     protected String[] _getProjection() {
-    	return PROJECTION;
+        return PROJECTION;
     }
-    
+
     public void setTrackname(String trackname) {
-    	mTrackname = trackname;
-    	mTracknameDirty = true;
+        mTrackname = trackname;
+        mTracknameDirty = true;
     }
-    
+
     public String getTrackname() {
-    	return mTrackname;
+        return mTrackname;
     }
+
     public void setApproved(long approved) {
-    	mApproved = approved;
-    	mApprovedDirty = true;
+        mApproved = approved;
+        mApprovedDirty = true;
     }
-    
+
     public long getApproved() {
-    	return mApproved;
+        return mApproved;
     }
+
     public void setDistance2location(long distance2location) {
-    	mDistance2location = distance2location;
-    	mDistance2locationDirty = true;
+        mDistance2location = distance2location;
+        mDistance2locationDirty = true;
     }
-    
+
     public long getDistance2location() {
-    	return mDistance2location;
+        return mDistance2location;
     }
+
     public void setOpenmondays(long openmondays) {
-    	mOpenmondays = openmondays;
-    	mOpenmondaysDirty = true;
+        mOpenmondays = openmondays;
+        mOpenmondaysDirty = true;
     }
-    
+
     public long getOpenmondays() {
-    	return mOpenmondays;
+        return mOpenmondays;
     }
+
     public void setOpentuesdays(long opentuesdays) {
-    	mOpentuesdays = opentuesdays;
-    	mOpentuesdaysDirty = true;
+        mOpentuesdays = opentuesdays;
+        mOpentuesdaysDirty = true;
     }
-    
+
     public long getOpentuesdays() {
-    	return mOpentuesdays;
+        return mOpentuesdays;
     }
+
     public void setNUEvents(String nUEvents) {
-    	mNUEvents = nUEvents;
-    	mNUEventsDirty = true;
+        mNUEvents = nUEvents;
+        mNUEventsDirty = true;
     }
-    
+
     public String getNUEvents() {
-    	return mNUEvents;
+        return mNUEvents;
     }
+
     public void setOpenwednesday(long openwednesday) {
-    	mOpenwednesday = openwednesday;
-    	mOpenwednesdayDirty = true;
+        mOpenwednesday = openwednesday;
+        mOpenwednesdayDirty = true;
     }
-    
+
     public long getOpenwednesday() {
-    	return mOpenwednesday;
+        return mOpenwednesday;
     }
+
     public void setOpenthursday(long openthursday) {
-    	mOpenthursday = openthursday;
-    	mOpenthursdayDirty = true;
+        mOpenthursday = openthursday;
+        mOpenthursdayDirty = true;
     }
-    
+
     public long getOpenthursday() {
-    	return mOpenthursday;
+        return mOpenthursday;
     }
+
     public void setOpenfriday(long openfriday) {
-    	mOpenfriday = openfriday;
-    	mOpenfridayDirty = true;
+        mOpenfriday = openfriday;
+        mOpenfridayDirty = true;
     }
-    
+
     public long getOpenfriday() {
-    	return mOpenfriday;
+        return mOpenfriday;
     }
+
     public void setOpensaturday(long opensaturday) {
-    	mOpensaturday = opensaturday;
-    	mOpensaturdayDirty = true;
+        mOpensaturday = opensaturday;
+        mOpensaturdayDirty = true;
     }
-    
+
     public long getOpensaturday() {
-    	return mOpensaturday;
+        return mOpensaturday;
     }
+
     public void setOpensunday(long opensunday) {
-    	mOpensunday = opensunday;
-    	mOpensundayDirty = true;
+        mOpensunday = opensunday;
+        mOpensundayDirty = true;
     }
-    
+
     public long getOpensunday() {
-    	return mOpensunday;
+        return mOpensunday;
     }
+
     public void setCountry(String country) {
-    	mCountry = country;
-    	mCountryDirty = true;
+        mCountry = country;
+        mCountryDirty = true;
     }
-    
+
     public String getCountry() {
-    	return mCountry;
+        return mCountry;
     }
+
     public void setTrackaccess(String trackaccess) {
-    	mTrackaccess = trackaccess;
-    	mTrackaccessDirty = true;
+        mTrackaccess = trackaccess;
+        mTrackaccessDirty = true;
     }
-    
+
     public String getTrackaccess() {
-    	return mTrackaccess;
+        return mTrackaccess;
     }
+
     public void setRestId(long restId) {
-    	mRestId = restId;
-    	mRestIdDirty = true;
+        mRestId = restId;
+        mRestIdDirty = true;
     }
-    
+
     public long getRestId() {
-    	return mRestId;
+        return mRestId;
     }
+
     public void setBrands(String brands) {
-    	mBrands = brands;
-    	mBrandsDirty = true;
+        mBrands = brands;
+        mBrandsDirty = true;
     }
-    
+
     public String getBrands() {
-    	return mBrands;
+        return mBrands;
     }
+
     public void setMetatext(String metatext) {
-    	mMetatext = metatext;
-    	mMetatextDirty = true;
+        mMetatext = metatext;
+        mMetatextDirty = true;
     }
-    
+
     public String getMetatext() {
-    	return mMetatext;
+        return mMetatext;
     }
+
     public void setKidstrack(long kidstrack) {
-    	mKidstrack = kidstrack;
-    	mKidstrackDirty = true;
+        mKidstrack = kidstrack;
+        mKidstrackDirty = true;
     }
-    
+
     public long getKidstrack() {
-    	return mKidstrack;
+        return mKidstrack;
     }
+
     public void setSupercross(long supercross) {
-    	mSupercross = supercross;
-    	mSupercrossDirty = true;
+        mSupercross = supercross;
+        mSupercrossDirty = true;
     }
-    
+
     public long getSupercross() {
-    	return mSupercross;
+        return mSupercross;
     }
+
     public void setShower(long shower) {
-    	mShower = shower;
-    	mShowerDirty = true;
+        mShower = shower;
+        mShowerDirty = true;
     }
-    
+
     public long getShower() {
-    	return mShower;
+        return mShower;
     }
+
     public void setCleaning(long cleaning) {
-    	mCleaning = cleaning;
-    	mCleaningDirty = true;
+        mCleaning = cleaning;
+        mCleaningDirty = true;
     }
-    
+
     public long getCleaning() {
-    	return mCleaning;
+        return mCleaning;
     }
+
     public void setElectricity(long electricity) {
-    	mElectricity = electricity;
-    	mElectricityDirty = true;
+        mElectricity = electricity;
+        mElectricityDirty = true;
     }
-    
+
     public long getElectricity() {
-    	return mElectricity;
+        return mElectricity;
     }
+
     public void setCamping(long camping) {
-    	mCamping = camping;
-    	mCampingDirty = true;
+        mCamping = camping;
+        mCampingDirty = true;
     }
-    
+
     public long getCamping() {
-    	return mCamping;
+        return mCamping;
     }
+
     public void setLatitude(double latitude) {
-    	mLatitude = latitude;
-    	mLatitudeDirty = true;
+        mLatitude = latitude;
+        mLatitudeDirty = true;
     }
-    
+
     public double getLatitude() {
-    	return mLatitude;
+        return mLatitude;
     }
+
     public void setLongitude(double longitude) {
-    	mLongitude = longitude;
-    	mLongitudeDirty = true;
+        mLongitude = longitude;
+        mLongitudeDirty = true;
     }
-    
+
     public double getLongitude() {
-    	return mLongitude;
+        return mLongitude;
     }
+
     public void setHoursmonday(String hoursmonday) {
-    	mHoursmonday = hoursmonday;
-    	mHoursmondayDirty = true;
+        mHoursmonday = hoursmonday;
+        mHoursmondayDirty = true;
     }
-    
+
     public String getHoursmonday() {
-    	return mHoursmonday;
+        return mHoursmonday;
     }
+
     public void setHourstuesday(String hourstuesday) {
-    	mHourstuesday = hourstuesday;
-    	mHourstuesdayDirty = true;
+        mHourstuesday = hourstuesday;
+        mHourstuesdayDirty = true;
     }
-    
+
     public String getHourstuesday() {
-    	return mHourstuesday;
+        return mHourstuesday;
     }
+
     public void setHourswednesday(String hourswednesday) {
-    	mHourswednesday = hourswednesday;
-    	mHourswednesdayDirty = true;
+        mHourswednesday = hourswednesday;
+        mHourswednesdayDirty = true;
     }
-    
+
     public String getHourswednesday() {
-    	return mHourswednesday;
+        return mHourswednesday;
     }
+
     public void setHoursthursday(String hoursthursday) {
-    	mHoursthursday = hoursthursday;
-    	mHoursthursdayDirty = true;
+        mHoursthursday = hoursthursday;
+        mHoursthursdayDirty = true;
     }
-    
+
     public String getHoursthursday() {
-    	return mHoursthursday;
+        return mHoursthursday;
     }
+
     public void setHoursfriday(String hoursfriday) {
-    	mHoursfriday = hoursfriday;
-    	mHoursfridayDirty = true;
+        mHoursfriday = hoursfriday;
+        mHoursfridayDirty = true;
     }
-    
+
     public String getHoursfriday() {
-    	return mHoursfriday;
+        return mHoursfriday;
     }
+
     public void setHourssaturday(String hourssaturday) {
-    	mHourssaturday = hourssaturday;
-    	mHourssaturdayDirty = true;
+        mHourssaturday = hourssaturday;
+        mHourssaturdayDirty = true;
     }
-    
+
     public String getHourssaturday() {
-    	return mHourssaturday;
+        return mHourssaturday;
     }
+
     public void setHourssunday(String hourssunday) {
-    	mHourssunday = hourssunday;
-    	mHourssundayDirty = true;
+        mHourssunday = hourssunday;
+        mHourssundayDirty = true;
     }
-    
+
     public String getHourssunday() {
-    	return mHourssunday;
+        return mHourssunday;
     }
+
     public void setValiduntil(long validuntil) {
-    	mValiduntil = validuntil;
-    	mValiduntilDirty = true;
+        mValiduntil = validuntil;
+        mValiduntilDirty = true;
     }
-    
+
     public long getValiduntil() {
-    	return mValiduntil;
+        return mValiduntil;
     }
+
     public void setUrl(String url) {
-    	mUrl = url;
-    	mUrlDirty = true;
+        mUrl = url;
+        mUrlDirty = true;
     }
-    
+
     public String getUrl() {
-    	return mUrl;
+        return mUrl;
     }
+
     public void setPhone(String phone) {
-    	mPhone = phone;
-    	mPhoneDirty = true;
+        mPhone = phone;
+        mPhoneDirty = true;
     }
-    
+
     public String getPhone() {
-    	return mPhone;
+        return mPhone;
     }
+
     public void setContact(String contact) {
-    	mContact = contact;
-    	mContactDirty = true;
+        mContact = contact;
+        mContactDirty = true;
     }
-    
+
     public String getContact() {
-    	return mContact;
+        return mContact;
     }
+
     public void setNotes(String notes) {
-    	mNotes = notes;
-    	mNotesDirty = true;
+        mNotes = notes;
+        mNotesDirty = true;
     }
-    
+
     public String getNotes() {
-    	return mNotes;
+        return mNotes;
     }
+
     public void setTracklength(long tracklength) {
-    	mTracklength = tracklength;
-    	mTracklengthDirty = true;
+        mTracklength = tracklength;
+        mTracklengthDirty = true;
     }
-    
+
     public long getTracklength() {
-    	return mTracklength;
+        return mTracklength;
     }
+
     public void setSoiltype(long soiltype) {
-    	mSoiltype = soiltype;
-    	mSoiltypeDirty = true;
+        mSoiltype = soiltype;
+        mSoiltypeDirty = true;
     }
-    
+
     public long getSoiltype() {
-    	return mSoiltype;
+        return mSoiltype;
     }
+
     public void setFacebook(String facebook) {
-    	mFacebook = facebook;
-    	mFacebookDirty = true;
+        mFacebook = facebook;
+        mFacebookDirty = true;
     }
-    
+
     public String getFacebook() {
-    	return mFacebook;
+        return mFacebook;
     }
+
     public void setAdress(String adress) {
-    	mAdress = adress;
-    	mAdressDirty = true;
+        mAdress = adress;
+        mAdressDirty = true;
     }
-    
+
     public String getAdress() {
-    	return mAdress;
+        return mAdress;
     }
+
     public void setLicence(String licence) {
-    	mLicence = licence;
-    	mLicenceDirty = true;
+        mLicence = licence;
+        mLicenceDirty = true;
     }
-    
+
     public String getLicence() {
-    	return mLicence;
+        return mLicence;
     }
+
     public void setFees(String fees) {
-    	mFees = fees;
-    	mFeesDirty = true;
+        mFees = fees;
+        mFeesDirty = true;
     }
-    
+
     public String getFees() {
-    	return mFees;
+        return mFees;
     }
+
     public void setFeescamping(String feescamping) {
-    	mFeescamping = feescamping;
-    	mFeescampingDirty = true;
+        mFeescamping = feescamping;
+        mFeescampingDirty = true;
     }
-    
+
     public String getFeescamping() {
-    	return mFeescamping;
+        return mFeescamping;
     }
+
     public void setDaysopen(String daysopen) {
-    	mDaysopen = daysopen;
-    	mDaysopenDirty = true;
+        mDaysopen = daysopen;
+        mDaysopenDirty = true;
     }
-    
+
     public String getDaysopen() {
-    	return mDaysopen;
+        return mDaysopen;
     }
+
     public void setNoiselimit(String noiselimit) {
-    	mNoiselimit = noiselimit;
-    	mNoiselimitDirty = true;
+        mNoiselimit = noiselimit;
+        mNoiselimitDirty = true;
     }
-    
+
     public String getNoiselimit() {
-    	return mNoiselimit;
+        return mNoiselimit;
     }
+
     public void setCampingrvrvhookup(long campingrvrvhookup) {
-    	mCampingrvrvhookup = campingrvrvhookup;
-    	mCampingrvrvhookupDirty = true;
+        mCampingrvrvhookup = campingrvrvhookup;
+        mCampingrvrvhookupDirty = true;
     }
-    
+
     public long getCampingrvrvhookup() {
-    	return mCampingrvrvhookup;
+        return mCampingrvrvhookup;
     }
+
     public void setSingletracks(long singletracks) {
-    	mSingletracks = singletracks;
-    	mSingletracksDirty = true;
+        mSingletracks = singletracks;
+        mSingletracksDirty = true;
     }
-    
+
     public long getSingletracks() {
-    	return mSingletracks;
+        return mSingletracks;
     }
+
     public void setMxtrack(long mxtrack) {
-    	mMxtrack = mxtrack;
-    	mMxtrackDirty = true;
+        mMxtrack = mxtrack;
+        mMxtrackDirty = true;
     }
-    
+
     public long getMxtrack() {
-    	return mMxtrack;
+        return mMxtrack;
     }
+
     public void setA4x4(long a4x4) {
-    	mA4x4 = a4x4;
-    	mA4x4Dirty = true;
+        mA4x4 = a4x4;
+        mA4x4Dirty = true;
     }
-    
+
     public long getA4x4() {
-    	return mA4x4;
+        return mA4x4;
     }
+
     public void setEndruo(long endruo) {
-    	mEndruo = endruo;
-    	mEndruoDirty = true;
+        mEndruo = endruo;
+        mEndruoDirty = true;
     }
-    
+
     public long getEndruo() {
-    	return mEndruo;
+        return mEndruo;
     }
+
     public void setUtv(long utv) {
-    	mUtv = utv;
-    	mUtvDirty = true;
+        mUtv = utv;
+        mUtvDirty = true;
     }
-    
+
     public long getUtv() {
-    	return mUtv;
+        return mUtv;
     }
+
     public void setQuad(long quad) {
-    	mQuad = quad;
-    	mQuadDirty = true;
+        mQuad = quad;
+        mQuadDirty = true;
     }
-    
+
     public long getQuad() {
-    	return mQuad;
+        return mQuad;
     }
+
     public void setTrackstatus(String trackstatus) {
-    	mTrackstatus = trackstatus;
-    	mTrackstatusDirty = true;
+        mTrackstatus = trackstatus;
+        mTrackstatusDirty = true;
     }
-    
+
     public String getTrackstatus() {
-    	return mTrackstatus;
+        return mTrackstatus;
     }
+
     public void setAreatype(String areatype) {
-    	mAreatype = areatype;
-    	mAreatypeDirty = true;
+        mAreatype = areatype;
+        mAreatypeDirty = true;
     }
-    
+
     public String getAreatype() {
-    	return mAreatype;
+        return mAreatype;
     }
+
     public void setSchwierigkeit(long schwierigkeit) {
-    	mSchwierigkeit = schwierigkeit;
-    	mSchwierigkeitDirty = true;
+        mSchwierigkeit = schwierigkeit;
+        mSchwierigkeitDirty = true;
     }
-    
+
     public long getSchwierigkeit() {
-    	return mSchwierigkeit;
+        return mSchwierigkeit;
     }
+
     public void setIndoor(long indoor) {
-    	mIndoor = indoor;
-    	mIndoorDirty = true;
+        mIndoor = indoor;
+        mIndoorDirty = true;
     }
-    
+
     public long getIndoor() {
-    	return mIndoor;
+        return mIndoor;
     }
+
+    public void setPicturecount(String picturecount) {
+        mPicturecount = picturecount;
+        mPicturecountDirty = true;
+    }
+
+    public String getPicturecount() {
+        return mPicturecount;
+    }
+
     public void setRating(String rating) {
-    	mRating = rating;
-    	mRatingDirty = true;
+        mRating = rating;
+        mRatingDirty = true;
     }
-    
+
     public String getRating() {
-    	return mRating;
+        return mRating;
     }
-    
+
+    public void setEventcount(String eventcount) {
+        mEventcount = eventcount;
+        mEventcountDirty = true;
+    }
+
+    public String getEventcount() {
+        return mEventcount;
+    }
+
     public TracksgesRecord() {
-    	super(Tracksges.CONTENT_URI);
-	}
-	
-	private TracksgesRecord(Parcel in) {
-    	super(Tracksges.CONTENT_URI);
-    	
-		setId(in.readLong());
-		
-		mTrackname = in.readString();
-		mApproved = in.readLong();
-		mDistance2location = in.readLong();
-		mOpenmondays = in.readLong();
-		mOpentuesdays = in.readLong();
-		mNUEvents = in.readString();
-		mOpenwednesday = in.readLong();
-		mOpenthursday = in.readLong();
-		mOpenfriday = in.readLong();
-		mOpensaturday = in.readLong();
-		mOpensunday = in.readLong();
-		mCountry = in.readString();
-		mTrackaccess = in.readString();
-		mRestId = in.readLong();
-		mBrands = in.readString();
-		mMetatext = in.readString();
-		mKidstrack = in.readLong();
-		mSupercross = in.readLong();
-		mShower = in.readLong();
-		mCleaning = in.readLong();
-		mElectricity = in.readLong();
-		mCamping = in.readLong();
-		mLatitude = in.readDouble();
-		mLongitude = in.readDouble();
-		mHoursmonday = in.readString();
-		mHourstuesday = in.readString();
-		mHourswednesday = in.readString();
-		mHoursthursday = in.readString();
-		mHoursfriday = in.readString();
-		mHourssaturday = in.readString();
-		mHourssunday = in.readString();
-		mValiduntil = in.readLong();
-		mUrl = in.readString();
-		mPhone = in.readString();
-		mContact = in.readString();
-		mNotes = in.readString();
-		mTracklength = in.readLong();
-		mSoiltype = in.readLong();
-		mFacebook = in.readString();
-		mAdress = in.readString();
-		mLicence = in.readString();
-		mFees = in.readString();
-		mFeescamping = in.readString();
-		mDaysopen = in.readString();
-		mNoiselimit = in.readString();
-		mCampingrvrvhookup = in.readLong();
-		mSingletracks = in.readLong();
-		mMxtrack = in.readLong();
-		mA4x4 = in.readLong();
-		mEndruo = in.readLong();
-		mUtv = in.readLong();
-		mQuad = in.readLong();
-		mTrackstatus = in.readString();
-		mAreatype = in.readString();
-		mSchwierigkeit = in.readLong();
-		mIndoor = in.readLong();
-		mRating = in.readString();
-		
-		boolean[] dirtyFlags = new boolean[57];
-		in.readBooleanArray(dirtyFlags);
-		mTracknameDirty = dirtyFlags[0];
-		mApprovedDirty = dirtyFlags[1];
-		mDistance2locationDirty = dirtyFlags[2];
-		mOpenmondaysDirty = dirtyFlags[3];
-		mOpentuesdaysDirty = dirtyFlags[4];
-		mNUEventsDirty = dirtyFlags[5];
-		mOpenwednesdayDirty = dirtyFlags[6];
-		mOpenthursdayDirty = dirtyFlags[7];
-		mOpenfridayDirty = dirtyFlags[8];
-		mOpensaturdayDirty = dirtyFlags[9];
-		mOpensundayDirty = dirtyFlags[10];
-		mCountryDirty = dirtyFlags[11];
-		mTrackaccessDirty = dirtyFlags[12];
-		mRestIdDirty = dirtyFlags[13];
-		mBrandsDirty = dirtyFlags[14];
-		mMetatextDirty = dirtyFlags[15];
-		mKidstrackDirty = dirtyFlags[16];
-		mSupercrossDirty = dirtyFlags[17];
-		mShowerDirty = dirtyFlags[18];
-		mCleaningDirty = dirtyFlags[19];
-		mElectricityDirty = dirtyFlags[20];
-		mCampingDirty = dirtyFlags[21];
-		mLatitudeDirty = dirtyFlags[22];
-		mLongitudeDirty = dirtyFlags[23];
-		mHoursmondayDirty = dirtyFlags[24];
-		mHourstuesdayDirty = dirtyFlags[25];
-		mHourswednesdayDirty = dirtyFlags[26];
-		mHoursthursdayDirty = dirtyFlags[27];
-		mHoursfridayDirty = dirtyFlags[28];
-		mHourssaturdayDirty = dirtyFlags[29];
-		mHourssundayDirty = dirtyFlags[30];
-		mValiduntilDirty = dirtyFlags[31];
-		mUrlDirty = dirtyFlags[32];
-		mPhoneDirty = dirtyFlags[33];
-		mContactDirty = dirtyFlags[34];
-		mNotesDirty = dirtyFlags[35];
-		mTracklengthDirty = dirtyFlags[36];
-		mSoiltypeDirty = dirtyFlags[37];
-		mFacebookDirty = dirtyFlags[38];
-		mAdressDirty = dirtyFlags[39];
-		mLicenceDirty = dirtyFlags[40];
-		mFeesDirty = dirtyFlags[41];
-		mFeescampingDirty = dirtyFlags[42];
-		mDaysopenDirty = dirtyFlags[43];
-		mNoiselimitDirty = dirtyFlags[44];
-		mCampingrvrvhookupDirty = dirtyFlags[45];
-		mSingletracksDirty = dirtyFlags[46];
-		mMxtrackDirty = dirtyFlags[47];
-		mA4x4Dirty = dirtyFlags[48];
-		mEndruoDirty = dirtyFlags[49];
-		mUtvDirty = dirtyFlags[50];
-		mQuadDirty = dirtyFlags[51];
-		mTrackstatusDirty = dirtyFlags[52];
-		mAreatypeDirty = dirtyFlags[53];
-		mSchwierigkeitDirty = dirtyFlags[54];
-		mIndoorDirty = dirtyFlags[55];
-		mRatingDirty = dirtyFlags[56];
-	}
-	
-	@Override
-	public int describeContents() {
-	    return 0;
-	}
-	
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(getId());
-		dest.writeString(mTrackname);
-		dest.writeLong(mApproved);
-		dest.writeLong(mDistance2location);
-		dest.writeLong(mOpenmondays);
-		dest.writeLong(mOpentuesdays);
-		dest.writeString(mNUEvents);
-		dest.writeLong(mOpenwednesday);
-		dest.writeLong(mOpenthursday);
-		dest.writeLong(mOpenfriday);
-		dest.writeLong(mOpensaturday);
-		dest.writeLong(mOpensunday);
-		dest.writeString(mCountry);
-		dest.writeString(mTrackaccess);
-		dest.writeLong(mRestId);
-		dest.writeString(mBrands);
-		dest.writeString(mMetatext);
-		dest.writeLong(mKidstrack);
-		dest.writeLong(mSupercross);
-		dest.writeLong(mShower);
-		dest.writeLong(mCleaning);
-		dest.writeLong(mElectricity);
-		dest.writeLong(mCamping);
-		dest.writeDouble(mLatitude);
-		dest.writeDouble(mLongitude);
-		dest.writeString(mHoursmonday);
-		dest.writeString(mHourstuesday);
-		dest.writeString(mHourswednesday);
-		dest.writeString(mHoursthursday);
-		dest.writeString(mHoursfriday);
-		dest.writeString(mHourssaturday);
-		dest.writeString(mHourssunday);
-		dest.writeLong(mValiduntil);
-		dest.writeString(mUrl);
-		dest.writeString(mPhone);
-		dest.writeString(mContact);
-		dest.writeString(mNotes);
-		dest.writeLong(mTracklength);
-		dest.writeLong(mSoiltype);
-		dest.writeString(mFacebook);
-		dest.writeString(mAdress);
-		dest.writeString(mLicence);
-		dest.writeString(mFees);
-		dest.writeString(mFeescamping);
-		dest.writeString(mDaysopen);
-		dest.writeString(mNoiselimit);
-		dest.writeLong(mCampingrvrvhookup);
-		dest.writeLong(mSingletracks);
-		dest.writeLong(mMxtrack);
-		dest.writeLong(mA4x4);
-		dest.writeLong(mEndruo);
-		dest.writeLong(mUtv);
-		dest.writeLong(mQuad);
-		dest.writeString(mTrackstatus);
-		dest.writeString(mAreatype);
-		dest.writeLong(mSchwierigkeit);
-		dest.writeLong(mIndoor);
-		dest.writeString(mRating);
-		dest.writeBooleanArray(new boolean[] {
-			mTracknameDirty,
-			mApprovedDirty,
-			mDistance2locationDirty,
-			mOpenmondaysDirty,
-			mOpentuesdaysDirty,
-			mNUEventsDirty,
-			mOpenwednesdayDirty,
-			mOpenthursdayDirty,
-			mOpenfridayDirty,
-			mOpensaturdayDirty,
-			mOpensundayDirty,
-			mCountryDirty,
-			mTrackaccessDirty,
-			mRestIdDirty,
-			mBrandsDirty,
-			mMetatextDirty,
-			mKidstrackDirty,
-			mSupercrossDirty,
-			mShowerDirty,
-			mCleaningDirty,
-			mElectricityDirty,
-			mCampingDirty,
-			mLatitudeDirty,
-			mLongitudeDirty,
-			mHoursmondayDirty,
-			mHourstuesdayDirty,
-			mHourswednesdayDirty,
-			mHoursthursdayDirty,
-			mHoursfridayDirty,
-			mHourssaturdayDirty,
-			mHourssundayDirty,
-			mValiduntilDirty,
-			mUrlDirty,
-			mPhoneDirty,
-			mContactDirty,
-			mNotesDirty,
-			mTracklengthDirty,
-			mSoiltypeDirty,
-			mFacebookDirty,
-			mAdressDirty,
-			mLicenceDirty,
-			mFeesDirty,
-			mFeescampingDirty,
-			mDaysopenDirty,
-			mNoiselimitDirty,
-			mCampingrvrvhookupDirty,
-			mSingletracksDirty,
-			mMxtrackDirty,
-			mA4x4Dirty,
-			mEndruoDirty,
-			mUtvDirty,
-			mQuadDirty,
-			mTrackstatusDirty,
-			mAreatypeDirty,
-			mSchwierigkeitDirty,
-			mIndoorDirty,
-			mRatingDirty
-		});
-	}
-	
-	@Override
-	protected AbstractValuesBuilder createBuilder() {
-		Builder builder = Tracksges.newBuilder();
+        super(Tracksges.CONTENT_URI);
+    }
 
-		if(mTracknameDirty) {
-			builder.setTrackname(mTrackname);
-		}
-		if(mApprovedDirty) {
-			builder.setApproved(mApproved);
-		}
-		if(mDistance2locationDirty) {
-			builder.setDistance2location(mDistance2location);
-		}
-		if(mOpenmondaysDirty) {
-			builder.setOpenmondays(mOpenmondays);
-		}
-		if(mOpentuesdaysDirty) {
-			builder.setOpentuesdays(mOpentuesdays);
-		}
-		if(mNUEventsDirty) {
-			builder.setNUEvents(mNUEvents);
-		}
-		if(mOpenwednesdayDirty) {
-			builder.setOpenwednesday(mOpenwednesday);
-		}
-		if(mOpenthursdayDirty) {
-			builder.setOpenthursday(mOpenthursday);
-		}
-		if(mOpenfridayDirty) {
-			builder.setOpenfriday(mOpenfriday);
-		}
-		if(mOpensaturdayDirty) {
-			builder.setOpensaturday(mOpensaturday);
-		}
-		if(mOpensundayDirty) {
-			builder.setOpensunday(mOpensunday);
-		}
-		if(mCountryDirty) {
-			builder.setCountry(mCountry);
-		}
-		if(mTrackaccessDirty) {
-			builder.setTrackaccess(mTrackaccess);
-		}
-		if(mRestIdDirty) {
-			builder.setRestId(mRestId);
-		}
-		if(mBrandsDirty) {
-			builder.setBrands(mBrands);
-		}
-		if(mMetatextDirty) {
-			builder.setMetatext(mMetatext);
-		}
-		if(mKidstrackDirty) {
-			builder.setKidstrack(mKidstrack);
-		}
-		if(mSupercrossDirty) {
-			builder.setSupercross(mSupercross);
-		}
-		if(mShowerDirty) {
-			builder.setShower(mShower);
-		}
-		if(mCleaningDirty) {
-			builder.setCleaning(mCleaning);
-		}
-		if(mElectricityDirty) {
-			builder.setElectricity(mElectricity);
-		}
-		if(mCampingDirty) {
-			builder.setCamping(mCamping);
-		}
-		if(mLatitudeDirty) {
-			builder.setLatitude(mLatitude);
-		}
-		if(mLongitudeDirty) {
-			builder.setLongitude(mLongitude);
-		}
-		if(mHoursmondayDirty) {
-			builder.setHoursmonday(mHoursmonday);
-		}
-		if(mHourstuesdayDirty) {
-			builder.setHourstuesday(mHourstuesday);
-		}
-		if(mHourswednesdayDirty) {
-			builder.setHourswednesday(mHourswednesday);
-		}
-		if(mHoursthursdayDirty) {
-			builder.setHoursthursday(mHoursthursday);
-		}
-		if(mHoursfridayDirty) {
-			builder.setHoursfriday(mHoursfriday);
-		}
-		if(mHourssaturdayDirty) {
-			builder.setHourssaturday(mHourssaturday);
-		}
-		if(mHourssundayDirty) {
-			builder.setHourssunday(mHourssunday);
-		}
-		if(mValiduntilDirty) {
-			builder.setValiduntil(mValiduntil);
-		}
-		if(mUrlDirty) {
-			builder.setUrl(mUrl);
-		}
-		if(mPhoneDirty) {
-			builder.setPhone(mPhone);
-		}
-		if(mContactDirty) {
-			builder.setContact(mContact);
-		}
-		if(mNotesDirty) {
-			builder.setNotes(mNotes);
-		}
-		if(mTracklengthDirty) {
-			builder.setTracklength(mTracklength);
-		}
-		if(mSoiltypeDirty) {
-			builder.setSoiltype(mSoiltype);
-		}
-		if(mFacebookDirty) {
-			builder.setFacebook(mFacebook);
-		}
-		if(mAdressDirty) {
-			builder.setAdress(mAdress);
-		}
-		if(mLicenceDirty) {
-			builder.setLicence(mLicence);
-		}
-		if(mFeesDirty) {
-			builder.setFees(mFees);
-		}
-		if(mFeescampingDirty) {
-			builder.setFeescamping(mFeescamping);
-		}
-		if(mDaysopenDirty) {
-			builder.setDaysopen(mDaysopen);
-		}
-		if(mNoiselimitDirty) {
-			builder.setNoiselimit(mNoiselimit);
-		}
-		if(mCampingrvrvhookupDirty) {
-			builder.setCampingrvrvhookup(mCampingrvrvhookup);
-		}
-		if(mSingletracksDirty) {
-			builder.setSingletracks(mSingletracks);
-		}
-		if(mMxtrackDirty) {
-			builder.setMxtrack(mMxtrack);
-		}
-		if(mA4x4Dirty) {
-			builder.setA4x4(mA4x4);
-		}
-		if(mEndruoDirty) {
-			builder.setEndruo(mEndruo);
-		}
-		if(mUtvDirty) {
-			builder.setUtv(mUtv);
-		}
-		if(mQuadDirty) {
-			builder.setQuad(mQuad);
-		}
-		if(mTrackstatusDirty) {
-			builder.setTrackstatus(mTrackstatus);
-		}
-		if(mAreatypeDirty) {
-			builder.setAreatype(mAreatype);
-		}
-		if(mSchwierigkeitDirty) {
-			builder.setSchwierigkeit(mSchwierigkeit);
-		}
-		if(mIndoorDirty) {
-			builder.setIndoor(mIndoor);
-		}
-		if(mRatingDirty) {
-			builder.setRating(mRating);
-		}
-		
-		return builder;
-	}
-	
+    private TracksgesRecord(Parcel in) {
+        super(Tracksges.CONTENT_URI);
+
+        setId(in.readLong());
+
+        mTrackname = in.readString();
+        mApproved = in.readLong();
+        mDistance2location = in.readLong();
+        mOpenmondays = in.readLong();
+        mOpentuesdays = in.readLong();
+        mNUEvents = in.readString();
+        mOpenwednesday = in.readLong();
+        mOpenthursday = in.readLong();
+        mOpenfriday = in.readLong();
+        mOpensaturday = in.readLong();
+        mOpensunday = in.readLong();
+        mCountry = in.readString();
+        mTrackaccess = in.readString();
+        mRestId = in.readLong();
+        mBrands = in.readString();
+        mMetatext = in.readString();
+        mKidstrack = in.readLong();
+        mSupercross = in.readLong();
+        mShower = in.readLong();
+        mCleaning = in.readLong();
+        mElectricity = in.readLong();
+        mCamping = in.readLong();
+        mLatitude = in.readDouble();
+        mLongitude = in.readDouble();
+        mHoursmonday = in.readString();
+        mHourstuesday = in.readString();
+        mHourswednesday = in.readString();
+        mHoursthursday = in.readString();
+        mHoursfriday = in.readString();
+        mHourssaturday = in.readString();
+        mHourssunday = in.readString();
+        mValiduntil = in.readLong();
+        mUrl = in.readString();
+        mPhone = in.readString();
+        mContact = in.readString();
+        mNotes = in.readString();
+        mTracklength = in.readLong();
+        mSoiltype = in.readLong();
+        mFacebook = in.readString();
+        mAdress = in.readString();
+        mLicence = in.readString();
+        mFees = in.readString();
+        mFeescamping = in.readString();
+        mDaysopen = in.readString();
+        mNoiselimit = in.readString();
+        mCampingrvrvhookup = in.readLong();
+        mSingletracks = in.readLong();
+        mMxtrack = in.readLong();
+        mA4x4 = in.readLong();
+        mEndruo = in.readLong();
+        mUtv = in.readLong();
+        mQuad = in.readLong();
+        mTrackstatus = in.readString();
+        mAreatype = in.readString();
+        mSchwierigkeit = in.readLong();
+        mIndoor = in.readLong();
+        mPicturecount = in.readString();
+        mEventcount = in.readString();
+        mRating = in.readString();
+
+        boolean[] dirtyFlags = new boolean[59];
+        in.readBooleanArray(dirtyFlags);
+        mTracknameDirty = dirtyFlags[0];
+        mApprovedDirty = dirtyFlags[1];
+        mDistance2locationDirty = dirtyFlags[2];
+        mOpenmondaysDirty = dirtyFlags[3];
+        mOpentuesdaysDirty = dirtyFlags[4];
+        mNUEventsDirty = dirtyFlags[5];
+        mOpenwednesdayDirty = dirtyFlags[6];
+        mOpenthursdayDirty = dirtyFlags[7];
+        mOpenfridayDirty = dirtyFlags[8];
+        mOpensaturdayDirty = dirtyFlags[9];
+        mOpensundayDirty = dirtyFlags[10];
+        mCountryDirty = dirtyFlags[11];
+        mTrackaccessDirty = dirtyFlags[12];
+        mRestIdDirty = dirtyFlags[13];
+        mBrandsDirty = dirtyFlags[14];
+        mMetatextDirty = dirtyFlags[15];
+        mKidstrackDirty = dirtyFlags[16];
+        mSupercrossDirty = dirtyFlags[17];
+        mShowerDirty = dirtyFlags[18];
+        mCleaningDirty = dirtyFlags[19];
+        mElectricityDirty = dirtyFlags[20];
+        mCampingDirty = dirtyFlags[21];
+        mLatitudeDirty = dirtyFlags[22];
+        mLongitudeDirty = dirtyFlags[23];
+        mHoursmondayDirty = dirtyFlags[24];
+        mHourstuesdayDirty = dirtyFlags[25];
+        mHourswednesdayDirty = dirtyFlags[26];
+        mHoursthursdayDirty = dirtyFlags[27];
+        mHoursfridayDirty = dirtyFlags[28];
+        mHourssaturdayDirty = dirtyFlags[29];
+        mHourssundayDirty = dirtyFlags[30];
+        mValiduntilDirty = dirtyFlags[31];
+        mUrlDirty = dirtyFlags[32];
+        mPhoneDirty = dirtyFlags[33];
+        mContactDirty = dirtyFlags[34];
+        mNotesDirty = dirtyFlags[35];
+        mTracklengthDirty = dirtyFlags[36];
+        mSoiltypeDirty = dirtyFlags[37];
+        mFacebookDirty = dirtyFlags[38];
+        mAdressDirty = dirtyFlags[39];
+        mLicenceDirty = dirtyFlags[40];
+        mFeesDirty = dirtyFlags[41];
+        mFeescampingDirty = dirtyFlags[42];
+        mDaysopenDirty = dirtyFlags[43];
+        mNoiselimitDirty = dirtyFlags[44];
+        mCampingrvrvhookupDirty = dirtyFlags[45];
+        mSingletracksDirty = dirtyFlags[46];
+        mMxtrackDirty = dirtyFlags[47];
+        mA4x4Dirty = dirtyFlags[48];
+        mEndruoDirty = dirtyFlags[49];
+        mUtvDirty = dirtyFlags[50];
+        mQuadDirty = dirtyFlags[51];
+        mTrackstatusDirty = dirtyFlags[52];
+        mAreatypeDirty = dirtyFlags[53];
+        mSchwierigkeitDirty = dirtyFlags[54];
+        mIndoorDirty = dirtyFlags[55];
+        mPicturecountDirty = dirtyFlags[56];
+        mEventcountDirty = dirtyFlags[57];
+        mRatingDirty = dirtyFlags[58];
+    }
+
     @Override
-	public void makeDirty(boolean dirty){
-		mTracknameDirty = dirty;
-		mApprovedDirty = dirty;
-		mDistance2locationDirty = dirty;
-		mOpenmondaysDirty = dirty;
-		mOpentuesdaysDirty = dirty;
-		mNUEventsDirty = dirty;
-		mOpenwednesdayDirty = dirty;
-		mOpenthursdayDirty = dirty;
-		mOpenfridayDirty = dirty;
-		mOpensaturdayDirty = dirty;
-		mOpensundayDirty = dirty;
-		mCountryDirty = dirty;
-		mTrackaccessDirty = dirty;
-		mRestIdDirty = dirty;
-		mBrandsDirty = dirty;
-		mMetatextDirty = dirty;
-		mKidstrackDirty = dirty;
-		mSupercrossDirty = dirty;
-		mShowerDirty = dirty;
-		mCleaningDirty = dirty;
-		mElectricityDirty = dirty;
-		mCampingDirty = dirty;
-		mLatitudeDirty = dirty;
-		mLongitudeDirty = dirty;
-		mHoursmondayDirty = dirty;
-		mHourstuesdayDirty = dirty;
-		mHourswednesdayDirty = dirty;
-		mHoursthursdayDirty = dirty;
-		mHoursfridayDirty = dirty;
-		mHourssaturdayDirty = dirty;
-		mHourssundayDirty = dirty;
-		mValiduntilDirty = dirty;
-		mUrlDirty = dirty;
-		mPhoneDirty = dirty;
-		mContactDirty = dirty;
-		mNotesDirty = dirty;
-		mTracklengthDirty = dirty;
-		mSoiltypeDirty = dirty;
-		mFacebookDirty = dirty;
-		mAdressDirty = dirty;
-		mLicenceDirty = dirty;
-		mFeesDirty = dirty;
-		mFeescampingDirty = dirty;
-		mDaysopenDirty = dirty;
-		mNoiselimitDirty = dirty;
-		mCampingrvrvhookupDirty = dirty;
-		mSingletracksDirty = dirty;
-		mMxtrackDirty = dirty;
-		mA4x4Dirty = dirty;
-		mEndruoDirty = dirty;
-		mUtvDirty = dirty;
-		mQuadDirty = dirty;
-		mTrackstatusDirty = dirty;
-		mAreatypeDirty = dirty;
-		mSchwierigkeitDirty = dirty;
-		mIndoorDirty = dirty;
-		mRatingDirty = dirty;
-	}
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	protected void setPropertiesFromCursor(Cursor c) {
-		setId(c.getLong(Indices._ID));
-		setTrackname(c.getString(Indices.TRACKNAME));
-		setApproved(c.getLong(Indices.APPROVED));
-		setDistance2location(c.getLong(Indices.DISTANCE2LOCATION));
-		setOpenmondays(c.getLong(Indices.OPENMONDAYS));
-		setOpentuesdays(c.getLong(Indices.OPENTUESDAYS));
-		setNUEvents(c.getString(Indices.N_U_EVENTS));
-		setOpenwednesday(c.getLong(Indices.OPENWEDNESDAY));
-		setOpenthursday(c.getLong(Indices.OPENTHURSDAY));
-		setOpenfriday(c.getLong(Indices.OPENFRIDAY));
-		setOpensaturday(c.getLong(Indices.OPENSATURDAY));
-		setOpensunday(c.getLong(Indices.OPENSUNDAY));
-		setCountry(c.getString(Indices.COUNTRY));
-		setTrackaccess(c.getString(Indices.TRACKACCESS));
-		setRestId(c.getLong(Indices.REST_ID));
-		setBrands(c.getString(Indices.BRANDS));
-		setMetatext(c.getString(Indices.METATEXT));
-		setKidstrack(c.getLong(Indices.KIDSTRACK));
-		setSupercross(c.getLong(Indices.SUPERCROSS));
-		setShower(c.getLong(Indices.SHOWER));
-		setCleaning(c.getLong(Indices.CLEANING));
-		setElectricity(c.getLong(Indices.ELECTRICITY));
-		setCamping(c.getLong(Indices.CAMPING));
-		setLatitude(c.getDouble(Indices.LATITUDE));
-		setLongitude(c.getDouble(Indices.LONGITUDE));
-		setHoursmonday(c.getString(Indices.HOURSMONDAY));
-		setHourstuesday(c.getString(Indices.HOURSTUESDAY));
-		setHourswednesday(c.getString(Indices.HOURSWEDNESDAY));
-		setHoursthursday(c.getString(Indices.HOURSTHURSDAY));
-		setHoursfriday(c.getString(Indices.HOURSFRIDAY));
-		setHourssaturday(c.getString(Indices.HOURSSATURDAY));
-		setHourssunday(c.getString(Indices.HOURSSUNDAY));
-		setValiduntil(c.getLong(Indices.VALIDUNTIL));
-		setUrl(c.getString(Indices.URL));
-		setPhone(c.getString(Indices.PHONE));
-		setContact(c.getString(Indices.CONTACT));
-		setNotes(c.getString(Indices.NOTES));
-		setTracklength(c.getLong(Indices.TRACKLENGTH));
-		setSoiltype(c.getLong(Indices.SOILTYPE));
-		setFacebook(c.getString(Indices.FACEBOOK));
-		setAdress(c.getString(Indices.ADRESS));
-		setLicence(c.getString(Indices.LICENCE));
-		setFees(c.getString(Indices.FEES));
-		setFeescamping(c.getString(Indices.FEESCAMPING));
-		setDaysopen(c.getString(Indices.DAYSOPEN));
-		setNoiselimit(c.getString(Indices.NOISELIMIT));
-		setCampingrvrvhookup(c.getLong(Indices.CAMPINGRVRVHOOKUP));
-		setSingletracks(c.getLong(Indices.SINGLETRACKS));
-		setMxtrack(c.getLong(Indices.MXTRACK));
-		setA4x4(c.getLong(Indices.A4X4));
-		setEndruo(c.getLong(Indices.ENDRUO));
-		setUtv(c.getLong(Indices.UTV));
-		setQuad(c.getLong(Indices.QUAD));
-		setTrackstatus(c.getString(Indices.TRACKSTATUS));
-		setAreatype(c.getString(Indices.AREATYPE));
-		setSchwierigkeit(c.getLong(Indices.SCHWIERIGKEIT));
-		setIndoor(c.getLong(Indices.INDOOR));
-		setRating(c.getString(Indices.RATING));
-	}
-	
-	public static TracksgesRecord fromCursor(Cursor c) {
-	    TracksgesRecord item = new TracksgesRecord();
-	    
-		item.setPropertiesFromCursor(c);
-		
-		item.makeDirty(false);
-		
-	    return item;
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeString(mTrackname);
+        dest.writeLong(mApproved);
+        dest.writeLong(mDistance2location);
+        dest.writeLong(mOpenmondays);
+        dest.writeLong(mOpentuesdays);
+        dest.writeString(mNUEvents);
+        dest.writeLong(mOpenwednesday);
+        dest.writeLong(mOpenthursday);
+        dest.writeLong(mOpenfriday);
+        dest.writeLong(mOpensaturday);
+        dest.writeLong(mOpensunday);
+        dest.writeString(mCountry);
+        dest.writeString(mTrackaccess);
+        dest.writeLong(mRestId);
+        dest.writeString(mBrands);
+        dest.writeString(mMetatext);
+        dest.writeLong(mKidstrack);
+        dest.writeLong(mSupercross);
+        dest.writeLong(mShower);
+        dest.writeLong(mCleaning);
+        dest.writeLong(mElectricity);
+        dest.writeLong(mCamping);
+        dest.writeDouble(mLatitude);
+        dest.writeDouble(mLongitude);
+        dest.writeString(mHoursmonday);
+        dest.writeString(mHourstuesday);
+        dest.writeString(mHourswednesday);
+        dest.writeString(mHoursthursday);
+        dest.writeString(mHoursfriday);
+        dest.writeString(mHourssaturday);
+        dest.writeString(mHourssunday);
+        dest.writeLong(mValiduntil);
+        dest.writeString(mUrl);
+        dest.writeString(mPhone);
+        dest.writeString(mContact);
+        dest.writeString(mNotes);
+        dest.writeLong(mTracklength);
+        dest.writeLong(mSoiltype);
+        dest.writeString(mFacebook);
+        dest.writeString(mAdress);
+        dest.writeString(mLicence);
+        dest.writeString(mFees);
+        dest.writeString(mFeescamping);
+        dest.writeString(mDaysopen);
+        dest.writeString(mNoiselimit);
+        dest.writeLong(mCampingrvrvhookup);
+        dest.writeLong(mSingletracks);
+        dest.writeLong(mMxtrack);
+        dest.writeLong(mA4x4);
+        dest.writeLong(mEndruo);
+        dest.writeLong(mUtv);
+        dest.writeLong(mQuad);
+        dest.writeString(mTrackstatus);
+        dest.writeString(mAreatype);
+        dest.writeLong(mSchwierigkeit);
+        dest.writeLong(mIndoor);
+        dest.writeString(mPicturecount);
+        dest.writeString(mEventcount);
+        dest.writeString(mRating);
+        dest.writeBooleanArray(new boolean[]{
+                mTracknameDirty,
+                mApprovedDirty,
+                mDistance2locationDirty,
+                mOpenmondaysDirty,
+                mOpentuesdaysDirty,
+                mNUEventsDirty,
+                mOpenwednesdayDirty,
+                mOpenthursdayDirty,
+                mOpenfridayDirty,
+                mOpensaturdayDirty,
+                mOpensundayDirty,
+                mCountryDirty,
+                mTrackaccessDirty,
+                mRestIdDirty,
+                mBrandsDirty,
+                mMetatextDirty,
+                mKidstrackDirty,
+                mSupercrossDirty,
+                mShowerDirty,
+                mCleaningDirty,
+                mElectricityDirty,
+                mCampingDirty,
+                mLatitudeDirty,
+                mLongitudeDirty,
+                mHoursmondayDirty,
+                mHourstuesdayDirty,
+                mHourswednesdayDirty,
+                mHoursthursdayDirty,
+                mHoursfridayDirty,
+                mHourssaturdayDirty,
+                mHourssundayDirty,
+                mValiduntilDirty,
+                mUrlDirty,
+                mPhoneDirty,
+                mContactDirty,
+                mNotesDirty,
+                mTracklengthDirty,
+                mSoiltypeDirty,
+                mFacebookDirty,
+                mAdressDirty,
+                mLicenceDirty,
+                mFeesDirty,
+                mFeescampingDirty,
+                mDaysopenDirty,
+                mNoiselimitDirty,
+                mCampingrvrvhookupDirty,
+                mSingletracksDirty,
+                mMxtrackDirty,
+                mA4x4Dirty,
+                mEndruoDirty,
+                mUtvDirty,
+                mQuadDirty,
+                mTrackstatusDirty,
+                mAreatypeDirty,
+                mSchwierigkeitDirty,
+                mIndoorDirty,
+                mPicturecountDirty,
+                mEventcountDirty,
+                mRatingDirty,
+        });
+    }
+
+    @Override
+    protected AbstractValuesBuilder createBuilder() {
+        Builder builder = Tracksges.newBuilder();
+
+        if (mTracknameDirty) {
+            builder.setTrackname(mTrackname);
+        }
+        if (mApprovedDirty) {
+            builder.setApproved(mApproved);
+        }
+        if (mDistance2locationDirty) {
+            builder.setDistance2location(mDistance2location);
+        }
+        if (mOpenmondaysDirty) {
+            builder.setOpenmondays(mOpenmondays);
+        }
+        if (mOpentuesdaysDirty) {
+            builder.setOpentuesdays(mOpentuesdays);
+        }
+        if (mNUEventsDirty) {
+            builder.setNUEvents(mNUEvents);
+        }
+        if (mOpenwednesdayDirty) {
+            builder.setOpenwednesday(mOpenwednesday);
+        }
+        if (mOpenthursdayDirty) {
+            builder.setOpenthursday(mOpenthursday);
+        }
+        if (mOpenfridayDirty) {
+            builder.setOpenfriday(mOpenfriday);
+        }
+        if (mOpensaturdayDirty) {
+            builder.setOpensaturday(mOpensaturday);
+        }
+        if (mOpensundayDirty) {
+            builder.setOpensunday(mOpensunday);
+        }
+        if (mCountryDirty) {
+            builder.setCountry(mCountry);
+        }
+        if (mTrackaccessDirty) {
+            builder.setTrackaccess(mTrackaccess);
+        }
+        if (mRestIdDirty) {
+            builder.setRestId(mRestId);
+        }
+        if (mBrandsDirty) {
+            builder.setBrands(mBrands);
+        }
+        if (mMetatextDirty) {
+            builder.setMetatext(mMetatext);
+        }
+        if (mKidstrackDirty) {
+            builder.setKidstrack(mKidstrack);
+        }
+        if (mSupercrossDirty) {
+            builder.setSupercross(mSupercross);
+        }
+        if (mShowerDirty) {
+            builder.setShower(mShower);
+        }
+        if (mCleaningDirty) {
+            builder.setCleaning(mCleaning);
+        }
+        if (mElectricityDirty) {
+            builder.setElectricity(mElectricity);
+        }
+        if (mCampingDirty) {
+            builder.setCamping(mCamping);
+        }
+        if (mLatitudeDirty) {
+            builder.setLatitude(mLatitude);
+        }
+        if (mLongitudeDirty) {
+            builder.setLongitude(mLongitude);
+        }
+        if (mHoursmondayDirty) {
+            builder.setHoursmonday(mHoursmonday);
+        }
+        if (mHourstuesdayDirty) {
+            builder.setHourstuesday(mHourstuesday);
+        }
+        if (mHourswednesdayDirty) {
+            builder.setHourswednesday(mHourswednesday);
+        }
+        if (mHoursthursdayDirty) {
+            builder.setHoursthursday(mHoursthursday);
+        }
+        if (mHoursfridayDirty) {
+            builder.setHoursfriday(mHoursfriday);
+        }
+        if (mHourssaturdayDirty) {
+            builder.setHourssaturday(mHourssaturday);
+        }
+        if (mHourssundayDirty) {
+            builder.setHourssunday(mHourssunday);
+        }
+        if (mValiduntilDirty) {
+            builder.setValiduntil(mValiduntil);
+        }
+        if (mUrlDirty) {
+            builder.setUrl(mUrl);
+        }
+        if (mPhoneDirty) {
+            builder.setPhone(mPhone);
+        }
+        if (mContactDirty) {
+            builder.setContact(mContact);
+        }
+        if (mNotesDirty) {
+            builder.setNotes(mNotes);
+        }
+        if (mTracklengthDirty) {
+            builder.setTracklength(mTracklength);
+        }
+        if (mSoiltypeDirty) {
+            builder.setSoiltype(mSoiltype);
+        }
+        if (mFacebookDirty) {
+            builder.setFacebook(mFacebook);
+        }
+        if (mAdressDirty) {
+            builder.setAdress(mAdress);
+        }
+        if (mLicenceDirty) {
+            builder.setLicence(mLicence);
+        }
+        if (mFeesDirty) {
+            builder.setFees(mFees);
+        }
+        if (mFeescampingDirty) {
+            builder.setFeescamping(mFeescamping);
+        }
+        if (mDaysopenDirty) {
+            builder.setDaysopen(mDaysopen);
+        }
+        if (mNoiselimitDirty) {
+            builder.setNoiselimit(mNoiselimit);
+        }
+        if (mCampingrvrvhookupDirty) {
+            builder.setCampingrvrvhookup(mCampingrvrvhookup);
+        }
+        if (mSingletracksDirty) {
+            builder.setSingletracks(mSingletracks);
+        }
+        if (mMxtrackDirty) {
+            builder.setMxtrack(mMxtrack);
+        }
+        if (mA4x4Dirty) {
+            builder.setA4x4(mA4x4);
+        }
+        if (mEndruoDirty) {
+            builder.setEndruo(mEndruo);
+        }
+        if (mUtvDirty) {
+            builder.setUtv(mUtv);
+        }
+        if (mQuadDirty) {
+            builder.setQuad(mQuad);
+        }
+        if (mTrackstatusDirty) {
+            builder.setTrackstatus(mTrackstatus);
+        }
+        if (mAreatypeDirty) {
+            builder.setAreatype(mAreatype);
+        }
+        if (mSchwierigkeitDirty) {
+            builder.setSchwierigkeit(mSchwierigkeit);
+        }
+        if (mIndoorDirty) {
+            builder.setIndoor(mIndoor);
+        }
+        if (mRatingDirty) {
+            builder.setRating(mRating);
+        }
+        return builder;
+    }
+
+    @Override
+    public void makeDirty(boolean dirty) {
+        mTracknameDirty = dirty;
+        mApprovedDirty = dirty;
+        mDistance2locationDirty = dirty;
+        mOpenmondaysDirty = dirty;
+        mOpentuesdaysDirty = dirty;
+        mNUEventsDirty = dirty;
+        mOpenwednesdayDirty = dirty;
+        mOpenthursdayDirty = dirty;
+        mOpenfridayDirty = dirty;
+        mOpensaturdayDirty = dirty;
+        mOpensundayDirty = dirty;
+        mCountryDirty = dirty;
+        mTrackaccessDirty = dirty;
+        mRestIdDirty = dirty;
+        mBrandsDirty = dirty;
+        mMetatextDirty = dirty;
+        mKidstrackDirty = dirty;
+        mSupercrossDirty = dirty;
+        mShowerDirty = dirty;
+        mCleaningDirty = dirty;
+        mElectricityDirty = dirty;
+        mCampingDirty = dirty;
+        mLatitudeDirty = dirty;
+        mLongitudeDirty = dirty;
+        mHoursmondayDirty = dirty;
+        mHourstuesdayDirty = dirty;
+        mHourswednesdayDirty = dirty;
+        mHoursthursdayDirty = dirty;
+        mHoursfridayDirty = dirty;
+        mHourssaturdayDirty = dirty;
+        mHourssundayDirty = dirty;
+        mValiduntilDirty = dirty;
+        mUrlDirty = dirty;
+        mPhoneDirty = dirty;
+        mContactDirty = dirty;
+        mNotesDirty = dirty;
+        mTracklengthDirty = dirty;
+        mSoiltypeDirty = dirty;
+        mFacebookDirty = dirty;
+        mAdressDirty = dirty;
+        mLicenceDirty = dirty;
+        mFeesDirty = dirty;
+        mFeescampingDirty = dirty;
+        mDaysopenDirty = dirty;
+        mNoiselimitDirty = dirty;
+        mCampingrvrvhookupDirty = dirty;
+        mSingletracksDirty = dirty;
+        mMxtrackDirty = dirty;
+        mA4x4Dirty = dirty;
+        mEndruoDirty = dirty;
+        mUtvDirty = dirty;
+        mQuadDirty = dirty;
+        mTrackstatusDirty = dirty;
+        mAreatypeDirty = dirty;
+        mSchwierigkeitDirty = dirty;
+        mIndoorDirty = dirty;
+        mPicturecountDirty = dirty;
+        mEventcountDirty = dirty;
+        mRatingDirty = dirty;
+    }
+
+    @Override
+    protected void setPropertiesFromCursor(Cursor c) {
+        setId(c.getLong(Indices._ID));
+        setTrackname(c.getString(Indices.TRACKNAME));
+        setApproved(c.getLong(Indices.APPROVED));
+        setDistance2location(c.getLong(Indices.DISTANCE2LOCATION));
+        setOpenmondays(c.getLong(Indices.OPENMONDAYS));
+        setOpentuesdays(c.getLong(Indices.OPENTUESDAYS));
+        setNUEvents(c.getString(Indices.N_U_EVENTS));
+        setOpenwednesday(c.getLong(Indices.OPENWEDNESDAY));
+        setOpenthursday(c.getLong(Indices.OPENTHURSDAY));
+        setOpenfriday(c.getLong(Indices.OPENFRIDAY));
+        setOpensaturday(c.getLong(Indices.OPENSATURDAY));
+        setOpensunday(c.getLong(Indices.OPENSUNDAY));
+        setCountry(c.getString(Indices.COUNTRY));
+        setTrackaccess(c.getString(Indices.TRACKACCESS));
+        setRestId(c.getLong(Indices.REST_ID));
+        setBrands(c.getString(Indices.BRANDS));
+        setMetatext(c.getString(Indices.METATEXT));
+        setKidstrack(c.getLong(Indices.KIDSTRACK));
+        setSupercross(c.getLong(Indices.SUPERCROSS));
+        setShower(c.getLong(Indices.SHOWER));
+        setCleaning(c.getLong(Indices.CLEANING));
+        setElectricity(c.getLong(Indices.ELECTRICITY));
+        setCamping(c.getLong(Indices.CAMPING));
+        setLatitude(c.getDouble(Indices.LATITUDE));
+        setLongitude(c.getDouble(Indices.LONGITUDE));
+        setHoursmonday(c.getString(Indices.HOURSMONDAY));
+        setHourstuesday(c.getString(Indices.HOURSTUESDAY));
+        setHourswednesday(c.getString(Indices.HOURSWEDNESDAY));
+        setHoursthursday(c.getString(Indices.HOURSTHURSDAY));
+        setHoursfriday(c.getString(Indices.HOURSFRIDAY));
+        setHourssaturday(c.getString(Indices.HOURSSATURDAY));
+        setHourssunday(c.getString(Indices.HOURSSUNDAY));
+        setValiduntil(c.getLong(Indices.VALIDUNTIL));
+        setUrl(c.getString(Indices.URL));
+        setPhone(c.getString(Indices.PHONE));
+        setContact(c.getString(Indices.CONTACT));
+        setNotes(c.getString(Indices.NOTES));
+        setTracklength(c.getLong(Indices.TRACKLENGTH));
+        setSoiltype(c.getLong(Indices.SOILTYPE));
+        setFacebook(c.getString(Indices.FACEBOOK));
+        setAdress(c.getString(Indices.ADRESS));
+        setLicence(c.getString(Indices.LICENCE));
+        setFees(c.getString(Indices.FEES));
+        setFeescamping(c.getString(Indices.FEESCAMPING));
+        setDaysopen(c.getString(Indices.DAYSOPEN));
+        setNoiselimit(c.getString(Indices.NOISELIMIT));
+        setCampingrvrvhookup(c.getLong(Indices.CAMPINGRVRVHOOKUP));
+        setSingletracks(c.getLong(Indices.SINGLETRACKS));
+        setMxtrack(c.getLong(Indices.MXTRACK));
+        setA4x4(c.getLong(Indices.A4X4));
+        setEndruo(c.getLong(Indices.ENDRUO));
+        setUtv(c.getLong(Indices.UTV));
+        setQuad(c.getLong(Indices.QUAD));
+        setTrackstatus(c.getString(Indices.TRACKSTATUS));
+        setAreatype(c.getString(Indices.AREATYPE));
+        setSchwierigkeit(c.getLong(Indices.SCHWIERIGKEIT));
+        setIndoor(c.getLong(Indices.INDOOR));
+        setPicturecount(c.getString(Indices.PICTURECOUNT));
+        setEventcount(c.getString(Indices.EVENTCOUNT));
+        setRating(c.getString(Indices.RATING));
+    }
+
+    public static TracksgesRecord fromCursor(Cursor c) {
+        TracksgesRecord item = new TracksgesRecord();
+
+        item.setPropertiesFromCursor(c);
+
+        item.makeDirty(false);
+
+        return item;
+    }
 
     @SuppressWarnings("deprecation")
-	public static TracksgesRecord fromBundle(Bundle bundle, String key) {
-		bundle.setClassLoader(TracksgesRecord.class.getClassLoader());
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-			return bundle.getParcelable(key, TracksgesRecord.class);
-		} else {
-			return bundle.getParcelable(key);
-		}
-	}
-	
-	public static TracksgesRecord get(long id) {
-	    Cursor c = null;
-	    
-	    ContentResolver resolver = Mechanoid.getContentResolver();
-	    
-	    try {
-	        c = resolver.query(Tracksges.CONTENT_URI.buildUpon()
-			.appendPath(String.valueOf(id)).build(), PROJECTION, null, null, null);
-	        
-	        if(!c.moveToFirst()) {
-	            return null;
-	        }
-	        
-	        return fromCursor(c);
-	    } finally {
-	        Closeables.closeSilently(c);
-	    }
-	}
+    public static TracksgesRecord fromBundle(Bundle bundle, String key) {
+        bundle.setClassLoader(TracksgesRecord.class.getClassLoader());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, TracksgesRecord.class);
+        } else {
+            return bundle.getParcelable(key);
+        }
+    }
+
+    public static TracksgesRecord get(long id) {
+        Cursor c = null;
+
+        ContentResolver resolver = Mechanoid.getContentResolver();
+
+        try {
+            c = resolver.query(Tracksges.CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(id)).build(), PROJECTION, null, null, null);
+
+            if (!c.moveToFirst()) {
+                return null;
+            }
+
+            return fromCursor(c);
+        } finally {
+            Closeables.closeSilently(c);
+        }
+    }
 }
