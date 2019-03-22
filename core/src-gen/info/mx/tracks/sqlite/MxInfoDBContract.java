@@ -63,14 +63,6 @@ public class MxInfoDBContract  {
 		String CREATED = "created";
 	}
 	
-	interface MessageColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String ANDROIDID = "androidid";
-		String READ = "read";
-		String MSG = "msg";
-	}
-	
 	interface NetworkColumns {
 		String REASON = "reason";
 		String TRACKS = "tracks";
@@ -95,19 +87,6 @@ public class MxInfoDBContract  {
 		String DELETED = "deleted";
 		String LOCALFILE = "localfile";
 		String LOCALTHUMB = "localthumb";
-	}
-	
-	interface RatingsColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String TRACK_REST_ID = "track_restId";
-		String RATING = "rating";
-		String USERNAME = "username";
-		String NOTE = "note";
-		String COUNTRY = "country";
-		String DELETED = "deleted";
-		String APPROVED = "approved";
-		String ANDROIDID = "androidid";
 	}
 	
 	interface RouteColumns {
@@ -288,11 +267,6 @@ public class MxInfoDBContract  {
 		String TRACK_REST_ID = "track_restId";
 		String PICTURECOUNT = "picturecount";
 	}
-	interface RatingsumColumns {
-		String TRACK_REST_ID = "track_restId";
-		String RATINGCOUNT = "ratingcount";
-		String RATINGAVG = "ratingavg";
-	}
 	interface TracksGesSumColumns {
 		String TRACKNAME = "trackname";
 		String APPROVED = "Approved";
@@ -350,7 +324,6 @@ public class MxInfoDBContract  {
 		String AREATYPE = "areatype";
 		String SCHWIERIGKEIT = "schwierigkeit";
 		String INDOOR = "indoor";
-		String RATING = "rating";
 		String PICTURECOUNT = "picturecount";
 		String EVENTCOUNT = "eventcount";
 	}
@@ -411,7 +384,8 @@ public class MxInfoDBContract  {
 		String AREATYPE = "areatype";
 		String SCHWIERIGKEIT = "schwierigkeit";
 		String INDOOR = "indoor";
-		String RATING = "rating";
+		String PICTURECOUNT = "picturecount";
+		String EVENTCOUNT = "eventcount";
 	}
 	interface UserActivityColumns {
 		String ANDROIDID = "androidid";
@@ -579,6 +553,7 @@ public class MxInfoDBContract  {
 			viewUris.add(Events2series.CONTENT_URI);
 			viewUris.add(Eventsum.CONTENT_URI);
 			viewUris.add(TracksGesSum.CONTENT_URI);
+			viewUris.add(Tracksges.CONTENT_URI);
 			
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
@@ -706,88 +681,6 @@ public class MxInfoDBContract  {
 			}
 			public Builder setCreated(long value) {
 				mValues.put(Importstatus.CREATED, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Message.</p>
-	 */
-	public static class Message implements MessageColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("message").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Message rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.message";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Message row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.message";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Message, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/message/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Message.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Message.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Message</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Message.</p>
-		 *
-		 * <p>Use {@link Message#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Message.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Message.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Message.CHANGED, value);
-				return this;
-			}
-			public Builder setAndroidid(String value) {
-				mValues.put(Message.ANDROIDID, value);
-				return this;
-			}
-			public Builder setRead(long value) {
-				mValues.put(Message.READ, value);
-				return this;
-			}
-			public Builder setMsg(String value) {
-				mValues.put(Message.MSG, value);
 				return this;
 			}
 		}
@@ -971,110 +864,6 @@ public class MxInfoDBContract  {
 			HashSet<Uri> viewUris =  new HashSet<Uri>();
 	
 			viewUris.add(Picturesum.CONTENT_URI);
-			viewUris.add(TracksGesSum.CONTENT_URI);
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Ratings.</p>
-	 */
-	public static class Ratings implements RatingsColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("ratings").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Ratings rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.ratings";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Ratings row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.ratings";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Ratings, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/ratings/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Ratings.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Ratings.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Ratings</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Ratings.</p>
-		 *
-		 * <p>Use {@link Ratings#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Ratings.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Ratings.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Ratings.CHANGED, value);
-				return this;
-			}
-			public Builder setTrackRestId(long value) {
-				mValues.put(Ratings.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setRating(long value) {
-				mValues.put(Ratings.RATING, value);
-				return this;
-			}
-			public Builder setUsername(String value) {
-				mValues.put(Ratings.USERNAME, value);
-				return this;
-			}
-			public Builder setNote(String value) {
-				mValues.put(Ratings.NOTE, value);
-				return this;
-			}
-			public Builder setCountry(String value) {
-				mValues.put(Ratings.COUNTRY, value);
-				return this;
-			}
-			public Builder setDeleted(long value) {
-				mValues.put(Ratings.DELETED, value);
-				return this;
-			}
-			public Builder setApproved(long value) {
-				mValues.put(Ratings.APPROVED, value);
-				return this;
-			}
-			public Builder setAndroidid(String value) {
-				mValues.put(Ratings.ANDROIDID, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			viewUris.add(Ratingsum.CONTENT_URI);
 			viewUris.add(TracksGesSum.CONTENT_URI);
 			viewUris.add(Tracksges.CONTENT_URI);
 			
@@ -2321,80 +2110,6 @@ public class MxInfoDBContract  {
 		}
 	}
 	/**
-	 * <p>Column definitions and helper methods to work with the Ratingsum.</p>
-	 */
-	public static class Ratingsum implements RatingsumColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("ratingsum").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Ratingsum rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.ratingsum";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Ratingsum row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.ratingsum";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Ratingsum, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/ratingsum/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Ratingsum.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Ratingsum.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Ratingsum</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Ratingsum.</p>
-		 *
-		 * <p>Use {@link Ratingsum#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Ratingsum.CONTENT_URI);
-			}
-			
-			public Builder setTrackRestId(long value) {
-				mValues.put(Ratingsum.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setRatingcount(long value) {
-				mValues.put(Ratingsum.RATINGCOUNT, value);
-				return this;
-			}
-			public Builder setRatingavg(double value) {
-				mValues.put(Ratingsum.RATINGAVG, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
 	 * <p>Column definitions and helper methods to work with the TracksGesSum.</p>
 	 */
 	public static class TracksGesSum implements TracksGesSumColumns, BaseColumns {
@@ -2667,10 +2382,6 @@ public class MxInfoDBContract  {
 			}
 			public Builder setIndoor(long value) {
 				mValues.put(TracksGesSum.INDOOR, value);
-				return this;
-			}
-			public Builder setRating(String value) {
-				mValues.put(TracksGesSum.RATING, value);
 				return this;
 			}
 			public Builder setPicturecount(String value) {
@@ -2967,8 +2678,12 @@ public class MxInfoDBContract  {
 				mValues.put(Tracksges.INDOOR, value);
 				return this;
 			}
-			public Builder setRating(String value) {
-				mValues.put(Tracksges.RATING, value);
+			public Builder setPicturecount(String value) {
+				mValues.put(Tracksges.PICTURECOUNT, value);
+				return this;
+			}
+			public Builder setEventcount(String value) {
+				mValues.put(Tracksges.EVENTCOUNT, value);
 				return this;
 			}
 		}
@@ -3068,10 +2783,8 @@ public class MxInfoDBContract  {
 		map.put(Events.CONTENT_URI, Events.VIEW_URIS);
 		map.put(Favorits.CONTENT_URI, Favorits.VIEW_URIS);
 		map.put(Importstatus.CONTENT_URI, Importstatus.VIEW_URIS);
-		map.put(Message.CONTENT_URI, Message.VIEW_URIS);
 		map.put(Network.CONTENT_URI, Network.VIEW_URIS);
 		map.put(Pictures.CONTENT_URI, Pictures.VIEW_URIS);
-		map.put(Ratings.CONTENT_URI, Ratings.VIEW_URIS);
 		map.put(Route.CONTENT_URI, Route.VIEW_URIS);
 		map.put(Series.CONTENT_URI, Series.VIEW_URIS);
 		map.put(Tracks.CONTENT_URI, Tracks.VIEW_URIS);
@@ -3082,7 +2795,6 @@ public class MxInfoDBContract  {
 		map.put(Events2series.CONTENT_URI, Events2series.VIEW_URIS);
 		map.put(Eventsum.CONTENT_URI, Eventsum.VIEW_URIS);
 		map.put(Picturesum.CONTENT_URI, Picturesum.VIEW_URIS);
-		map.put(Ratingsum.CONTENT_URI, Ratingsum.VIEW_URIS);
 		map.put(TracksGesSum.CONTENT_URI, TracksGesSum.VIEW_URIS);
 		map.put(Tracksges.CONTENT_URI, Tracksges.VIEW_URIS);
 		map.put(UserActivity.CONTENT_URI, UserActivity.VIEW_URIS);
@@ -3101,10 +2813,8 @@ public class MxInfoDBContract  {
 		Events.delete();
 		Favorits.delete();
 		Importstatus.delete();
-		Message.delete();
 		Network.delete();
 		Pictures.delete();
-		Ratings.delete();
 		Route.delete();
 		Series.delete();
 		Tracks.delete();
