@@ -17,11 +17,13 @@ import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV6;
 import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV7;
 import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV8;
 import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV9;
+import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV10;
+import info.mx.tracks.sqlite.migrations.DefaultMxInfoDBMigrationV11;
 
 public abstract class AbstractMxInfoDBOpenHelper extends MechanoidSQLiteOpenHelper {
 	private static final String DATABASE_NAME = "MxInfoDB.db";
 
-	public static final int VERSION = 9;
+	public static final int VERSION = 11;
 
 	public interface Sources {
 		String TRACKS = "tracks";
@@ -82,6 +84,10 @@ public abstract class AbstractMxInfoDBOpenHelper extends MechanoidSQLiteOpenHelp
 				return createMxInfoDBMigrationV8();
 			case 8:
 				return createMxInfoDBMigrationV9();
+			case 9:
+				return createMxInfoDBMigrationV10();
+			case 10:
+				return createMxInfoDBMigrationV11();
 			default:
 				throw new IllegalStateException("No migration for version " + version);
 		}
@@ -113,5 +119,11 @@ public abstract class AbstractMxInfoDBOpenHelper extends MechanoidSQLiteOpenHelp
 	}
 	protected SQLiteMigration createMxInfoDBMigrationV9() {
 		return new DefaultMxInfoDBMigrationV9();
+	}
+	protected SQLiteMigration createMxInfoDBMigrationV10() {
+		return new DefaultMxInfoDBMigrationV10();
+	}
+	protected SQLiteMigration createMxInfoDBMigrationV11() {
+		return new DefaultMxInfoDBMigrationV11();
 	}
 }
