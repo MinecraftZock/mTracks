@@ -1,11 +1,12 @@
-package info.mx.tracks.room
+package info.mx.tracks.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import info.mx.tracks.room.DBMigrationUtil
 
-@Entity
+@Entity(tableName = DBMigrationUtil.TABLE_CAPTUREDLATLNG)
 data class CapturedLatLng(
         @PrimaryKey(autoGenerate = true) var id: Long?,
         @ColumnInfo(name = "lat") var lat: Double = 0.0,

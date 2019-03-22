@@ -50,7 +50,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
         binding.poiDetailPhone.setOnTouchListener(object : FeedBackTouchListener() {
 
             override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-                var res = false // super.onTouch(view, motionEvent);
+                var res = false // super.onTouch(view, motionEvent)
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
                     MotionEvent.ACTION_CANCEL -> res = true

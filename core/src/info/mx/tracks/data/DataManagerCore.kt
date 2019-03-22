@@ -17,7 +17,7 @@ open class DataManagerCore(private val commApiClient: CommApiClient) : DataManag
 
     @Throws(IOException::class)
     fun getWeather4TrackSync(trackRestID: Long, unit: String, lang: String): Response<String> {
-        return commApiClient.tracksService.getWeather4Track(trackRestID, unit, lang, basic).execute()
+        return commApiClient.tracksService.getWeather4TrackSync(trackRestID, unit, lang, basic).execute()
     }
 
     @Throws(IOException::class)
