@@ -32,8 +32,8 @@ import info.mx.tracks.R
 import info.mx.tracks.common.NotificationHelper
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.CapturedLatLng
 import info.mx.tracks.tools.PermissionHelper
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

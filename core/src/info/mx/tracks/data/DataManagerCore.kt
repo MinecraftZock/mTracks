@@ -16,8 +16,8 @@ import java.io.IOException
 open class DataManagerCore(private val commApiClient: CommApiClient) : DataManagerBase() {
 
     @Throws(IOException::class)
-    fun getWeather4Track(trackRestID: Long, unit: String, lang: String): Response<String> {
-        return commApiClient.tracksService.getWeather4Track(trackRestID, unit, lang, basic).execute()
+    fun getWeather4TrackSync(trackRestID: Long, unit: String, lang: String): Response<String> {
+        return commApiClient.tracksService.getWeather4TrackSync(trackRestID, unit, lang, basic).execute()
     }
 
     @Throws(IOException::class)

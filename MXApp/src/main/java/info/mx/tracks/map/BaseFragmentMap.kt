@@ -554,7 +554,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        searchAdapter = SimpleCursorAdapter(context, R.layout.item_track, null, ViewBinderTracks.projectionGes, ViewBinderTracks.toGes, 0)
+        searchAdapter = SimpleCursorAdapter(context, R.layout.item_track, null, ViewBinderTracks.projectionGesSum, ViewBinderTracks.toGes, 0)
         val viewBinder = ViewBinderTracks(context, null, false)
         searchAdapter!!.viewBinder = viewBinder
     }

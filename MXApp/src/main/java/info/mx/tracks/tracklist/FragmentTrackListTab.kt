@@ -60,7 +60,8 @@ class FragmentTrackListTab : FragmentBase() {
                         arguments = bundle
                     }
                     1 -> FragmentTrackList().apply {
-                        bundle.putString(FragmentUpDown.ORDER, Tracksges.RATING)
+                        bundle.putString(FragmentUpDown.ORDER, FragmentTrackList.IS_FAVORITE)
+
                         arguments = bundle
                     }
                     2 -> if (MxCoreApplication.isAdmin)

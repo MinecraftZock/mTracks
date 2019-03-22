@@ -282,7 +282,7 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
         return try {
             val units = if (MxPreferences.getInstance().unitsKm) "metric" else "imperial"
             val picturesResponse = dataManagerCore
-                .getWeather4Track(trackRecord.restId, units, Locale.getDefault().toString())
+                .getWeather4TrackSync(trackRecord.restId, units, Locale.getDefault().toString())
             picturesResponse.checkResponseCodeOk()
             var jsonString = picturesResponse.body()
             if (jsonString == null) {
