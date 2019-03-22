@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import info.mx.tracks.room.entity.CapturedLatLng
 import info.mx.tracks.service.RecalculateDistance
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -27,7 +28,7 @@ interface CapturedLatLngDao {
     fun count(): Int
 
     //    @Query("SELECT * FROM Comment WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
-    //    User findByName(String first, String last);
+    //    User findByName(String first, String last)
 
     @Insert
     fun insertAll(vararg capturedLatLngs: CapturedLatLng)
