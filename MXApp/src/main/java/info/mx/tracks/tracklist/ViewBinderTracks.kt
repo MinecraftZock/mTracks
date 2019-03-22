@@ -32,7 +32,8 @@ import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
-class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) : SimpleCursorAdapter.ViewBinder, KoinComponent {
+class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) :
+    SimpleCursorAdapter.ViewBinder, KoinComponent {
 
     private val shortWeekdays: Array<String>
     private val withSum: Boolean
@@ -205,7 +206,6 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
             TracksGesSum.N_U_EVENTS,
             TracksGesSum.TRACKNAME,
             TracksGesSum.DISTANCE2LOCATION,
-            TracksGesSum.RATING,
             TracksGesSum.OPENMONDAYS,
             TracksGesSum.OPENTUESDAYS,
             TracksGesSum.OPENWEDNESDAY,
@@ -240,7 +240,6 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
             Tracksges.N_U_EVENTS,
             Tracksges.TRACKNAME,
             Tracksges.DISTANCE2LOCATION,
-            Tracksges.RATING,
             Tracksges.OPENMONDAYS,
             Tracksges.OPENTUESDAYS,
             Tracksges.OPENWEDNESDAY,

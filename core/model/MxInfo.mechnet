@@ -23,6 +23,7 @@ client MxInfo "http://192.168.178.23:8080" {
 		body RESTevent
 		response BaseResponse
 	}
+	// IAppTrackService has it too TODO postRating()
 	post postRatings /MXServer/rest/ratings/createWithID {
 		body RESTrating
 		response BaseResponse
