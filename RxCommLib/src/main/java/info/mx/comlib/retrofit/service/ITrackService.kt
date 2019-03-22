@@ -10,6 +10,8 @@ import info.mx.comlib.retrofit.service.model.TrackR
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
+import io.reactivex.Single
+import retrofit2.http.GET
 
 interface ITrackService {
 
@@ -44,8 +46,14 @@ interface ITrackService {
             @Header("Authorization") authorization: String): Call<List<RatingR>>
 
     @Headers("Accept: application/json")
+    @GET("/backend/MXServer/rest/ratings/track/{trackId}")
+    fun getRatingsForTrack(
+            @Path(value = "trackId") trackId: Long,
+            @Header("Authorization") authorization: String): Single<List<RatingR>>
+
+    @Headers("Accept: application/json")
     @GET("/backend/MXServer/rest/weather/forTrack/{trackid}/{unit}/{lang}")
-    fun getWeather4Track(
+    fun getWeather4TrackSync(
             @Path(value = "trackid") trackid: Long,
             @Path(value = "unit") unit: String,
             @Path(value = "lang") lang: String,

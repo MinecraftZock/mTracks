@@ -209,21 +209,21 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
             val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder
-                    .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
-                    .setView(if (uris.size == 1) listView else gridView)
-                    .setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        for (uri in uris) {
-                            val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
-                            Ops.execute(intentM)
-                            if (clip) {
-                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val data = ClipData.newPlainText("", "")
-                                clipboard.setPrimaryClip(data)
-                            }
+                .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
+                .setView(if (uris.size == 1) listView else gridView)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    for (uri in uris) {
+                        val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
+                        Ops.execute(intentM)
+                        if (clip) {
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val data = ClipData.newPlainText("", "")
+                            clipboard.setPrimaryClip(data)
                         }
                     }
+                }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.window!!.setLayout(AdapterImageUrisAdapter.getDesiredScreenWidth(), AdapterImageUrisAdapter.getDesiredScreenHeight())
             alertDialog.show()
