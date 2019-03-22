@@ -49,8 +49,16 @@ import info.mx.core_generated.ops.AbstractOpPostImagesOperation
 import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.rest.*
-import info.mx.core_generated.sqlite.*
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.CountryRecord
+import info.mx.core_generated.sqlite.CountrysumRecord
+import info.mx.core_generated.sqlite.EventsRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.core_generated.sqlite.NetworkRecord
+import info.mx.core_generated.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.SeriesRecord
+import info.mx.core_generated.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
@@ -145,8 +153,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 }
 
                 doSyncPictures(context, args.updateProvider)
-                imported = 0
-                doSyncRatings(context, args.updateProvider)
                 imported = 0
                 doSyncSeries(context, args.updateProvider)
                 imported = 0
@@ -425,7 +431,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         Timber.d("del approved:%s", del)
         SQuery.newQuery().expr(Trackstage.APPROVED, Op.EQ, -1).delete(Trackstage.CONTENT_URI)
         SQuery.newQuery().expr(Pictures.APPROVED, Op.EQ, -1).delete(Pictures.CONTENT_URI)
-        SQuery.newQuery().expr(Ratings.APPROVED, Op.EQ, -1).delete(Ratings.CONTENT_URI)
     }
 
     @Throws(ServiceException::class)
@@ -1042,78 +1047,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             throw Exception(e.message + " $trackName")
         }
         return zlrInsertedReturn
-    }
-
-    @Throws(Exception::class)
-    private fun doSyncRatings(context: OperationContext, updateProvider: Boolean) {
-        val opName = "Ratings"
-        val maxCreated = SQuery.newQuery()
-            .expr(Ratings.REST_ID, Op.NEQ, -1)
-            .firstLong(Ratings.CONTENT_URI, "max(" + Ratings.CHANGED + ")")
-
-        val ratingsResponse = dataManagerApp.getRatings(maxCreated / 1000)
-
-        ratingsResponse.checkResponseCodeOk()
-
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val contentValuesRatingsList = ArrayList<ContentValues>()
-        for (trackREST in ratingsResponse.body()!!) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Ratings.REST_ID, Op.EQ, trackREST.id!!)
-                .firstInt(Ratings.CONTENT_URI, Ratings._ID)
-            if (restId == 0) { // neuanlage
-                zlrInserted++
-                val builderRating = Ratings.newBuilder()
-
-                builderRating.setRestId(trackREST.id!!.toLong())
-                builderRating.setChanged(trackREST.changed.toLong() * 1000)
-                builderRating.setCountry(trackREST.country)
-                builderRating.setDeleted(trackREST.deleted!!.toLong())
-                builderRating.setNote(trackREST.note)
-                builderRating.setRating(trackREST.rating!!.toLong())
-                builderRating.setTrackRestId(trackREST.trackId!!.toLong())
-                builderRating.setUsername(trackREST.username)
-                builderRating.setApproved(trackREST.approved!!.toLong())
-                builderRating.setAndroidid(trackREST.androidid)
-                contentValuesRatingsList.add(builderRating.values)
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = bulkInsert(
-                        context.applicationContext, contentValuesRatingsList,
-                        Ratings.CONTENT_URI, ratingsResponse.body()!!.size, opName, 0
-                    )
-                }
-            } else {
-                val recordTrack = RatingsRecord.get(restId.toLong())
-                recordTrack!!.restId = trackREST.id!!.toLong()
-                recordTrack.changed = trackREST.changed.toLong() * 1000
-                recordTrack.country = trackREST.country
-                recordTrack.deleted = trackREST.deleted!!.toLong()
-                recordTrack.note = trackREST.note
-                recordTrack.rating = trackREST.rating!!.toLong()
-                recordTrack.trackRestId = trackREST.trackId!!.toLong()
-                recordTrack.username = trackREST.username
-                recordTrack.approved = trackREST.approved!!.toLong()
-                recordTrack.androidid = trackREST.androidid
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            bulkInsert(
-                context.applicationContext, contentValuesRatingsList,
-                Ratings.CONTENT_URI, ratingsResponse.body()!!.size, opName, 0
-            )
-        }
-        Timber.i("$opName gesamt ${(if (ratingsResponse.body() != null) ratingsResponse.body()!!.size else 0)} updated $zlrUpdated")
     }
 
     @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)

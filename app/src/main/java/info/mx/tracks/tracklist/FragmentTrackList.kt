@@ -32,26 +32,27 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.commonlib.LocationHelper
-import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication
+import info.mx.core.common.ImportStatusMessage
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.core_generated.sqlite.TracksGesSumRecord
+import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.core.common.ImportStatusMessage
 import info.mx.tracks.common.OverScrollListView
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.databinding.ScreenListWithProgressbarBinding
 import info.mx.tracks.ops.OpSyncFromServerOperation
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.settings.ActivityFilter
 import info.mx.tracks.settings.ActivityFilterCountry
 import info.mx.tracks.settings.ActivitySetting
-import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.MxInfoDBContract.*
-import info.mx.core_generated.sqlite.TracksGesSumRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -95,6 +96,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    private val mxDatabase: MxDatabase by inject()
 
     internal interface Callbacks {
         fun onItemSelected(id: Long)
@@ -211,7 +214,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
             override fun onOverScroll(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) = Unit
         })
         if (sortOrder == TracksGesSum.DISTANCE2LOCATION) {
-            adapterTracksSort = AdapterTracksSort(requireActivity())
+            adapterTracksSort = AdapterTracksSort(requireActivity(), this, mxDatabase)
             binding.listOverview.adapter = adapterTracksSort
         } else {
             adapter = SimpleCursorAdapter(
@@ -344,7 +347,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                 }
                 val order = bundle.getString(FragmentUpDown.ORDER)!!.lowercase(Locale.getDefault())
                 Timber.i("onCreateLoader $order $curFilter")
-                isFav = order == TracksGesSum.RATING.lowercase(Locale.getDefault())
+                isFav = order == IS_FAVORITE
                 val isStage = order == TracksGesSum.APPROVED.lowercase(Locale.getDefault())
                 val isOnlyForeign = bundle.getBoolean(ONLY_FOREIGN, false)
                 var query = SQuery.newQuery()
@@ -572,6 +575,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
 
     companion object {
+        const val IS_FAVORITE = Tracks.TRACKNAME
         private const val LOADER_TRACKS = 0
         private const val FILTER = "FILTER"
         internal const val ONLY_FOREIGN = "only_foreign"

@@ -190,9 +190,9 @@ public class QueryHelper {
                 query.expr(Tracksges.OPENSUNDAY, Op.EQ, 0);
             }
         }
-        if (prefs.getShowRating() > 0) {
-            query.expr(Tracksges.RATING, Op.GTEQ, prefs.getShowRating());
-        }
+//        if (prefs.getShowRating() > 0) {
+//            query.expr(Tracksges.RATING, Op.GTEQ, prefs.getShowRating());
+//        }
         if (prefs.getShowDifficult() > 0) {
             query.expr(Tracksges.SCHWIERIGKEIT, Op.GTEQ, prefs.getShowDifficult());
         }

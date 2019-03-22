@@ -53,36 +53,42 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.DateHelper
-import info.mx.commonlib.LocationHelper
 import info.hannes.commonlib.utils.FileHelper
-import info.mx.tracks.BuildConfig
+import info.mx.commonlib.LocationHelper
 import info.mx.core.MxCoreApplication
-import info.mx.tracks.R
 import info.mx.core.common.DistanceHelper
+import info.mx.core.sqlite.TracksDistanceRecord
+import info.mx.core.tasks.ImportTaskCompleteListener
+import info.mx.core_generated.ops.AbstractOpGetWeatherCachedOperation
+import info.mx.core_generated.ops.AbstractOpPostImagesOperation
+import info.mx.core_generated.ops.google.AbstractOpGetRouteOperation
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.FavoritsRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.core_generated.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.RouteRecord
+import info.mx.core_generated.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.TracksgesRecord
+import info.mx.core_generated.sqlite.WeatherRecord
+import info.mx.tracks.BuildConfig
+import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
 import info.mx.tracks.map.ActivityMapExtension
-import info.mx.core_generated.ops.AbstractOpGetWeatherCachedOperation
-import info.mx.core_generated.ops.AbstractOpPostImagesOperation
-import info.mx.core_generated.ops.google.AbstractOpGetRouteOperation
-import info.mx.core_generated.prefs.MxPreferences
+import info.mx.tracks.rest.DataManagerApp
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
-import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.FavoritsRecord
-import info.mx.core_generated.sqlite.MxInfoDBContract.*
-import info.mx.core_generated.sqlite.PicturesRecord
-import info.mx.core_generated.sqlite.RouteRecord
-import info.mx.core.sqlite.TracksDistanceRecord
-import info.mx.core_generated.sqlite.TracksRecord
-import info.mx.core_generated.sqlite.TracksgesRecord
-import info.mx.core_generated.sqlite.WeatherRecord
-import info.mx.core.tasks.ImportTaskCompleteListener
+import info.mx.tracks.tracklist.FragmentTrackList.Companion.IS_FAVORITE
 import info.mx.tracks.util.CommentHelper
 import info.mx.tracks.util.EventHelper
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -92,6 +98,10 @@ import java.util.Locale
 
 
 class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener {
+
+    private val mxDatabase: MxDatabase by inject()
+
+    private val dataManagerApp: DataManagerApp by inject()
 
     private var adapterWeather: WeatherCursorAdapter? = null
     private var recordTrack: TracksgesRecord? = null
@@ -554,16 +564,22 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             }
         }
         DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, null)
-        binding.trDetailRating.rating = java.lang.Float.parseFloat(trackRec.rating)
+        addDisposable(
+            mxDatabase.commentDao().avgByTrackId(trackRec.restId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ binding.trDetailRating.rating = it }, { throwable -> Timber.e("Subscribing to registerRx failed") })
+        )
         binding.trDetailDifficult.rating = trackRec.schwierigkeit.toFloat()
 
-        val anzRating = SQuery.newQuery()
-            .expr(Ratings.TRACK_REST_ID, Op.EQ, trackRec.restId)
-            .expr(Ratings.DELETED, Op.EQ, 0)
-            .expr(Ratings.ANDROIDID, Op.NEQ, "debug")
-            .count(Ratings.CONTENT_URI)
-        binding.textRatingCount.text = if (anzRating == 0) "" else String.format(getString(R.string.rating_count), anzRating.toString() + "")
-
+        addDisposable(
+            mxDatabase.commentDao().avgByTrackId(trackRec.restId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { count ->
+                    binding.textRatingCount.text = if (count == 0F) "" else String.format(getString(R.string.rating_count), count!!.toString() + "")
+                }
+        )
         binding.trLayoutDifficult.visibility = if (trackRec.schwierigkeit == 0L) View.GONE else View.VISIBLE
         binding.trLayoutRating.visibility = if (trackRec.trackaccess == "D") View.GONE else View.VISIBLE
         val hideTimes = trackRec.hoursmonday == null &&
@@ -868,7 +884,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     fun addRating() {
         TracksRecord.get(recordLocalId)?.let {
-            CommentHelper.doAddRating(requireActivity(), it)
+            CommentHelper.doAddRating(requireActivity(), it, mxDatabase, dataManagerApp)
         }
     }
 
@@ -1097,7 +1113,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 } else {
                     sort = sort.lowercase(Locale.getDefault())
                 }
-                isFav = sort == Tracksges.RATING.lowercase(Locale.getDefault())
+                isFav = sort.equals(IS_FAVORITE)
             }
         }
         var query = SQuery.newQuery()

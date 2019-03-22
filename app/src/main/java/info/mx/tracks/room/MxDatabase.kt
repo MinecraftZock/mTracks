@@ -2,11 +2,16 @@ package info.mx.tracks.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import info.mx.tracks.room.entity.*
 
-@Database(entities = [CapturedLatLng::class], version = 1)
+@Database(entities = [CapturedLatLng::class, Comment::class, Country::class, Event::class,
+    Favorit::class, Network::class, Picture::class, Route::class, Series::class, Track::class,
+    TrackStage::class, Weather::class], version = 2)
 abstract class MxDatabase : RoomDatabase() {
 
     abstract fun capturedLatLngDao(): CapturedLatLngDao
+
+    abstract fun commentDao(): CommentDao
 
     companion object {
 

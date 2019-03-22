@@ -1,0 +1,1410 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "e99980f95656b56c1cf8aea35ca559f2",
+    "entities": [
+      {
+        "tableName": "CapturedLatLng",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `lat` REAL NOT NULL, `lon ` REAL NOT NULL, `time` INTEGER NOT NULL, `distToNearest` INTEGER NOT NULL, `distToLast` INTEGER NOT NULL, `aktion` TEXT NOT NULL, `extra` TEXT NOT NULL, `trackname` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "lon ",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distToNearest",
+            "columnName": "distToNearest",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distanceToLast",
+            "columnName": "distToLast",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "aktion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "extra",
+            "columnName": "extra",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackname",
+            "columnName": "trackname",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Comment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `rating` INTEGER NOT NULL, `username` TEXT NOT NULL, `note` TEXT NOT NULL, `country` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rating",
+            "columnName": "rating",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleted",
+            "columnName": "deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "androidid",
+            "columnName": "androidid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "CommentTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `CommentTrackIdIndex` ON `${TABLE_NAME}` (`trackId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Country",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `country` TEXT NOT NULL, `show` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "show",
+            "columnName": "show",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackRestId` INTEGER NOT NULL, `seriesRestId` INTEGER NOT NULL, `eventDate` INTEGER NOT NULL, `comment` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackRestId",
+            "columnName": "trackRestId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seriesRestId",
+            "columnName": "seriesRestId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventDate",
+            "columnName": "eventDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleted",
+            "columnName": "deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "androidid",
+            "columnName": "androidid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "EventTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackRestId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `EventTrackIdIndex` ON `${TABLE_NAME}` (`trackRestId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Favorit",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Network",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tracks` INTEGER NOT NULL, `reason` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "tracks",
+            "columnName": "tracks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reason",
+            "columnName": "reason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Picture",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `localfile` TEXT NOT NULL, `localthumb` TEXT NOT NULL, `username` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localfile",
+            "columnName": "localfile",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localthumb",
+            "columnName": "localthumb",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleted",
+            "columnName": "deleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "androidid",
+            "columnName": "androidid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "PictureTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `PictureTrackIdIndex` ON `${TABLE_NAME}` (`trackId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Route",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `content` TEXT NOT NULL, `logitude` REAL NOT NULL, `langitude` REAL NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logitude",
+            "columnName": "logitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "langitude",
+            "columnName": "langitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "RouteTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `RouteTrackIdIndex` ON `${TABLE_NAME}` (`trackId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Series",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `seriesUrl` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seriesUrl",
+            "columnName": "seriesUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Track",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` INTEGER NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackname",
+            "columnName": "trackname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fees",
+            "columnName": "fees",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contact",
+            "columnName": "contact",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "metatext",
+            "columnName": "metatext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "licence",
+            "columnName": "licence",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kidstrack",
+            "columnName": "kidstrack",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openmondays",
+            "columnName": "openmondays",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opentuesdays",
+            "columnName": "opentuesdays",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openwednesday",
+            "columnName": "openwednesday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openthursday",
+            "columnName": "openthursday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openfriday",
+            "columnName": "openfriday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opensaturday",
+            "columnName": "opensaturday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opensunday",
+            "columnName": "opensunday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursmonday",
+            "columnName": "hoursmonday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourstuesday",
+            "columnName": "hourstuesday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourswednesday",
+            "columnName": "hourswednesday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursthursday",
+            "columnName": "hoursthursday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursfriday",
+            "columnName": "hoursfriday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourssaturday",
+            "columnName": "hourssaturday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourssunday",
+            "columnName": "hourssunday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tracklength",
+            "columnName": "tracklength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soiltype",
+            "columnName": "soiltype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "camping",
+            "columnName": "camping",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shower",
+            "columnName": "shower",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cleaning",
+            "columnName": "cleaning",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "electricity",
+            "columnName": "electricity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distance2location",
+            "columnName": "distance2location",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supercross",
+            "columnName": "supercross",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showroom",
+            "columnName": "showroom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workshop",
+            "columnName": "workshop",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "validuntil",
+            "columnName": "validuntil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "singletracks",
+            "columnName": "singletracks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "campingrvrvhookup",
+            "columnName": "campingrvrvhookup",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mxtrack",
+            "columnName": "mxtrack",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "a4x4",
+            "columnName": "a4x4",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enduro",
+            "columnName": "enduro",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "utv",
+            "columnName": "utv",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quad",
+            "columnName": "quad",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "areatype",
+            "columnName": "areatype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schwierigkeit",
+            "columnName": "schwierigkeit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "indoor",
+            "columnName": "indoor",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAsked",
+            "columnName": "lastAsked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackaccess",
+            "columnName": "trackaccess",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logoURL",
+            "columnName": "logoURL",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brands",
+            "columnName": "brands",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adress",
+            "columnName": "adress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feescamping",
+            "columnName": "feescamping",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "daysopen",
+            "columnName": "daysopen",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noiselimit",
+            "columnName": "noiselimit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackstatus",
+            "columnName": "trackstatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "andoridid",
+            "columnName": "andoridid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "TrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `TrackIdIndex` ON `${TABLE_NAME}` (`id`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TrackStage",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `updated` INTEGER NOT NULL, `trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` INTEGER NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updated",
+            "columnName": "updated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackname",
+            "columnName": "trackname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fees",
+            "columnName": "fees",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contact",
+            "columnName": "contact",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "metatext",
+            "columnName": "metatext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "licence",
+            "columnName": "licence",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kidstrack",
+            "columnName": "kidstrack",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openmondays",
+            "columnName": "openmondays",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opentuesdays",
+            "columnName": "opentuesdays",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openwednesday",
+            "columnName": "openwednesday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openthursday",
+            "columnName": "openthursday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openfriday",
+            "columnName": "openfriday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opensaturday",
+            "columnName": "opensaturday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opensunday",
+            "columnName": "opensunday",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursmonday",
+            "columnName": "hoursmonday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourstuesday",
+            "columnName": "hourstuesday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourswednesday",
+            "columnName": "hourswednesday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursthursday",
+            "columnName": "hoursthursday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoursfriday",
+            "columnName": "hoursfriday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourssaturday",
+            "columnName": "hourssaturday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hourssunday",
+            "columnName": "hourssunday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tracklength",
+            "columnName": "tracklength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soiltype",
+            "columnName": "soiltype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "camping",
+            "columnName": "camping",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shower",
+            "columnName": "shower",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cleaning",
+            "columnName": "cleaning",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "electricity",
+            "columnName": "electricity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distance2location",
+            "columnName": "distance2location",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supercross",
+            "columnName": "supercross",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showroom",
+            "columnName": "showroom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "workshop",
+            "columnName": "workshop",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "validuntil",
+            "columnName": "validuntil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "singletracks",
+            "columnName": "singletracks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "campingrvrvhookup",
+            "columnName": "campingrvrvhookup",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mxtrack",
+            "columnName": "mxtrack",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "a4x4",
+            "columnName": "a4x4",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enduro",
+            "columnName": "enduro",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "utv",
+            "columnName": "utv",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quad",
+            "columnName": "quad",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "areatype",
+            "columnName": "areatype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schwierigkeit",
+            "columnName": "schwierigkeit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "indoor",
+            "columnName": "indoor",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAsked",
+            "columnName": "lastAsked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackaccess",
+            "columnName": "trackaccess",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logoURL",
+            "columnName": "logoURL",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brands",
+            "columnName": "brands",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "facebook",
+            "columnName": "facebook",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adress",
+            "columnName": "adress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feescamping",
+            "columnName": "feescamping",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "daysopen",
+            "columnName": "daysopen",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noiselimit",
+            "columnName": "noiselimit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trackstatus",
+            "columnName": "trackstatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "andoridid",
+            "columnName": "andoridid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "TrackStageTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `TrackStageTrackIdIndex` ON `${TABLE_NAME}` (`trackId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Weather",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `dt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "trackId",
+            "columnName": "trackId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dt",
+            "columnName": "dt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "restId",
+            "columnName": "restId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "changed",
+            "columnName": "changed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "WeatherTrackIdIndex",
+            "unique": false,
+            "columnNames": [
+              "trackId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `WeatherTrackIdIndex` ON `${TABLE_NAME}` (`trackId`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e99980f95656b56c1cf8aea35ca559f2')"
+    ]
+  }
+}
