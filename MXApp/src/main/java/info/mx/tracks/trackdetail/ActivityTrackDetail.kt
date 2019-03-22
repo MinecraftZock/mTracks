@@ -205,8 +205,8 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
         fun createDeepLinkIntent(context: Context, uri: Uri?): Intent {
             val localId = SQuery.newQuery()
-                    .expr(Tracks.REST_ID, SQuery.Op.EQ, uri!!.getQueryParameter("trackid"))
-                    .firstLong(Tracks.CONTENT_URI, Tracks._ID)
+                .expr(Tracks.REST_ID, SQuery.Op.EQ, uri!!.getQueryParameter("trackid"))
+                .firstLong(Tracks.CONTENT_URI, Tracks._ID)
             val intent = Intent(context, ActivityTrackDetail::class.java)
             intent.putExtra(RECORD_ID_LOCAL, localId)
             intent.putExtra(CONTENT_URI, Tracksges.CONTENT_URI.toString())
@@ -231,21 +231,21 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
             val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder
-                    .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
-                    .setView(if (uris.size == 1) listView else gridView)
-                    .setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        for (uri in uris) {
-                            val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
-                            Ops.execute(intentM)
-                            if (clip) {
-                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val data = ClipData.newPlainText("", "")
-                                clipboard.setPrimaryClip(data)
-                            }
+                .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
+                .setView(if (uris.size == 1) listView else gridView)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    for (uri in uris) {
+                        val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
+                        Ops.execute(intentM)
+                        if (clip) {
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val data = ClipData.newPlainText("", "")
+                            clipboard.setPrimaryClip(data)
                         }
                     }
+                }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.window!!.setLayout(AdapterImageUrisAdapter.getDesiredScreenWidth(), AdapterImageUrisAdapter.getDesiredScreenHeight())
             alertDialog.show()
