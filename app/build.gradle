@@ -138,6 +138,7 @@ android {
             dimension "kind"
             applicationId "info.hannes.mxadmin"
             versionNameSuffix "-Admin"
+            buildConfigField 'int', pushServerSleep, '1500'
             buildConfigField "Boolean", SHOW_WEATHER, "false"
         }
         free {
@@ -217,6 +218,8 @@ dependencies {
     ksp "androidx.room:room-compiler:$room"
     implementation "androidx.room:room-rxjava2:$room"
     implementation "androidx.room:room-testing:$room"
+
+    //implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     implementation "com.github.AppDevNext:ChangeLog:3.7.1"
     implementation "com.github.AppDevNext.Logcat:LogcatCrashlyticLib:3.3.1"

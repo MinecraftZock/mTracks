@@ -476,6 +476,7 @@ database MxInfoDB {
 			left join ratingsum on tracks.restId = ratingsum.track_restId;
 			
     }
+    // move rating to Room
     migration {
     	alter table trackstage add column enduro integer default 0;
 		alter table tracks add column enduro integer default 0;
@@ -594,5 +595,134 @@ database MxInfoDB {
 			left join eventsum on tracks.restId = eventsum.track_restId
 			left join ratingsum on tracks.restId = ratingsum.track_restId;
 			
+    }
+    migration {
+    	drop table ratings;
+    	
+    	drop view tracksges;
+    	create view tracksges as
+			select  
+			Trackname as trackname, 
+			Approved as Approved,
+			Distance2location as distance2location, 
+			Openmondays as openmondays, 
+			Opentuesdays as opentuesdays, 
+			Nu_events as n_u_events,
+			Openwednesday as openwednesday, Openthursday as openthursday, 
+			Openfriday as openfriday, Opensaturday as opensaturday, 
+			Opensunday as opensunday,
+			Country as country, trackaccess as trackaccess, 
+			restId as restId, tracks._id as _id, brands as brands, 
+			Metatext as metatext,
+			Kidstrack as Kidstrack, Supercross as Supercross, 
+			Shower as Shower, Cleaning as Cleaning, 
+			Electricity as Electricity, Camping as Camping,
+			Latitude as Latitude, Longitude as Longitude,
+			Hoursmonday as Hoursmonday,    
+			Hourstuesday as Hourstuesday,
+			Hourswednesday as Hourswednesday,
+			Hoursthursday as Hoursthursday,
+			Hoursfriday as Hoursfriday,
+			Hourssaturday as Hourssaturday,
+			Hourssunday as Hourssunday,
+			validuntil as validuntil,
+			Url as Url,
+			Phone as Phone,
+			Contact as Contact,
+			Notes as Notes,
+			Tracklength as Tracklength,
+			Soiltype as Soiltype,
+			facebook as facebook,
+			adress as adress,
+			Licence as Licence,
+			Fees as Fees, 
+			
+			feescamping as feescamping,
+			daysopen as daysopen,
+			noiselimit as noiselimit,
+			campingrvrvhookup as campingrvrvhookup,
+			singletracks as singletracks,
+			mxtrack as mxtrack,
+			a4x4 as a4x4,
+			enduro as endruo,
+			utv as utv,
+			quad as quad,
+			trackstatus as trackstatus,
+			areatype as areatype,
+			schwierigkeit as schwierigkeit,
+			indoor as indoor,
+			
+//			(cast (ifnull(ratingavg,0) as real)) as rating,
+			(cast(ifnull(picturecount,0) as integer)) as picturecount,
+			(cast(ifnull(eventcount,0) as integer)) as eventcount
+			from tracks 
+				left join picturesum on tracks.restId = picturesum.track_restId
+				left join eventsum on tracks.restId = eventsum.track_restId
+//				left join ratingsum on tracks.restId = ratingsum.track_restId
+			;
+			
+		drop view tracksGesSum;
+		create view tracksGesSum as select 
+			Trackname as trackname, 
+			Approved as Approved,
+			Distance2location as distance2location, 
+			Openmondays as openmondays, 
+			Opentuesdays as opentuesdays, 
+			Nu_events as n_u_events,
+			Openwednesday as openwednesday, Openthursday as openthursday, 
+			Openfriday as openfriday, Opensaturday as opensaturday, 
+			Opensunday as opensunday,
+			Country as country, trackaccess as trackaccess, 
+			restId as restId, tracks._id as _id, brands as brands, 
+			Metatext as metatext,
+			Kidstrack as Kidstrack, Supercross as Supercross, 
+			Shower as Shower, Cleaning as Cleaning, 
+			Electricity as Electricity, Camping as Camping,
+			Latitude as Latitude, Longitude as Longitude,
+			Hoursmonday as Hoursmonday,    
+			Hourstuesday as Hourstuesday,
+			Hourswednesday as Hourswednesday,
+			Hoursthursday as Hoursthursday,
+			Hoursfriday as Hoursfriday,
+			Hourssaturday as Hourssaturday,
+			Hourssunday as Hourssunday,
+			validuntil as validuntil,
+			Url as Url,
+			Phone as Phone,
+			Contact as Contact,
+			Notes as Notes,
+			Tracklength as Tracklength,
+			Soiltype as Soiltype,
+			facebook as facebook,
+			adress as adress,
+			Licence as Licence,
+			Fees as Fees, 
+			feescamping as feescamping,
+			daysopen as daysopen,
+			noiselimit as noiselimit,
+			campingrvrvhookup as campingrvrvhookup,
+			singletracks as singletracks,
+			mxtrack as mxtrack,
+			a4x4 as a4x4,
+			enduro as endruo,
+			utv as utv,
+			quad as quad,
+			trackstatus as trackstatus,
+			areatype as areatype,
+			schwierigkeit as schwierigkeit,
+			indoor as indoor,
+//			(cast (ifnull(ratingavg,0) as real)) as rating,
+			(cast(ifnull(picturecount,0) as integer)) as picturecount,
+			(cast(ifnull(eventcount,0) as integer)) as eventcount
+		from tracks
+			left join picturesum on tracks.restId = picturesum.track_restId
+			left join eventsum on tracks.restId = eventsum.track_restId
+//			left join ratingsum on tracks.restId = ratingsum.track_restId
+			;
+			
+    	drop view ratingsum;
+    }
+    migration {
+    	drop table message;
     }
 }

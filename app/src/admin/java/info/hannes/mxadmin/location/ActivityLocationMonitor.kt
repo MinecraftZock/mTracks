@@ -22,6 +22,12 @@ class ActivityLocationMonitor : ActivityAdminBase() {
 
     val permissionHelper: PermissionHelper by inject()
 
+    private val permissionIcon = if (permissionHelper.hasLocationPermission()) {
+        ContextCompat.getDrawable(this, R.drawable.actionbar_checkbox)
+    } else {
+        ContextCompat.getDrawable(this, R.drawable.actionbar_checkbox_empty)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_monitor)
@@ -66,12 +72,8 @@ class ActivityLocationMonitor : ActivityAdminBase() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-
-        menu.findItem(R.id.action_settings_filter_country).icon = if (permissionHelper.hasLocationPermission()) {
-            ContextCompat.getDrawable(this, R.drawable.actionbar_checkbox)
-        } else {
-            ContextCompat.getDrawable(this, R.drawable.actionbar_checkbox_empty)
-        }
+        if (!permissionHelper.hasLocationPermission())
+            menu.findItem(R.id.action_settings_filter_country).icon = permissionIcon
         return super.onPrepareOptionsMenu(menu)
     }
 
