@@ -18,10 +18,10 @@ import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.room.memory.entity.TracksDistance
+import info.mx.tracks.room.entity.CapturedLatLng
 import info.mx.tracks.room.memory.MxMemDatabase
+import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.tracks.sqlite.CountryRecord
 import info.mx.tracks.sqlite.MxInfoDBContract
