@@ -1,97 +1,118 @@
 package info.mx.tracks.util
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.provider.Settings
-import android.widget.EditText
-import android.widget.RatingBar
+import android.view.LayoutInflater
 import android.widget.Toast
-import com.robotoworks.mechanoid.db.SQuery
-import info.mx.core.MxCoreApplication.Companion.doSync
-import info.mx.core_generated.prefs.MxPreferences.Companion.instance
-import info.mx.core_generated.sqlite.MxInfoDBContract.Ratings
-import info.mx.core_generated.sqlite.RatingsRecord
-import info.mx.core_generated.sqlite.TracksRecord
-import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
-import java.util.Locale
+import info.mx.tracks.databinding.LayoutCommentAddBinding
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.tracks.rest.DataManagerApp
+import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Comment
+import info.mx.core_generated.sqlite.TracksRecord
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import java.util.*
 
+@SuppressLint("StaticFieldLeak")
 object CommentHelper {
-    private var ratingsRecord: RatingsRecord? = null
 
-    // on add eventId is not used
-    fun doAddRating(activity: Activity, trackRec: TracksRecord) {
-        doEditRating(activity, 0, trackRec)
-    }
+    private var compositeDisposable: CompositeDisposable? = null
 
-    private fun doEditRating(activity: Activity, ratingId: Int, trackRec: TracksRecord) {
-        var edtComment: EditText? = null
-        var userName: EditText? = null
-        var ratingBar: RatingBar? = null
+    fun doAddRating(context: Context, trackRec: TracksRecord, mxDatabase: MxDatabase, dataManagerApp: DataManagerApp) {
+        compositeDisposable = CompositeDisposable()
 
-        ratingsRecord = RatingsRecord.get(ratingId.toLong())
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle(activity.getString(R.string.newRating))
+        val binding: LayoutCommentAddBinding = LayoutCommentAddBinding
+            .inflate(LayoutInflater.from(context))
 
-        builder.setNegativeButton(android.R.string.cancel) { _: DialogInterface?, _: Int -> }
+        val builder = AlertDialog.Builder(context)
+        builder.setView(binding.root)
 
-        builder.setPositiveButton(R.string.done) { _: DialogInterface?, _: Int ->
-            val alreadyExist = SQuery.newQuery()
-                .expr(Ratings.TRACK_REST_ID, SQuery.Op.EQ, trackRec.restId)
-                .expr(Ratings.ANDROIDID, SQuery.Op.EQ, getAndroidID(activity))
-                .expr(Ratings.NOTE, SQuery.Op.EQ, edtComment!!.text.toString())
-                .exists(Ratings.CONTENT_URI)
-            if (!alreadyExist) {
-                if (ratingsRecord == null) {
-                    ratingsRecord = RatingsRecord()
+        // show note if exists
+        addDisposable(
+            mxDatabase.commentDao().loadById(trackRec.restId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ comment ->
+                Timber.d("comment=$comment")
+                if (comment != null) {
+                    binding.comNote.setText(comment.note)
                 }
-
-                ratingsRecord!!.setTrackRestId(trackRec.restId)
-                ratingsRecord!!.setApproved(0)
-                ratingsRecord!!.setRating(ratingBar!!.rating.toLong())
-                ratingsRecord!!.setUsername(userName!!.text.toString())
-                ratingsRecord!!.setNote(edtComment!!.text.toString())
-                ratingsRecord!!.setCountry(Locale.getDefault().country)
-                ratingsRecord!!.setChanged(System.currentTimeMillis())
-                ratingsRecord!!.setAndroidid(getAndroidID(activity))
-                ratingsRecord!!.save()
-                doSync(true, true, BuildConfig.FLAVOR)
-                if (ratingsRecord!!.username != activity.getString(R.string.noname)) {
-                    val prefs1 = instance
-                    prefs1.edit().putUsername(ratingsRecord!!.username.trim { it <= ' ' })
-                        .commit()
-                }
-            } else {
-                Toast.makeText(
-                    activity,
-                    activity.getString(R.string.comment_alredy_exists),
-                    Toast.LENGTH_SHORT
-                ).show()
+            }, { error ->
+                Timber.e(error)
             }
-        }
-        val dlg = builder.create()
-        val inflater = dlg.layoutInflater
-        @SuppressLint("InflateParams") val view =
-            inflater.inflate(R.layout.layout_comment_add, null)
-        edtComment = view.findViewById<EditText>(R.id.com_note)
-        ratingBar = view.findViewById<RatingBar>(R.id.com_rating)
-        if (ratingsRecord != null) {
-            edtComment!!.setText(ratingsRecord!!.note)
+            )
+        )
+
+        builder.setTitle(context.getString(R.string.newRating))
+        builder.setNegativeButton(android.R.string.cancel) { _, _ -> }
+        builder.setPositiveButton(R.string.done) { _, _ ->
+
+            addDisposable(
+                mxDatabase.commentDao().commentExistsRx(trackRec.restId, getAndroidID(context), binding.comNote.text.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap { x ->
+                    if (x > 0) {
+                        Toast.makeText(context, context.getString(R.string.comment_alredy_exists), Toast.LENGTH_SHORT).show()
+                        Single.just(x)
+                    } else {
+                        val comment = Comment()
+                        comment.approved = 0
+                        comment.id = System.currentTimeMillis() * -1000 //a negative value means it's not synced
+                        comment.trackId = trackRec.restId
+                        comment.rating = binding.comRating.rating.toInt()
+                        comment.username = binding.comUsername.text.toString()
+                        comment.note = binding.comNote.text.toString()
+                        comment.country = Locale.getDefault().country
+                        comment.changed = System.currentTimeMillis() / 1000
+                        comment.androidid = getAndroidID(context)
+                        mxDatabase.commentDao().insertAll(comment)
+                        if (comment.username != context.getString(R.string.noname)) {
+                            val prefs1 = MxPreferences.instance
+                            prefs1.edit().putUsername(comment.username.trim()).commit()
+                        }
+
+                        Single.just(x)
+                    }
+                }
+                .flatMap { _ -> mxDatabase.commentDao().allNonPushed() }
+                .toObservable()
+                .flatMapIterable { it }
+                .flatMap { item -> dataManagerApp.pushRating(item).toObservable() }
+                .toList()
+                .subscribe({ listUpdate ->
+                    Timber.d("updateCount=${listUpdate.size}")
+                }, { error ->
+                    Timber.e(error)
+                }
+                )
+            )
         }
 
-        val prefs = instance
-        userName = view.findViewById<EditText>(R.id.com_username).apply {
-            setHint(R.string.default_username)
-            setText(prefs.username)
-        }
-        dlg.setView(view)
+        val dlg = builder.create()
+
+        binding.comUsername.setHint(R.string.default_username)
+        binding.comUsername.setText(MxPreferences.instance.username)
         dlg.show()
     }
 
     @SuppressLint("HardwareIds")
-    private fun getAndroidID(activity: Activity): String? {
-        return Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
+    fun getAndroidID(context: Context): String = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+
+    private fun addDisposable(disposable: Disposable) {
+        if (compositeDisposable == null) {
+            throw Throwable("Disposable can only be added within onResume / onPause lifecycle")
+        }
+
+        compositeDisposable!!.add(disposable)
     }
+
 }
