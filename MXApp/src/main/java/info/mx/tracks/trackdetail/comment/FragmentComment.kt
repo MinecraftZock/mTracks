@@ -3,13 +3,11 @@ package info.mx.tracks.trackdetail.comment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.core.app.NavUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.R
-import info.mx.tracks.adapter.EmptyRecyclerView
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.databinding.FragmentRecyclerListBinding
 import info.mx.tracks.rest.DataManagerApp
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.sqlite.TracksRecord
@@ -26,32 +24,38 @@ class FragmentComment : FragmentUpDown() {
 
     private var localTrackId = 0L
 
+    private var _binding: FragmentRecyclerListBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
     val mxDatabase: MxDatabase by inject()
 
     @SuppressLint("HardwareIds")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
-        @SuppressLint("InflateParams")
-        val view = inflater.inflate(R.layout.fragment_recycler_list, null)
+        _binding = FragmentRecyclerListBinding.inflate(inflater, container, false)
+        val view = binding.root
         // keyboard hide
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-        val emptyView = view.findViewById<TextView>(R.id.txt_no_entry)
-
-        val listRatings = view.findViewById<EmptyRecyclerView>(R.id.listRecyclerEntries)
-        val mLayoutManager = LinearLayoutManager(context)
-        listRatings.layoutManager = mLayoutManager
-        listRatings.setEmptyView(emptyView)
-        listRatings.isLongClickable = true
+        val layoutManager = LinearLayoutManager(context)
+        binding.listRecyclerEntries.layoutManager = layoutManager
+        binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
+        binding.listRecyclerEntries.isLongClickable = true
 
         adapter = CommentsAdapter(this.requireContext())
 
-        listRatings.adapter = adapter
+        binding.listRecyclerEntries.adapter = adapter
 
         localTrackId = requireArguments().getLong(RECORD_ID_LOCAL)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
