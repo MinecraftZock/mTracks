@@ -1,34 +1,30 @@
 package info.mx.tracks.trackdetail.comment
 
 import android.annotation.SuppressLint
-import android.database.Cursor
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.core.app.NavUtils
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.robotoworks.mechanoid.db.SQuery
-import com.robotoworks.mechanoid.db.SQuery.Op
-import info.mx.tracks.R
+import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.databinding.FragmentRecyclerListBinding
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.sqlite.MxInfoDBContract.Ratings
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import info.mx.tracks.sqlite.TracksRecord
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.LoaderCallbacks<Cursor> {
+class CommentFragment : FragmentUpDown() {
 
-    private val projection = arrayOf(Ratings.USERNAME, Ratings.CHANGED, Ratings.COUNTRY, Ratings.NOTE, Ratings.RATING)
-    internal var to = intArrayOf(R.id.comlst_username, R.id.comlst_datum, R.id.comlst_country, R.id.comlst_note, R.id.comlst_rating)
+    private lateinit var adapter: CommentAdapter
 
-    private var mAdapter: androidx.cursoradapter.widget.SimpleCursorAdapter? = null
-    private var tracksRestID: Long = 0
+    private var localTrackId = 0L
 
     private var _binding: FragmentRecyclerListBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    private val commentViewModel: CommentViewModel by viewModel()
 
     val mxDatabase: MxDatabase by inject()
 
@@ -45,12 +41,9 @@ class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.Load
         binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
         binding.listRecyclerEntries.isLongClickable = true
 
-        mAdapter = androidx.cursoradapter.widget.SimpleCursorAdapter(requireActivity(), R.layout.item_comment, null, projection, to, 0)
-        mAdapter!!.viewBinder = CommentViewBinder(requireActivity())
+        adapter = CommentAdapter(this.requireContext())
 
-        binding.listRecyclerEntries.adapter = mAdapter
-
-        loaderManager.initLoader(LOADER_RATINGS, arguments, this)
+        binding.listRecyclerEntries.adapter = adapter
 
         return view
     }
@@ -82,33 +75,15 @@ class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.Load
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateLoader(id: Int, bundle: Bundle?): androidx.loader.content.Loader<Cursor> {
-        val trackId = bundle!!.getLong(RECORD_ID_LOCAL)
-        tracksRestID = SQuery.newQuery()
-            .expr(Tracks._ID, Op.EQ, trackId)
-            .firstLong(Tracks.CONTENT_URI, Tracks.REST_ID)
-        return SQuery.newQuery()
-            .expr(Ratings.TRACK_REST_ID, Op.EQ, tracksRestID)
-            .expr(Ratings.NOTE, Op.NEQ, "")
-            .expr(Ratings.DELETED, Op.NEQ, 1)
-            .createSupportLoader(Ratings.CONTENT_URI, null, Ratings.CHANGED + " desc")
-    }
-
-    override fun onLoadFinished(loader: androidx.loader.content.Loader<Cursor>, data: Cursor) {
-        mAdapter!!.swapCursor(data)
-    }
-
-    override fun onLoaderReset(loader: androidx.loader.content.Loader<Cursor>) {
-        mAdapter!!.swapCursor(null)
-    }
-
     override fun fillMask(localId: Long) {
         requireArguments().putLong(RECORD_ID_LOCAL, localId)
-        loaderManager.restartLoader(LOADER_RATINGS, arguments, this)
-    }
 
-    companion object {
-        private const val LOADER_RATINGS = 0
-    }
+        val tracksRecord = TracksRecord.get(localId)
 
+        commentViewModel.allCommentsByTrackId(tracksRecord.restId).observe(viewLifecycleOwner) { comments ->
+            adapter.setData(Data.db(comments))
+        }
+
+        commentViewModel.getNewRemoteData(tracksRecord.restId)
+    }
 }
