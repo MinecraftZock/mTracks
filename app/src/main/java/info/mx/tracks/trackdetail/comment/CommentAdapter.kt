@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-internal class CommentsAdapter(private val context: Context) : RecyclerView.Adapter<CommentsAdapter.PostViewHolder>() {
+internal class CommentAdapter(private val context: Context) : RecyclerView.Adapter<CommentAdapter.PostViewHolder>() {
 
     private var data: MutableList<Comment>? = null
     private val layoutInflater: LayoutInflater
