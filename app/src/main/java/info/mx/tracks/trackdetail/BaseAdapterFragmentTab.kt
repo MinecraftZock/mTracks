@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.trackdetail.comment.FragmentComment
+import info.mx.tracks.trackdetail.comment.CommentFragment
 import info.mx.tracks.trackdetail.event.FragmentEvent
 import timber.log.Timber
 import java.util.Locale
@@ -41,7 +41,7 @@ abstract class BaseAdapterFragmentTab internal constructor(
                 ArrayList()
             tabs.add(
                 TabFragmentInfo(
-                    FragmentComment::class.java,
+                    CommentFragment::class.java,
                     R.string.title_activity_comment,
                     R.drawable.ic_comment_white_24px
                 )
