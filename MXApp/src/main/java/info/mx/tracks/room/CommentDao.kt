@@ -5,15 +5,16 @@ import info.mx.tracks.room.entity.Comment
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CommentDao {
 
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
+    fun getByTrackId(trackId: Long): Flow<List<Comment>>
+
     @get:Query("SELECT * FROM Comment")
     val all: List<Comment>
-
-    @Query("SELECT * FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
-    fun loadByTrackId(trackId: Long): Flowable<List<Comment>>
 
     @Query("SELECT avg(rating) FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
     fun avgByTrackId(trackId: Long): Maybe<Float>
