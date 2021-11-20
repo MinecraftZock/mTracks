@@ -5,22 +5,17 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.app.NavUtils
 import androidx.recyclerview.widget.LinearLayoutManager
-import info.mx.tracks.BuildConfig
+import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.databinding.FragmentRecyclerListBinding
-import info.mx.tracks.rest.DataManagerApp
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.sqlite.TracksRecord
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
-import timber.log.Timber
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentComment : FragmentUpDown() {
+class CommentFragment : FragmentUpDown() {
 
-    private val dataManagerApp: DataManagerApp by inject()
-
-    private lateinit var adapter: CommentsAdapter
+    private lateinit var adapter: CommentAdapter
 
     private var localTrackId = 0L
 
@@ -28,6 +23,8 @@ class FragmentComment : FragmentUpDown() {
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    private val commentViewModel: CommentViewModel by viewModel()
 
     val mxDatabase: MxDatabase by inject()
 
@@ -44,7 +41,7 @@ class FragmentComment : FragmentUpDown() {
         binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
         binding.listRecyclerEntries.isLongClickable = true
 
-        adapter = CommentsAdapter(this.requireContext())
+        adapter = CommentAdapter(this.requireContext())
 
         binding.listRecyclerEntries.adapter = adapter
 
@@ -84,35 +81,10 @@ class FragmentComment : FragmentUpDown() {
 
         val tracksRecord = TracksRecord.get(newId)
 
-        addDisposable(mxDatabase.commentDao().loadByTrackId(tracksRecord.restId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({ comments ->
-                adapter.setData(comments.toMutableList())
-            },
-                { error ->
-                    if (BuildConfig.DEBUG) {
-                        Timber.e(error)
-                        error.message?.let { showSnackbar(it) }
-                    }
-                }
-            )
-        )
+        commentViewModel.allComments(tracksRecord.restId).observe(viewLifecycleOwner) { comments ->
+            adapter.setData(Data.db(comments))
+        }
 
-        addDisposable(dataManagerApp.updateRatingsForTrack(tracksRecord.restId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-//                    adapter.setData(comments)
-            },
-                { error ->
-                    if (BuildConfig.DEBUG) {
-                        Timber.e(error)
-                        error.message?.let { showSnackbar(it) }
-                    }
-                }
-            )
-        )
+        commentViewModel.getNewRemoteData(tracksRecord.restId)
     }
 }
-
