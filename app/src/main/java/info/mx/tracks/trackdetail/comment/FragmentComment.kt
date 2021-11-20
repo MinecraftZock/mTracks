@@ -3,15 +3,14 @@ package info.mx.tracks.trackdetail.comment
 import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Bundle
-import android.provider.Settings.Secure
 import android.view.*
-import android.widget.ListView
-import android.widget.TextView
 import androidx.core.app.NavUtils
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.databinding.FragmentRecyclerListBinding
 import info.mx.tracks.room.MxDatabase
 import info.mx.core_generated.sqlite.MxInfoDBContract.Ratings
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
@@ -25,37 +24,44 @@ class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.Load
     private var mAdapter: androidx.cursoradapter.widget.SimpleCursorAdapter? = null
     private var tracksRestID: Long = 0
 
+    private var _binding: FragmentRecyclerListBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
     val mxDatabase: MxDatabase by inject()
 
     @SuppressLint("HardwareIds")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.fragment_list, null)
+        _binding = FragmentRecyclerListBinding.inflate(inflater, container, false)
+        val view = binding.root
         // keyboard hide
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-        val emptyView = view.findViewById<TextView>(R.id.txt_no_entry)
-
-        val listRatings = view.findViewById<ListView>(R.id.listEntries)
-        listRatings.emptyView = emptyView
-        listRatings.isLongClickable = true
-        listRatings.setOnItemLongClickListener { _, _, _, id ->
-            SQuery.newQuery()
-                .expr(Ratings.TRACK_REST_ID, Op.EQ, tracksRestID)
-                .expr(Ratings._ID, Op.EQ, id)
-                .expr(Ratings.ANDROIDID, Op.EQ, Secure.getString(requireActivity().contentResolver, Secure.ANDROID_ID))
-                .delete(Ratings.CONTENT_URI)
-            true
-        }
+        val layoutManager = LinearLayoutManager(context)
+        binding.listRecyclerEntries.layoutManager = layoutManager
+        binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
+        binding.listRecyclerEntries.isLongClickable = true
 
         mAdapter = androidx.cursoradapter.widget.SimpleCursorAdapter(requireActivity(), R.layout.item_comment, null, projection, to, 0)
         mAdapter!!.viewBinder = CommentViewBinder(requireActivity())
 
-        listRatings.adapter = mAdapter
+        binding.listRecyclerEntries.adapter = mAdapter
 
         loaderManager.initLoader(LOADER_RATINGS, arguments, this)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fillMask(localTrackId)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
