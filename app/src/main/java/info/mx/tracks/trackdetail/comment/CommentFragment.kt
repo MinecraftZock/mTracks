@@ -84,6 +84,6 @@ class CommentFragment : FragmentUpDown() {
             adapter.setData(Data.db(comments))
         }
 
-//        commentViewModel.getNewRemoteData(tracksRecord.restId)
+        commentViewModel.getNewRemoteData(tracksRecord.restId)
     }
 }

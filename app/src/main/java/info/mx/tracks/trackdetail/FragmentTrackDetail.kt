@@ -25,6 +25,7 @@ import android.telephony.TelephonyManager
 import android.text.Html
 import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
+import android.view.LayoutInflater
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -50,25 +51,29 @@ import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
+import info.mx.tracks.databinding.LayoutCommentAddBinding
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.ops.AbstractOpGetWeatherCachedOperation
 import info.mx.tracks.ops.AbstractOpPostImagesOperation
 import info.mx.tracks.ops.google.AbstractOpGetRouteOperation
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.rest.DataManagerApp
+import info.mx.tracks.rest.AppApiClient
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Comment
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.sqlite.*
 import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.tasks.ImportTaskCompleteListener
 import info.mx.tracks.tools.PermissionHelper
+import info.mx.tracks.trackdetail.comment.CommentViewModel
 import info.mx.tracks.tracklist.FragmentTrackList.Companion.IS_FAVORITE
-import info.mx.tracks.util.CommentHelper
 import info.mx.tracks.util.EventHelper
+import info.mx.tracks.util.getAndroidID
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -82,7 +87,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     private val mxDatabase: MxDatabase by inject()
 
-    private val dataManagerApp: DataManagerApp by inject()
+    private val appApiClient: AppApiClient by inject()
+
+    private val commentViewModel: CommentViewModel by viewModel()
 
     private var adapterWeather: WeatherCursorAdapter? = null
     private var recordTrack: TracksgesRecord? = null
@@ -821,8 +828,45 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     fun addRating() {
         TracksRecord.get(recordLocalId)?.let {
-            CommentHelper.doAddRating(requireActivity(), it, mxDatabase, dataManagerApp)
+            showNewCommentDialog(it)
         }
+    }
+
+    private fun showNewCommentDialog(tracksRecord: TracksRecord) {
+        val bindingDialog: LayoutCommentAddBinding = LayoutCommentAddBinding
+            .inflate(LayoutInflater.from(context))
+
+        val builder = AlertDialog.Builder(activity)
+        builder.setView(bindingDialog.root)
+        builder.setTitle(requireContext().getString(R.string.newRating))
+        builder.setNegativeButton(android.R.string.cancel) { _, _ -> }
+        builder.setPositiveButton(R.string.done) { _, _ ->
+
+            val comment = Comment()
+            comment.approved = 0
+            comment.id = System.currentTimeMillis() * -1000 //a negative value means it's not synced
+            comment.trackId = tracksRecord.restId
+            comment.rating = bindingDialog.comRating.rating.toInt()
+            comment.username = bindingDialog.comUsername.text.toString()
+            comment.note = bindingDialog.comNote.text.toString()
+            comment.country = Locale.getDefault().country
+            comment.changed = System.currentTimeMillis() / 1000
+            comment.androidid = requireContext().getAndroidID()
+
+            if (commentViewModel.addComment(comment, bindingDialog.comNote.text.toString()) > 0)
+                Toast.makeText(activity, requireContext().getString(R.string.comment_alredy_exists), Toast.LENGTH_SHORT).show()
+
+            if (comment.username != requireContext().getString(R.string.noname)) {
+                val prefs1 = MxPreferences.getInstance()
+                prefs1.edit().putUsername(comment.username.trim()).commit()
+            }
+        }
+
+        val prefs = MxPreferences.getInstance()
+        bindingDialog.comUsername.setHint(R.string.default_username)
+        bindingDialog.comUsername.setText(prefs.username)
+        val dlg = builder.create()
+        dlg.show()
     }
 
     private fun openEdit(id: Long) {

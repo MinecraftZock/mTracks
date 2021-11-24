@@ -184,7 +184,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             override fun onOverScroll(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) = Unit
         })
         if (sortOrder == TracksGesSum.DISTANCE2LOCATION) {
-            adapterTracksSort = AdapterTracksSort(requireActivity(), this, mxDatabase)
+            adapterTracksSort = AdapterTracksSort(requireContext(), this, mxDatabase)
             binding.listOverview.adapter = adapterTracksSort
         } else {
             adapter = SimpleCursorAdapter(
