@@ -29,13 +29,19 @@ interface CommentDao {
     fun avgByTrackIdMT(trackId: Long): Float
 
     @Query("SELECT * FROM Comment WHERE trackId = :trackId order by changed desc")
-    fun loadAllByTrackId(trackId: Long): Flowable<List<Comment>>
+    fun flowableAllByTrackId(trackId: Long): Flowable<List<Comment>>
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId order by changed desc")
+    fun loadAllByTrackId(trackId: Long): Flow<List<Comment>>
 
     @Query("SELECT * FROM Comment WHERE id < 0 order by changed desc")
-    fun allNonPushed(): Single<List<Comment>>
+    fun commentAllNonPushed(): List<Comment>
+
+    @Query("SELECT * FROM Comment WHERE id < 0 order by changed desc")
+    fun allNonPushedRx(): Single<List<Comment>>
 
     @Query("SELECT count(*) FROM Comment WHERE trackId = :trackId and androidid = :androidID and note = :note and deleted != 1 " + "order by changed desc")
-    fun commentExistsRx(trackId: Long, androidID: String, note: String): Single<Int>
+    fun commentExists(trackId: Long, androidID: String, note: String): Int
 
     @Query("SELECT * FROM Comment WHERE id IN (:ids)")
     fun loadAllByIds(ids: IntArray): List<Comment>
@@ -47,10 +53,10 @@ interface CommentDao {
     //    User findByName(String first, String last);
 
     @Insert
-    fun insertAll(vararg comments: Comment)
+    fun insertCommentsAll(vararg comments: Comment)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(comments: List<Comment>)
+    fun insertCommentsAll(comments: List<Comment>)
 
     @Update
     fun update(comment: Comment)
@@ -62,15 +68,15 @@ interface CommentDao {
     fun delete(comments: List<Comment>)
 
     @Transaction
-    fun updateComment(commentOrigin: Comment, commentNew: Comment) {
-        delete(commentOrigin)
-        insertAll(commentNew)
+    fun updateComment(commentDelete: Comment, commentNew: Comment) {
+        delete(commentDelete)
+        insertCommentsAll(commentNew)
     }
 
     @Transaction
-    fun updateComments(commentOrigin: List<Comment>, commentNew: List<Comment>) {
+    fun updateComments(commentOrigin: List<Comment>, commentNew: List<Comment>?) {
         delete(commentOrigin)
-        insertAll(commentNew)
+        commentNew?.let { insertCommentsAll(it) }
     }
 
 }
