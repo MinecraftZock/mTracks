@@ -4,6 +4,7 @@ import java.util.List;
 
 import info.mx.tracks.room.entity.Comment;
 import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -19,12 +20,27 @@ public interface IAppTrackService {
             @Path(value = "trackId") long trackId,
             @Header("Authorization") String authorization);
 
+    @Headers("Accept: application/json")
+    @GET("/backend/MXServer/rest/ratings/track/{trackId}")
+    Call<List<Comment>> callRatingsForTrack(
+            @Path(value = "trackId") long trackId,
+            @Header("Authorization") String authorization);
+
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
     })
     @POST("/backend/MXServer/rest/ratings/createComment")
-    Single<Comment> postRating(
+    Single<Comment> postRatingRx(
+            @Body Comment comment,
+            @Header("Authorization") String authorization);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("/backend/MXServer/rest/ratings/createComment")
+    Call<Comment> postRating(
             @Body Comment comment,
             @Header("Authorization") String authorization);
 
