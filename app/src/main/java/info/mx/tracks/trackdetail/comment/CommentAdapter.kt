@@ -67,49 +67,39 @@ internal class CommentAdapter(private val context: Context) : RecyclerView.Adapt
 
     internal inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val ratingComment: RatingBar
-        private val tvUser: TextView
-        private val imageCountry: ImageView
-        private val tvNote: TextView
-        private val tvDatum: TextView
-
-        init {
-
-            tvUser = itemView.findViewById(R.id.comlst_username)
-            imageCountry = itemView.findViewById(R.id.comlst_country)
-            tvNote = itemView.findViewById(R.id.comlst_note)
-            ratingComment = itemView.findViewById(R.id.comlst_rating)
-            tvDatum = itemView.findViewById(R.id.comlst_datum)
-        }
+        private val ratingComment: RatingBar = itemView.findViewById(R.id.comlst_rating)
+        private val tvUser: TextView = itemView.findViewById(R.id.comlst_username)
+        private val imageCountry: ImageView = itemView.findViewById(R.id.comlst_country)
+        private val tvNote: TextView = itemView.findViewById(R.id.comlst_note)
+        private val tvDatum: TextView = itemView.findViewById(R.id.comlst_datum)
 
         @SuppressLint("DiscouragedApi")
-        fun bind(comment: Comment?) {
-            if (comment != null) {
-                if (comment.username == "") {
-                    tvUser.text = context.getString(R.string.noname)
-                } else {
-                    tvUser.text = comment.username
-                }
+        fun bind(comment: Comment) {
+            if (comment.username == "") {
+                tvUser.text = context.getString(R.string.noname)
+            } else {
+                tvUser.text = comment.username
+            }
 
-                val valueL = comment.country.lowercase(Locale.getDefault())
-                val id = context.resources.getIdentifier(valueL, "drawable", context.packageName)
-                imageCountry.setImageResource(id)
+            val valueL = comment.country.lowercase(Locale.getDefault())
+            val id = context.resources.getIdentifier(valueL, "drawable", context.packageName)
+            imageCountry.setImageResource(id)
 
-                if (comment.note.equals("")) {
-                    tvNote.visibility = View.GONE
-                } else {
-                    tvNote.visibility = View.VISIBLE
-                    tvNote.text = comment.note
-                }
+            if (comment.note.equals("")) {
+                tvNote.visibility = View.GONE
+            } else {
+                tvNote.visibility = View.VISIBLE
+                tvNote.text = comment.note
+            }
+            tvNote.alpha = if (comment.id!! < 1) 0.5F else 1.0F
 
-                ratingComment.rating = comment.rating.toFloat()
-                tvDatum.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(comment.changed * 1000))
+            ratingComment.rating = comment.rating.toFloat()
+            tvDatum.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(comment.changed * 1000))
 
 //                tvUser.setOnLongClickListener { _ ->
 //                    mxDatabase.commentDao().delete(comment)
 //                    return@setOnLongClickListener true
 //                }
-            }
         }
     }
 

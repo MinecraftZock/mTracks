@@ -1,6 +1,7 @@
 [*]
 max_line_length = 180
 
+ktlint_standard_function-literal = disabled
 ktlint_standard_max-line-length = disabled
 ktlint_standard_class-naming = disabled
 ktlint_standard_when-entry-bracing = disabled
