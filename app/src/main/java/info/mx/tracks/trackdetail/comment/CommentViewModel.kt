@@ -51,8 +51,8 @@ class CommentViewModel() : ViewModel(), KoinComponent {
             .await()
     }
 
-    fun addComment(comment: Comment, commentText: String): Int {
-        val count = commentExists(comment, commentText)
+    fun addComment(comment: Comment): Int {
+        val count = commentExists(comment, comment.note)
         if (count == 0)
             scope.launch {
                 repository.insertCommentsAll(comment)

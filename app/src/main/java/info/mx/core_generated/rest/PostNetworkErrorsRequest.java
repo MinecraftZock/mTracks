@@ -17,11 +17,8 @@ public class PostNetworkErrorsRequest extends EntityEnclosedServiceRequest {
 	private static final String PATH = "/MXServer/rest/network/multi";
 	
 	private final List<RESTnetworkError> rESTnetworkErrors;
-	
-	public List<RESTnetworkError> getRESTnetworkErrors() {
-		return rESTnetworkErrors;
-	}
-	public PostNetworkErrorsRequest(List<RESTnetworkError> rESTnetworkErrors){
+
+    public PostNetworkErrorsRequest(List<RESTnetworkError> rESTnetworkErrors){
 		this.rESTnetworkErrors = rESTnetworkErrors;
 	}
 	

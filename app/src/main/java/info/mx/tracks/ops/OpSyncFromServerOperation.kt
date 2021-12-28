@@ -2,7 +2,6 @@ package info.mx.tracks.ops
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -48,20 +47,25 @@ import info.mx.core.util.checkResponseCodeOk
 import info.mx.core_generated.ops.AbstractOpPostImagesOperation
 import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.core_generated.rest.*
+import info.mx.core_generated.rest.GetTracksStageFromRequest
+import info.mx.core_generated.rest.PostNetworkErrorsRequest
+import info.mx.core_generated.rest.PostNetworkErrorsResult
+import info.mx.core_generated.rest.PostTrackstageIDRequest
+import info.mx.core_generated.rest.PutTrackstageRequest
+import info.mx.core_generated.rest.RESTnetworkError
+import info.mx.core_generated.rest.RESTtrackStage
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.CountrysumRecord
-import info.mx.core_generated.sqlite.EventsRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
-import info.mx.core_generated.sqlite.NetworkRecord
-import info.mx.core_generated.sqlite.PicturesRecord
-import info.mx.core_generated.sqlite.SeriesRecord
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
+import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Picture
+import info.mx.tracks.room.entity.TrackStage
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.util.UnzipUtil
@@ -86,6 +90,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     private val dataManagerApp: DataManagerApp by inject()
     private val locationHelper: LocationHelper by inject()
+    private val mxDatabase: MxDatabase by inject()
 
     /**
      * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
@@ -125,7 +130,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         ImportIdlingResource.increment()
 
         try {
-            val trackCount = SQuery.newQuery().count(Tracks.CONTENT_URI)
+            val trackCount = mxDatabase.trackDao().countAll()
             if (trackCount == 0) {
                 doImportInitial()
             }
@@ -133,7 +138,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             var countryResult = ""
             if (NetworkHelper.isOnline(context.applicationContext)) {
                 doHandleTrackStage(context.applicationContext, webClient)
-                doPushEvents(webClient)
                 var gesImported = 0
                 var newImported = doSyncTracksBlock(context, args.updateProvider, gesImported, args.flavor)
                 while (newImported > 0) {
@@ -153,11 +157,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     calcDistance(context.applicationContext, lastKnown!!)
                 }
 
-                doSyncPictures(context, args.updateProvider)
+                doSyncPictures(context)
                 imported = 0
-                doSyncSeries(context, args.updateProvider)
-                imported = 0
-                doSyncEvents(context, webClient, args.updateProvider)
                 doPushNetworkErrorsAtOnce(webClient)
 
                 val intentM = AbstractOpPostImagesOperation.newIntent()
@@ -300,17 +301,17 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun calcDistance(context: Context, location: Location) {
-        val recalcTracks = Intent(RECALC_TRACKS)
-        recalcTracks.setPackage(context.packageName)
-        recalcTracks.putExtra(LOCATION, location)
-        recalcTracks.putExtra(SOURCE, "Sync")
-        context.sendBroadcast(recalcTracks)
+        val recalculateTracks = Intent(RECALC_TRACKS)
+        recalculateTracks.setPackage(context.packageName)
+        recalculateTracks.putExtra(LOCATION, location)
+        recalculateTracks.putExtra(SOURCE, "Sync")
+        context.sendBroadcast(recalculateTracks)
     }
 
     @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
-    fun doSyncPictures(context: OperationContext, updateProvider: Boolean) {
+    fun doSyncPictures(context: OperationContext) {
         val opName = "Pictures"
-        val maxCreated = SQuery.newQuery().firstInt(Pictures.CONTENT_URI, "max(" + Pictures.CHANGED + ")")
+        val maxCreated = mxDatabase.pictureDao().getNewest()
 
         try {
             val picturesResponse = dataManagerApp.getPictures(maxCreated.toLong())
@@ -320,54 +321,50 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             LoggingHelper.setMessage("$DOWNLOAD $opName")
             var zlrUpdated = 0
             var zlrInserted = 0
-            val opsTracks = ArrayList<ContentProviderOperation>()
+            val opsTracks = mutableListOf<Picture>()
             for (pictureR in picturesResponse.body()!!) {
                 if (context.isAborted) {
                     return
                 }
 
                 zlrUpdated++
-                val restId = SQuery.newQuery()
-                    .expr(Pictures.REST_ID, Op.EQ, pictureR.id!!)
-                    .firstInt(Pictures.CONTENT_URI, Pictures._ID)
-                if (restId == 0) { // new entry
+                val localPicture = mxDatabase.pictureDao().getById(pictureR.id.toLong())
+
+                if (localPicture == null) { // new entry
                     zlrInserted++
-                    val builderTrack = Pictures.newBuilder()
+                    val newPicture = Picture()
 
-                    builderTrack.setRestId(pictureR.id!!.toLong())
-                    builderTrack.setChanged(pictureR.changed!!.toLong())
-                    builderTrack.setApproved(pictureR.approved!!.toLong())
-                    builderTrack.setComment(pictureR.comment)
-                    builderTrack.setDeleted(pictureR.deleted!!.toLong())
-                    builderTrack.setTrackRestId(pictureR.trackId!!.toLong())
-                    builderTrack.setUsername(pictureR.username)
+                    newPicture.id = pictureR.id.toLong()
+                    newPicture.changed = pictureR.changed.toLong()
+                    newPicture.approved = pictureR.approved
+                    newPicture.deleted = pictureR.deleted
+                    newPicture.trackId = pictureR.trackId.toLong()
+                    newPicture.username = pictureR.username
+                    newPicture.androidid = pictureR.androidid
 
-                    opsTracks.add(builderTrack.toInsertOperationBuilder().build())
+                    opsTracks.add(newPicture)
 
                     // bulk insert
                     if (zlrUpdated > BLOCK_SIZE) {
-                        zlrUpdated = doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                        zlrUpdated = doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, opName, 0)
                     }
                 } else {
-                    val recordTrack = PicturesRecord.get(restId.toLong())
-                    deleteFile(recordTrack!!.localfile)
-                    deleteFile(recordTrack.localthumb)
-                    recordTrack.localfile = ""
-                    recordTrack.localthumb = ""
+                    deleteFile(localPicture.localfile)
+                    deleteFile(localPicture.localthumb)
+                    localPicture.localfile = ""
+                    localPicture.localthumb = ""
 
-                    recordTrack.restId = pictureR.id!!.toLong()
-                    recordTrack.changed = pictureR.changed!!.toLong()
-                    recordTrack.approved = pictureR.approved!!.toLong()
-                    recordTrack.comment = pictureR.comment
-                    recordTrack.deleted = pictureR.deleted!!.toLong()
-                    recordTrack.trackRestId = pictureR.trackId!!.toLong()
-                    recordTrack.username = pictureR.username
-                    recordTrack.save(updateProvider)
+                    localPicture.changed = pictureR.changed!!.toLong()
+                    localPicture.approved = pictureR.approved!!
+                    localPicture.deleted = pictureR.deleted!!
+                    localPicture.trackId = pictureR.trackId!!.toLong()
+                    localPicture.username = pictureR.username
+                    mxDatabase.pictureDao().update(localPicture)
                 }
             }
             // clean up
             if (zlrInserted > 0) {
-                doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, opName, 0)
             }
             LoggingHelper.setMessage("") // SyncPictures is also called from pushImages, so we need to clear the message here
             Timber.i("$opName all ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
@@ -379,12 +376,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doPushNetworkErrorsAtOnce(webClient: MxInfo) {
-        val networkErrors = SQuery.newQuery().select<NetworkRecord>(Network.CONTENT_URI)
+        val networkErrors = mxDatabase.networkDao().all
 
         val requestList = ArrayList<RESTnetworkError>()
         for (networkError in networkErrors) {
             val requestSingle = RESTnetworkError()
-            requestSingle.changed = networkError.created
+            requestSingle.changed = networkError.changed
             requestSingle.reason = networkError.reason
             requestSingle.tracks = networkError.tracks.toInt()
             requestSingle.androidid = TrackingApplication.androidId
@@ -395,34 +392,28 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         try {
             resultTrack = webClient.postNetworkErrors(requestNetwork)
             if (resultTrack.responseCode == Response.HTTP_NO_CONTENT) {
-                for (networkError in networkErrors) {
-                    networkError.delete(false)
-                }
+                mxDatabase.networkDao().deleteAll()
             } else {
                 Timber.w("Network result code:%s", resultTrack.responseCode)
             }
         } catch (_: ServiceException) {
         }
-
     }
 
     private fun doFixMissingCounty(context: Context) {
-        val tracks = SQuery.newQuery()
-            .expr(Tracks.COUNTRY, Op.EQ, "")
-            .select<TracksRecord>(Tracks.CONTENT_URI)
-        for (record in tracks) {
-            val coder = Geocoder(context)
+        val coder = Geocoder(context)
+        mxDatabase.trackDao().emptyCountry("").forEach { track ->
             try {
-                val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
+                val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(track.latitude), SecHelper.entcryptXtude(track.longitude), 1)
                 if (!addresses.isNullOrEmpty()) {
                     val country = addresses[0].countryCode
-                    Timber.d("${record.trackname}  country:$country")
-                    val stage = TrackstageRecord()
-                    stage.trackRestId = record.restId
+                    Timber.d("${track.trackname} country:$country")
+                    val stage = TrackStage()
+                    stage.trackId = track.id!!
                     stage.country = country
-                    stage.save(false)
-                    record.country = country
-                    record.save(false)
+                    mxDatabase.trackStageDao().insertTrackStagesAll(stage)
+                    track.country = country
+                    mxDatabase.trackDao().update(track)
                 }
             } catch (e: IOException) {
                 Timber.e(e)
@@ -431,41 +422,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doCleanFromDecline() {
-        // keep the last is required
-        val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
-        val del = SQuery.newQuery().expr(Tracks.APPROVED, Op.EQ, -1)
-            .expr(Tracks.CHANGED, Op.NEQ, maxCreated)
-            .delete(Tracks.CONTENT_URI, false)
+        // the last should be kept
+        val maxCreated = mxDatabase.trackDao().latest()
+        val del = mxDatabase.trackDao().deleteNotApproved(maxCreated)
         Timber.d("del approved:%s", del)
-        SQuery.newQuery().expr(Trackstage.APPROVED, Op.EQ, -1).delete(Trackstage.CONTENT_URI)
-        SQuery.newQuery().expr(Pictures.APPROVED, Op.EQ, -1).delete(Pictures.CONTENT_URI)
-    }
-
-    @Throws(ServiceException::class)
-    private fun doPushEvents(webClient: MxInfo) {
-        val eventsNeu = SQuery.newQuery()
-            .expr(Events.REST_ID, Op.LTEQ, 0)
-            .or()
-            .append(Events.REST_ID + " is null")
-            .select<EventsRecord>(Events.CONTENT_URI)
-
-        for (eventDB in eventsNeu) {
-            val eventREST = RESTevent()
-            eventREST.approved = eventDB.approved.toInt()
-            eventREST.changed = eventDB.changed.toInt()
-            eventREST.comment = eventDB.comment
-            eventREST.eventdate = eventDB.eventDate.toInt()
-            eventREST.trackId = eventDB.trackRestId.toInt()
-            eventREST.androidid = TrackingApplication.androidId
-            val request = PostEventRequest(eventREST)
-            val res = webClient.postEvent(request)
-            val response = res.parse()
-            res.checkResponseCodeOk()
-            eventDB.restId = response.baseResponse.id.toLong()
-            eventDB.changed = 1
-            eventDB.save()
-
-        }
+        mxDatabase.trackStageDao().deleteNotApproved()
+        mxDatabase.pictureDao().deleteNotApproved()
     }
 
     private fun doHandleTrackStage(context: Context, webClient: MxInfo) {
@@ -478,90 +440,85 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         } catch (ex: Exception) {
             Timber.e(ex)
         }
-
     }
 
     @Throws(ServiceException::class, NotFoundException::class, InterruptedException::class)
     private fun doStagesUpdate(webClient: MxInfo) {
         // already known on server and updated
-        val records = SQuery.newQuery()
-            .expr(Trackstage.REST_ID, Op.GT, 0)
-            .expr(Trackstage.UPDATED, Op.EQ, 1)
-            .select<TrackstageRecord>(Trackstage.CONTENT_URI, Trackstage._ID)
-        var i = 0
-        for (record in records) {
-            i++
-            LoggingHelper.setMessage("update:" + i + "/" + records.size)
-            val restTrackStage = RESTtrackStage()
-            restTrackStage.androidid = record.androidid
-            restTrackStage.id = record.restId.toInt()
-            if (record.trackRestId > 0) {
-                restTrackStage.trackId = record.trackRestId.toInt()
-            }
-            if (record.trackname != null) {
-                restTrackStage.trackname = record.trackname
-            }
-            if (record.latitude != 0.0) {
-                restTrackStage.latitude = record.latitude
-            }
-            if (record.longitude != 0.0) {
-                restTrackStage.longitude = record.longitude
-            }
-            restTrackStage.country = record.country
-            restTrackStage.changed = record.created.toInt().toLong()
-            restTrackStage.insLatitude = record.insLatitude
-            restTrackStage.insLongitude = record.insLongitude
-            restTrackStage.insDistance = record.insDistance.toInt()
-            restTrackStage.url = record.url
-            restTrackStage.fees = record.fees
-            restTrackStage.phone = record.phone
-            restTrackStage.notes = record.notes
-            restTrackStage.contact = record.contact
-            restTrackStage.licence = record.licence
-            restTrackStage.kidstrack = record.kidstrack.toInt()
-            restTrackStage.openmondays = record.openmondays.toInt()
-            restTrackStage.opentuesdays = record.opentuesdays.toInt()
-            restTrackStage.openwednesday = record.openwednesday.toInt()
-            restTrackStage.openthursday = record.openthursday.toInt()
-            restTrackStage.openfriday = record.openfriday.toInt()
-            restTrackStage.opensaturday = record.opensaturday.toInt()
-            restTrackStage.opensunday = record.opensunday.toInt()
-            restTrackStage.hoursmonday = record.hoursmonday
-            restTrackStage.hourstuesday = record.hourstuesday
-            restTrackStage.hourswednesday = record.hourswednesday
-            restTrackStage.hoursthursday = record.hoursthursday
-            restTrackStage.hoursfriday = record.hoursfriday
-            restTrackStage.hourssaturday = record.hourssaturday
-            restTrackStage.hourssunday = record.hourssunday
-            restTrackStage.tracklength = record.tracklength.toInt()
-            restTrackStage.soiltype = record.soiltype.toInt()
-            restTrackStage.camping = record.camping.toInt()
-            restTrackStage.shower = record.shower.toInt()
-            restTrackStage.cleaning = record.cleaning.toInt()
-            restTrackStage.electricity = record.electricity.toInt()
-            restTrackStage.supercross = record.supercross.toInt()
-            restTrackStage.trackaccess = record.trackaccess
-            restTrackStage.facebook = record.facebook
+        val trackStages = mxDatabase.trackDao().alreadyKnownAndUpdated()
 
-            restTrackStage.adress = record.adress
-            restTrackStage.feescamping = record.feescamping
-            restTrackStage.daysopen = record.daysopen
-            restTrackStage.noiselimit = record.noiselimit
-            restTrackStage.campingrvhookups = record.campingRVhookups.toInt()
-            restTrackStage.singletrack = record.singleTrack.toInt()
-            restTrackStage.mxtrack = record.mxTrack.toInt()
-            restTrackStage.a4x4 = record.a4X4.toInt()
-            restTrackStage.enduro = record.enduro.toInt()
-            restTrackStage.utv = record.utv.toInt()
-            restTrackStage.quad = record.quad.toInt()
-            restTrackStage.trackstatus = record.trackstatus
-            restTrackStage.areatype = record.areatype
-            restTrackStage.schwierigkeit = record.schwierigkeit.toInt()
-            val request = PutTrackstageRequest(record.restId, restTrackStage)
+        var i = 0
+        for (trackStage in trackStages) {
+            i++
+            LoggingHelper.setMessage("update:" + i + "/" + trackStages.size)
+            val restTrackStage = RESTtrackStage()
+            restTrackStage.androidid = trackStage.andoridid
+            restTrackStage.id = trackStage.restId.toInt()
+            if (trackStage.restId > 0) {
+                restTrackStage.trackId = trackStage.restId.toInt()
+            }
+            restTrackStage.trackname = trackStage.trackname
+            if (trackStage.latitude != 0.0) {
+                restTrackStage.latitude = trackStage.latitude
+            }
+            if (trackStage.longitude != 0.0) {
+                restTrackStage.longitude = trackStage.longitude
+            }
+            restTrackStage.country = trackStage.country
+            restTrackStage.changed = trackStage.changed
+            restTrackStage.insLatitude = trackStage.insLatitude
+            restTrackStage.insLongitude = trackStage.insLongitude
+            restTrackStage.insDistance = trackStage.insDistance.toInt()
+            restTrackStage.url = trackStage.url
+            restTrackStage.fees = trackStage.fees
+            restTrackStage.phone = trackStage.phone
+            restTrackStage.notes = trackStage.notes
+            restTrackStage.contact = trackStage.contact
+            restTrackStage.licence = trackStage.licence
+            restTrackStage.kidstrack = trackStage.kidstrack
+            restTrackStage.openmondays = trackStage.openmondays
+            restTrackStage.opentuesdays = trackStage.opentuesdays
+            restTrackStage.openwednesday = trackStage.openwednesday
+            restTrackStage.openthursday = trackStage.openthursday
+            restTrackStage.openfriday = trackStage.openfriday
+            restTrackStage.opensaturday = trackStage.opensaturday
+            restTrackStage.opensunday = trackStage.opensunday
+            restTrackStage.hoursmonday = trackStage.hoursmonday
+            restTrackStage.hourstuesday = trackStage.hourstuesday
+            restTrackStage.hourswednesday = trackStage.hourswednesday
+            restTrackStage.hoursthursday = trackStage.hoursthursday
+            restTrackStage.hoursfriday = trackStage.hoursfriday
+            restTrackStage.hourssaturday = trackStage.hourssaturday
+            restTrackStage.hourssunday = trackStage.hourssunday
+            restTrackStage.tracklength = trackStage.tracklength
+            restTrackStage.soiltype = trackStage.soiltype
+            restTrackStage.camping = trackStage.camping
+            restTrackStage.shower = trackStage.shower
+            restTrackStage.cleaning = trackStage.cleaning
+            restTrackStage.electricity = trackStage.electricity
+            restTrackStage.supercross = trackStage.supercross
+            restTrackStage.trackaccess = trackStage.trackaccess
+            restTrackStage.facebook = trackStage.facebook
+
+            restTrackStage.adress = trackStage.adress
+            restTrackStage.feescamping = trackStage.feescamping
+            restTrackStage.daysopen = trackStage.daysopen
+            restTrackStage.noiselimit = trackStage.noiselimit
+            restTrackStage.campingrvhookups = trackStage.campingrvrvhookup
+            restTrackStage.singletrack = trackStage.singletracks
+            restTrackStage.mxtrack = trackStage.mxtrack
+            restTrackStage.a4x4 = trackStage.a4x4
+            restTrackStage.enduro = trackStage.enduro
+            restTrackStage.utv = trackStage.utv
+            restTrackStage.quad = trackStage.quad
+            restTrackStage.trackstatus = trackStage.trackstatus
+            restTrackStage.areatype = trackStage.areatype
+            restTrackStage.schwierigkeit = trackStage.schwierigkeit
+            val request = PutTrackstageRequest(trackStage.restId, restTrackStage)
             val res = webClient.putTrackstage(request)
             res.checkResponseCode(Response.HTTP_NO_CONTENT)
-            record.updated = 0
-            record.save(false)
+            trackStage.changed = 0
+            mxDatabase.trackStageDao().update(trackStage)
             Wait.delay()
         }
         LoggingHelper.setMessage("")
@@ -574,14 +531,14 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         val notPublished = SQuery.newQuery().expr(Trackstage.REST_ID, Op.EQ, 0)
             .or()
             .append(Trackstage.REST_ID + " is null")
-        val records = SQuery.newQuery()
+        val stageRecords = SQuery.newQuery()
             .expr(notPublished)
             .expr(Trackstage.UPDATED, Op.NEQ, 1)
             .select<TrackstageRecord>(Trackstage.CONTENT_URI, Trackstage._ID)
         var i = 0
-        for (recordStage in records) {
+        for (recordStage in stageRecords) {
             i++
-            LoggingHelper.setMessage("push:" + i + "/" + records.size)
+            LoggingHelper.setMessage("push:" + i + "/" + stageRecords.size)
             val restTrackStage = RESTtrackStage()
             if (MxCoreApplication.isAdmin && recordStage.androidid != null && recordStage.androidid != androidId) {
                 androidId = recordStage.androidid
@@ -1062,117 +1019,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return zlrInsertedReturn
     }
 
-    @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
-    private fun doSyncSeries(context: OperationContext, updateProvider: Boolean) {
-        val opName = "Series"
-        val maxCreated = SQuery.newQuery().firstInt(Series.CONTENT_URI, "max(" + Series.CHANGED + ")")
-
-        val seriesResponse = dataManagerApp.getSeries(maxCreated.toLong())
-
-        seriesResponse.checkResponseCodeOk()
-
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (serieR in seriesResponse.body()!!) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Series.REST_ID, Op.EQ, serieR.id!!)
-                .firstInt(Series.CONTENT_URI, Series._ID)
-            if (restId == 0) { // new entry
-                zlrInserted++
-                val builderTrack = Series.newBuilder()
-
-                builderTrack.setRestId(serieR.id!!.toLong())
-                builderTrack.setChanged(serieR.changed!!.toLong())
-                builderTrack.setName(serieR.name)
-                builderTrack.setSeriesUrl(serieR.seriesurl)
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-                }
-            } else {
-                val recordTrack = SeriesRecord.get(restId.toLong())
-                recordTrack!!.restId = serieR.id!!.toLong()
-                recordTrack.changed = serieR.changed!!.toLong()
-                recordTrack.name = serieR.name
-                recordTrack.seriesUrl = serieR.seriesurl
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-        }
-        Timber.i("$opName all ${(if (seriesResponse.body() != null) seriesResponse.body()!!.size else 0)} updated:$zlrUpdated")
-    }
-
-    @Throws(ServiceException::class, RemoteException::class, OperationApplicationException::class)
-    private fun doSyncEvents(context: OperationContext, webClient: MxInfo, updateProvider: Boolean) {
-        val opName = "Events"
-        val maxCreated = SQuery.newQuery().firstInt(Events.CONTENT_URI, "max(" + Events.CHANGED + ")")
-        val requestTrack = GetEventsFromRequest(maxCreated.toLong())
-        val resultTrack = webClient.getEventsFrom(requestTrack)
-        val resTrack = resultTrack.parse()
-        resultTrack.checkResponseCodeOk()
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (trackREST in resTrack.resTevents) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val dbId = SQuery.newQuery()
-                .expr(Events.REST_ID, Op.EQ, trackREST.id)
-                .firstInt(Events.CONTENT_URI, Events._ID)
-            if (dbId == 0) { // new entry
-                zlrInserted++
-                val builderTrack = Events.newBuilder()
-
-                builderTrack.setRestId(trackREST.id.toLong())
-                builderTrack.setChanged(trackREST.changed.toLong())
-                builderTrack.setComment(trackREST.comment)
-                builderTrack.setEventDate(trackREST.eventdate.toLong())
-                builderTrack.setSeriesRestId(trackREST.serieId.toLong())
-                builderTrack.setApproved(trackREST.approved.toLong())
-                builderTrack.setTrackRestId(trackREST.trackId.toLong())
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-                }
-            } else {
-                val recordTrack = EventsRecord.get(dbId.toLong())
-                recordTrack!!.restId = trackREST.id.toLong()
-                recordTrack.changed = trackREST.changed.toLong()
-                recordTrack.comment = trackREST.comment
-                recordTrack.eventDate = trackREST.eventdate.toLong()
-                recordTrack.seriesRestId = trackREST.serieId.toLong()
-                recordTrack.approved = trackREST.approved.toLong()
-                recordTrack.trackRestId = trackREST.trackId.toLong()
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-        }
-        Timber.i("$opName all ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
-    }
-
     private fun doBuildCountryTableMechanoid(context: Context): String {
         val result = ""
         val deleteCount = SQuery.newQuery().append(
@@ -1305,22 +1151,18 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
 
         @Throws(RemoteException::class, OperationApplicationException::class)
-        private fun doApplyBatch(
-            context: OperationContext,
-            ops: ArrayList<ContentProviderOperation>,
+        private fun doApplyBatchRoom(
+            mxDatabase: MxDatabase,
+            listPictures: MutableList<Picture>,
             ges: Int,
-            was: String,
+            what: String,
             @Suppress("SameParameterValue") previousImported: Int
         ): Int {
-            if (context.isAborted) {
-                return 0
-            }
-
-            imported += ops.size
-            context.applicationContext.contentResolver.applyBatch(CONTENT_AUTHORITY, ops)
+            imported += listPictures.size
+            mxDatabase.pictureDao().insertPicturesAll(listPictures)
             val zlr = 0
-            LoggingHelper.setMessage(IMPORT_REC + " " + was + " " + imported + "/" + (ges + previousImported))
-            ops.clear()
+            LoggingHelper.setMessage(IMPORT_REC + " " + what + " " + imported + "/" + (ges + previousImported))
+            listPictures.clear()
             return zlr
         }
     }

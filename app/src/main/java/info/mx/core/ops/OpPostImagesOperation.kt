@@ -62,7 +62,7 @@ class OpPostImagesOperation : AbstractOpPostImagesOperation(), CoreKoinComponent
                     }
                 }
                 val opPic = OpSyncFromServerOperation()
-                opPic.doSyncPictures(context, true)
+                opPic.doSyncPictures(context)
                 OperationResult.ok(bundle)
             } catch (e: Exception) {
                 val msg = if (e.message == null) "NullPointerException" else e.message!!

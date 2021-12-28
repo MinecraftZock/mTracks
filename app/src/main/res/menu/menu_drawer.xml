@@ -45,11 +45,6 @@
             android:title="@string/edit_track"/>
 
         <item
-            android:id="@+id/drawer_event_add"
-            android:icon="@drawable/ic_event_add"
-            android:title="@string/event_add"/>
-
-        <item
             android:id="@+id/drawer_track_feedback"
             android:icon="@drawable/ic_track_feedback"
             android:title="@string/track_error"/>
