@@ -29,23 +29,15 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
     public static final int COUNTRY_ID = 11;
     public static final int PICTURES = 12;
     public static final int PICTURES_ID = 13;
-    public static final int SERIES = 14;
-    public static final int SERIES_ID = 15;
-    public static final int EVENTS = 16;
-    public static final int EVENTS_ID = 17;
     public static final int WEATHER = 20;
     public static final int WEATHER_ID = 21;
     public static final int ROUTE = 24;
     public static final int ROUTE_ID = 25;
-    public static final int NETWORK = 26;
-    public static final int NETWORK_ID = 27;
 
     public static final int COUNTRYSUM = 28;
     public static final int COUNTRYSUM_ID = 29;
     public static final int PICTURESUM = 30;
     public static final int PICTURESUM_ID = 31;
-    public static final int EVENTSUM = 34;
-    public static final int EVENTSUM_ID = 35;
     public static final int EVENTS2SERIES = 36;
     public static final int EVENTS2SERIES_ID = 37;
     public static final int COUNTRYCOUNT = 38;
@@ -75,22 +67,14 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         matcher.addURI(authority, "country/#", COUNTRY_ID);
         matcher.addURI(authority, "pictures", PICTURES);
         matcher.addURI(authority, "pictures/#", PICTURES_ID);
-        matcher.addURI(authority, "series", SERIES);
-        matcher.addURI(authority, "series/#", SERIES_ID);
-        matcher.addURI(authority, "events", EVENTS);
-        matcher.addURI(authority, "events/#", EVENTS_ID);
         matcher.addURI(authority, "weather", WEATHER);
         matcher.addURI(authority, "weather/#", WEATHER_ID);
         matcher.addURI(authority, "route", ROUTE);
         matcher.addURI(authority, "route/#", ROUTE_ID);
-        matcher.addURI(authority, "network", NETWORK);
-        matcher.addURI(authority, "network/#", NETWORK_ID);
         matcher.addURI(authority, "countrysum", COUNTRYSUM);
         matcher.addURI(authority, "countrysum/#", COUNTRYSUM_ID);
         matcher.addURI(authority, "picturesum", PICTURESUM);
         matcher.addURI(authority, "picturesum/#", PICTURESUM_ID);
-        matcher.addURI(authority, "eventsum", EVENTSUM);
-        matcher.addURI(authority, "eventsum/#", EVENTSUM_ID);
         matcher.addURI(authority, "events2series", EVENTS2SERIES);
         matcher.addURI(authority, "events2series/#", EVENTS2SERIES_ID);
         matcher.addURI(authority, "countrycount", COUNTRYCOUNT);
@@ -120,22 +104,14 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         contentTypes[COUNTRY_ID] = MxInfoDBContract.Country.ITEM_CONTENT_TYPE;
         contentTypes[PICTURES] = MxInfoDBContract.Pictures.CONTENT_TYPE;
         contentTypes[PICTURES_ID] = MxInfoDBContract.Pictures.ITEM_CONTENT_TYPE;
-        contentTypes[SERIES] = MxInfoDBContract.Series.CONTENT_TYPE;
-        contentTypes[SERIES_ID] = MxInfoDBContract.Series.ITEM_CONTENT_TYPE;
-        contentTypes[EVENTS] = MxInfoDBContract.Events.CONTENT_TYPE;
-        contentTypes[EVENTS_ID] = MxInfoDBContract.Events.ITEM_CONTENT_TYPE;
         contentTypes[WEATHER] = MxInfoDBContract.Weather.CONTENT_TYPE;
         contentTypes[WEATHER_ID] = MxInfoDBContract.Weather.ITEM_CONTENT_TYPE;
         contentTypes[ROUTE] = MxInfoDBContract.Route.CONTENT_TYPE;
         contentTypes[ROUTE_ID] = MxInfoDBContract.Route.ITEM_CONTENT_TYPE;
-        contentTypes[NETWORK] = MxInfoDBContract.Network.CONTENT_TYPE;
-        contentTypes[NETWORK_ID] = MxInfoDBContract.Network.ITEM_CONTENT_TYPE;
         contentTypes[COUNTRYSUM] = MxInfoDBContract.Countrysum.CONTENT_TYPE;
         contentTypes[COUNTRYSUM_ID] = MxInfoDBContract.Countrysum.ITEM_CONTENT_TYPE;
         contentTypes[PICTURESUM] = MxInfoDBContract.Picturesum.CONTENT_TYPE;
         contentTypes[PICTURESUM_ID] = MxInfoDBContract.Picturesum.ITEM_CONTENT_TYPE;
-        contentTypes[EVENTSUM] = MxInfoDBContract.Eventsum.CONTENT_TYPE;
-        contentTypes[EVENTSUM_ID] = MxInfoDBContract.Eventsum.ITEM_CONTENT_TYPE;
         contentTypes[EVENTS2SERIES] = MxInfoDBContract.Events2series.CONTENT_TYPE;
         contentTypes[EVENTS2SERIES_ID] = MxInfoDBContract.Events2series.ITEM_CONTENT_TYPE;
         contentTypes[COUNTRYCOUNT] = MxInfoDBContract.Countrycount.CONTENT_TYPE;
@@ -183,14 +159,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createPicturesActions();
             case PICTURES_ID:
                 return createPicturesByIdActions();
-            case SERIES:
-                return createSeriesActions();
-            case SERIES_ID:
-                return createSeriesByIdActions();
-            case EVENTS:
-                return createEventsActions();
-            case EVENTS_ID:
-                return createEventsByIdActions();
             case WEATHER:
                 return createWeatherActions();
             case WEATHER_ID:
@@ -199,10 +167,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createRouteActions();
             case ROUTE_ID:
                 return createRouteByIdActions();
-            case NETWORK:
-                return createNetworkActions();
-            case NETWORK_ID:
-                return createNetworkByIdActions();
             case COUNTRYSUM:
                 return createCountrysumActions();
             case COUNTRYSUM_ID:
@@ -211,14 +175,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createPicturesumActions();
             case PICTURESUM_ID:
                 return createPicturesumByIdActions();
-            case EVENTSUM:
-                return createEventsumActions();
-            case EVENTSUM_ID:
-                return createEventsumByIdActions();
-            case EVENTS2SERIES:
-                return createEvents2seriesActions();
-            case EVENTS2SERIES_ID:
-                return createEvents2seriesByIdActions();
             case COUNTRYCOUNT:
                 return createCountrycountActions();
             case COUNTRYCOUNT_ID:
@@ -280,22 +236,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         return new DefaultContentProviderActions(Sources.PICTURES, false, PicturesRecord.getFactory());
     }
 
-    protected ContentProviderActions createSeriesByIdActions() {
-        return new DefaultContentProviderActions(Sources.SERIES, true, SeriesRecord.getFactory());
-    }
-
-    protected ContentProviderActions createSeriesActions() {
-        return new DefaultContentProviderActions(Sources.SERIES, false, SeriesRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEventsByIdActions() {
-        return new DefaultContentProviderActions(Sources.EVENTS, true, EventsRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEventsActions() {
-        return new DefaultContentProviderActions(Sources.EVENTS, false, EventsRecord.getFactory());
-    }
-
     protected ContentProviderActions createWeatherByIdActions() {
         return new DefaultContentProviderActions(Sources.WEATHER, true, WeatherRecord.getFactory());
     }
@@ -312,14 +252,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         return new DefaultContentProviderActions(Sources.ROUTE, false, RouteRecord.getFactory());
     }
 
-    protected ContentProviderActions createNetworkByIdActions() {
-        return new DefaultContentProviderActions(Sources.NETWORK, true, NetworkRecord.getFactory());
-    }
-
-    protected ContentProviderActions createNetworkActions() {
-        return new DefaultContentProviderActions(Sources.NETWORK, false, NetworkRecord.getFactory());
-    }
-
     protected ContentProviderActions createCountrysumByIdActions() {
         return new DefaultContentProviderActions(Sources.COUNTRYSUM, true, CountrysumRecord.getFactory());
     }
@@ -334,22 +266,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
 
     protected ContentProviderActions createPicturesumActions() {
         return new DefaultContentProviderActions(Sources.PICTURESUM, false, PicturesumRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEventsumByIdActions() {
-        return new DefaultContentProviderActions(Sources.EVENTSUM, true, EventsumRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEventsumActions() {
-        return new DefaultContentProviderActions(Sources.EVENTSUM, false, EventsumRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEvents2seriesByIdActions() {
-        return new DefaultContentProviderActions(Sources.EVENTS2SERIES, true, Events2seriesRecord.getFactory());
-    }
-
-    protected ContentProviderActions createEvents2seriesActions() {
-        return new DefaultContentProviderActions(Sources.EVENTS2SERIES, false, Events2seriesRecord.getFactory());
     }
 
     protected ContentProviderActions createCountrycountByIdActions() {

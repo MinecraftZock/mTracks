@@ -81,6 +81,10 @@ interface TrackDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTracksAll(vararg tracks: Track)
 
+//
+//    @Query("SELECT * FROM Track WHERE id = :id")
+//    fun loadById(id: Long): Maybe<Track>
+//
 //    //    @Query("SELECT * FROM Track WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
 //    //    User findByName(String first, String last);
 //
