@@ -37,18 +37,8 @@ open class DataManagerCore(protected val commApiClient: CommApiClient) : DataMan
     }
 
     @Throws(IOException::class)
-    fun getRatings(fromDate: Long): Response<List<RatingR>> {
-        return commApiClient.tracksService.getRatings(fromDate, basic).execute()
-    }
-
-    @Throws(IOException::class)
     fun getPictures(fromDate: Long): Response<List<PictureR>> {
         return commApiClient.tracksService.getPictures(fromDate, basic).execute()
-    }
-
-    @Throws(IOException::class)
-    fun getSeries(fromDate: Long): Response<List<SerieR>> {
-        return commApiClient.tracksService.getSeries(fromDate, basic).execute()
     }
 
     @Throws(IOException::class)
