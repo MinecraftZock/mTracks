@@ -28,21 +28,14 @@ public abstract class AbstractMxInfoDBOpenHelper extends MechanoidSQLiteOpenHelp
 	public interface Sources {
 		String TRACKS = "tracks";
 		String TRACKSTAGE = "trackstage";
-		String RATINGS = "ratings";
 		String FAVORITS = "favorits";
 		String COUNTRY = "country";
 		String PICTURES = "pictures";
-		String SERIES = "series";
-		String EVENTS = "events";
 		String WEATHER = "weather";
-		String MESSAGE = "message";
 		String ROUTE = "route";
 		String NETWORK = "network";
 		String COUNTRYSUM = "countrysum";
 		String PICTURESUM = "picturesum";
-		String RATINGSUM = "ratingsum";
-		String EVENTSUM = "eventsum";
-		String EVENTS2SERIES = "events2series";
 		String COUNTRYCOUNT = "countrycount";
 		String USER_ACTIVITY = "userActivity";
 		String TRACKSGES = "tracksges";
