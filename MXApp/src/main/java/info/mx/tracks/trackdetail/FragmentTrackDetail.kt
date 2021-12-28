@@ -7,6 +7,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -47,9 +48,11 @@ import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper
 import info.hannes.commonlib.utils.FileHelper
 import info.mx.tracks.BuildConfig
+import info.mx.tracks.MxApplication
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.*
+import info.mx.tracks.databinding.DialogEventEditBinding
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
 import info.mx.tracks.databinding.LayoutCommentAddBinding
 import info.mx.tracks.map.ActivityMapExtension
@@ -60,6 +63,7 @@ import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.AppApiClient
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.room.entity.Comment
+import info.mx.tracks.room.entity.Event
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.sqlite.*
@@ -67,8 +71,8 @@ import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.tasks.ImportTaskCompleteListener
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.comment.CommentViewModel
+import info.mx.tracks.trackdetail.event.EventViewModel
 import info.mx.tracks.tracklist.FragmentTrackList.Companion.IS_FAVORITE
-import info.mx.tracks.util.EventHelper
 import info.mx.tracks.util.getAndroidID
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -90,6 +94,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     private val appApiClient: AppApiClient by inject()
 
     private val commentViewModel: CommentViewModel by viewModel()
+    private val eventViewModel: EventViewModel by viewModel()
 
     private var adapterWeather: WeatherCursorAdapter? = null
     private var recordTrack: TracksgesRecord? = null
@@ -822,7 +827,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     fun addEvent() {
         TracksRecord.get(recordId)?.let {
-            EventHelper().doAddEvent(requireActivity(), it)
+            showNewEventDialog(requireActivity(), 0, it)
         }
     }
 
@@ -830,6 +835,39 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         TracksRecord.get(recordId)?.let {
             showNewCommentDialog(it)
         }
+    }
+
+    private fun showNewEventDialog(context: Context, eventId: Int, trackRec: TracksRecord) {
+        val bindingDialog: DialogEventEditBinding = DialogEventEditBinding
+            .inflate(LayoutInflater.from(context))
+
+        if (trackRec.trackname == null) {
+            return
+        }
+
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(context.getString(if (eventId == 0) R.string.event_add else R.string.event_edit))
+        builder.setNegativeButton(android.R.string.cancel) { _: DialogInterface?, _: Int -> }
+        builder.setPositiveButton(R.string.done) { _: DialogInterface?, _: Int ->
+            if (MxApplication.isGoogleTests) {
+                Toast.makeText(context, "you test the app, event is ignored", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                val event = Event()
+                val cal = Calendar.getInstance()
+                cal[bindingDialog.datePickerEvent.year, bindingDialog.datePickerEvent.month] = bindingDialog.datePickerEvent.dayOfMonth
+                val value = cal.time
+                event.eventDate = value.time / 1000
+                event.comment = bindingDialog.edtEventComment.text.toString()
+                event.trackRestId = trackRec.restId
+                event.approved = 0
+                eventViewModel.addEvent(event)
+                MxCoreApplication.doSync(true, true, BuildConfig.FLAVOR)
+            }
+        }
+
+        val dlg = builder.create()
+        dlg.show()
     }
 
     private fun showNewCommentDialog(tracksRecord: TracksRecord) {
@@ -841,24 +879,28 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         builder.setTitle(requireContext().getString(R.string.newRating))
         builder.setNegativeButton(android.R.string.cancel) { _, _ -> }
         builder.setPositiveButton(R.string.done) { _, _ ->
+            if (MxApplication.isGoogleTests) {
+                Toast.makeText(context, "you test the app, event is ignored", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                val comment = Comment()
+                comment.approved = 0
+                comment.id = System.currentTimeMillis() * -1000 //a negative value means it's not synced
+                comment.trackId = tracksRecord.restId
+                comment.rating = bindingDialog.comRating.rating.toInt()
+                comment.username = bindingDialog.comUsername.text.toString()
+                comment.note = bindingDialog.comNote.text.toString()
+                comment.country = Locale.getDefault().country
+                comment.changed = System.currentTimeMillis() / 1000
+                comment.androidid = requireContext().getAndroidID()
 
-            val comment = Comment()
-            comment.approved = 0
-            comment.id = System.currentTimeMillis() * -1000 //a negative value means it's not synced
-            comment.trackId = tracksRecord.restId
-            comment.rating = bindingDialog.comRating.rating.toInt()
-            comment.username = bindingDialog.comUsername.text.toString()
-            comment.note = bindingDialog.comNote.text.toString()
-            comment.country = Locale.getDefault().country
-            comment.changed = System.currentTimeMillis() / 1000
-            comment.androidid = requireContext().getAndroidID()
+                if (commentViewModel.addComment(comment) > 0)
+                    Toast.makeText(activity, requireContext().getString(R.string.comment_alredy_exists), Toast.LENGTH_SHORT).show()
 
-            if (commentViewModel.addComment(comment, bindingDialog.comNote.text.toString()) > 0)
-                Toast.makeText(activity, requireContext().getString(R.string.comment_alredy_exists), Toast.LENGTH_SHORT).show()
-
-            if (comment.username != requireContext().getString(R.string.noname)) {
-                val prefs1 = MxPreferences.getInstance()
-                prefs1.edit().putUsername(comment.username.trim()).commit()
+                if (comment.username != requireContext().getString(R.string.noname)) {
+                    val prefs1 = MxPreferences.getInstance()
+                    prefs1.edit().putUsername(comment.username.trim()).commit()
+                }
             }
         }
 

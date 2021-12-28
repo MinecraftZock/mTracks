@@ -51,8 +51,8 @@ class EventViewModel() : ViewModel(), KoinComponent {
             .await()
     }
 
-    fun addEvent(event: Event, eventText: String): Int {
-        val count = eventExists(event, eventText)
+    fun addEvent(event: Event): Int {
+        val count = eventExists(event, event.comment)
         if (count == 0)
             scope.launch {
                 repository.insertEventsAll(event)
