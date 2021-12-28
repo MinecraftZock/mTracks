@@ -598,24 +598,6 @@ $zw""".trim { it <= ' ' }
                         result = res.parse()
                     }
                     res.checkResponseCodeOk()
-                    if (result!!.insertResponse.message == "insert" || result.insertResponse.message == "update") {
-                        val restID = result.insertResponse.id
-                        anzahlChange++
-                        if (rating > 0 && result.insertResponse.message == "insert") {
-                            val ratingREST = RESTrating()
-                            ratingREST.country = "DE"
-                            ratingREST.rating = rating
-                            ratingREST.androidid = "debug"
-                            ratingREST.trackId = restID
-                            val requestR = PostRatingsRequest(ratingREST)
-                            val resR = webClient.postRatings(requestR)
-                            // PostRatingsResult responseR = resR.parse();
-                            if (resR.responseCode != 200) {
-                                Timber.w(resR.responseCode.toString() + " " + restID)
-                                // resR.checkResponseCodeOk();
-                            }
-                        }
-                    }
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
