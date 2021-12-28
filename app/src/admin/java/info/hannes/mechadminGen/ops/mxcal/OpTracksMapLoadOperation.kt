@@ -11,12 +11,10 @@ import info.mx.comlib.retrofit.CommApiClient
 import info.mx.comlib.util.RetroFileHelper
 import info.mx.core.MxCoreApplication.Companion.mxInfo
 import info.mx.core.ops.ImportHelper.getCountryFromLatLng
-import info.mx.core_generated.rest.PostRatingsRequest
+import info.mx.core.util.Wait.delay
 import info.mx.core_generated.rest.PostTrackstageIDRequest
 import info.mx.core_generated.rest.PostTrackstageIDResult
-import info.mx.core_generated.rest.RESTrating
 import info.mx.core_generated.rest.RESTtrackStage
-import info.mx.core.util.Wait.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -95,7 +93,7 @@ internal open class OpTracksMapLoadOperation : AbstractOpTracksMapLoadOperation(
             .append(QuellFile.REST_ID + " is null")
             .select<QuellFileRecord>(QuellFile.CONTENT_URI, QuellFile.CREATEDATE + " desc")
         for (fileRecord in files) {
-            var anzahlChange = 0
+            val anzahlChange = 0
             val options =
                 fileRecord.content.split("map\\.addOverlay\\(marker\\)\\;bounds\\.extend\\(point\\)\\;")
                     .toTypedArray()
@@ -547,24 +545,6 @@ $zw""".trim { it <= ' ' }
                         result = res.parse()
                     }
                     res.checkResponseCodeOk()
-                    if (result!!.insertResponse.message == "insert" || result.insertResponse.message == "update") {
-                        val restID = result.insertResponse.id
-                        anzahlChange++
-                        if (rating > 0 && result.insertResponse.message == "insert") {
-                            val ratingREST = RESTrating()
-                            ratingREST.country = "DE"
-                            ratingREST.rating = rating
-                            ratingREST.androidid = "debug"
-                            ratingREST.trackId = restID
-                            val requestR = PostRatingsRequest(ratingREST)
-                            val resR = webClient.postRatings(requestR)
-                            // PostRatingsResult responseR = resR.parse();
-                            if (resR.responseCode != 200) {
-                                Timber.w("${resR.responseCode} $restID")
-                                // resR.checkResponseCodeOk();
-                            }
-                        }
-                    }
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
