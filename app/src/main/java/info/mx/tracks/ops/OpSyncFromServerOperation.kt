@@ -52,11 +52,9 @@ import info.mx.core_generated.rest.*
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.CountrysumRecord
-import info.mx.core_generated.sqlite.EventsRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
 import info.mx.core_generated.sqlite.NetworkRecord
 import info.mx.core_generated.sqlite.PicturesRecord
-import info.mx.core_generated.sqlite.SeriesRecord
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
@@ -132,7 +130,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             var countryResult = ""
             if (NetworkHelper.isOnline(context.applicationContext)) {
                 doHandleTrackStage(context.applicationContext, webClient)
-                doPushEvents(webClient)
                 var gesImported = 0
                 var newImported = doSyncTracksBlock(context, args.updateProvider, gesImported, args.flavor)
                 while (newImported > 0) {
@@ -154,9 +151,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                 doSyncPictures(context, args.updateProvider)
                 imported = 0
-                doSyncSeries(context, args.updateProvider)
-                imported = 0
-                doSyncEvents(context, webClient, args.updateProvider)
                 doPushNetworkErrorsAtOnce(webClient)
 
                 val intentM = AbstractOpPostImagesOperation.newIntent()
@@ -431,33 +425,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         Timber.d("del approved:%s", del)
         SQuery.newQuery().expr(Trackstage.APPROVED, Op.EQ, -1).delete(Trackstage.CONTENT_URI)
         SQuery.newQuery().expr(Pictures.APPROVED, Op.EQ, -1).delete(Pictures.CONTENT_URI)
-    }
-
-    @Throws(ServiceException::class)
-    private fun doPushEvents(webClient: MxInfo) {
-        val eventsNeu = SQuery.newQuery()
-            .expr(Events.REST_ID, Op.LTEQ, 0)
-            .or()
-            .append(Events.REST_ID + " is null")
-            .select<EventsRecord>(Events.CONTENT_URI)
-
-        for (eventDB in eventsNeu) {
-            val eventREST = RESTevent()
-            eventREST.approved = eventDB.approved.toInt()
-            eventREST.changed = eventDB.changed.toInt()
-            eventREST.comment = eventDB.comment
-            eventREST.eventdate = eventDB.eventDate.toInt()
-            eventREST.trackId = eventDB.trackRestId.toInt()
-            eventREST.androidid = TrackingApplication.androidId
-            val request = PostEventRequest(eventREST)
-            val res = webClient.postEvent(request)
-            val response = res.parse()
-            res.checkResponseCodeOk()
-            eventDB.restId = response.baseResponse.id.toLong()
-            eventDB.changed = 1
-            eventDB.save()
-
-        }
     }
 
     private fun doHandleTrackStage(context: Context, webClient: MxInfo) {
@@ -1047,117 +1014,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             throw Exception(e.message + " $trackName")
         }
         return zlrInsertedReturn
-    }
-
-    @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
-    private fun doSyncSeries(context: OperationContext, updateProvider: Boolean) {
-        val opName = "Series"
-        val maxCreated = SQuery.newQuery().firstInt(Series.CONTENT_URI, "max(" + Series.CHANGED + ")")
-
-        val seriesResponse = dataManagerApp.getSeries(maxCreated.toLong())
-
-        seriesResponse.checkResponseCodeOk()
-
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (serieR in seriesResponse.body()!!) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Series.REST_ID, Op.EQ, serieR.id!!)
-                .firstInt(Series.CONTENT_URI, Series._ID)
-            if (restId == 0) { // neuanlage
-                zlrInserted++
-                val builderTrack = Series.newBuilder()
-
-                builderTrack.setRestId(serieR.id!!.toLong())
-                builderTrack.setChanged(serieR.changed!!.toLong())
-                builderTrack.setName(serieR.name)
-                builderTrack.setSeriesUrl(serieR.seriesurl)
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-                }
-            } else {
-                val recordTrack = SeriesRecord.get(restId.toLong())
-                recordTrack!!.restId = serieR.id!!.toLong()
-                recordTrack.changed = serieR.changed!!.toLong()
-                recordTrack.name = serieR.name
-                recordTrack.seriesUrl = serieR.seriesurl
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-        }
-        Timber.i("$opName gesamt ${(if (seriesResponse.body() != null) seriesResponse.body()!!.size else 0)} updated:$zlrUpdated")
-    }
-
-    @Throws(ServiceException::class, RemoteException::class, OperationApplicationException::class)
-    private fun doSyncEvents(context: OperationContext, webClient: MxInfo, updateProvider: Boolean) {
-        val opName = "Events"
-        val maxCreated = SQuery.newQuery().firstInt(Events.CONTENT_URI, "max(" + Events.CHANGED + ")")
-        val requestTrack = GetEventsFromRequest(maxCreated.toLong())
-        val resultTrack = webClient.getEventsFrom(requestTrack)
-        val resTrack = resultTrack.parse()
-        resultTrack.checkResponseCodeOk()
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (trackREST in resTrack.resTevents) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val dbId = SQuery.newQuery()
-                .expr(Events.REST_ID, Op.EQ, trackREST.id)
-                .firstInt(Events.CONTENT_URI, Events._ID)
-            if (dbId == 0) { // neuanlage
-                zlrInserted++
-                val builderTrack = Events.newBuilder()
-
-                builderTrack.setRestId(trackREST.id.toLong())
-                builderTrack.setChanged(trackREST.changed.toLong())
-                builderTrack.setComment(trackREST.comment)
-                builderTrack.setEventDate(trackREST.eventdate.toLong())
-                builderTrack.setSeriesRestId(trackREST.serieId.toLong())
-                builderTrack.setApproved(trackREST.approved.toLong())
-                builderTrack.setTrackRestId(trackREST.trackId.toLong())
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-                }
-            } else {
-                val recordTrack = EventsRecord.get(dbId.toLong())
-                recordTrack!!.restId = trackREST.id.toLong()
-                recordTrack.changed = trackREST.changed.toLong()
-                recordTrack.comment = trackREST.comment
-                recordTrack.eventDate = trackREST.eventdate.toLong()
-                recordTrack.seriesRestId = trackREST.serieId.toLong()
-                recordTrack.approved = trackREST.approved.toLong()
-                recordTrack.trackRestId = trackREST.trackId.toLong()
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-        }
-        Timber.i("$opName gesamt ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
     }
 
     private fun doBuildCountryTable(context: Context): String {
