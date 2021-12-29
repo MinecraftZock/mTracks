@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import info.mx.tracks.R;
 import info.mx.tracks.common.FragmentUpDown;
 import info.mx.tracks.trackdetail.comment.CommentFragment;
-import info.mx.tracks.trackdetail.event.FragmentEvent;
+import info.mx.tracks.trackdetail.event.EventFragment;
 import timber.log.Timber;
 
 public abstract class BaseAdapterFragmentTab extends FragmentPagerAdapter {
@@ -32,7 +32,7 @@ public abstract class BaseAdapterFragmentTab extends FragmentPagerAdapter {
         List<TabFragmentInfo> tabs = new ArrayList<>();
         tabs.add(new TabFragmentInfo(CommentFragment.class, R.string.title_activity_comment, R.drawable.ic_comment_white_24px));
         tabs.add(new TabFragmentInfo(FragmentTrackDetail.class, R.string.info, R.drawable.ic_info));
-        tabs.add(new TabFragmentInfo(FragmentEvent.class, R.string.events, R.drawable.ic_event_note_white_24px));
+        tabs.add(new TabFragmentInfo(EventFragment.class, R.string.events, R.drawable.ic_event_note_white_24px));
         return tabs;
     }
 
