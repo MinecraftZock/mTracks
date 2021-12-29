@@ -13,6 +13,8 @@ abstract class MxDatabase : RoomDatabase() {
 
     abstract fun commentDao(): CommentDao
 
+    abstract fun eventDao(): EventDao
+
     companion object {
 
         const val ROOM_DATABASE_NAME = "mx_native.db"
