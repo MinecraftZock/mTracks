@@ -1,71 +1,71 @@
 package info.mx.tracks.trackdetail.event
 
 import android.annotation.SuppressLint
-import android.database.Cursor
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemLongClickListener
-import android.widget.ListView
-import android.widget.TextView
 import androidx.core.app.NavUtils
-import androidx.cursoradapter.widget.SimpleCursorAdapter
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
-import com.robotoworks.mechanoid.db.SQuery
-import info.mx.tracks.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.sqlite.MxInfoDBContract.Events2series
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import info.mx.tracks.databinding.FragmentRecyclerListBinding
+import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.sqlite.TracksRecord
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
-    private val projectionEvents = arrayOf(Events2series.EVENT_DATE, Events2series.COMMENT, Events2series.SERIESNAME)
-    private val toEvents = intArrayOf(R.id.textDatum, R.id.textKommentar, R.id.textSerie)
-    private var mAdapter: SimpleCursorAdapter? = null
-    private var tracksRest_ID: Long = 0
+class FragmentEvent : FragmentUpDown() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private lateinit var adapter: EventAdapter
+
+    private var localTrackId = 0L
+
+    private var _binding: FragmentRecyclerListBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
+    private val eventViewModel: EventViewModel by viewModel()
+
+    val mxDatabase: MxDatabase by inject()
+
+    @SuppressLint("HardwareIds")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.fragment_list, null)
+        _binding = FragmentRecyclerListBinding.inflate(inflater, container, false)
+        val view = binding.root
         // keyboard hide
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-        val emptyView = view.findViewById<TextView>(R.id.txt_no_entry)
-        val listRatings = view.findViewById<ListView>(R.id.listEntries)
-        listRatings.emptyView = emptyView
-        listRatings.isLongClickable = true
-        listRatings.onItemLongClickListener =
-            OnItemLongClickListener { _: AdapterView<*>?, _: View?, _: Int, id: Long ->
-                SQuery.newQuery()
-                    .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRest_ID)
-                    .expr(Events2series._ID, SQuery.Op.EQ, id)
-                    .delete(Events2series.CONTENT_URI)
-                true
-            }
-        mAdapter = SimpleCursorAdapter(
-            requireActivity(),
-            R.layout.item_event,
-            null,
-            projectionEvents,
-            toEvents,
-            0
-        )
-        mAdapter!!.viewBinder = EventsViewBinder()
-        listRatings.adapter = mAdapter
-        loaderManager.initLoader(LOADER_EVENTS, arguments, this)
+
+        val layoutManager = LinearLayoutManager(context)
+        binding.listRecyclerEntries.layoutManager = layoutManager
+        binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
+        binding.listRecyclerEntries.isLongClickable = true
+
+        adapter = EventAdapter(this.requireContext())
+
+        binding.listRecyclerEntries.adapter = adapter
+
+        localTrackId = requireArguments().getLong(RECORD_ID_LOCAL)
+
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fillMask(localTrackId)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
+                // This ID represents the Home or Up button. In the case of this activity, the Up button is shown.
+                // Use NavUtils to allow users to navigate up one level in the application structure.
+                // For more details, see the Navigation pattern on Android Design:
                 //
                 // http://developer.android.com/design/patterns/navigation.html#up-vs-back
                 //
@@ -76,35 +76,15 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateLoader(id: Int, bundle: Bundle?): Loader<Cursor> {
-        val trackId = bundle!!.getLong(RECORD_ID_LOCAL)
-        tracksRest_ID = SQuery.newQuery()
-            .expr(Tracks._ID, SQuery.Op.EQ, trackId)
-            .firstLong(Tracks.CONTENT_URI, Tracks.REST_ID)
-        return SQuery.newQuery()
-            .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRest_ID)
-            .expr(Events2series.APPROVED, SQuery.Op.NEQ, -11)
-            .createSupportLoader(
-                Events2series.CONTENT_URI,
-                null,
-                Events2series.EVENT_DATE + " desc"
-            )
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-        mAdapter!!.swapCursor(data)
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>) {
-        mAdapter!!.swapCursor(null)
-    }
-
     override fun fillMask(newId: Long) {
         requireArguments().putLong(RECORD_ID_LOCAL, newId)
-        loaderManager.restartLoader(LOADER_EVENTS, arguments, this)
-    }
 
-    companion object {
-        private const val LOADER_EVENTS = 0
+        val tracksRecord = TracksRecord.get(newId)
+
+        eventViewModel.allEvents(tracksRecord.restId).observe(viewLifecycleOwner) { events ->
+            adapter.setData(Data.db(events))
+        }
+
+        eventViewModel.getNewRemoteData(tracksRecord.restId)
     }
 }
