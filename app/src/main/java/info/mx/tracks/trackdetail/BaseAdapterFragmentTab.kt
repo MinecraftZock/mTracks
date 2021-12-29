@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.trackdetail.comment.CommentFragment
-import info.mx.tracks.trackdetail.event.FragmentEvent
+import info.mx.tracks.trackdetail.event.EventFragment
 import timber.log.Timber
 import java.util.Locale
 
@@ -51,7 +51,7 @@ abstract class BaseAdapterFragmentTab internal constructor(
             )
             tabs.add(
                 TabFragmentInfo(
-                    FragmentEvent::class.java,
+                    EventFragment::class.java,
                     R.string.events,
                     R.drawable.ic_event_note_white_24px
                 )
