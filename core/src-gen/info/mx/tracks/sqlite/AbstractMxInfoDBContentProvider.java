@@ -112,46 +112,45 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
     protected String[] createContentTypes() {
         String[] contentTypes = new String[NUM_URI_MATCHERS];
 
-        contentTypes[TRACKS] = MxInfoDBContract.Tracks.CONTENT_TYPE;
-        contentTypes[TRACKS_ID] = MxInfoDBContract.Tracks.ITEM_CONTENT_TYPE;
-        contentTypes[TRACKSTAGE] = MxInfoDBContract.Trackstage.CONTENT_TYPE;
-        contentTypes[TRACKSTAGE_ID] = MxInfoDBContract.Trackstage.ITEM_CONTENT_TYPE;
-        contentTypes[FAVORITS] = MxInfoDBContract.Favorits.CONTENT_TYPE;
-        contentTypes[FAVORITS_ID] = MxInfoDBContract.Favorits.ITEM_CONTENT_TYPE;
-        contentTypes[COUNTRY] = MxInfoDBContract.Country.CONTENT_TYPE;
-        contentTypes[COUNTRY_ID] = MxInfoDBContract.Country.ITEM_CONTENT_TYPE;
-        contentTypes[PICTURES] = MxInfoDBContract.Pictures.CONTENT_TYPE;
-        contentTypes[PICTURES_ID] = MxInfoDBContract.Pictures.ITEM_CONTENT_TYPE;
-        contentTypes[SERIES] = MxInfoDBContract.Series.CONTENT_TYPE;
-        contentTypes[SERIES_ID] = MxInfoDBContract.Series.ITEM_CONTENT_TYPE;
-        contentTypes[EVENTS] = MxInfoDBContract.Events.CONTENT_TYPE;
-        contentTypes[EVENTS_ID] = MxInfoDBContract.Events.ITEM_CONTENT_TYPE;
-        contentTypes[IMPORTSTATUS] = MxInfoDBContract.Importstatus.CONTENT_TYPE;
-        contentTypes[IMPORTSTATUS_ID] = MxInfoDBContract.Importstatus.ITEM_CONTENT_TYPE;
-        contentTypes[WEATHER] = MxInfoDBContract.Weather.CONTENT_TYPE;
-        contentTypes[WEATHER_ID] = MxInfoDBContract.Weather.ITEM_CONTENT_TYPE;
-        contentTypes[ROUTE] = MxInfoDBContract.Route.CONTENT_TYPE;
-        contentTypes[ROUTE_ID] = MxInfoDBContract.Route.ITEM_CONTENT_TYPE;
-        contentTypes[NETWORK] = MxInfoDBContract.Network.CONTENT_TYPE;
-        contentTypes[NETWORK_ID] = MxInfoDBContract.Network.ITEM_CONTENT_TYPE;
-        contentTypes[COUNTRYSUM] = MxInfoDBContract.Countrysum.CONTENT_TYPE;
-        contentTypes[COUNTRYSUM_ID] = MxInfoDBContract.Countrysum.ITEM_CONTENT_TYPE;
-        contentTypes[PICTURESUM] = MxInfoDBContract.Picturesum.CONTENT_TYPE;
-        contentTypes[PICTURESUM_ID] = MxInfoDBContract.Picturesum.ITEM_CONTENT_TYPE;
-        contentTypes[EVENTSUM] = MxInfoDBContract.Eventsum.CONTENT_TYPE;
-        contentTypes[EVENTSUM_ID] = MxInfoDBContract.Eventsum.ITEM_CONTENT_TYPE;
-        contentTypes[EVENTS2SERIES] = MxInfoDBContract.Events2series.CONTENT_TYPE;
-        contentTypes[EVENTS2SERIES_ID] = MxInfoDBContract.Events2series.ITEM_CONTENT_TYPE;
-        contentTypes[COUNTRYCOUNT] = MxInfoDBContract.Countrycount.CONTENT_TYPE;
-        contentTypes[COUNTRYCOUNT_ID] = MxInfoDBContract.Countrycount.ITEM_CONTENT_TYPE;
-        contentTypes[USER_ACTIVITY] = MxInfoDBContract.UserActivity.CONTENT_TYPE;
-        contentTypes[USER_ACTIVITY_ID] = MxInfoDBContract.UserActivity.ITEM_CONTENT_TYPE;
-        contentTypes[TRACKSGES] = MxInfoDBContract.Tracksges.CONTENT_TYPE;
-        contentTypes[TRACKSGES_ID] = MxInfoDBContract.Tracksges.ITEM_CONTENT_TYPE;
-        contentTypes[TRACKS_GES_SUM] = MxInfoDBContract.TracksGesSum.CONTENT_TYPE;
-        contentTypes[TRACKS_GES_SUM_ID] = MxInfoDBContract.TracksGesSum.ITEM_CONTENT_TYPE;
-
-        return contentTypes;
+		contentTypes[TRACKS] = MxInfoDBContract.Tracks.CONTENT_TYPE;
+		contentTypes[TRACKS_ID] = MxInfoDBContract.Tracks.ITEM_CONTENT_TYPE;
+		contentTypes[TRACKSTAGE] = MxInfoDBContract.Trackstage.CONTENT_TYPE;
+		contentTypes[TRACKSTAGE_ID] = MxInfoDBContract.Trackstage.ITEM_CONTENT_TYPE;
+		contentTypes[FAVORITS_ID] = MxInfoDBContract.Favorits.ITEM_CONTENT_TYPE;
+		contentTypes[COUNTRY] = MxInfoDBContract.Country.CONTENT_TYPE;
+		contentTypes[COUNTRY_ID] = MxInfoDBContract.Country.ITEM_CONTENT_TYPE;
+		contentTypes[PICTURES] = MxInfoDBContract.Pictures.CONTENT_TYPE;
+		contentTypes[PICTURES_ID] = MxInfoDBContract.Pictures.ITEM_CONTENT_TYPE;
+		contentTypes[SERIES] = MxInfoDBContract.Series.CONTENT_TYPE;
+		contentTypes[SERIES_ID] = MxInfoDBContract.Series.ITEM_CONTENT_TYPE;
+		contentTypes[EVENTS] = MxInfoDBContract.Events.CONTENT_TYPE;
+		contentTypes[EVENTS_ID] = MxInfoDBContract.Events.ITEM_CONTENT_TYPE;
+		contentTypes[IMPORTSTATUS] = MxInfoDBContract.Importstatus.CONTENT_TYPE;
+		contentTypes[IMPORTSTATUS_ID] = MxInfoDBContract.Importstatus.ITEM_CONTENT_TYPE;
+		contentTypes[WEATHER] = MxInfoDBContract.Weather.CONTENT_TYPE;
+		contentTypes[WEATHER_ID] = MxInfoDBContract.Weather.ITEM_CONTENT_TYPE;
+		contentTypes[ROUTE] = MxInfoDBContract.Route.CONTENT_TYPE;
+		contentTypes[ROUTE_ID] = MxInfoDBContract.Route.ITEM_CONTENT_TYPE;
+		contentTypes[NETWORK] = MxInfoDBContract.Network.CONTENT_TYPE;
+		contentTypes[NETWORK_ID] = MxInfoDBContract.Network.ITEM_CONTENT_TYPE;
+		contentTypes[COUNTRYSUM] = MxInfoDBContract.Countrysum.CONTENT_TYPE;
+		contentTypes[COUNTRYSUM_ID] = MxInfoDBContract.Countrysum.ITEM_CONTENT_TYPE;
+		contentTypes[PICTURESUM] = MxInfoDBContract.Picturesum.CONTENT_TYPE;
+		contentTypes[PICTURESUM_ID] = MxInfoDBContract.Picturesum.ITEM_CONTENT_TYPE;
+		contentTypes[EVENTSUM] = MxInfoDBContract.Eventsum.CONTENT_TYPE;
+		contentTypes[EVENTSUM_ID] = MxInfoDBContract.Eventsum.ITEM_CONTENT_TYPE;
+		contentTypes[EVENTS2SERIES] = MxInfoDBContract.Events2series.CONTENT_TYPE;
+		contentTypes[EVENTS2SERIES_ID] = MxInfoDBContract.Events2series.ITEM_CONTENT_TYPE;
+		contentTypes[COUNTRYCOUNT] = MxInfoDBContract.Countrycount.CONTENT_TYPE;
+		contentTypes[COUNTRYCOUNT_ID] = MxInfoDBContract.Countrycount.ITEM_CONTENT_TYPE;
+		contentTypes[USER_ACTIVITY] = MxInfoDBContract.UserActivity.CONTENT_TYPE;
+		contentTypes[USER_ACTIVITY_ID] = MxInfoDBContract.UserActivity.ITEM_CONTENT_TYPE;
+		contentTypes[TRACKSGES] = MxInfoDBContract.Tracksges.CONTENT_TYPE;
+		contentTypes[TRACKSGES_ID] = MxInfoDBContract.Tracksges.ITEM_CONTENT_TYPE;
+		contentTypes[TRACKS_GES_SUM] = MxInfoDBContract.TracksGesSum.CONTENT_TYPE;
+		contentTypes[TRACKS_GES_SUM_ID] = MxInfoDBContract.TracksGesSum.ITEM_CONTENT_TYPE;
+		
+		return contentTypes;
     }
 
     @Override
