@@ -33,7 +33,6 @@ public abstract class AbstractMxInfoDBOpenHelper extends MechanoidSQLiteOpenHelp
 		String PICTURES = "pictures";
 		String WEATHER = "weather";
 		String ROUTE = "route";
-		String NETWORK = "network";
 		String COUNTRYSUM = "countrysum";
 		String PICTURESUM = "picturesum";
 		String COUNTRYCOUNT = "countrycount";

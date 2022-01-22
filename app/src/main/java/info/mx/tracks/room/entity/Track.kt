@@ -55,7 +55,7 @@ open class Track(
     @ColumnInfo(name = "enduro") var enduro: Int = -1,
     @ColumnInfo(name = "utv") var utv: Int = -1,
     @ColumnInfo(name = "quad") var quad: Int = -1,
-    @ColumnInfo(name = "areatype") var areatype: Int = -1,
+    @ColumnInfo(name = "areatype") var areatype: String = "",
     @ColumnInfo(name = "schwierigkeit") var schwierigkeit: Int = 0,
     @ColumnInfo(name = "indoor") var indoor: Int = 0,
     @ColumnInfo(name = "lastAsked") var lastAsked: Int = 0,
@@ -68,7 +68,8 @@ open class Track(
     @ColumnInfo(name = "daysopen") var daysopen: String = "",
     @ColumnInfo(name = "noiselimit") var noiselimit: String = "",
     @ColumnInfo(name = "trackstatus") var trackstatus: String = "",
-    @ColumnInfo(name = "andoridid") var andoridid: String = ""
+    @ColumnInfo(name = "andoridid") var andoridid: String = "",
+    @ColumnInfo(name = "notes") var notes: String = ""
 ) : BaseEntity() {
 
     override fun toString(): String {
