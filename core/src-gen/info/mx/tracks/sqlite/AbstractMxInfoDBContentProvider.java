@@ -34,8 +34,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
     public static final int WEATHER_ID = 19;
     public static final int ROUTE = 20;
     public static final int ROUTE_ID = 21;
-    public static final int NETWORK = 22;
-    public static final int NETWORK_ID = 23;
 
     public static final int COUNTRYSUM = 24;
     public static final int COUNTRYSUM_ID = 25;
@@ -73,8 +71,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         matcher.addURI(authority, "weather/#", WEATHER_ID);
         matcher.addURI(authority, "route", ROUTE);
         matcher.addURI(authority, "route/#", ROUTE_ID);
-        matcher.addURI(authority, "network", NETWORK);
-        matcher.addURI(authority, "network/#", NETWORK_ID);
         matcher.addURI(authority, "countrysum", COUNTRYSUM);
         matcher.addURI(authority, "countrysum/#", COUNTRYSUM_ID);
         matcher.addURI(authority, "picturesum", PICTURESUM);
@@ -112,8 +108,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         contentTypes[WEATHER_ID] = MxInfoDBContract.Weather.ITEM_CONTENT_TYPE;
         contentTypes[ROUTE] = MxInfoDBContract.Route.CONTENT_TYPE;
         contentTypes[ROUTE_ID] = MxInfoDBContract.Route.ITEM_CONTENT_TYPE;
-        contentTypes[NETWORK] = MxInfoDBContract.Network.CONTENT_TYPE;
-        contentTypes[NETWORK_ID] = MxInfoDBContract.Network.ITEM_CONTENT_TYPE;
         contentTypes[COUNTRYSUM] = MxInfoDBContract.Countrysum.CONTENT_TYPE;
         contentTypes[COUNTRYSUM_ID] = MxInfoDBContract.Countrysum.ITEM_CONTENT_TYPE;
         contentTypes[PICTURESUM] = MxInfoDBContract.Picturesum.CONTENT_TYPE;
@@ -175,10 +169,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createRouteActions();
             case ROUTE_ID:
                 return createRouteByIdActions();
-            case NETWORK:
-                return createNetworkActions();
-            case NETWORK_ID:
-                return createNetworkByIdActions();
             case COUNTRYSUM:
                 return createCountrysumActions();
             case COUNTRYSUM_ID:
@@ -271,14 +261,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
 
     protected ContentProviderActions createRouteActions() {
         return new DefaultContentProviderActions(Sources.ROUTE, false, RouteRecord.getFactory());
-    }
-
-    protected ContentProviderActions createNetworkByIdActions() {
-        return new DefaultContentProviderActions(Sources.NETWORK, true, NetworkRecord.getFactory());
-    }
-
-    protected ContentProviderActions createNetworkActions() {
-        return new DefaultContentProviderActions(Sources.NETWORK, false, NetworkRecord.getFactory());
     }
 
     protected ContentProviderActions createCountrysumByIdActions() {
