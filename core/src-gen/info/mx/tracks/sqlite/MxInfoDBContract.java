@@ -545,81 +545,6 @@ public class MxInfoDBContract {
     }
 
     /**
-     * <p>Column definitions and helper methods to work with the Network.</p>
-     */
-    public static class Network implements NetworkColumns, BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("network").build();
-
-        /**
-         * <p>The content type for a cursor that contains many Network rows.</p>
-         */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.network";
-
-        /**
-         * <p>The content type for a cursor that contains a single Network row.</p>
-         */
-        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.network";
-
-        /**
-         * <p>Builds a Uri with appended id for a row in Network,
-         * eg:- content://info.mx.tracks.sqlite.mxinfodb/network/123.</p>
-         */
-        public static Uri buildUriWithId(long id) {
-            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
-        public static int delete() {
-            return Mechanoid.getContentResolver().delete(Network.CONTENT_URI, null, null);
-        }
-
-        public static int delete(String where, String[] selectionArgs) {
-            return Mechanoid.getContentResolver().delete(Network.CONTENT_URI, where, selectionArgs);
-        }
-
-        /**
-         * <p>Create a new Builder for Network</p>
-         */
-        public static Builder newBuilder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Build and execute insert or update statements for Network.</p>
-         *
-         * <p>Use {@link Network#newBuilder()} to create new builder</p>
-         */
-        public static class Builder extends AbstractValuesBuilder {
-            private Builder() {
-                super(Mechanoid.getApplicationContext(), Network.CONTENT_URI);
-            }
-
-            public Builder setReason(String value) {
-                mValues.put(Network.REASON, value);
-                return this;
-            }
-
-            public Builder setTracks(long value) {
-                mValues.put(Network.TRACKS, value);
-                return this;
-            }
-
-            public Builder setCreated(long value) {
-                mValues.put(Network.CREATED, value);
-                return this;
-            }
-        }
-
-        static final Set<Uri> VIEW_URIS;
-
-        static {
-            HashSet<Uri> viewUris = new HashSet<>();
-
-
-            VIEW_URIS = Collections.unmodifiableSet(viewUris);
-        }
-    }
-
-    /**
      * <p>Column definitions and helper methods to work with the Pictures.</p>
      */
     public static class Pictures implements PicturesColumns, BaseColumns {
@@ -2737,7 +2662,6 @@ public class MxInfoDBContract {
 
         map.put(Country.CONTENT_URI, Country.VIEW_URIS);
         map.put(Favorits.CONTENT_URI, Favorits.VIEW_URIS);
-        map.put(Network.CONTENT_URI, Network.VIEW_URIS);
         map.put(Pictures.CONTENT_URI, Pictures.VIEW_URIS);
         map.put(Route.CONTENT_URI, Route.VIEW_URIS);
         map.put(Tracks.CONTENT_URI, Tracks.VIEW_URIS);
@@ -2764,7 +2688,6 @@ public class MxInfoDBContract {
     public static void deleteAll() {
         Country.delete();
         Favorits.delete();
-        Network.delete();
         Pictures.delete();
         Route.delete();
         Tracks.delete();
