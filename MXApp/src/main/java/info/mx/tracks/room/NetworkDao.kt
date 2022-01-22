@@ -1,4 +1,4 @@
-package info.mx.tracks.room.memory
+package info.mx.tracks.room
 
 import androidx.room.*
 import info.mx.tracks.room.entity.Network
