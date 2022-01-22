@@ -38,6 +38,7 @@ import info.mx.tracks.common.ImportStatusMessage
 import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.*
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.sqlite.*
 import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.util.LocationHelper
@@ -61,6 +62,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     private lateinit var operationContext: OperationContext
 
     private val dataManagerApp: DataManagerApp by inject()
+    private val mxDatabase: MxDatabase by inject()
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         operationContext = context
@@ -313,12 +315,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doPushNetworkErrorsAtOnce(webClient: MxInfo) {
-        val networkErrors = SQuery.newQuery().select<NetworkRecord>(Network.CONTENT_URI)
+        val networkErrors = mxDatabase.networkDao().all
 
         val requestList = ArrayList<RESTnetworkError>()
         for (networkError in networkErrors) {
             val requestSingle = RESTnetworkError()
-            requestSingle.changed = networkError.created
+            requestSingle.changed = networkError.changed
             requestSingle.reason = networkError.reason
             requestSingle.tracks = networkError.tracks.toInt()
             requestSingle.androidid = TrackingApplication.androidId
@@ -330,14 +332,13 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             resultTrack = webClient.postNetworkErrors(requestNetwork)
             if (resultTrack.responseCode == Response.HTTP_NO_CONTENT) {
                 for (networkError in networkErrors) {
-                    networkError.delete(false)
+                    mxDatabase.networkDao().deleteAll()
                 }
             } else {
                 Timber.w("Network result code:%s", resultTrack.responseCode)
             }
         } catch (_: ServiceException) {
         }
-
     }
 
     private fun doFixMissingCounty(context: Context) {
