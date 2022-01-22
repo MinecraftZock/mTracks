@@ -48,18 +48,24 @@ import info.mx.core.util.checkResponseCodeOk
 import info.mx.core_generated.ops.AbstractOpPostImagesOperation
 import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.core_generated.rest.*
+import info.mx.core_generated.rest.GetTracksStageFromRequest
+import info.mx.core_generated.rest.PostNetworkErrorsRequest
+import info.mx.core_generated.rest.PostNetworkErrorsResult
+import info.mx.core_generated.rest.PostTrackstageIDRequest
+import info.mx.core_generated.rest.PutTrackstageRequest
+import info.mx.core_generated.rest.RESTnetworkError
+import info.mx.core_generated.rest.RESTtrackStage
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.CountrysumRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
-import info.mx.core_generated.sqlite.NetworkRecord
 import info.mx.core_generated.sqlite.PicturesRecord
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
+import info.mx.tracks.room.MxDatabase
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.util.UnzipUtil
@@ -83,6 +89,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     private lateinit var operationContext: OperationContext
 
     private val dataManagerApp: DataManagerApp by inject()
+    private val mxDatabase: MxDatabase by inject()
 
     /**
      * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
@@ -364,12 +371,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doPushNetworkErrorsAtOnce(webClient: MxInfo) {
-        val networkErrors = SQuery.newQuery().select<NetworkRecord>(Network.CONTENT_URI)
+        val networkErrors = mxDatabase.networkDao().all
 
         val requestList = ArrayList<RESTnetworkError>()
         for (networkError in networkErrors) {
             val requestSingle = RESTnetworkError()
-            requestSingle.changed = networkError.created
+            requestSingle.changed = networkError.changed
             requestSingle.reason = networkError.reason
             requestSingle.tracks = networkError.tracks.toInt()
             requestSingle.androidid = TrackingApplication.androidId
@@ -380,15 +387,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         try {
             resultTrack = webClient.postNetworkErrors(requestNetwork)
             if (resultTrack.responseCode == Response.HTTP_NO_CONTENT) {
-                for (networkError in networkErrors) {
-                    networkError.delete(false)
-                }
+                mxDatabase.networkDao().deleteAll()
             } else {
                 Timber.w("Network result code:%s", resultTrack.responseCode)
             }
         } catch (_: ServiceException) {
         }
-
     }
 
     private fun doFixMissingCounty(context: Context) {
