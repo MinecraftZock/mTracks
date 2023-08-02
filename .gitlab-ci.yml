@@ -17,7 +17,7 @@ stages:
   before_script:
     - pwd
   tags:
-    - android31-ndk
+    - api34-java17-NDK25
 
 LintProject:
   stage: check
