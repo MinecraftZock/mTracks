@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="server_list">
+        <item>@string/BACKEND_PROD_URL</item>
+        <item>http://hannes-vaio/backend</item>
+        <item>http://HannesMacAir256:8080/backend</item>
+        <item>http://hannes-mac-pro:8080/backend</item>
+        <item>http://192.168.178.23:8080/backend</item>
+        <item>http://10.0.2.2:8080/backend</item>
+        <item>http://10.0.2.1:8080/backend</item>
+        <!-- VPN -->
+        <item>http://10.0.0.4:8080/backend</item>
+    </string-array>
+
+</resources>

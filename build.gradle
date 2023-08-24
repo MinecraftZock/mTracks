@@ -1,0 +1,78 @@
+import org.gradle.internal.jvm.Jvm
+
+buildscript {
+    ext.kotlin_version = '1.8.20'
+
+    repositories {
+        google()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.github.triplet.gradle:play-publisher:3.8.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+    }
+}
+
+plugins {
+    // ./gradlew dependencyUpdates -Drevision=release
+    id 'com.github.ben-manes.versions' version '0.42.0'
+}
+
+println "Gradle uses Java ${Jvm.current()}"
+
+ext {
+    defaultCompileSdkVersion = 33
+    defaultMinSdkVersion = 21
+    defaultTargetSdkVersion = 33
+    koin_version = "3.3.2"
+    AndroidX = "1.6.1"
+    gsonVersion = "2.10.1"
+    retrofitVersion = "2.9.0"
+    rxAndroidVersion = "2.1.1"
+    rxJavaVersion = "2.2.21"
+    defaultPlayLibVersion = "21.0.1"
+    uiautomatorVersion = "2.2.0"
+    extJUnitVersion = "1.1.5"
+    espresso_core = "3.5.1"
+    room = "2.5.1"
+}
+
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint" // Version should be inherited from parent
+
+    // Optionally configure plugin
+    ktlint {
+        debug = false
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
+    // show detailed warnings in gradle output
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force("com.google.auto.value:auto-value-annotations:1.6.3")
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+

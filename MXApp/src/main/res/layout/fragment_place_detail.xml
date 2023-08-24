@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/RelativeLayout1"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="TooManyViews,RtlHardcoded">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/poi_list_item"
+            style="@style/dividedListStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/poi_layoutUploadHorizontal"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/poi_hImgGalery"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/thumbnail_size_dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:cacheColorHint="@android:color/transparent">
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/poi_layoutRating"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/poi_detail_rating_text"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/rating"/>
+
+                <RatingBar
+                    android:id="@+id/poi_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="@dimen/ratingBatMarginLeft"
+                    android:numStars="5"
+                    android:rating="1.5"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:textIsSelectable="true"/>
+
+                <TextView
+                    android:id="@+id/textRatingCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poi_layoutAddress"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/TextView04adr"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/Adress"/>
+
+                <TextView
+                    android:id="@+id/poi_detail_Address"
+                    style="@style/track_detail_itemContent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poi_layoutwebsite"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView041"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/website"/>
+
+                <TextView
+                    android:id="@+id/poi_detail_website"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true"/>
+
+                <ImageView
+                    android:id="@+id/ImageView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poi_layoutphone"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/phone"/>
+
+                <TextView
+                    android:id="@+id/poi_detail_phone"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true"/>
+
+                <ImageView
+                    android:id="@+id/ImageView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poi_layoutStage"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/TextView048"
+                    style="@style/track_detail_itemLabel"
+                    android:text="Stage"/>
+
+                <TextView
+                    android:id="@+id/poi_detail_stage"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

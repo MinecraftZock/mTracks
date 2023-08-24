@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".settings.ActivitySetting"
+    tools:showIn="@layout/activity_setting">
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".ActivityFilter">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_divider"
+            android:paddingLeft="5dp"
+            android:text="Info"
+            android:textColor="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/setting_Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_version"/>
+
+                <TextView
+                    android:id="@+id/setting_version"
+                    style="@style/setting_Label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/primaryLight"
+                    tools:text="V123"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/primaryLight"/>
+
+        <LinearLayout
+            android:id="@+id/layoutChangeLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_setting_item"
+            android:clickable="false"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/setting_Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/changelog_full_title"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/primaryLight"/>
+
+        <LinearLayout
+            android:id="@+id/layoutLicense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_setting_item"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/setting_Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/license"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_divider"
+            android:paddingLeft="5dp"
+            android:text="@string/user"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/setting_Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/username_for_comments"/>
+
+        <EditText
+            android:id="@+id/setting_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:hint="@string/empty_user">
+
+            <requestFocus/>
+        </EditText>
+
+        <TextView
+            android:id="@+id/tvCountryList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingLeft="5dp"
+            android:text="@string/display"
+            android:textColor="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:id="@+id/TextView03"
+                style="@style/setting_Label"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/unit_distance_measure"/>
+
+            <ToggleButton
+                android:id="@+id/set_toggleKm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/unit_distance_measure"
+                android:textOff="miles"
+                android:textOn="km"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvUsage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingLeft="5dp"
+            android:text="Usage"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/setting_tracking"
+            style="@style/setting_Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="@string/use_tracking"/>
+
+        <TextView
+            android:id="@+id/tvSurveillance"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingLeft="5dp"
+            android:text="@string/improve_track_info"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/setting_surveillance"
+            style="@style/setting_Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="@string/allow_ask_track_updates"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

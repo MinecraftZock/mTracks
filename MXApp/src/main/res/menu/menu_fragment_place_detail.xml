@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_place_navigation"
+        android:icon="@drawable/navigation2x"
+        android:orderInCategory="50"
+        app:showAsAction="always|collapseActionView"
+        android:title="@string/showroute"/>
+    <item
+        android:id="@+id/menu_place_share"
+        android:icon="@drawable/ic_menu_share"
+        android:orderInCategory="50"
+        app:showAsAction="always|collapseActionView"
+        android:title="@string/share"
+        android:visible="false"/>
+
+</menu>

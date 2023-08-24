@@ -1,0 +1,21 @@
+<resources>
+
+    <declare-styleable name="ButtonBarContainerTheme">
+    </declare-styleable>
+
+    <attr name="direction">
+        <enum name="rightToLeft" value="0"/>
+        <enum name="bottomToTop" value="1"/>
+        <enum name="leftToRight" value="2"/>
+        <enum name="topToBottom" value="3"/>
+    </attr>
+
+    <!-- copy from sdk/platforms/android-22/data/res/values/styles.xml for WidgetRatingBarSmall-->
+    <attr name="indeterminateDrawable" format="reference"/>
+    <attr name="indeterminateOnly" format="boolean"/>
+    <attr name="isIndicator" format="boolean"/>
+    <attr name="indeterminate" format="boolean"/>
+    <attr name="progressDrawable" format="reference"/>
+    <attr name="thumb" format="reference"/>
+
+</resources>

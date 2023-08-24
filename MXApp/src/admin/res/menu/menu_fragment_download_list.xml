@@ -1,0 +1,49 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_reset_reload_stage"
+        android:icon="@drawable/ic_menu_refresh"
+        android:orderInCategory="100"
+        android:title="reload and reset stages"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_solit_acceptable_tocheck"
+        android:icon="@drawable/ic_menu_splitt"
+        android:orderInCategory="100"
+        android:title="splitt acceptable/to check"
+        app:showAsAction="ifRoom"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:orderInCategory="100"
+        android:title="share DB"
+        app:showAsAction="ifRoom"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_facebook"
+        android:icon="@drawable/ic_facebook"
+        android:orderInCategory="100"
+        android:title="split url to facebook"
+        app:showAsAction="ifRoom"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_pictures"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:orderInCategory="100"
+        android:title="check images"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_pictures_mxbrothers_stage"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:orderInCategory="100"
+        android:title="check MXBrother stage images"
+        app:showAsAction="ifRoom"
+        tools:ignore="HardcodedText"/>
+
+
+</menu>

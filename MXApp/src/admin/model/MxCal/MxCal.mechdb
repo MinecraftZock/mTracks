@@ -1,0 +1,95 @@
+package info.info.hannes.mechadmin_gen.sqlite
+
+database MxCal {
+
+	migration {
+		
+		create table DownLoadSite (
+			_id integer primary key autoincrement,
+			restId integer,
+			display text,
+			url text,
+			createdate integer default ( strftime ( '%s' , 'now' ) ),
+			quellfile_id integer
+		);
+		
+		create table MXSerie (
+			_id integer primary key autoincrement,
+			restId integer,
+			webId integer,
+			created_at integer,
+			updated_at integer,
+			name text,
+			series_url text,
+			year integer,
+			quellfile_id integer
+		);
+
+		create table MxSeriesTrack (
+			_id integer primary key autoincrement,
+			restId integer,
+			webId integer,
+			web_series_id integer,
+			web_track_id integer,
+			created_at integer,
+			updated_at integer,
+			event_date integer,
+			notes text,
+			quellfile_id integer
+		);
+
+		create table MxTrack (
+			_id integer primary key autoincrement,
+			restId integer,
+			webId integer,
+			created_at integer,
+			updated_at integer,
+			address text,
+			city text,
+			email text,
+			name text,
+			phone text,
+			state_code text,
+			website text,
+			zip integer,
+			quellfile_id integer,
+			lat real,
+			lng real
+		);
+
+		create table QuellFile (
+			_id integer primary key autoincrement,
+			restId integer,
+			downloadSite_id integer,
+			createdate integer default ( strftime ( '%s' , 'now' ) ),
+			updatedCount integer,
+			content text default "",
+			log text default "",
+			url text
+		);
+
+		create table importstatusCal(
+			_id integer primary key autoincrement,
+			msg text,
+			created integer default 0
+		);
+	}
+	migration {
+		create view QuellFileSmall as 
+		select _id as _id,
+		restId as restId,
+		url as url
+		from QuellFile; 
+	}
+	migration {
+		drop view QuellFileSmall;
+		create view QuellFileSmall as 
+		select _id as _id,
+		restId as restId,
+		url as url,
+		createdate as createdate,
+		updatedCount as updatedCount,
+		substr(content,1, 10) as content
+		from QuellFile; 
+	}
+} 

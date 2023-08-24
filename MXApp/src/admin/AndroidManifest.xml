@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
+
+    <application
+        android:name="info.hannes.mxadmin.MxAppAdmin"
+        android:hardwareAccelerated="true"
+        android:label="@string/app_name"
+        tools:replace="android:name"
+        tools:ignore="AllowBackup,MissingApplicationIcon">
+        <activity
+            android:name="info.hannes.mxadmin.download.ActivityDownloadList"
+            android:label="@string/app_name"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.download.ActivityDownloadDetail"
+            android:exported="true"
+            android:label="Detail of site">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="info.hannes.mxadmin.download.ActivityDownloadList"/>
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.location.ActivityLocationMonitor"
+            android:exported="true"
+            android:label="Location Monitor">
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.picture.ActivityImageConfirm"
+            android:exported="true"
+            android:label="Picture confirm">
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.picture.ActivityImageMXBrotherStage"
+            android:exported="true"
+            android:label="Picture Stage confirm">
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.network.ActivityNetworkProblems"
+            android:exported="true"
+            android:label="Network Problems">
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.crashlytic.ActivityCrashlytic"
+            android:exported="true"
+            android:label="Crashlytic">
+        </activity>
+        <activity
+            android:name="info.hannes.mxadmin.deepLink.DeepLinkActivity"
+            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+<!--                <data-->
+<!--                    android:scheme="MXAdmin"-->
+<!--                    tools:ignore="AppLinkUrlError"/>-->
+<!--                <data android:scheme="mxadmin"/>-->
+                <!-- adb shell am start -W -a android.intent.action.VIEW -d "MXAdmin://trackedit"-->
+                <data
+                    android:host="trackedit"
+                    android:scheme="MXAdmin"
+                    tools:ignore="AppLinkUrlError"/>
+            </intent-filter>
+<!--            <intent-filter android:label="abc">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                &lt;!&ndash; Accepts URIs that begin with "example://gizmos” &ndash;&gt;-->
+<!--                <data android:scheme="example"-->
+<!--                    android:host="gizmos" />-->
+<!--            </intent-filter>-->
+
+        </activity>
+
+        <service
+            android:name="info.hannes.mechadmin_gen.ops.mxcal.MxCalService"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name="info.hannes.mechadmin_gen.ops.StageingService"
+            android:exported="false">
+        </service>
+
+        <provider
+            android:name="info.hannes.mechadmin_gen.sqlite.MxAdminDBContentProvider"
+            android:authorities="info.hannes.mechadmin.sqlite.mxadmindb"
+            android:exported="false"/>
+
+        <provider
+            android:name="info.hannes.mechadmin_gen.sqlite.MxCalContentProvider"
+            android:authorities="info.hannes.mechadmin.sqlite.mxcal"
+            android:exported="false"/>
+
+    </application>
+
+</manifest>

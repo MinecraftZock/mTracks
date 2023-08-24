@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+def backendKey = "BACKEND_PROD_URL"
+def backendUrl = System.getenv(backendKey) ? System.getenv(backendKey) : "http://backend.org"
+
+dependencies {
+    implementation project(':commonLib')
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    api project(path: ':RxCommData')
+    api "com.google.code.gson:gson:${gsonVersion}"
+
+    api "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    api "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+    api "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    api("com.squareup.retrofit2:converter-gson:${retrofitVersion}") {  // contains gson 2.8.2
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+    api "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
+
+    api "com.squareup.okhttp3:logging-interceptor:4.10.0"
+    api "commons-io:commons-io:2.11.0"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+android {
+    compileSdkVersion defaultCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion defaultMinSdkVersion
+        targetSdkVersion defaultTargetSdkVersion
+        consumerProguardFiles 'proguard-RxCommLib.pro'
+
+        // TODO rework it
+        buildConfigField "String", backendKey, "\"" + backendUrl.toString() + "\""
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-RxCommLib.pro'
+        }
+    }
+    lint {
+        abortOnError false
+    }
+    namespace 'info.mx.rxcommlibrary'
+
+}

@@ -1,0 +1,164 @@
+package info.info.hannes.mechadmin_gen.rest
+
+client MxCal "http://mxcal.com" {
+	get getSearch /api/v1/series/search.js {
+		response Serie[]
+	}
+	get getSeries /api/v1/series/resource_name:String {
+		response Serie
+	}
+	
+	get getMXcalSerieLastId /MXServer/rest/mxcalserie/last {
+		response CalStatusResponse
+	}
+	get getMXcalSeriestrackLastId /MXServer/rest/mxcalseriestrack/last {
+		response CalStatusResponse
+	}
+	get getMXcalTrackLastId /MXServer/rest/mxcaltrack/last {
+		response CalStatusResponse
+	}
+	get getMXcalQuellfileLastId /MXServer/rest/mxcalquellfile/last {
+		response CalStatusResponse
+	}
+	
+	post postMXcalSerie /MXServer/rest/mxcalserie/createWithID {
+		body RESTmxcalSerie
+		response CalBaseResponse
+	}
+	put putMXcalSerie /MXServer/rest/mxcalserie/id:long {
+		body RESTmxcalSerie
+		response CalBaseResponse
+	}
+	get getMXcalSerieFrom /MXServer/rest/mxcalserie/changed/from:long {
+		response RESTmxcalSerie[]
+	}
+	post postMXcalSeriestrack /MXServer/rest/mxcalseriestrack/createWithID {
+		body RESTmxcalSeriestrack
+		response CalInsertResponse
+	}
+	get getMXcalSeriestrackFrom /MXServer/rest/mxcalseriestrack/changed/from:long {
+		response RESTmxcalSeriestrack[]
+	}
+	post postMXcalTrack /MXServer/rest/mxcaltrack/createWithID {
+		body RESTmxcalTrack
+		response CalBaseResponse
+	}
+	get getMXcalTrackFrom /MXServer/rest/mxcaltrack/changed/from:long {
+		response RESTmxcalTrack[]
+	}
+	post postMXcalQuellfile /MXServer/rest/mxcalquellfile/createWithID {
+		body RESTmxcalQuellfile
+		response CalBaseResponse
+	}
+	get getMXcalQuellfileFrom /MXServer/rest/mxcalquellfile/changed/from:long {
+		response RESTmxcalQuellfile[]
+	}
+	get getMXcalSerieLastChanged /MXServer/rest/mxcalserie/lastChanged {
+		response RESTmxcalSerie[]
+	}
+	get getMXcalSeriestrackLastChanged /MXServer/rest/mxcalseriestrack/lastChanged {
+		response RESTmxcalSeriestrack[]
+	}
+	get getMXcalTrackLastChanged /MXServer/rest/mxcaltrack/lastChanged {
+		response RESTmxcalTrack[]
+	}
+	get getMXcalQuellfileLastChanged /MXServer/rest/mxcalquellfile/lastChanged {
+		response RESTmxcalQuellfile[]
+	}
+}
+
+entity CalBaseResponse {
+	id:int
+}
+
+entity CalInsertResponse {
+	id:int,
+	trackRestId:int,
+	changed:long,
+	message:String
+}
+
+entity CalStatusResponse {
+	changed:int,
+	message:String
+}
+
+entity Serie {
+	created_at:String,
+	id:int,
+	name:String,
+	series_url:String,
+	updated_at:String,
+	year:int,
+	series_tracks:SeriesTracks[]
+}
+ 
+entity SeriesTracks {
+	created_at:String,
+	event_date:String,
+	id:int,
+	notes:String,
+	series_id:int,
+	track_id:int,
+	updated_at:String,
+	track:Track
+}
+
+entity Track {
+	address:String,
+	city:String,
+	created_at:String,
+	email:String,
+	id:int,
+	name:String,
+	phone:String,
+	state_code:String,
+	updated_at:String,
+	website:String,
+	zip:int
+}
+
+entity RESTmxcalSerie {
+	id:long,
+	changed:int,
+	webid:int,
+	name:String,
+	seriesUrl:String,
+	year:long,
+	quellfileId:int
+}
+
+entity RESTmxcalSeriestrack {
+	id:int,
+	changed:int,
+	webid:int,
+	webSeriesId:int,
+	webTrackId:int,
+	eventDate:int,
+	notes:String,
+	quellfileId:int
+}
+
+entity RESTmxcalTrack {
+	id:int,
+	changed:int,
+	webid:int,
+	address:String,
+	city:String,
+	email:String,
+	name:String,
+	phone:String,
+	stateCode:String,
+	website:String,
+	zip:int,
+	quellfileId:int
+}
+
+entity RESTmxcalQuellfile {
+	id:int,
+	changed:int,
+	updatedcount:int,
+	content:String,
+	log:String,
+	url:String
+}

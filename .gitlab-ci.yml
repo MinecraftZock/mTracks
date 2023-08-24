@@ -1,0 +1,165 @@
+before_script:
+  #- export PATH=/opt/android-sdk-linux/sdk/platform-tools:$PATH
+  - echo "$USER"
+  - /opt/android-sdk-linux/tools/bin/sdkmanager --list
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - fastFail
+  - check
+  - build
+  #- test
+  - publish
+
+.base:
+  before_script:
+    - pwd
+  tags:
+    - android31-ndk
+
+LintProject:
+  stage: check
+  extends: .base
+  only:
+    - merge_requests
+  script:
+    - ./gradlew lintDebug
+
+ktLintProject:
+  stage: check
+  extends: .base
+  only:
+    - merge_requests
+  script:
+    - ./gradlew ktlintCheck
+
+BuildMaster:
+  stage: build
+  extends: .base
+  only:
+    - master
+  script:
+    - ./gradlew clean :MXApp:assembleRelease
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 2 days
+    paths:
+      - MXApp/build/outputs/apk/
+      - $(find . -name *.aab 2>/dev/null)
+      - MXApp/build/outputs/mapping
+      - RxCommJson/build/reports
+      - core/build/reports
+      - commonLib/build/reports
+      - RxCommLib/build/reports/
+      - MXApp/build/reports
+      - $(find . -name lint-results.html)
+      - MXApp/build/reports/androidTests/connected
+
+BuildPaid:
+  stage: build
+  extends: .base
+  only:
+    - merge_requests
+  script:
+    - ./gradlew clean :MXApp:assemblePaidDebug
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 2 days
+    paths:
+      - MXApp/build/outputs/apk/
+      - $(find . -name *.aab 2>/dev/null)
+      - MXApp/build/outputs/mapping
+      - RxCommJson/build/reports
+      - core/build/reports
+      - commonLib/build/reports
+      - RxCommLib/build/reports/
+      - MXApp/build/reports
+      - $(find . -name lint-results.html)
+      - MXApp/build/reports/androidTests/connected
+
+BuildAdmin:
+  stage: fastFail
+  extends: .base
+  only:
+    - merge_requests
+  script:
+    - ./gradlew clean :MXApp:assembleAdminDebug
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 14 days
+    paths:
+      - $(find . -name *.aar 2>/dev/null)
+      - access/build/outputs/aar/
+
+BuildFree:
+  stage: build
+  extends: .base
+  only:
+    - merge_requests
+  script:
+    - ./gradlew clean :MXApp:assembleFreeDebug
+
+#job test :
+#   stage: test
+#   extends: .base
+#   script:
+#    - ./scripts/emulator.sh ./gradlew connectedAndroidTest
+#   only:
+#    - master
+#    - /^feature-.*$/
+
+.publish:
+  extends: .base
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 14 days
+    paths:
+      - $(find . -name default.txt 2>/dev/null)
+      - $(find . -name gitlog.json 2>/dev/null)
+      - MXApp/build/outputs/apk/
+      - $(find . -name *.aab 2>/dev/null)
+      - MXApp/build/outputs/mapping
+      - RxCommJson/build/reports
+      - core/build/reports
+      - commonLib/build/reports
+      - RxCommLib/build/reports/
+      - MXApp/build/reports
+      - $(find . -name lint-results.html)
+      - MXApp/build/reports/androidTests/connected
+
+PublishPaid:
+  stage: publish
+  extends: .publish
+  dependencies:
+    - BuildPaid
+  script:
+    - ./gradlew clean :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=alpha
+  only:
+    - tags
+
+PublishFree:
+  stage: publish
+  extends: .publish
+  dependencies:
+    - BuildFree
+  script:
+    - ./gradlew clean :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
+  only:
+    - tags
+
+PublishAdmin:
+  stage: publish
+  extends: .publish
+  dependencies:
+    - BuildAdmin
+  script:
+    - ./gradlew clean :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
+  only:
+    - tags
+

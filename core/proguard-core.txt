@@ -1,0 +1,51 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Proguard causing RuntimeException (Unmarshalling unknown type code) in Parcelable class
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+}
+
+### login
+-keepclasseswithmembernames class info.mx.tracks.MxCoreApplication {
+    private static java.util.List getAadhresUParams();
+    private static java.lang.String getAadhresUP();
+    public static java.lang.String getAadhresUBase();
+}
+
+-keepclassmembers class * extends com.robotoworks.mechanoid.ops.OperationService {
+    public static <fields>;
+}
+
+-keepclassmembers class * {
+    @com.google.inject.InjectResource <init>(...);
+    @com.google.inject.Inject <fields>;
+    @com.google.inject.InjectView <fields>;
+}
+
+-keep class info.mx.tracks.data.DataManager{*;}
+
+### Viewpageindicator ###
+-dontwarn com.viewpagerindicator.**
+
+# Databinding
+-dontwarn android.databinding.**
+-keep class android.databinding.** { *; }

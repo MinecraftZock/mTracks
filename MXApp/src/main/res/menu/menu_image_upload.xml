@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_image_pick"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="@string/picture_pick"/>
+    <item
+        android:id="@+id/menu_image_make"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/picture_make"/>
+
+</menu>

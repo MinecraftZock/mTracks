@@ -1,0 +1,178 @@
+<resources>
+
+    <string name="normal">Normal</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="terrain">Gelände</string>
+    <string name="satellite">Satellit</string>
+    <string name="only_approved">nur bestätigte Strecken</string>
+    <string name="open_everyone">Jeder</string>
+    <string name="open_member">nur Mitglieder</string>
+    <string name="open_race">nur Rennen</string>
+    <string name="open_dealer">Händler</string>
+    <string name="action_settings">Einstellung</string>
+    <string name="bike_cleaning">Waschplatz</string>
+    <string name="by_distance">Distanz</string>
+    <string name="camping">Camping</string>
+    <string name="common">Allgemein</string>
+    <string name="coordinates">Koordinaten</string>
+    <string name="countries">Länder</string>
+    <string name="detail">Detail</string>
+    <string name="newRating">neuer Kommentar</string>
+    <string name="distance">Entfernung</string>
+    <string name="electricity">Elektrizität</string>
+    <string name="empty">keine Daten vorhanden</string>
+    <string name="go_to_filter">Unter \'Filter\' änderbar</string>
+    <string name="empty_countyselection">Länderauswahl hat keine Strecken</string>
+    <string name="feedback">Rückmeldung</string>
+    <string name="fees">Gebühren</string>
+    <string name="filter">Filter</string>
+    <string name="filter_country">Länderfilter</string>
+    <string name="hours">Stunden</string>
+    <string name="import_info">Hintergrundimport läuft, Strecken können temporär unvollständig sein</string>
+    <string name="kids_track">Kinder Strecke</string>
+    <string name="length">Länge</string>
+    <string name="license">Lizenz</string>
+    <string name="map">Landkarte</string>
+    <string name="menu_add">Hinzufügen</string>
+    <string name="name">Name</string>
+    <string name="new_track">neue Strecke</string>
+    <string name="next">nächste</string>
+    <string name="no">nein</string>
+    <string name="no_email_installed">keine Email App vorhanden </string>
+    <string name="note">Notiz</string>
+    <string name="notes">Notizen</string>
+    <string name="open_days">Öffnungstage</string>
+    <string name="phone">Telefon</string>
+    <string name="preferences">Einstellungen</string>
+    <string name="previous">vorherige</string>
+    <string name="rating">Bewertung</string>
+    <string name="settings">Einstellung</string>
+    <string name="showers">Duschen</string>
+    <string name="soil">Erde</string>
+    <string name="soil1clay">Lehm</string>
+    <string name="soil2sand">Sand</string>
+    <string name="soil3top">Muttererde</string>
+    <string name="soil4claysand">Lehm- Sandgemisch</string>
+    <string name="soil5rock">steinig</string>
+    <string name="soil6gravel">Kies</string>
+    <string name="soil7hard">hart</string>
+    <string name="soil8soft">weich</string>
+    <string name="soil9middle">mittel</string>
+    <string name="soil10mud">Schlamm</string>
+    <string name="soil11dust">Staub</string>
+    <string name="title_activity_filter">Streckenfilter</string>
+    <string name="title_activity_setting">Einstellung</string>
+    <string name="track_error">Streckenfehler melden</string>
+    <string name="tracks_with_kids_track">nur mit Kinderstrecken</string>
+    <string name="user">Benutzer</string>
+    <string name="username_for_comments">Benutzername für Kommentare</string>
+    <string name="website">Web</string>
+    <string name="yes">ja</string>
+    <string name="contact">Kontakt</string>
+    <string name="menu_search">Suche</string>
+    <string name="nothing_selected">nichts ausgewählt</string>
+    <string name="events">Termine</string>
+    <string name="access">Art</string>
+    <string name="edit_track">Strecke bearbeiten</string>
+    <string name="unsaved_changes">Änderungen</string>
+    <string name="ask_unsaved_changes">Sollen diese gespeichert werden ?</string>
+    <string name="cluster">Markierungen zusammenfassen</string>
+    <string name="many_records">viele Strecken kann manchmal zur Trägheit der App führen</string>
+    <string name="done">Speichern</string>
+    <string name="event_edit">bearbeite Event</string>
+    <string name="event_add">neuer Event</string>
+    <string name="pictures">Bilder</string>
+    <string name="filter_shower">Dusche</string>
+    <string name="filter_electricity">Stromversorgung</string>
+    <string name="filter_washing">Fahrzeugwäsche</string>
+    <string name="Adress">Adresse</string>
+    <string name="workshop">Werkstatt</string>
+    <string name="Brands">Marken</string>
+    <string name="showroom">Schauraum</string>
+    <string name="difficult">Schwierigkeit</string>
+    <string name="only_opend">nur geöffnete Strecken</string>
+    <string name="vehicles">Fahrzeuge/Info</string>
+    <string name="noiselimit">Lärmgrenze</string>
+    <string name="status">Status</string>
+    <string name="open">offen</string>
+    <string name="closed_season">saisonal geschlossen</string>
+    <string name="closed_notyet">bis jetzt nicht geöffnet</string>
+    <string name="closed">geschlossen</string>
+    <string name="closed_temp">temporär geschlossen</string>
+    <string name="save_teackstage">Vielen Dank ! Wir werden die Änderungen zusammenführen</string>
+    <string name="firstime_dlg1">Wenn etwas in den Daten falsch ist, bitte den %s Knopf unten benützen um alle Änderungen allen Fahrern zur Verfügung zu stellen</string>
+    <string name="firstime_dlg2">Wenn etwas in der App falsch läuft, bitte das Menü %s statt den Google Play Kommentaren benützen, wir werden das Problem umgehend lösen</string>
+    <string name="firstime_title">
+<![CDATA[
+          Thank you for choosing<br/><b><i>MX Tracks Info</i></b>
+           ]]>
+    </string>
+    <string name="picture_pick">Bild auswählen</string>
+    <string name="picture_make">Bild aufnehmen</string>
+    <string name="locationservices">Ortnungsdienste</string>
+    <string name="ask_locationservices">Der aktuelle Standort kann nicht ermittelt werden, soll jetzt die Einstellung geändert werden?</string>
+    <string name="info_reapir">Die Datenbank ist leider defekt, bitte mach einen Neustart oder deinstalliere und installiere die App neu</string>
+    <string name="close">Schließen</string>
+    <string name="trackname_required">Streckenname ist notwendig</string>
+    <string name="click_to_upload_image">zum Bild raufladen drücken</string>
+    <string name="share">teilen</string>
+    <string name="reset_filter">Filter zurücksetzen</string>
+    <string name="default_latlon">Position auf der Karte ist nicht geändert</string>
+    <string name="tracks">Strecken</string>
+    <string name="tracks_imported">Strecken importiert</string>
+    <string name="tracks_show_dealers">zeige Händler</string>
+    <string name="tracksfound">%s Strecken gefunden</string>
+    <string name="unit_distance_measure">Entfernung in</string>
+    <string name="uploadfail">hochladen fehlgeschlagen</string>
+    <string name="uploadsuccess">hochladen erfolgreich</string>
+    <string name="title_activity_comment">Kommentar</string>
+    <string name="title_activity_activity_image_slider">Bild</string>
+    <string name="stage_longclick">zum Verschieben lange drücken</string>
+    <string name="showroute">zeige Route</string>
+    <string name="send">Senden</string>
+    <string name="send_image_to_track">Bild zur Strecke hinzufügen</string>
+    <string name="route">Route</string>
+    <string name="rating_count">(%s Bewertungen)</string>
+    <string name="no_country_selected">keine Länder ausgewählt</string>
+    <string name="navigate">Navigation</string>
+    <string name="myposition_not_known">aktuelle Position unbekannt, bitte kurz warten</string>
+    <string name="info">Info</string>
+    <string name="filter_camping">Camping</string>
+    <string name="display">Anzeige</string>
+    <string name="default_username">Benutzername</string>
+    <string name="comment_alredy_exists">Kommentar existiert bereits</string>
+    <string name="country_anz">%s Strecken</string>
+    <string name="action_traffic">Verkehr</string>
+    <string name="action_zoom2myloc">zoom zur aktuellen Position</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_satellite">Satellite</string>
+    <string name="action_add">hinzufügen</string>
+    <string name="use_tracking">Ja, ich will dazu beitragen, diese App zu verbessern und willige zu, anonyme Nutzungsstatistiken zu senden.Diese
+        enthalten keine persönlichen Informationen</string>
+    <string name="empty_user">- leer -</string>
+
+    <string name="filter_is_active">Filter ist an</string>
+    <string name="allow_ask_track_updates">Wenn ich bei einer Strecke bin, erlaube ich, dass ich gefragt werde ob sich etwas and den Streckendaten
+        geändert hat, oder ob ich Streckenbilder habe.\nJeder Fahrer hat einen Vorteil, wenn ich mitmache</string>
+    <string name="notification_small">Du befindest dich in der nähe der Strecke. Hat sich an den Streckeninfos was geändert ?</string>
+    <string name="notification_big">Du befindest dich in der nähe der Strecke. Hat sich an den Streckeninfos was geändert, hast du
+        aktuelle Streckenfotos, oder ist ein interessantes Ereignis in der Zukunft ?\nJeder Fahrer freut sich über Zusatzinfos</string>
+    <string name="improve_track_info">Stecken info verbessern</string>
+    <string name="PEER_ERROR">Es gibt ein Problem mit der Sicherheit. Sehr oft ist eine ungültig eingestellte Uhrzeit die Ursache. Hier
+            hilft die Uhrzeit einzustellen, am Besten macht man das per Netzwerk mit Android. Manchmal geht das nicht, dann muss man sich per WLAN mit
+            dem Internet verbinden, und dann die Uhrzeit von Android per Netzwerk einstellen lassen</string>
+    <string name="location">Lage</string>
+    <string name="all">alle</string>
+    <string name="title_activity_acknowledge">Lizenzhinweise</string>
+
+    <string name="LOCATION_EXPLAIN_AND_RETHINK_ABOUT">Ohne diesem Recht kann die App keine Distanz zu den Strecken berechnen\n\nMöchstest du die
+        Rechte nochmals prüfen ?</string>
+    <string name="show_on_map">zeige auf der Landkarte</string>
+    <string name="HOST_ERROR">Es gibt ein Problem mit der Netzwerkverbindung. Oft hilft hier ein Geräteneustart.</string>
+    <string name="enable_europe">Du siehst jetzt alle Strecken von Europa, sollte MX Info zu langsam sein, dann kannst du die Länder in «Filter»
+    reduzieren</string>
+    <string name="show_pro_dialog">Du hast eine Funktion gefunden, die nur in der PRO Version verfügbar ist. Um die Funktion zu ermöglichen,
+        kannst du die PRO Version erwerben.
+    </string>
+    <string name="jump_google_play_store">Öffne Google Play Store</string>
+</resources>

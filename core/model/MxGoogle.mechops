@@ -1,0 +1,5 @@
+package info.mx.tracks.ops.google
+
+service MxGoogle {
+	operation opGetRoute(long trackClientId, double lat, double lon) unique (trackClientId)
+}

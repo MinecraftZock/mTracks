@@ -1,0 +1,42 @@
+var gobjRAC = {
+   guiRAGUID: '6e35e7dd948c40b4abff1754481542df',
+   intRAID: 2196,
+   strName: 'McCubbins Gulch OHV Area',
+   strAreaTypeSummary: 'Trail',
+   strLandTypeSummary: 'National Forest',
+   strNearestCity: 'Maupin, OR',
+   strDirectionsOrigin: 'Portland, OR',
+   strStateCode: 'OR',
+   strStateName: 'Oregon',
+   dblLat: 43.58954,
+   dblLng: -123.037543,
+   objTrailMapDef: {
+      dblCenterLat: 43.610057,
+      dblCenterLng: -123.03126,
+      intZoomLevel: 15,
+      strIconPath: '../../../../res/styles/theme_earth/images/mapicons/',
+      arrMarkerDefs: [
+         { dblLat: 43.605207, dblLng: -123.027227, strLabel: 'McCubbins Gulch OHV Area', strCategory: 'Map Label', strIcon: '1RideArea.gif', strDescription: '', guiGUID: '6e35e7dd948c40b4abff1754481542df' },
+         { dblLat: 43.58954, dblLng: -123.037543, strLabel: 'Enter From Here', strCategory: 'Main Access Point', strIcon: '1Other.gif', strDescription: 'Main Access Point', guiGUID: '6e35e7dd948c40b4abff1754481542df' },
+         { dblLat: 43.607173, dblLng: -123.08941, strLabel: 'McCubbins Gulch Day Use Staging Area', strCategory: 'Staging Area', strIcon: '1StagingArea.gif', strDescription: '(Staging Area, Restroom, Potable Water)', guiGUID: '6d68d2ea78d949a7aa0721d76ed37c45' },
+         { dblLat: 43.594523, dblLng: -123.01556, strLabel: 'McCubbins Gulch Campground', strCategory: 'Service Point', strIcon: '1CampAndStage.gif', strDescription: '$11/night, $5/extra vehicle fishing permit from Warm Springs Tribal Lands required to fish vehicle 25\' max (Staging Area, Campground, Primitive Campsite, Parking, Restroom)', guiGUID: '11fb5190b81941609c02d92e03f7e5a8' },
+         { dblLat: 43.597223, dblLng: -123.020927, strLabel: 'McCubbins Gulch Overflow Campground', strCategory: 'Staging Area', strIcon: '1CampAndStage.gif', strDescription: '$11/night, $5/extra vehicle (Staging Area, Primitive Campsite, Parking)', guiGUID: 'af2dc85abc3a4a9e809a35f9fdea633e' },
+         { dblLat: 43.88264, dblLng: -123.817127, strLabel: 'Mt. Hood Natioanl Foerst Headquarters', strCategory: '', strIcon: '1Other.gif', strDescription: '16400 Champion Way Sandy, OR 97055 (503) 668-1700 Can purchase "northwest Forest Pass\' at ranger station - is required to access Mt. Hood National Forest Day Pass - $5.00 per day ', guiGUID: 'e541c2a1298048eab4523a5cd3f8cd8b' },
+         { dblLat: 43.116023, dblLng: -122.643327, strLabel: 'Mountain View Hospital', strCategory: 'Service Point', strIcon: '1Hospital.gif', strDescription: '(541) 475-3882 (Hospital)', guiGUID: '8cdf3ee548b740309a112fde834d8a07' },
+         { dblLat: 43.655923, dblLng: -123.21916, strLabel: 'Clear Lake Boat Ramp', strCategory: 'Service Point', strIcon: '1BoatRamp.gif', strDescription: '(Boat Ramp, Water Body)', guiGUID: '1631690a6d39423389ceea561673e3c8' },
+         { dblLat: 43.780673, dblLng: -123.268643, strLabel: 'Chevron', strCategory: 'Service Point', strIcon: '1ConvenienceStore.gif', strDescription: '(503) 337-2277 (Gasoline, Diesel, Convenience Store)', guiGUID: 'd13d75a643da469aa8bffdb858b41ab6' },
+         { dblLat: 43.835723, dblLng: -123.518127, strLabel: 'Mt Hood Village RV Resort', strCategory: 'Service Point', strIcon: '1RVResort.gif', strDescription: '(877) 570-2267 http://www.rvonthego.com/Mt-Hood-Village-RV-Resort.html (Water Body, Campground, Primitive Campsite, RV Disposal (black water), RV Disposal (grey water), RV Hookup, RV Resort, Convenience Store, Restroom, Fire Rings, Picnic Tables, Potable Water, Showers, BBQ Grills)', guiGUID: 'd5da2b2ae3a44d228d265b1423006b50' },
+         { dblLat: 43.651957, dblLng: -122.594893, strLabel: 'Maupin City Park', strCategory: 'Service Point', strIcon: '1Campground.gif', strDescription: '(541) 395-2252 http://www.cityofmaupin.com/VisitorInfo/CityPark/tabid/76/Default.aspx (Beach Area, Water Body, Campground, Campsite, Primitive Campsite, RV Disposal (black water), RV Disposal (grey water), RV Hookup, Restroom, Picnic Tables, Potable Water, Showers, Sinks, BBQ Grills)', guiGUID: '995ae6a00b4d49a388ee04ea6a66f524' },
+         { dblLat: 43.608057, dblLng: -123.08056, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: '7969e13b549c4da2a33522564774b400' },
+         { dblLat: 43.609823, dblLng: -123.05516, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: '54260d338b744bf88638537100d42bc6' },
+         { dblLat: 43.62434, dblLng: -123.033943, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: '0b545bff6bb9450b8465ef96bfe0f838' },
+         { dblLat: 43.600607, dblLng: -123.020843, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: '758bdcde09b1450c9197bb2143a2b006' },
+         { dblLat: 43.607923, dblLng: -123.02956, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: '7ed715a31c8e4a2d9473305c4ca846e9' },
+         { dblLat: 43.60949, dblLng: -123.018343, strLabel: 'Various Trails', strCategory: 'Trail Point', strIcon: '1AmateurTerrain.gif', strDescription: '', guiGUID: 'dbe56df6024a487f8da0dc7c06d07b0b' }
+      ]
+   }
+}
+
+5327
+0
+0

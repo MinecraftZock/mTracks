@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.github.clans.fab.FloatingActionMenu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menuFab"
+    app:layout_behavior="info.mx.tracks.util.FloatingActionMenuBehavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    app:menu_labels_position="right"
+    android:layout_alignParentRight="false"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentEnd="true"
+    android:paddingRight="@dimen/fab_padding"
+    android:paddingBottom="@dimen/fab_padding"
+    android:paddingLeft="@dimen/fab_padding"
+    fab:menu_colorNormal="@color/fabNormal"
+    fab:menu_colorPressed="@color/fabPressed"
+    fab:menu_colorRipple="@color/fabRipple"
+    fab:menu_labels_style="@style/fab_menu_labels_style"
+    fab:menu_labels_ellipsize="end"
+    fab:menu_labels_singleLine="true"
+    fab:menu_backgroundColor="@color/fab_sub_background"
+    tools:showIn="@layout/activity_track_detail">
+
+    <include layout="@layout/layout_fab_items"/>
+
+</com.github.clans.fab.FloatingActionMenu>
+
+    

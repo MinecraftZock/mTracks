@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/trackstage_ignore"
+        android:orderInCategory="100"
+        android:title="ignorieren"/>
+    <item
+        android:id="@+id/trackstage_decline"
+        android:orderInCategory="100"
+        android:title="ablehnen"/>
+
+</menu>

@@ -1,0 +1,45 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_alle"
+        android:icon="@drawable/actionbar_checkbox_empty"
+        android:orderInCategory="100"
+        android:title="nur aktuelle"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="100"
+        android:title="Löschen"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_push2server"
+        android:icon="@android:drawable/ic_menu_share"
+        android:orderInCategory="100"
+        android:title="Upload"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_getgeo"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        android:orderInCategory="100"
+        android:title="fix fehlende LatLng"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_download"
+        android:icon="@drawable/ic_action_refresh"
+        android:orderInCategory="100"
+        android:title="Aktualisieren"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_reset1"
+        android:icon="@drawable/ic_action_refresh"
+        android:orderInCategory="100"
+        android:title="Reset Stufe 1"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_download_pictures"
+        android:orderInCategory="100"
+        android:title="down picture/video"
+        app:showAsAction="never"/>
+</menu>

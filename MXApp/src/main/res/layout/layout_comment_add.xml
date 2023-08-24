@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/content2"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/chart_background"
+    android:gravity="center|top"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/separatorHeader"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/gradient_line"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/tr_layoutUserR"
+            style="@style/track_detail_itemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/TextView04brat"
+                style="@style/left_label_small"
+                android:layout_centerVertical="true"
+                android:text="@string/rating"/>
+
+            <RatingBar
+                android:id="@+id/com_rating"
+                style="?android:attr/ratingBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/TextView04brat"
+                android:layout_toRightOf="@+id/TextView04brat"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="2"
+                android:stepSize="1"/>
+
+            <Button
+                android:id="@+id/com_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@android:drawable/ic_menu_send"
+                android:drawableStart="@android:drawable/ic_menu_send"
+                android:text="@string/send"
+                android:visibility="invisible"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutUserL"
+            style="@style/track_detail_itemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/com_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:hint="@string/default_username"
+                android:textColor="@color/soft_grey">
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutComment"
+            style="@style/track_detail_itemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/com_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="@string/title_activity_comment"
+                android:inputType="textMultiLine"
+                android:lines="4"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

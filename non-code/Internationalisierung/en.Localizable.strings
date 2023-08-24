@@ -1,0 +1,254 @@
+/* Guideline for translating texts : */
+/* anything between a pair of /**/
+/* is just a comment and is not to be translated */
+/* change ONLY the part to the RIGHT SIDE OF THE EQUAL "=" sign and keep the "" pairs an the semicolon ; */
+
+/* MapToolBarButton */
+"Favorites"="Favorites";
+"Map" = "Map";
+"GoogleMaps" = "Google maps";
+"Tracks" = "Tracks";
+"Settings" = "Preferences";
+"Tracklist" = "List of Tracks";
+"Info" = "Info";
+"LocationPurpose" = "We would like to show your distances to MX Track locations and your position on a map.";
+"Userposition" = "You are here";
+"Trackdetails" = "Trackdetails";
+
+"RequestStarted" = "Request for updated tracks sent...";
+
+/*Tracklist Cell */
+"MembersOnly"="Members only";
+"RaceOnly" = "Race only";
+"OpenforPublic" = "Open for public";
+"Shoplabel" = "Shop or dealership";
+
+/* Tracklist ordering*/
+"ByName" = "ABC";
+"ByDistance" = "Distance";
+
+/* Filtering */
+"TrackFilter" = "Filter";
+"FilterCountries" = "Countries";
+"FilterRatings"="Ratings";
+"FilterResult"= "%d tracks found...";
+"FilterHeader"="Filter tracks";
+"FilterOpen"="Open";
+"FilterActiveCountries"="Active: %@";
+"NoFilter"="No Filter";
+
+"TrackTypeOpen"="Open to public";
+"TrackTypeClub"="Members only";
+"TrackTypeRace"="Races only";
+"TrackTypeShop"="Shop/Dealership";
+
+/* TrackDetails */
+"Monday-short" = "Mo";
+"Tuesday-short" = "Tu";
+"Wednesday-short" = "We";
+"Thursday-short" = "Th";
+"Friday-short" = "Fr";
+"Saturday-short" = "Sa";
+"Sunday-short" = "Su";
+
+/* Some Text for trackdetails */
+"Coordinates" = "Coordinates";
+"Distance" = "Distance";
+"Phone" = "Phone";
+"Website" = "Website";
+"Country" = "Country";
+"Notes" = "Notes";
+"Fees" = "Fees";
+"Hours" = "Hours";
+"Camping" = "Camping";
+"Electricity" = "Electricity";
+"Showers" = "Showers";
+"Washing" = "Bike cleaning";
+"Tracklength" = "Length";
+"SoilType" = "Soil";
+"RatingLabel" = "Rating";
+"CommentLabel" = "Comments";
+"KidsTrack" = "Kids track";
+"SXTrack" = "SX";
+"EmailLabel" = "Email";
+"numOfCorner" = "Number of corners";
+"numOfJumps" = "Number of jumps";
+"numOfTables" = "Number of tables";
+"numOfStepUpsDowns" = "Number of Stepups/Stepdowns";
+"numOfJumps20" = "Number of jumps up to 20m";
+"numOfJumps20Plus" = "Number of jump greater than 20m";
+"numOfSkiJumps" = "Number of ski jumps";
+"irrigationlabel" = "irrigation";
+"elevationlabel" = "elevation";
+"videolinksLabel" = "links to videos";
+"pictureLabel" = "links to pictures";
+"licenceLabel" = "required licence";
+"Brands"="Brands";
+"Showroom"="Showroom";
+"Workshop"="Workshop";
+"Address"="Address";
+
+/* misc */
+"WIFIOnly" = "WLAN only";
+"download" = "download";
+"downloadinprogress" = "Download of pictures in progress";
+"downloading" = "downloading";
+"loadPictures" = "download all pictures locally";
+"loadRatings" = "download/refresh all ratings";
+"trackname" = "Track's name";
+"description" = "Description";
+"FilterButton" = "Filter";
+"AllButton" = "All";
+"NoneButton" = "None";
+
+/* Soiltypes */
+"SoilClay"= "clay";
+"SoilSand" = "sand";
+"SoilTop" = "topsoil";
+"SoilClaySand" = "clay/sand";
+"SoilRock" = "rocky";
+"SoilGravel" = "gravel";
+
+/* commenting */
+"LastComment"="Last comment %@:";
+"CommentCount"="(%@ comments)";
+"AddComment"="Your comment";
+
+/* Standard and Dial Alert Texts */
+"AlertDial" = "Dial";
+"AlertDialQuestion" = "Call the number %@?";
+"AlertCancelButton" = "Cancel";
+"AlertDialButton" = "Dial";
+
+/*Diagnostics data question */
+"Diagnosticstitle"="Diagnostic data";
+"DiagnosticsMessage"="We would like to gather ANONYMOUS statistics about your usage of mx tracks - is this ok for you?\nIf you deny now WE WILL NEVER ASK YOU AGAIN AND WE WILL NOT GATHER ANY DATA!";
+"AlertDiagonisticsOK"="Allow";
+"AlertDiagonisticsCancel"="DENY";
+
+/* forward Actionsheet Texts */
+"FwdEmailButton" = "Email";
+"FwdSMSButton" = "Message";
+"FwdGoogle" = "Directions Google";
+"FwdNavigon" = "Directions Navigon";
+"FwdTomTom" = "Directions TomTom";
+"FwdMaps" = "Directions Maps";
+"FwdNewTrack" = "Report new track";
+"FwdTrackError" = "Report changes";
+"FwdFavorites" = "Add to favorites";
+"FwdTwitter" = "Twitter";
+
+/* Image Picker */
+"PickerCamera" = "Shoot Pic. or Video";
+"PickerRoll" = "Choose from Library";
+"ShowGallery"="Show Gallery";
+
+/* Forwaring of URLs in built in browser */
+"ForwardSafari" = "Safari";
+"ForwardTitle" = "Forward to";
+"ForwardNavigation"="Navigate";
+
+/* Mail subject template */
+"MailSubject" = "MX track %@";
+"MailBody" = "Hello, <BR>info for MX track <a href=http://maps.google.com/maps?ll=%@,%@>%@</a><BR>Coordinates: %@";
+
+"SMSBody" = "Hello,\nInfos for MX track %@ http://maps.google.com/maps?ll=%@,%@\nCoordinates: %@";
+"TweetBody" = "At mx track %@";
+
+"NoMailTitle" = "No emails";
+"NoMailMessage" = "Emails cannot be sent. Please check your accounts and settings.";
+"NoSMSTitle" = "No messages";
+"NoSMSMessage" = "Messages cannot be sent. Please check your phone and messages settings.";
+
+/* Text for Yes and No ;-) */
+"Yes" = "Yes";
+"No" = "No";
+
+/* Text for Send Button in NewTrackView */
+"SendButtonText" = "Send";
+"NewTrackTitle" = "New track";
+"MailSubjectNewTrack" = "MX-Tracks New track '%@'";
+"NewtrackCoordinatesFix" = "Please wait til' coordinates 'stabilize' before sending %@";
+"Newtrackname" = "New track - drag the pin";
+
+/* TrackErrorView */
+"TrackErrorTitle" = "Report track error";
+"MailSubjectErrorTrack" = "Error in trackdata for track ID:%d";
+
+/* Favorites */
+"FavoriteAddedTop" = "Favorite";
+"FavoriteAddedBottom" = "added";
+"FavoriteAddedBottomError" = "already exists";
+
+/* Trackloading */
+"TracksAddedTop" = "%d tracks";
+"TracksAddedBottom" = "updated";
+"TracksRead" = "%d tracks read";
+"TrackUpdateLoading" = "track updates loading";
+"TrackUpdateLoaded" = "track updates loaded";
+
+/*Webview */
+"NetworkError" = "Network error";
+
+/* Locationmanager */
+"LocationServicesDisabled" = "Location services for mx tracks are disabled - please activate them!";
+"LocationManagerError" = "Error while determining position - activate location services and network!";
+
+/* Track Context menu to the left */
+"MenuMiscellaneous" = "Miscellaneous";
+"MenuData" = "Data";
+"MenuReportNewTrack" = "Report new track";
+"MenuReportTrackError" = "Report an error";
+"MenuActions" = "Actions";
+"MenuShowMap" = "Show Map";
+"MenuShowNearbyTracks" = "Show nearby tracks";
+"MenuNavigate" = "Navigate";
+"MenuFunctions"="Functions";
+
+/* Number of ratings */
+"NumberOfRatings"="(%@ votes)";
+
+/* Map type of map */
+"MapTypeStandard"="Standard";
+"MapTypeSatellite"="Satellite";
+"MapTypeHybrid"="Both";
+
+/* Labels for Track Error and new track dialog */
+"LabelTrackName"="track's name";
+"LabelDescription"="description";
+"TracknamePlaceholder"="enter track's name";
+
+/* Info dialog */
+"Testernames"="Nina Kaas #168, Oliver Kaas #503, Matthias Hitz #701, Håkan Enegård (swedish texts), Robin Kappel (french texts), Steffany Staman (dutch translation), Vito Ronzano (iPad testing), Moritz Weickardt (iPhone testing), Denis König, Christian Schäfer, Martin Anderson";
+
+"info.copyright"="© 2013 Christian Kaas & CROSS magazin - all rights reserved - copying or extracting the data provided with the app is prohibited and punishable under international law.";
+
+/* request for first picture upload */
+"agreement.pictureupload"="You here for declare you have the rights to upload the pictures you post here and EXPLICITLY grant Christian Kaas and Triple Verlag GmbH (Cross magazin) the non exclusive rights to use the pictures for whatever purposes.";
+"Agree.button"="AGREE";
+
+/* Ratings disliking */
+"ratingdislike.title"="Offensive rating";
+"ratingdislike.message"="This rating/comment needs to be considered offensive?";
+"dislike.button"="Mark offensive";
+
+/* Ratings */
+/* need a name when posting comments and ratings */
+"ratings.rating"="Rating";
+"ratings.username"="Alias";
+"ratings.comment"="Comment";
+"ratings.aliasAlertTitle"="Alias missing";
+"ratings.needaname"="Please enter an alias!";
+"ratings.enteryournamehere" = "Alias";
+
+/* Alert OK Button */
+"alert.OK"="OK";
+
+/* FGallery */
+"Back"="Back";
+"See all"="See all";
+"of"="of";
+"Close"="Close";
+
+/* IDMPhotoBrowser */
+"Done"="Done";

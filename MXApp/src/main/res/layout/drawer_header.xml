@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/drawer_bar_height"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/drawer_spacing_large"
+        android:layout_marginRight="@dimen/drawer_spacing_large"
+        android:layout_marginTop="@dimen/drawer_spacing_large"
+        android:elevation="4dp"
+        android:scaleType="fitStart"
+        tools:src="@drawable/actionbar_logo"
+        tools:targetApi="lollipop"/>
+
+    <TextView
+        android:id="@+id/textUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:layout_marginLeft="@dimen/spacing_large"
+        android:layout_marginStart="@dimen/spacing_large"
+        tools:text="username@mymail.com"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.3"
+        android:scaleType="centerCrop"
+        android:src="@drawable/drawer_background"/>
+
+</RelativeLayout>

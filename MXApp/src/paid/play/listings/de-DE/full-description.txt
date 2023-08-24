@@ -1,0 +1,14 @@
+Motocross Streckenverzeichnis für Europa (~2000 Strecken) und USA (~1700)
+Aktuell sind Strecken aus folgenden Ländern in der App:
+Deutschland, USA, Österreich, Niederlande, Belgien, Schweiz, Italien, Spanien, Schweden, Norwegen, Dänemark, Polen, Ungarn, Tschechien und England.
+
+Strecken können auch nach Namen oder Veranstaltung oder Land gesucht werden.
+
+Umher irren und eine Strecke nicht finden gehört mit dieser App der Vergangenheit an.
+
+Die Strecken werden als Liste (sortiert nach Name oder Entfernung) oder auf einer Karte dargestellt, jeweils mit Entfernungsanzeige zur aktuellen Position.
+Informationen über die Einrichtungen an der Strecke, sowie Streckenlänge, Bodenbeschaffenheit, Kosten und Öffnungszeiten (soweit recherchierbar) sind enthalten.
+
+Man kann Ereignisse erfassen und so der Community zur Verfügung stellen.
+
+Durch einen Touch kann man den Streckenbetreiber/-verantwortlichen per Telefon oder Email erreichen oder die Koordinaten der Strecke per Email oder SMS an seine Freunde und Bekannten weiterreichen.

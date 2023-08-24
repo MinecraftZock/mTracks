@@ -1,0 +1,63 @@
+package info.mx.tracks.prefs 
+ 
+preferences mx { 
+	FirstTimeUse : boolean = true
+	FirstTimeLocation : boolean = false
+	FirstTimeCountry : boolean = false
+	LastSyncTime : long
+	AgreeTracking : boolean = true
+	AgreeTrackSurveillance : boolean = true
+	TrackerMinTime : int = 5 //Minuten
+	TrackerMinDistance : int = 15 //Meter
+	TrackerAccurancy : int = 25 //Meter
+	DBlocation : int = 0 //0=internal, 1=sd-card, 2=external sd-card
+	LocationProviderChecked : boolean = false	
+	username : String = ""
+	SearchOpenMo : boolean = true 
+	SearchOpenDi : boolean = true
+	SearchOpenMi : boolean = true
+	SearchOpenDo : boolean = true
+	SearchOpenFr : boolean = true
+	SearchOpenSa : boolean = true
+	SearchOpenSo : boolean = true
+	DebugTrackAnsicht :int = 2 //-1 ausgeblendet ... 2 = alle
+	LocationView :int = -1 //-1 egal, 1=indoor, 0=outdoor
+	OnlyOpen : boolean = false
+	OnlyApproved : boolean = false
+	OnlyWithKids : boolean = false
+	ShowDealers  : boolean = true
+	ShowEveryone  : boolean = true
+	ShowRace  : boolean = true
+	ShowMember  : boolean = true
+	ShowRating : float = 0
+	ShowDifficult : float = 0
+	ShowMx : boolean = false
+	ShowQuad : boolean = false
+	ShowUtv : boolean = false
+	Show4x4 : boolean = false
+	ShowEnduro : boolean = false
+	unitsKm : boolean = true	
+	repairDB : boolean = false
+	MapCluster : boolean = true
+	MapType : int = 0
+	MapTraffic : boolean = false
+	MapZoom : float = 9
+	MapLatitude : float = 0
+	MapLongitude : float = 0
+	ShowOnlyNewTrackStage : boolean = true
+	MarkerShowLongClickText : int = 0
+	ImageCropTo : int = 1200
+	
+	SearchSuperCross : boolean = false
+	SearchShower : boolean = false
+	SearchWash : boolean = false
+	SearchCamping : boolean = false
+	SearchElectricity : boolean = false
+	SearchPicture : boolean = false
+	
+	RestoreID : long
+	RestoreContentUri : String
+	LastOpenStartActivity : String
+	ResetPictureStorageCount : int = 0
+	TabDetailPosition : int = 1
+}

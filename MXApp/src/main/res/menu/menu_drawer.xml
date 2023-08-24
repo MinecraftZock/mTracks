@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015 Antonio Leiva
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/drawer_separator1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_tracks"
+            android:icon="@drawable/ic_menu_list"
+            android:title="@string/tracks"/>
+        <item
+            android:id="@+id/drawer_map"
+            android:icon="@drawable/ic_globe_white"
+            android:title="@string/map"/>
+
+        <item
+            android:id="@+id/drawer_filter"
+            android:icon="@drawable/ic_filter_list_white_24dp"
+            android:title="@string/filter"/>
+    </group>
+    <group
+        android:id="@+id/drawer_separator_track"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_edit"
+            android:icon="@drawable/ic_edit_track"
+            android:title="@string/edit_track"/>
+
+        <item
+            android:id="@+id/drawer_event_add"
+            android:icon="@drawable/ic_event_add"
+            android:title="@string/event_add"/>
+
+        <item
+            android:id="@+id/drawer_track_feedback"
+            android:icon="@drawable/ic_track_feedback"
+            android:title="@string/track_error"/>
+
+        <item
+            android:id="@+id/drawer_navigation"
+            android:icon="@drawable/navigation2x"
+            android:title="@string/navigate"/>
+    </group>
+    <group
+        android:id="@+id/drawer_separator2"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_settings"
+            android:icon="@drawable/ic_prefs"
+            android:title="@string/preferences"/>
+
+        <item
+            android:id="@+id/drawer_feedback"
+            android:icon="@drawable/ic_email"
+            android:title="@string/feedback"/>
+
+        <item
+            android:id="@+id/drawer_facebook"
+            android:icon="@drawable/ic_facebook"
+            android:title="Facebook"/>
+    </group>
+    <group
+        android:id="@+id/drawer_separator3"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/drawer_new"
+            android:icon="@drawable/ic_add_track"
+            android:title="@string/new_track"/>
+
+    </group>
+</menu>

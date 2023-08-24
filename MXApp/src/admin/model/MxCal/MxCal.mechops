@@ -1,0 +1,13 @@
+package info.info.hannes.mechadmin_gen.ops.mxcal
+
+service MxCal {
+	operation opLoadPictureVideo()
+	operation opTracksMapLoad(String url, long downLoadId, boolean onlyExtract)
+	operation opRiderPlanetLoad(String url, long downLoadId, boolean onlyExtract)
+	operation opBrothersLoad(String url, long downLoadId, boolean initDownload)
+	operation opBrothersPush()
+	operation opMxCalLoadSearch(boolean alle)
+	operation opMxCalLoadSerieDyn(long seriesId)
+	operation opMxCallPush2Server(String basic)
+	operation opMxCallFixLatLng(boolean alle)
+}

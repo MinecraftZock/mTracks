@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="MXorange">@android:color/holo_orange_light</color>
+    <color name="MXorangeLight">@android:color/holo_orange_light</color>
+    <color name="MXorangeLightVeryLight">#66f1a540</color>
+
+    <color name="primaryDark">@color/MXorange</color>
+    <color name="primaryLight">@color/MXorangeLight</color>
+    <color name="colorAccent">@android:color/holo_orange_light</color>
+
+    <color name="fabNormal">@color/MXorange</color>
+    <color name="fabPressed">@color/MXorangeLight</color>
+    <color name="fabRipple">@color/MXorangeLightVeryLight</color>
+
+</resources>

@@ -1,0 +1,6 @@
+Motocross pálya könyvtár Európában (~2100) és az USA-ban (~1700),
+valódi pályák a következő országokból az alkalmazásban: Németország, Ausztria, Hollandia, Belgium, Franciaország, Svájc, Olaszország, Spanyolország, Svédország, Dánia, Norvégia, Csehország, Lengyelország, Magyarország és Nagy-Britannia.
+
+Pályákat kereshet név, esemény vagy ország alapján
+
+Az, hogy nem találsz pályát a múlté, most már egyenesen oda mehetsz,sok időt felemésztő kutatás nélkül.

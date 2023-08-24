@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="no_navi_available" translatable="false">no navigation-app found</string>
+    <string name="crash_toast_text" translatable="false">Oops ! I crashed, but a report has been sent to my developer to help fix the issue !</string>
+    <string name="close">Close</string>
+
+</resources>

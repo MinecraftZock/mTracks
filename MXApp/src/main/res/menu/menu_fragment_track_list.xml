@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="100"
+        android:title="@string/menu_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/filter"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_add_track"
+        android:icon="@drawable/ic_add_track"
+        android:orderInCategory="100"
+        android:title="@string/new_track"
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <item
+        android:id="@+id/menu_filter_country"
+        android:icon="@drawable/ic_filter_country"
+        android:orderInCategory="100"
+        android:title="@string/filter_country"
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="100"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom|collapseActionView"/>
+    <item
+        android:id="@+id/menu_feedback"
+        android:icon="@android:drawable/ic_menu_send"
+        android:orderInCategory="100"
+        android:title="@string/feedback"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+</menu>

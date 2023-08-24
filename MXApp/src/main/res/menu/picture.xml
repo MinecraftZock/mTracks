@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/picture_pick"
+        android:orderInCategory="100"
+        android:title="@string/picture_pick"/>
+    <item
+        android:id="@+id/picture_make"
+        android:orderInCategory="100"
+        android:title="@string/picture_make"/>
+
+</menu>

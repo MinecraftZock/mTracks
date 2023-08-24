@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?android:attr/listPreferredItemHeight"
+              android:mode="twoLine"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text1_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            tools:text="links"
+            />
+
+        <TextView
+            android:id="@+id/text1_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@android:id/text1"
+            android:layout_marginTop="8dip"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:text="oben rechts"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text2_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/text1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:text="unten"
+            />
+
+        <TextView
+            android:id="@+id/text2_r"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@android:id/text1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:text="unten rechts"/>
+    </RelativeLayout>
+
+</LinearLayout>

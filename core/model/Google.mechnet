@@ -1,0 +1,15 @@
+package info.mx.tracks.rest
+ 
+client Google "https://maps.googleapis.com" {
+	
+//maps/api/directions/json?origin=51,0&destination=51.5,-0.1&sensor=false
+	get getRoute /maps/api/directions/json {
+		params
+			origin : String,
+			destination : String,
+			sensor : String
+		response {
+			content : String
+		}
+	}	
+}

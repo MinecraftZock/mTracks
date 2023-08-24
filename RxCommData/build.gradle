@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+dependencies {
+    api "com.google.code.gson:gson:${gsonVersion}"
+}
+
+android {
+    compileSdkVersion defaultCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion defaultMinSdkVersion
+        targetSdkVersion defaultTargetSdkVersion
+        consumerProguardFiles 'proguard-RxCommLib.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-RxCommLib.pro'
+        }
+    }
+    lint {
+        abortOnError false
+    }
+    namespace 'info.mx.rxcommdata'
+
+}

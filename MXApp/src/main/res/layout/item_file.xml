@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false"
+              android:orientation="horizontal"
+              android:padding="0dp"
+              android:showDividers="beginning"
+              tools:ignore="SelectableText">
+
+    <ImageView
+        android:id="@+id/tr_track_access"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="5dp"
+        android:contentDescription="TODO"
+        android:gravity="center_vertical|left"
+        android:scaleType="fitCenter"
+        android:src="@drawable/flag_blau_hell"
+        tools:ignore="HardcodedText,ContentDescription"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|left"
+        android:orientation="vertical"
+        android:paddingRight="7dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tr_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="top|left"
+                android:maxLines="1"
+                android:paddingRight="5dip"
+                android:singleLine="true"
+                android:textAppearance="@style/textAppearanceModerate"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/tr_country"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/mx_fontsize_moderate"
+                android:layout_gravity="right|center_vertical"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ad2x"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tr_mo"
+                style="@style/mx_style_openday_track"
+                android:text="mo">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_tu"
+                style="@style/mx_style_openday_track"
+                android:text="di">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_we"
+                style="@style/mx_style_openday_track"
+                android:text="mi">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_th"
+                style="@style/mx_style_openday_track"
+                android:text="do">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_fr"
+                style="@style/mx_style_openday_track"
+                android:text="fr">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_sa"
+                style="@style/mx_style_openday_track"
+                android:text="sa">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_so"
+                style="@style/mx_style_openday_track"
+                android:text="so">
+            </TextView>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tr_file_distance"
+                style="@style/mx_style_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="1dp"
+                android:text="ww"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/tr_ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:numStars="5"
+                android:rating="1.5"/>
+
+            <ImageView
+                android:id="@+id/tr_camera"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right|center_vertical"
+                android:scaleType="fitEnd"
+                android:src="@android:drawable/ic_menu_camera"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/tr_list_eventlogo"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/xcc_logo_at"/>
+
+            <TextView
+                android:id="@+id/tr_list_event"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

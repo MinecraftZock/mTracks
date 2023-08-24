@@ -1,0 +1,15 @@
+package info.mx.tracks.ops
+
+service MxInfo {
+	operation opRecalcDistance(double lat, double lon, String provider)
+	operation opSyncFromServer(boolean updateProvider, String flavor)
+	operation opPostTrackAppoved(long trackId, int status)
+	operation opPostRatings()
+	operation opPostImages()
+	operation opResetLocalImages()
+	operation opPushSharedImage(long trackRestId, String uri) unique (trackRestId, uri)
+	operation opDownLoadImage(long pictureId, int size, boolean thumb)
+	operation opGetLatLng(String countryLong)
+	operation opGetWeather(long trackClientId, double lat, double lon) unique (trackClientId)
+	operation opGetWeatherCached(long trackClientId) unique (trackClientId)
+}

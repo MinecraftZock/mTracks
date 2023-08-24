@@ -1,0 +1,7 @@
+package info.info.hannes.mechadmin_gen.ops
+
+service Stageing {
+	operation opStageSplit()                                                                                    // out of sync with generated classes
+	operation opFacebookSplit()                                                                                 // out of sync with generated classes
+	operation opPostPictureApproved(long pictureRestId, int status)
+}

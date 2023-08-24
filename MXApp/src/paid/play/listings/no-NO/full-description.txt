@@ -1,0 +1,10 @@
+Oversikt over motocross baner i Norge, Tyskland, Østerrike, Nederland, Belgia, Sveits, Italia, Spania, Sverige, Danmark, England og USA, totalt ca. 3900 baner.
+
+Baner kan søkes på navn, stevner og land.
+Tiden for og ikke finne noen baner er forbi, nå kan du kjøre direkte til den uten å bruke ekstra tid på å lete.
+
+Banene kan vises som liste (rekkefølge etter navn eller distanse) eller vises på kart, med avstand til posisjonen.
+
+Nyttig informasjon på hver bane, sånn som underlag, lengde, avgift og åpningstider.
+
+Banes lokalisering kan deles med andre.

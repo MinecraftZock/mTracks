@@ -1,0 +1,63 @@
+<resources>
+
+    <dimen name="fontsize_small">12dp</dimen>
+    <dimen name="fontsize_medium">14dp</dimen>
+    <dimen name="fontsize_moderate">16dp</dimen>
+    <dimen name="fontsize_large">19dp</dimen>
+    <dimen name="fontsize_xlarge">21dp</dimen>
+    <dimen name="fontsize_xxlarge">25dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="shadow_width">15dp</dimen>
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="slidingmenu_offset">60dp</dimen>
+    <dimen name="thumbnail_size_dp">90dp</dimen>
+    <dimen name="weather_item_height">90dp</dimen>
+    <dimen name="left_label_width_normal">95dp</dimen>
+    <dimen name="left_label_width_small">65dp</dimen>
+    <dimen name="weather_img_size_dp">40dp</dimen>
+
+    <dimen name="mx_track_day_padding">18dp</dimen>
+    <dimen name="mx_track_day_padding_width">22dp</dimen>
+    <dimen name="mx_filter_day_padding">25dp</dimen>
+    <dimen name="mx_fontsize_xxsmall">10dp</dimen>
+    <dimen name="mx_fontsize_xsmall">12dp</dimen>
+    <dimen name="mx_fontsize_small">15sp</dimen>
+    <dimen name="mx_fontsize_medium">17sp</dimen>
+    <dimen name="mx_fontsize_moderate">20dp</dimen>
+    <dimen name="mx_fontsize_large">22dp</dimen>
+    <dimen name="mx_fontsize_xlarge">23dp</dimen>
+    <dimen name="mx_fontsize_xxlarge">25dp</dimen>
+    <dimen name="edit_day_width">30dp</dimen>
+
+    <dimen name="ratingBatMarginTop">-5dp</dimen>
+    <dimen name="ratingBatMarginBottom">-5dp</dimen>
+    <dimen name="ratingBatMarginRight">-25dp</dimen>
+    <dimen name="ratingBatMarginLeft">16dp</dimen>
+    <dimen name="google_recommended_margin">16dp</dimen>
+    <dimen name="own_margin">0dp</dimen>
+    <dimen name="tracklist_right_padding">@dimen/own_margin</dimen>
+
+    <item name="anchorU" format="float" type="dimen">0.5</item>
+    <item name="anchorV" format="float" type="dimen">1</item>
+
+    <!-- Per the design guidelininfo.mx.tracks.navigationtion drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
+
+    <!-- drawer -->
+    <dimen name="drawer_bar_height">25dp</dimen>
+    <dimen name="drawer_spacing_large">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_padding">10dp</dimen>
+
+    <dimen name="mapcluster_text_size">15dp</dimen>
+</resources>

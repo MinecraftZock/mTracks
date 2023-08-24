@@ -1,0 +1,156 @@
+package info.mx.tracks.rest
+
+client MxInfo "http://192.168.178.23:8080" {
+	headers
+		"Content-Type":"application/json; charset=utf-8"
+
+	post postLatLng /MXServer/rest/mxcaltrack/latlng {
+		body LatLng
+	}
+	put putTrackstage /MXServer/rest/tracksstage/id:long {
+		body RESTtrackStage
+	}
+	post postTrackstageID /MXServer/rest/tracksstage/createWithID {
+		body RESTtrackStage
+		response InsertResponse
+	} 
+	delete delTrackstage /MXServer/rest/tracksstage/id:long {
+	}
+	get getTracksStageFrom /MXServer/rest/tracksstage/changed/last:long {
+		response RESTtrackStage[]
+	}
+	post postEvent /MXServer/rest/events/createWithID {
+		body RESTevent
+		response BaseResponse
+	}
+	post postRatings /MXServer/rest/ratings/createWithID {
+		body RESTrating
+		response BaseResponse
+	}
+
+	get getEventsFrom /MXServer/rest/events/changed/from:long {
+		response RESTevent[]
+	}
+	
+	post postWeather /MXServer/rest/weather/toTrack {
+		body {
+			trackId:long,
+			units:String, 
+			lang:String,
+			content:String
+		}
+		response String
+	}
+	
+	post postNetworkErrors /MXServer/rest/network/multi {
+		body RESTnetworkError []
+	}
+}
+
+entity RESTnetworkError {
+	androidid:String,
+	changed:long,
+	tracks:int,
+	reason:String
+}
+
+entity LatLng {
+	trackname:String,
+	lat:double,
+	lng:double
+}
+
+entity BaseResponse {
+	id:int
+}
+
+entity InsertResponse {
+	id:int,
+	trackRestId:int,
+	changed:long,
+	message:String
+}
+
+entity RESTtrackStage {
+	id:int,
+	trackId:int,
+	androidid:String,
+	approved:int,
+	country:String,
+	changed:long,
+	trackname:String,
+	longitude:double,
+	latitude:double,
+	ins_longitude:double,
+	ins_latitude:double,
+	ins_distance:int,
+	url:String,
+	fees:String,
+	phone:String,
+	notes:String,
+	contact:String,
+	licence:String,
+	kidstrack:int,
+	openmondays:int,
+	opentuesdays:int,
+	openwednesday:int,
+	openthursday:int,
+	openfriday:int,
+	opensaturday:int,
+	opensunday:int,
+	hoursmonday:String,
+	hourstuesday:String,
+	hourswednesday:String,
+	hoursthursday:String,
+	hoursfriday:String,
+	hourssaturday:String,
+	hourssunday:String,
+	tracklength:int,
+	soiltype:int,
+	camping:int,
+	shower:int,
+	cleaning:int,
+	electricity:int,
+	supercross:int,
+	trackaccess:String,
+	facebook:String,
+	adress:String,
+	feescamping:String,
+	daysopen:String,
+	noiselimit:String,
+	campingrvhookups:int,
+	singletrack:int,
+	mxtrack:int,
+	a4x4:int,
+	enduro:int,
+	utv:int,
+	quad:int,
+	trackstatus:String,
+	areatype:String,
+	schwierigkeit:int,
+	indoor:int
+}
+
+entity RESTrating {
+	id:int,
+	changed:int,
+	trackId:int,
+	rating:int,
+	username:String,
+	note:String,
+	country:String,
+	approved:int,
+	deleted:int,
+	androidid:String
+}
+
+entity RESTevent {
+	id:int,
+	changed:int,
+	trackId:int,
+	serieId:int,
+	comment:String,
+	approved:int,
+	eventdate:int,
+	androidid:String
+}

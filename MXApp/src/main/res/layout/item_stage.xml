@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/RelativeLayoutTop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_trackdetail_item"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutStage"
+        style="@style/track_detail_itemStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp">
+
+        <TextView
+            android:id="@+id/textUser"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="User"/>
+
+        <TextView
+            android:id="@+id/textDist"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="10km"/>
+
+        <TextView
+            android:id="@+id/textOpen"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:text="offen:"/>
+
+        <TextView
+            android:id="@+id/textOpenVal"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:text="1"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/mx_fontsize_small"/>
+
+        <TextView
+            android:id="@+id/textAcceptVal"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="2dp"
+            android:text="2"
+            android:textColor="@color/green"
+            android:textSize="@dimen/mx_fontsize_small"/>
+
+        <TextView
+            android:id="@+id/textDecline"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="2dp"
+            android:text="/"/>
+
+        <TextView
+            android:id="@+id/textDeclineVal"
+            style="@style/track_detail_itemLabel"
+            android:layout_width="wrap_content"
+            android:text="3"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="@dimen/mx_fontsize_small"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutStage"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textLeft"
+            style="@style/track_detail_itemContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnAccept"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="x\ny\nz\nA"
+            android:textStyle="bold"/>
+
+        <ImageButton
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btnDecline"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_input_add"/>
+
+        <ImageButton
+            android:id="@+id/btnDecline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnAccept"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_delete"/>
+    </RelativeLayout>
+
+</RelativeLayout>

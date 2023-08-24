@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settings_filter_country"
+        android:orderInCategory="100"
+        android:title="@string/filter_country"
+        app:showAsAction="always"
+        android:icon="@drawable/actionbar_checkbox"/>
+
+</menu>

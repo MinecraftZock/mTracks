@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="access_list">
+        <item>@string/open_everyone</item>
+        <item>@string/open_member</item>
+        <item>@string/open_race</item>
+    </string-array>
+    <string-array name="soil_list">
+        <item>@string/all</item>
+        <item>@string/soil1clay</item>
+        <item>@string/soil2sand</item>
+        <item>@string/soil3top</item>
+        <item>@string/soil4claysand</item>
+        <item>@string/soil5rock</item>
+        <item>@string/soil6gravel</item>
+        <item>@string/soil7hard</item>
+        <item>@string/soil8soft</item>
+        <item>@string/soil9middle</item>
+        <item>@string/soil10mud</item>
+        <item>@string/soil11dust</item>
+    </string-array>
+    <string-array name="status_list">
+        <item>@string/open</item>
+        <item>@string/closed_season</item>
+        <item>@string/closed_notyet</item>
+        <item>@string/closed</item>
+        <item>@string/closed_temp</item>
+    </string-array>
+    <string-array name="access_keylist">
+        <item>N</item>
+        <item>M</item>
+        <item>R</item>
+    </string-array>
+    <string-array name="debugansicht_list">
+        <item>ausgeblendet</item>
+        <item>offen</item>
+        <item>best�tigt</item>
+        <item>alle</item>
+    </string-array>
+    <string-array name="location_list_short">
+        <item>@string/outdoor</item>
+        <item>@string/indoor</item>
+    </string-array>
+    <string-array name="location_list">
+        <item>@string/all</item>
+        <item>@string/outdoor</item>
+        <item>@string/indoor</item>
+    </string-array>
+
+    <string name="app_name" translatable="false">MX Tracks</string>
+    <string name="crash_notif_ticker_text" translatable="false">Unexpected error, please send a report...</string>
+    <string name="crash_notif_title" translatable="false">MX Tracks has crashed...</string>
+    <string name="crash_notif_text" translatable="false">Please click here to help fix the issue.</string>
+    <string name="crash_dialog_title" translatable="false">MX Tracks has crashed</string>
+    <string name="crash_dialog_text" translatable="false">An unexpected error occurred forcing the
+	    application to stop. Please help us fix this by sending us error data,
+	    all you have to do is click OK.</string>
+    <string name="crash_dialog_comment_prompt" translatable="false">You might add your comments about the problem below:</string>
+    <string name="crash_dialog_ok_toast" translatable="false">Thank you !</string>
+    <string name="by_name" translatable="false">ABC</string>
+
+    <string name="stage" translatable="false">Stage</string>
+    <string name="archiv" translatable="false">Archiv</string>
+    <string name="supercross" translatable="false">Supercross</string>
+    <string name="open_supercross" translatable="false">Supercross</string>
+    <string name="filter_supercross" translatable="false">Supercross</string>
+    <string name="setting_version" translatable="false">Version</string>
+
+    <string name="open_mx" translatable="false">MX</string>
+    <string name="open_quad" translatable="false">Quad</string>
+    <string name="open_utv" translatable="false">UTV</string>
+    <string name="open_4x4" translatable="false">4x4</string>
+    <string name="open_enduro" translatable="false">Enduro</string>
+    <string name="tracksfoundges" translatable="false">( %s )</string>
+
+    <string name="HLIST_POSITION" translatable="false">HLIST_POSITION</string>
+    <string name="HLIST_REST_ID" translatable="false">HLIST_REST_ID</string>
+</resources>

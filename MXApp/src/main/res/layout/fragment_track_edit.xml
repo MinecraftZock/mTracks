@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:ignore="TooManyViews">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollviewEdit"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:id="@+id/te_list_item"
+            style="@style/dividedListStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/te_layoutPicture"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:id="@+id/TextView02xxy"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/name" />
+
+                <ImageView
+                    android:id="@+id/te_Approved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <EditText
+                    android:id="@+id/te_detail_name_ed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3"
+                    android:textAppearance="?android:attr/textAppearanceMediumInverse"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/te_detail_name_te"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="3"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutMap"
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+                <fragment
+                    android:id="@+id/map_edit"
+                    class="info.mx.tracks.map.FragmentMapScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:tag="fragment_map" />
+
+                <ImageView
+                    android:id="@+id/imageToggleBottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="5dp"
+                    android:background="@color/background_white_light_transparent"
+                    android:src="@drawable/ic_marker_move_selector"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/imageToggleLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@color/background_white_light_transparent"
+                    android:src="@drawable/ic_marker_move_selector"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutAccess"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:id="@+id/TextView02xx"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/access" />
+
+                <Spinner
+                    android:id="@+id/te_detail_access"
+                    style="@style/track_edit_itemContent"
+                    android:layout_height="58dp"
+                    android:entries="@array/access_list" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutAdress"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04adr"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/Adress" />
+
+                <EditText
+                    android:id="@+id/te_detail_Adress"
+                    style="@style/track_edit_itemContent" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutFacebook"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextViewFacebook"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="Facebook"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/te_detail_Facebook"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/imgFacebook"
+                    android:layout_toLeftOf="@+id/imgFacebook"
+                    android:layout_toEndOf="@+id/te_TextViewFacebook"
+                    android:layout_toRightOf="@+id/te_TextViewFacebook" />
+
+                <ImageView
+                    android:id="@+id/imgFacebook"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_facebook"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutMx"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextView01"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignBaseline="@+id/te_detail_mx"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/open_mx" />
+
+                <ImageView
+                    android:id="@+id/te_detail_mx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/te_TextView01"
+                    android:layout_toRightOf="@+id/te_TextView01"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/imgMx"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignTop="@+id/te_detail_mx"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/filter_mx"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutEnduro"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextViewEnduro"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/open_enduro" />
+
+                <ImageView
+                    android:id="@+id/te_detail_enduro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/te_TextViewEnduro"
+                    android:layout_toRightOf="@+id/te_TextViewEnduro"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/imgEnduro"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/filter_enduro"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutQuad"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextViewQ"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/open_quad" />
+
+                <ImageView
+                    android:id="@+id/te_detail_quad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/te_TextViewQ"
+                    android:layout_toRightOf="@+id/te_TextViewQ"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/imgQuad"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/filter_quad"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layout4x4"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextView4x4"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/open_4x4" />
+
+                <ImageView
+                    android:id="@+id/te_detail_4x4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/te_TextView4x4"
+                    android:layout_toRightOf="@+id/te_TextView4x4"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/img4x4"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/filter_4x4"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/te_layoutUtv"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/te_TextViewUTV"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/open_utv" />
+
+                <ImageView
+                    android:id="@+id/te_detail_utv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/te_TextViewUTV"
+                    android:layout_toRightOf="@+id/te_TextViewUTV"
+                    android:src="@drawable/check_box_3state_selector"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/imgUtv"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/filter_utv"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutSoil"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04x"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/soil" />
+
+                <Spinner
+                    android:id="@+id/te_detail_soil"
+                    style="@style/track_edit_itemContent"
+                    android:entries="@array/soil_list"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutLocation"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04L"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/location" />
+
+                <Spinner
+                    android:id="@+id/te_detail_Location"
+                    style="@style/track_edit_itemContent"
+                    android:entries="@array/location_list_short"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutStatus"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/status" />
+
+                <Spinner
+                    android:id="@+id/te_status"
+                    style="@style/track_edit_itemContent"
+                    android:entries="@array/status_list"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutDifficult"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/difficult" />
+
+                <RatingBar
+                    android:id="@+id/te_difficult"
+                    style="?android:attr/ratingBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/ratingBatMarginRight"
+                    android:layout_marginLeft="@dimen/ratingBatMarginRight"
+                    android:layout_marginTop="@dimen/ratingBatMarginTop"
+                    android:layout_marginBottom="@dimen/ratingBatMarginBottom"
+                    android:indeterminate="false"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:rating="2"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:stepSize="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutFees"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0401"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/fees" />
+
+                <EditText
+                    android:id="@+id/te_detail_fees"
+                    style="@style/track_edit_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutNoiseLimit"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0405x"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/noiselimit" />
+
+                <EditText
+                    android:id="@+id/te_NoiseLimit"
+                    style="@style/track_edit_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutLength"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0405"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/length" />
+
+                <EditText
+                    android:id="@+id/te_detail_length"
+                    style="@style/track_edit_itemContent"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutwebsite"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView041"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/website" />
+
+                <EditText
+                    android:id="@+id/te_detail_website"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutphone"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/phone" />
+
+                <EditText
+                    android:id="@+id/te_detail_phone"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:inputType="phone"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutcontact"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042c"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/contact" />
+
+                <EditText
+                    android:id="@+id/te_detail_contact"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/te_layoutCamping"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextView043"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/camping" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_camping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+                <View
+                    style="@style/Divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/te_layoutShower"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextView044"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/showers" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_shower"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/te_layoutKids"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextView047"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/kids_track" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_kids"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+                <View
+                    style="@style/Divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/te_layoutSx"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextViewsx"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/supercross" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_sx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/te_layoutBikclean"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextView046"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/bike_cleaning" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_bikecleaning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
+                <View
+                    style="@style/Divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/te_layoutElect"
+                    style="@style/track_detail_itemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/TextView045"
+                        style="@style/track_detail_itemLabel"
+                        android:text="@string/electricity" />
+
+                    <ImageView
+                        android:id="@+id/te_detail_electricity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/check_box_3state_selector"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutLicense"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextViewLicense"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/license" />
+
+                <EditText
+                    android:id="@+id/te_detail_license"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutComment"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView048"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/notes" />
+
+                <EditText
+                    android:id="@+id/te_detail_notes"
+                    style="@style/track_edit_itemContent"
+                    android:layout_width="match_parent">
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/te_layoutOpening"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textGroup"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/gradient_divider"
+                    android:hint="@string/open_days"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:textColor="#FFFFFF" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_mo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_mo"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_mo_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Divider"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_di"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_di"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_di_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_mi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_mi"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_mi_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Divider"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_do"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_do"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_do_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_fr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_fr"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_fr_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Divider"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_sa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_sa"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_sa_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/image_so"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/check_box_3state_selector"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/te_detail_so"
+                            style="@style/track_edit_day" />
+
+                        <EditText
+                            android:id="@+id/te_detail_so_hour"
+                            style="@style/track_edit_itemContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"></LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

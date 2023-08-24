@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <DatePicker
+        android:id="@+id/datePickerEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:spinnersShown="false"
+        android:startYear="2016"
+        android:datePickerMode="spinner"/>
+
+    <EditText
+        android:id="@+id/edtEventComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/title_activity_comment"
+        android:inputType="textMultiLine"/>
+
+</LinearLayout>

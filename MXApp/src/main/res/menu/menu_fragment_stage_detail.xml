@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_stage_accept"
+        android:icon="@drawable/actionbar_checkbox"
+        android:orderInCategory="50"
+        android:title="accept"
+        app:showAsAction="ifRoom|withText|collapseActionView"/>
+    <item
+        android:id="@+id/menu_stage_ignore"
+        android:icon="@drawable/actionbar_checkbox_question"
+        android:orderInCategory="50"
+        android:title="ignore"
+        app:showAsAction="ifRoom|withText|collapseActionView"/>
+    <item
+        android:id="@+id/menu_stage_decline"
+        android:icon="@drawable/actionbar_decline"
+        android:orderInCategory="50"
+        android:title="decline"
+        app:showAsAction="ifRoom|withText|collapseActionView"/>
+</menu>

@@ -1,0 +1,135 @@
+[
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452955688,
+    "id": 5049,
+    "reason": "failed to connect to /192.168.178.59 (port 8080) after 20000ms: isConnected failed: ECONNREFUSED (Connection refused)",
+    "tracks": 0
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452955749,
+    "id": 5048,
+    "reason": "failed to connect to /10.0.0.4 (port 8080) after 20000ms",
+    "tracks": 0
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452956465,
+    "id": 5050,
+    "reason": "failed to connect to /192.168.178.59 (port 8080) after 20000ms: isConnected failed: ECONNREFUSED (Connection refused)",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452956629,
+    "id": 5051,
+    "reason": "timeout",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452956979,
+    "id": 5052,
+    "reason": "failed to connect to /192.168.178.59 (port 8080) after 20000ms",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452958216,
+    "id": 5054,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452958244,
+    "id": 5056,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452958255,
+    "id": 5053,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452958293,
+    "id": 5055,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959452,
+    "id": 5059,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959457,
+    "id": 5062,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959984,
+    "id": 5058,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959987,
+    "id": 5063,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959990,
+    "id": 5064,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452959991,
+    "id": 5066,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452960223,
+    "id": 5065,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452960284,
+    "id": 5061,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452960307,
+    "id": 5060,
+    "reason": "Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 10",
+    "tracks": 4006
+  },
+  {
+    "androidid": "c4cff81bc24142e0",
+    "changed": 1452960307,
+    "id": 5057,
+    "reason": "timeout",
+    "tracks": 4006
+  }
+]

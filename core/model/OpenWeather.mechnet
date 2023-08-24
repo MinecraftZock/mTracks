@@ -1,0 +1,132 @@
+package info.mx.tracks.rest
+ 
+client OpenWeather "http://api.openweathermap.org" {
+	
+	get getWeatherDaily /data/api_version:double/forecast/daily { //}?lat=:double&lon=:double&cnt=16&mode=json {
+		params
+		   APPID : String,
+		   lat : double,
+		   lon : double,
+		   cnt : int, //16
+		   mode : String, //json, xml
+		   units : String, //metric, imperial
+		   lang : String //zh_cn, de, fr
+		response {
+			cod : int,
+			message : double,
+			city : City,
+			country : String,
+			population : int,
+			cnt : int,
+			list : TimeDay[]
+		}
+	}
+	get getWeatherDailyAnonym /data/api_version:double/forecast/daily { //}?lat=:double&lon=:double&cnt=16&mode=json {
+		params
+		   //id : String,
+		   lat : double,
+		   lon : double,
+		   cnt : int, //16
+		   mode : String, //json, xml
+		   units : String, //metric, imperial
+		   lang : String //zh_cn, de, fr
+		response {
+			cod : int,
+			message : double,
+			city : City,
+			country : String,
+			population : int,
+			cnt : int,
+			list : TimeDay[]
+		}
+	}
+	
+	get getWeatherHour /data/api_version:double/forecast { //}?lat=:double&lon=:double&cnt=16&mode=json {
+		params
+		   APPID : String,
+		   lat : double,
+		   lon : double,
+		   cnt : int, //16
+		   mode : String, //json, xml
+		   units : String, //metric, imperial
+		   lang : String //zh_cn, de, fr
+		response {
+			cod : int,
+			message : double,
+			city : City,
+			country : String,
+			population : int,
+			cnt : int,
+			list : TimeHour[]
+		}
+	}
+	
+}
+
+entity City {
+    id : int,
+    name: String,
+    coord : Coord 
+}
+
+entity Coord {
+   lon : double,
+   lat : double
+}
+
+entity TimeDay {
+   dt : long,
+   temp : Temp,
+   pressure : double,
+   humidity : int,
+   weather: Weather[],
+   speed : double,
+   deg : int,
+   clouds : int,
+   snow : double
+}
+
+entity TimeHour {
+   dt : long,
+   main : Main,
+   weather: Weather[],
+   clouds : Clouds,
+   wind : Wind,
+   t_txt : String
+}
+
+entity Temp {
+	day  : double,
+	min  : double,
+	max  : double,
+	night: double,
+	eve  : double,
+	morn : double
+}
+
+entity Main {
+	temp : double,
+	temp_min : double,
+	temp_max : double,
+	pressure : double,
+	sea_level : double,
+	grnd_level : double,
+	humidity : int,
+	temp_kf : double
+}
+
+entity Weather {
+   id : int,
+   main : String,
+   description : String,
+   icon: String //"01d"
+}
+
+entity Clouds {
+   all : int
+}
+
+entity Wind {
+   speed : double,
+   deg : double
+}

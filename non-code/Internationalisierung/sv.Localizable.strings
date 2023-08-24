@@ -1,0 +1,275 @@
+/* Guideline for translating texts : */
+/* anything between a pair of /**/
+/* is just a comment and is not to be translated */
+/* change ONLY the part to the RIGHT SIDE OF THE EQUAL "=" sign and keep the "" pairs an the semicolon ; */
+
+
+/* MapToolBarButton */
+"Favorites"="Favoriter";
+"Map" = "Karta";
+"GoogleMaps" = "Google karta";
+"Tracks" = "Motocrossbanor";
+"Settings" = "Egenskaper";
+"Tracklist" = "Banor";
+"Info" = "Info";
+"LocationPurpose" = "Visar ditt avstånd till olika Motocrossbanor och din position på kartan.";
+"Userposition" = "Du är här";
+"Trackdetails" = "Egenskaper för banan";
+
+
+"RequestStarted" = "Begäran om uppdatering av bana skickad...";
+
+
+/*Tracklist Cell */
+"MembersOnly"="Endast medlemmar";
+"RaceOnly" = "Endast tävlingar";
+"OpenforPublic" = "Öppet för allmänheten";
+"Shoplabel" = "Butik eller återförsäljare";
+
+
+/* Tracklist ordering*/
+"ByName" = "ABC";
+"ByDistance" = "Avstånd";
+
+/* Filtering */
+"TrackFilter" = "Filtrera";
+"FilterCountries" = "Länder";
+"FilterRatings"="Betyg";
+"FilterResult"= "%d banor fann...";
+"FilterHeader"="Filtrera banor";
+"FilterOpen"="Öppet";
+"FilterActiveCountries"="Aktiv: %@";
+"NoFilter"="Inga filter";
+
+"TrackTypeOpen"="Öppet för allmänheten";
+"TrackTypeClub"="Endast medlemmar";
+"TrackTypeRace"="Endast tävlingar";
+"TrackTypeShop"="Butik eller återförsäljare";
+
+/* TrackDetails */
+"Monday-short" = "Må";
+"Tuesday-short" = "Ti";
+"Wednesday-short" = "On";
+"Thursday-short" = "To";
+"Friday-short" = "Fr";
+"Saturday-short" = "Lö";
+"Sunday-short" = "Sö";
+
+
+/* Some Text for trackdetails */
+"Coordinates" = "Koordinater";
+"Distance" = "Avstånd";
+"Phone" = "Telefon";
+"Website" = "Webbsida";
+"Country" = "Land";
+"Notes" = "Noteringar";
+"Fees" = "Avgifter";
+"Hours" = "Öppettider";
+"Camping" = "Camping";
+"Electricity" = "Eluttag";
+"Showers" = "Dusch";
+"Washing" = "Motorcykeltvätt";
+"Tracklength" = "Banlängd";
+"SoilType" = "Underlag";
+"RatingLabel" = "Betyg";
+"CommentLabel" = "Comments";
+"KidsTrack" = "Minibana";
+"SXTrack" = "SX";
+"EmailLabel" = "E-post";
+"numOfCorner" = "Antal kurvor";
+"numOfJumps" = "Antal hopp";
+"numOfTables" = "Antal platåhopp";
+"numOfStepUpsDowns" = "Antal trapphopp";
+"numOfJumps20" = "Antal hopp upp till 20m";
+"numOfJumps20Plus" = "Antal hopp längre än 20m";
+"numOfSkiJumps" = "Antal spetshopp";
+"irrigationlabel" = "bevattning";
+"elevationlabel" = "höjd över havet";
+"videolinksLabel" = "länkar till videos";
+"pictureLabel" = "länkar till bilder";
+"licenceLabel" = "erfordras licens";
+"Brands"="Märken";
+"Showroom"="Showroom";
+"Workshop"="Verkstad";
+"Address"="Adress";
+
+
+/* misc */
+"WIFIOnly" = "Endast WLAN";
+"download" = "ladda ner";
+"downloadinprogress" = "nerladdning pågår";
+"downloading" = "laddar ner";
+"loadPictures" = "ladda ner alla bilder lokalt";
+"loadRatings" = "ladda ner/uppdatera alla betyg";
+"trackname" = "Banans namn";
+"description" = "Beskrivning";
+"FilterButton" = "Filtrera";
+"AllButton" = "Alla";
+"NoneButton" = "Inga";
+
+
+/* Soiltypes */
+"SoilClay"= "lera";
+"SoilSand" = "sand";
+"SoilTop" = "jord";
+"SoilClaySand" = "lera/sand";
+"SoilRock" = "stenig";
+"SoilGravel" = "grus";
+
+/* commenting */
+"LastComment"="Senaste kommentar %@:";
+"CommentCount"="(%@ kommentarer)";
+"AddComment"="Din kommentar";
+
+/* Standard and Dial Alert Texts */
+"AlertDial" = "Ring";
+"AlertDialQuestion" = "Ringa följande nummer %@?";
+"AlertCancelButton" = "Avbryt";
+"AlertDialButton" = "Ring";
+
+/*Diagnostics data question */
+"Diagnosticstitle"="Diagnostiska information";
+"DiagnosticsMessage"="Vi vill samla in anonym statistik om din användning av MX spår - är detta ok för dig \ nOm du förnekar Nu behöver vi aldrig kommer att be dig igen och vi kommer INTE samla någon DATA!";
+"AlertDiagonisticsOK"="Tillåt";
+"AlertDiagonisticsCancel"="Neka";
+
+/* forward Actionsheet Texts */
+"FwdEmailButton" = "E-post";
+"FwdSMSButton" = "SMS meddelande";
+"FwdGoogle" = "Navigera med Google Maps";
+"FwdNavigon" = "Navigera med Navigon";
+"FwdMaps" = "Navigera med Kartor";
+"FwdTomTom" = "Navigera med TomTom";
+"FwdNewTrack" = "Rapportera ny bana";
+"FwdTrackError" = "Rapportera felaktiga uppgifter";
+"FwdFavorites" = "Lägg till i favoriter";
+"FwdTwitter" = "Twitter";
+
+/* Image Picker @@@@@*/
+"PickerCamera" = "Shoot Pic. or Video";
+"PickerRoll" = "Choose from Library";
+"ShowGallery"="Show Gallery";
+
+/* Forwaring of URLs in built in browser */
+"ForwardSafari" = "Safari";
+"ForwardTitle" = "Vidarebefodra";
+"ForwardNavigation"="Navigering";
+
+/* Mail subject template */
+"MailSubject" = "Motocrossbana %@";
+"MailBody" = "Hej, <BR>information om motocrossbana <a href=http://maps.google.com/maps?ll=%@,%@>%@</a><BR>Coordinates: %@";
+
+
+"SMSBody" = "Hej,\Information om motocrossbana %@ http://maps.google.com/maps?ll=%@,%@\nCoordinates: %@";
+"TweetBody" = "Är på crossbanan %@";
+
+
+"NoMailTitle" = "E-post fel";
+"NoMailMessage" = "E-post kan inte skickas. Kontrollera dina kontoinställningar.";
+"NoSMSTitle" = "Meddelande fel";
+"NoSMSMessage" = "Meddelande kan inte skickas. Kontrollera dina telefon och meddelande inställningar.";
+
+
+/* Text for Yes and No ;-) */
+"Yes" = "Ja";
+"No" = "Nej";
+
+
+/* Text for Send Button in NewTrackView */
+"SendButtonText" = "Skicka";
+"NewTrackTitle" = "Ny bana";
+"MailSubjectNewTrack" = "Ny motocrossbana '%@'";
+"NewtrackCoordinatesFix" = "Vänta tills GPS positionen stabiliserats innan du skickar %@";
+"Newtrackname" = "Ny bana - justera nålen";
+
+
+/* TrackErrorView */
+"TrackErrorTitle" = "Rapportera felaktiga uppgifter";
+"MailSubjectErrorTrack" = "Fel i egenskaperna för bana ID:%d";
+
+
+/* Favorites */
+"FavoriteAddedTop" = "Favorit";
+"FavoriteAddedBottom" = "tillagd";
+"FavoriteAddedBottomError" = "finns redan";
+
+
+/* Trackloading */
+"TracksAddedTop" = "%d banor";
+"TracksAddedBottom" = "uppdaterade";
+"TracksRead" = "%d läser in banor";
+"TrackUpdateLoading" = "laddar banuppdateringar";
+"TrackUpdateLoaded" = "banuppdatering färdig";
+
+
+/*Webview */
+"NetworkError" = "Nätverksfel";
+
+
+/* Locationmanager */
+"LocationServicesDisabled" = "Platstjänster för mx tracks är inaktiverade - aktivera dessa i telefonens inställningsmeny!";
+"LocationManagerError" = "Ett fel uppstod att fastställa din position - aktivera platstjänster och nätverk i telefonens inställningsmeny!";
+
+/* Track Context menu to the left */
+"MenuMiscellaneous" = "Miscellaneous";
+"MenuData" = "Uppgifter";
+"MenuReportNewTrack" = "Rapportera ny bana";
+"MenuReportTrackError" = "Rapportera felaktiga uppgifter";
+"MenuActions" = "Åtgärder";
+"MenuShowMap" = "Visa karta";
+"MenuShowNearbyTracks" = "Visa närliggande banor";
+"MenuNavigate" = "Navigera";
+"MenuFunctions"="Funktioner";
+
+/* Filter Dialog */
+"FilterdlgCountry"="Länder";
+"FilterdlgRating"="Betyg";
+"FilterdlgHours"="Öppettider";
+
+/* Number of ratings */
+"NumberOfRatings"="(%@ röster)";
+
+/* Map type of map */
+"MapTypeStandard"="Standard";
+"MapTypeSatellite"="Satellit";
+"MapTypeHybrid"="Hybrid";
+
+/* Labels for Track Error and new track dialog */
+"LabelTrackName"="Banans namn";
+"LabelDescription"="Beskrivning";
+"TracknamePlaceholder"="Ange namnet på banor";
+
+/* Info dialog */
+"Testernames"="Nina Kaas #168, Oliver Kaas #503, Matthias Hitz #701, Håkan Enegård (swedish texts), Robin Kappel (french texts), Steffany Staman (dutch translation), Vito Ronzano (iPad testing), Moritz Weickardt (iPhone testing), Denis König, Christian Schäfer, Martin Anderson";
+"info.copyright"="© 2013 Christian Kaas & CROSS magazin - alla rättigheter förbehållna - kopiera eller extrahera uppgifterna med appen är förbjudet och straffbart enligt internationell rätt.";
+
+/* request for first picture upload */
+"agreement.pictureupload"="Du här deklarerar du har rättigheter att ladda upp bilder du lägger upp här och uttryckligen ger Christian Kaas och Triple Verlag GmbH (CROSS magazin) de icke exklusiva rättigheter att använda bilderna för oavsett ändamål.";
+"Agree.button"="Är överens";
+
+
+/* Ratings disliking */
+"ratingdislike.title"="Kränkande betyg";
+"ratingdislike.message"="Detta betyg / kommentar måste anses stötande?";
+"dislike.button"="Mark kränkande";
+
+/* Ratings */
+/* need a name when posting comments and ratings */
+"ratings.rating"="Betyg";
+"ratings.username"="Pseudonym";
+"ratings.comment"="Kommentera";
+"ratings.aliasAlertTitle"="Pseudonym ​​saknas";
+"ratings.needaname"="Vänligen entern en pseudonym!";
+"ratings.enteryournamehere" = "Pseudonym";
+
+/* Alert OK Button */
+"alert.OK"="OK";
+
+/* FGallery */
+"Back"="Bak";
+"See all"="Visa alla";
+"of"="av";
+"Close"="Stänga";
+
+/* IDMPhotoBrowser */
+"Done"="Klar";

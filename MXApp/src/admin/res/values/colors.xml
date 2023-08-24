@@ -1,0 +1,8 @@
+<resources>
+
+    <color name="DeepPink">#FF1493</color>
+    <color name="MXpink">#fa7eca</color>
+
+    <color name="primaryDark">@color/MXpink</color>
+
+</resources>

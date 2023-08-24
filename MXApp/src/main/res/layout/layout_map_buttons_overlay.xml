@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:ignore="ContentDescription">
+
+    <ImageView
+        android:id="@+id/map_tracks_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/map_tracks_btn"/>
+
+    <ImageView
+        android:id="@+id/map_stage_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/map_stage_btn"/>
+
+    <ImageView
+        android:id="@+id/map_cluster_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/map_cluster_on_btn"/>
+
+    <ImageView
+        android:id="@+id/map_type_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/map_type_btn"/>
+
+    <ImageView
+        android:id="@+id/map_traffic_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/map_traffic_on_btn"/>
+
+</merge>

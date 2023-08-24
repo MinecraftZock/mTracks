@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_prev"
+        android:icon="@drawable/ic_menu_top"
+        android:orderInCategory="50"
+        android:title="@string/previous"
+        app:showAsAction="always|collapseActionView"/>
+    <item
+        android:id="@+id/menu_next"
+        android:icon="@drawable/ic_menu_bottom"
+        android:orderInCategory="50"
+        android:title="@string/next"
+        app:showAsAction="always|collapseActionView"/>
+
+</menu>

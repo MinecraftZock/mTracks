@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvAdmin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingStart="5dp"
+            android:text="Server"
+            android:textColor="#FFFFFF"
+            tools:ignore="HardcodedText,RtlSymmetry"/>
+
+        <Spinner
+            android:id="@+id/spinnerBackend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:entries="@array/server_list"/>
+
+        <TextView
+            android:id="@+id/tvBackendInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingStart="5dp"
+            android:text="Backend Info"
+            android:textColor="#FFFFFF"
+            tools:ignore="HardcodedText,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/textVersionRest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="1.6.1"/>
+
+        <TextView
+            android:id="@+id/androidId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="androidId"/>
+
+        <TextView
+            android:id="@+id/switches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="true and false"/>
+
+        <TextView
+            android:id="@+id/IPAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="111.222.333.444"/>
+
+        <TextView
+            android:id="@+id/textVersionDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Postgres"/>
+
+        <TextView
+            android:id="@+id/tvImportInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_divider"
+            android:paddingStart="5dp"
+            android:text="Import"
+            android:textColor="#FFFFFF"
+            tools:ignore="HardcodedText,RtlSymmetry"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lyImportProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <include
+            android:id="@+id/container_progress"
+            layout="@layout/dialog_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txt_no_displays"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/empty"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <info.mx.tracks.common.OverScrollListView
+        android:id="@+id/list_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="TooManyViews,RtlHardcoded">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/tr_list_item"
+            style="@style/dividedListStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/tr_layoutEvent"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/tr_detail_eventlogo"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="4dp"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/xcc_logo_at"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tr_detail_event"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutOpening"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="?android:dividerHorizontal"
+                android:dividerHeight="20dp"
+                android:dividerPadding="5dp"
+                android:showDividers="middle">
+
+                <include
+                    android:id="@+id/day_mo"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_di"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_mi"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_do"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_fr"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_sa"
+                    layout="@layout/layout_openday" />
+
+                <include
+                    android:id="@+id/day_so"
+                    layout="@layout/layout_openday" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyWeatherHorizontal"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/weather_item_height">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hWeatherGalery"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/weather_item_height"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:focusableInTouchMode="false" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutDistance"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/distance" />
+
+                <include
+                    android:id="@+id/distanceContainer"
+                    layout="@layout/distance_background"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:id="@+id/tr_detail_distance_navigate"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/navigate"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:id="@+id/imDetailDistanceNavigate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    android:textIsSelectable="true"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/tr_layoutRating"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tr_detail_rattext2"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="0dp"
+                    android:text="@string/rating" />
+
+                <RatingBar
+                    android:id="@+id/tr_detail_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="@dimen/ratingBatMarginLeft"
+                    android:layout_toEndOf="@+id/tr_detail_rattext2"
+                    android:layout_toRightOf="@+id/tr_detail_rattext2"
+                    android:numStars="5"
+                    android:rating="1.5"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:textIsSelectable="true" />
+
+                <TextView
+                    android:id="@+id/textRatingCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tr_detail_rating"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="rating count" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutDifficult"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tr_detail_rattext3"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/difficult" />
+
+                <RatingBar
+                    android:id="@+id/tr_detail_difficult"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="@dimen/ratingBatMarginLeft"
+                    android:numStars="5"
+                    android:rating="1.5"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:textIsSelectable="true" />
+
+                <TextView
+                    android:id="@+id/textDifficultCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/tr_layoutInfo"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tr_detail_rattext"
+                    style="@style/track_detail_itemLabel"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/info" />
+
+                <FrameLayout
+                    android:id="@+id/imgFacebook"
+                    android:layout_width="44dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tr_detail_rattext"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_facebook"
+                        tools:ignore="ContentDescription" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/imgFacebook"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgUtv"
+                        android:layout_width="44dp"
+                        android:layout_height="35dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/filter_utv"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/imgMx"
+                        android:layout_width="44dp"
+                        android:layout_height="35dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/filter_mx"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/img4x4"
+                        android:layout_width="44dp"
+                        android:layout_height="35dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/filter_4x4"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/imgEnduro"
+                        android:layout_width="44dp"
+                        android:layout_height="35dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/filter_enduro"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/imgQuad"
+                        android:layout_width="44dp"
+                        android:layout_height="35dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/filter_quad"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutAdress"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04adr"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/Adress" />
+
+                <TextView
+                    android:id="@+id/tr_detail_Adress"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutBrands"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04br"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/Brands" />
+
+                <TextView
+                    android:id="@+id/tr_detail_Brands"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutWorkshop"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04ws"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/workshop" />
+
+                <TextView
+                    android:id="@+id/tr_detail_workshop"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutShowroom"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04sh"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/showroom" />
+
+                <TextView
+                    android:id="@+id/tr_detail_showroom"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutSoil"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/soil" />
+
+                <TextView
+                    android:id="@+id/tr_detail_soil"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutFees"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0401"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/fees" />
+
+                <TextView
+                    android:id="@+id/tr_detail_fees"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutNoiseLimit"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView03"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/noiselimit" />
+
+                <TextView
+                    android:id="@+id/tr_detail_noise"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutLength"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0405"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/length" />
+
+                <TextView
+                    android:id="@+id/tr_detail_length"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutwebsite"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView041"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/website" />
+
+                <TextView
+                    android:id="@+id/tr_detail_website"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:id="@+id/ImageView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutphone"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/phone" />
+
+                <TextView
+                    android:id="@+id/tr_detail_phone"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:id="@+id/ImageView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutcontact"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042c"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/contact" />
+
+                <TextView
+                    android:id="@+id/tr_detail_contact"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:id="@+id/ImageView21c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutCoordinates"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView042co"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/coordinates" />
+
+                <TextView
+                    android:id="@+id/tr_detail_coordinates"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:id="@+id/ImageView21cord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/table_arrow_cyan"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutCamping"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView043"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/camping" />
+
+                <TextView
+                    android:id="@+id/tr_detail_camping"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutShower"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView044"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/showers" />
+
+                <TextView
+                    android:id="@+id/tr_detail_shower"
+                    style="@style/track_detail_itemContent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutElect"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView045"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/electricity" />
+
+                <TextView
+                    android:id="@+id/tr_detail_electricity"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutBikclean"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView046"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/bike_cleaning" />
+
+                <TextView
+                    android:id="@+id/tr_detail_bikecleaning"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutKids"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView047"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/kids_track" />
+
+                <TextView
+                    android:id="@+id/tr_detail_kids"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutSx"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextViewsx"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/supercross" />
+
+                <TextView
+                    android:id="@+id/tr_detail_sx"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutLicense"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextViewLicense"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/license" />
+
+                <TextView
+                    android:id="@+id/tr_detail_license"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutLocation"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextViewLocation"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/location" />
+
+                <TextView
+                    android:id="@+id/tr_detail_location"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutStatus"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextViewStatus"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/status" />
+
+                <TextView
+                    android:id="@+id/tr_detail_status"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutComment"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/TextView0480"
+                    style="@style/track_detail_itemLabel"
+                    android:text="@string/notes" />
+
+                <TextView
+                    android:id="@+id/tr_detail_notes"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tr_layoutStage"
+                style="@style/track_detail_itemStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/TextView048"
+                    style="@style/track_detail_itemLabel"
+                    android:text="Stage"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tr_detail_stage"
+                    style="@style/track_detail_itemContent"
+                    android:layout_width="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

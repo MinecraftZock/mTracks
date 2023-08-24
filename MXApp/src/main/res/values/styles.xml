@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseThemeMaterial" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimary">@color/primary</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated, which is used to tint widgets -->
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+
+        <!--eg. TabHost indicator-->
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!--<item name="android:windowBackground">@drawable/window_background</item>-->
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+     colorControlHighlight, and colorSwitchThumbNormal. -->
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!-- Application theme. -->
+    <style name="MXTheme" parent="android:Theme.Holo">
+
+        <!--
+        All customizations that are NOT specific to a particular API-level can go here.
+    	<item name="android:panelFullBackground">@drawable/gradient_action_bar</item>
+        <item name="android:panelBackground">@drawable/gradient_action_bar</item>
+        -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@drawable/gradient_action_bar</item>
+    </style>
+
+    <style name="ButtonBar">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+
+    <style name="ButtonBarButton"/>
+
+    <style name="dividedListStyle">
+        <item name="android:divider">?android:dividerHorizontal</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:dividerHeight">20dp</item>
+        <item name="android:dividerPadding">5dp</item>
+    </style>
+
+    <style name="track_detail_itemStyle">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:background">@drawable/gradient_trackdetail_item</item>
+    </style>
+
+    <style name="track_detail_itemLabel">
+        <item name="android:layout_width">@dimen/left_label_width_normal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/font_color</item>
+        <item name="android:textAppearance">@style/textAppearanceXSmall</item>
+    </style>
+
+    <style name="left_label_small" parent="track_detail_itemLabel">
+        <item name="android:layout_width">@dimen/left_label_width_small</item>
+    </style>
+
+    <style name="setting_Label">
+        <item name="android:layout_width">@dimen/left_label_width_normal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textAppearance">@style/textAppearanceMedium</item>
+    </style>
+
+    <style name="weather_text_label" parent="track_detail_itemLabel">
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:paddingRight">4dp</item>
+    </style>
+
+    <style name="track_edit_day" parent="track_detail_itemLabel">
+        <item name="android:layout_width">@dimen/edit_day_width</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textAppearance">@style/textAppearanceXSmall</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="track_basic_itemContent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textAppearance">@style/textAppearanceSmall</item>
+    </style>
+
+    <style name="track_detail_itemContent" parent="track_basic_itemContent">
+        <item name="android:textColor">@color/font_color</item>
+        <item name="android:textAppearance">@style/textAppearanceSmall</item>
+    </style>
+
+    <style name="track_detail_itemContentSmall" parent="track_detail_itemContent">
+        <item name="android:textAppearance">@style/textAppearanceXSmall</item>
+    </style>
+
+    <style name="track_edit_itemContent" parent="track_basic_itemContent">
+        <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
+    </style>
+
+    <style name="mx_style_openday">
+        <item name="android:background">@drawable/rounded_edges_blue</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:paddingLeft">1dip</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textAppearance">@style/textAppearanceXSmall</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="mx_style_openday_track" parent="mx_style_openday">
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:layout_width">@dimen/mx_track_day_padding_width</item>
+        <item name="android:layout_height">@dimen/mx_track_day_padding</item>
+    </style>
+
+    <style name="mx_style_distance">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@style/textAppearanceXSmall</item>
+        <item name="android:textColor">@color/distance_font</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:layout_gravity">right|center_vertical</item>
+        <item name="android:gravity">right|center_vertical</item>
+    </style>
+
+    <!-- copy from sdk/platforms/android-22/data/res/values/styles.xml -->
+    <style name="WidgetRatingBarSmall">
+        <item name="indeterminateOnly">false</item>
+        <item name="progressDrawable">@drawable/ratingstar</item>
+        <item name="indeterminateDrawable">@drawable/ratingstar</item>
+        <item name="minHeight">14dip</item>
+        <item name="maxHeight">14dip</item>
+        <item name="thumb">@null</item>
+        <!--<item name="isIndicator">true</item>-->
+    </style>
+
+    <style name="textAppearanceModerate" patent="?android:attr/textAppearanceLarge">
+        <item name="android:textSize">@dimen/mx_fontsize_moderate</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="textAppearanceMedium" patent="textAppearanceModerate">
+        <item name="android:textSize">@dimen/mx_fontsize_medium</item>
+    </style>
+
+    <style name="textAppearanceSmall" patent="textAppearanceModerate">
+        <item name="android:textSize">@dimen/mx_fontsize_small</item>
+    </style>
+
+    <style name="textAppearanceXSmall" patent="textAppearanceModerate">
+        <item name="android:textSize">@dimen/mx_fontsize_xsmall</item>
+    </style>
+
+    <style name="textAppearanceXXSmall" patent="textAppearanceModerate">
+        <item name="android:textSize">@dimen/mx_fontsize_xxsmall</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+    </style>
+
+    <style name="MXSettingCheckbox">
+        <item name="android:minHeight">45dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="fab_menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MenuButtons">
+        <item name="fab_colorNormal">@color/fabNormal</item>
+        <item name="fab_colorPressed">@color/fabPressed</item>
+        <item name="fab_colorRipple">@color/fabRipple</item>
+    </style>
+
+    <style name="MenuButtonsSmall" parent="MenuButtons">
+        <item name="fab_size">mini</item>
+    </style>
+
+</resources>

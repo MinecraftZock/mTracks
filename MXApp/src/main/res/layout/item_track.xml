@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/layoutPoiHeaderMain"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:background="@drawable/list_item_selector"
+    android:showDividers="beginning"
+    tools:ignore="SelectableText"
+    android:paddingRight="@dimen/tracklist_right_padding">
+
+    <ImageView
+        android:id="@+id/tr_track_access"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="5dp"
+        android:contentDescription="TODO"
+        android:gravity="center_vertical|left"
+        android:scaleType="fitCenter"
+        android:src="@drawable/flag_blau_hell"
+        tools:ignore="HardcodedText,ContentDescription"/>
+
+    <LinearLayout
+        android:id="@+id/layoutPoiHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|left"
+        android:orientation="vertical"
+        android:paddingLeft="1dp"
+        android:paddingRight="7dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tr_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="top|left"
+                android:maxLines="1"
+                android:paddingLeft="0dip"
+                android:paddingRight="5dip"
+                android:singleLine="true"
+                android:textAppearance="@style/textAppearanceModerate"
+                android:textStyle="bold"
+                tools:text="Track"/>
+
+            <ImageView
+                android:id="@+id/tr_country"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/mx_fontsize_moderate"
+                android:layout_gravity="right|center_vertical"
+                android:scaleType="fitEnd"
+                tools:src="@drawable/ad2x"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tr_mo"
+                style="@style/mx_style_openday_track"
+                android:text="mo">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_tu"
+                style="@style/mx_style_openday_track"
+                android:text="di">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_we"
+                style="@style/mx_style_openday_track"
+                android:text="mi">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_th"
+                style="@style/mx_style_openday_track"
+                android:text="do">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_fr"
+                style="@style/mx_style_openday_track"
+                android:text="fr">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_sa"
+                style="@style/mx_style_openday_track"
+                android:text="sa">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tr_so"
+                style="@style/mx_style_openday_track"
+                android:text="so">
+            </TextView>
+
+            <View
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                layout="@layout/distance_background"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="0dp"
+                android:paddingRight="1dp"
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/tr_layoutRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/tr_ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="left"
+                android:numStars="5"
+                android:rating="1.5"/>
+
+            <ImageView
+                android:id="@+id/tr_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/tr_camera"
+                android:layout_toRightOf="@+id/tr_ratingBar"
+                android:scaleType="fitEnd"
+                android:src="@android:drawable/ic_menu_my_calendar"/>
+
+            <ImageView
+                android:id="@+id/tr_camera"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/ic_menu_camera"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/tr_list_eventlogo"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/xcc_logo_at"/>
+
+            <TextView
+                android:id="@+id/tr_list_event"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                tools:text="Event Text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tr_layoutAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tr_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="top|left"
+                android:singleLine="true"
+                android:textAppearance="@style/textAppearanceSmall"
+                android:textColor="@color/font_color_grey"
+                tools:text="Address"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

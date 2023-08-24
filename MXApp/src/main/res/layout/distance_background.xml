@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tr_detail_distance"
+        android:layout_alignEnd="@+id/tr_detail_distance"
+        android:layout_alignStart="@+id/tr_detail_distance"
+        android:layout_alignLeft="@+id/tr_detail_distance"
+        android:layout_alignRight="@+id/tr_detail_distance"
+        android:background="@drawable/button_distance_selector"
+        android:layout_alignTop="@+id/tr_detail_distance"/>
+
+    <TextView
+        android:id="@+id/tr_detail_distance"
+        style="@style/mx_style_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        tools:text="123km"
+        android:focusableInTouchMode="true"
+        android:gravity="end"
+        android:textIsSelectable="true"
+        android:paddingEnd="12dp"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"/>
+
+</RelativeLayout>

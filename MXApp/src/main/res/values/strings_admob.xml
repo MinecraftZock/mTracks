@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="admob_banner" translatable="false">ca-app-pub-9395649770735523/8505539270</string>
+    <string name="admob_interstitial" translatable="false">ca-app-pub-9395649770735523/1745801561</string>
+    <string name="admob_reward_video" translatable="false">ca-app-pub-9395649770735523/3334215409</string>
+
+    <!--Test-->
+    <string name="admob_native_advenced" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="admob_native_express_small" translatable="false">ca-app-pub-3940256099942544/2793859312</string>
+    <string name="admob_native_express_large" translatable="false">ca-app-pub-3940256099942544/2177258514</string>
+
+</resources>

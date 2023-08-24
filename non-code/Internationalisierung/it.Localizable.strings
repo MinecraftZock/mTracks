@@ -1,0 +1,257 @@
+/* Guideline for translating texts : */
+/* anything between a pair of /**/
+/* is just a comment and is not to be translated */
+/* change ONLY the part to the RIGHT SIDE OF THE EQUAL "=" sign and keep the "" pairs an the semicolon ; */
+
+/* MapToolBarButton */
+"Favorites"="Favoriti";
+"Map" = "Mappa";
+"GoogleMaps" = "Google mappa";
+"Tracks" = "Piste";
+"Settings" = "Preferenze";
+"Tracklist" = "Piste";
+"Info" = "Info";
+"LocationPurpose" = "Vorremmo mostrare le distanze alle posizioni piste e la tua posizione su una mappa.";
+"Userposition" = "Tu sei qui";
+"Trackdetails" = "Piste dettagli";
+
+"RequestStarted" = "Request for updated tracks sent...";
+
+/*Tracklist Cell */
+"MembersOnly"="solo per membri";
+"RaceOnly" = "solo per gare";
+"OpenforPublic" = "Aperto al pubblico";
+"Shoplabel" = "Shop o concessionaria";
+
+/* Tracklist ordering*/
+"ByName" = "ABC";
+"ByDistance" = "Distanza";
+
+/* Filtering */
+"TrackFilter" = "Filtro";
+"FilterCountries" = "Paesi";
+"FilterRatings"="Voti";
+"FilterResult"= "%d piste trovate...";
+"FilterHeader"="Filtro piste";
+"FilterOpen"="Aperto";
+"FilterActiveCountries"="Attivo: %@";
+"NoFilter"="Senza filtro";
+
+"TrackTypeOpen"="Aperto al pubblico";
+"TrackTypeClub"="Solo i membri";
+"TrackTypeRace"="Solo gare";
+"TrackTypeShop"="Negozio/Concessionaria";
+
+/* TrackDetails */
+"Monday-short" = "Lu";
+"Tuesday-short" = "Ma";
+"Wednesday-short" = "Me";
+"Thursday-short" = "Gi";
+"Friday-short" = "Ve";
+"Saturday-short" = "Sa";
+"Sunday-short" = "Do";
+
+/* Some Text for trackdetails */
+"Coordinates" = "Coordinate";
+"Distance" = "Distanza";
+"Phone" = "Telefono";
+"Website" = "Sito web";
+"Country" = "Nazione";
+"Notes" = "Nota";
+"Fees" = "Tassa";
+"Hours" = "Orario";
+"Camping" = "Campeggio";
+"Electricity" = "Elettricità";
+"Showers" = "Docce";
+"Washing" = "Area lavaggio";
+"Tracklength" = "Lunghezza";
+"SoilType" = "Terreno";
+"RatingLabel" = "Categoria";
+"CommentLabel" = "Comments";
+"KidsTrack" = "Minicross";
+"SXTrack" = "SX";
+"EmailLabel" = "Email";
+/**************************************************/
+"numOfCorner" = "Number of corners";
+"numOfJumps" = "Number of jumps";
+"numOfTables" = "Number of tables";
+"numOfStepUpsDowns" = "Number of Stepups/Stepdowns";
+"numOfJumps20" = "Number of jumps up to 20m";
+"numOfJumps20Plus" = "Number of jump greater than 20m";
+"numOfSkiJumps" = "Number of ski jumps";
+"irrigationlabel" = "irriggation";
+"elevationlabel" = "elevation";
+"videolinksLabel" = "links to videos";
+"pictureLabel" = "links to pictures";
+"licenceLabel" = "licenza necessaria";
+"Brands"="Marchi";
+"Showroom"="Sala d'esposizione";
+"Workshop"="Garage";
+"Address"="Indirizzo";
+
+
+/* misc */
+"WIFIOnly" = "solo WIFI";
+"download" = "Caricare";
+"downloadinprogress" = "Scaricare le foto";
+"downloading" = "Il download";
+"loadPictures" = "Scaricare tutte le immagini in locale";
+"loadRatings" = "Scaricare / aggiornare tutte le valutazioni";
+"trackname" = "Nome della pista";
+"description" = "Descrizione";
+"FilterButton" = "Filtro";
+"AllButton" = "Tutti";
+"NoneButton" = "Nessuna";
+
+/**************************************************/
+
+/* Soiltypes */
+"SoilClay"= "argilla";
+"SoilSand" = "sabbia";
+"SoilTop" = "terra";
+"SoilClaySand" = "argilla/terra/sabbia";
+"SoilRock" = "pietroso";
+"SoilGravel" = "ghiaia";
+
+/* commenting */
+"LastComment"="Ultimo commento %@:";
+"CommentCount"="(%@ commenti)";
+"AddComment"="Tuo commento";
+
+/* Standard and Dial Alert Texts */
+"AlertDial" = "Chiamare";
+"AlertDialQuestion" = "Chiamare il numero %@?";
+"AlertCancelButton" = "Annulla";
+"AlertDialButton" = "Chiamare";
+
+/*Diagnostics data question */
+"Diagnosticstitle"="Dati di diagnostica";
+"DiagnosticsMessage"="Vorremmo raccogliere statistiche anonime sul utilizzo di tracce mx -? Questo è ok per voi \ nSe si nega ora non saremo mai chiederò di nuovo e non saremo RACCOLTA DEI DATI!";
+"AlertDiagonisticsOK"="Consenti";
+"AlertDiagonisticsCancel"="Nega";
+
+/* forward Actionsheet Texts */
+"FwdEmailButton" = "Email";
+"FwdSMSButton" = "SMS";
+"FwdGoogle" = "Indicazioni a Google";
+"FwdMaps" = "Indicazioni a Mappe";
+"FwdTomTom" = "Indicazioni a TomTom";
+"FwdNavigon" = "Indicazioni a Navigon";
+"FwdNewTrack" = "Nuova pista";
+"FwdTrackError" = "Segnalare errori ei dati";
+"FwdFavorites" = "Aggiungi ai favoriti";
+"FwdTwitter" = "Twitter";
+
+/* Image Picker @@@@@*/
+"PickerCamera" = "Shoot Pic. or Video";
+"PickerRoll" = "Choose from Library";
+"ShowGallery"="Show Gallery";
+
+/* Forwaring of URLs in built in browser */
+"ForwardSafari" = "Safari";
+"ForwardTitle" = "Trasmesso dal";
+"ForwardNavigation"="Navigare";
+
+/* Mail subject template */
+"MailSubject" = "Pista di motocross %@";
+"MailBody" = "Ciao, <BR>Informazioni su pista motocross <a href=http://maps.google.com/maps?ll=%@,%@>%@</a><BR>Coordinates: %@";
+
+"SMSBody" = "Ciao,\nInformazioni su pista motocross %@ http://maps.google.com/maps?ll=%@,%@\nCoordinate: %@";
+"TweetBody" = "Sulla pista %@";
+
+"NoMailTitle" = "Nessuna e-mail";
+"NoMailMessage" = "Le email non possono essere inviati. Si prega di controllare i conti e le impostazioni.";
+"NoSMSTitle" = "Nessun messaggio";
+"NoSMSMessage" = "I messaggi non possono essere trasmesse. Si prega di controllare il telefono e le impostazioni dei messaggi.";
+
+/* Text for Yes and No ;-) */
+"Yes" = "Sì";
+"No" = "No";
+
+/* Text for Send Button in NewTrackView */
+"SendButtonText" = "Invia";
+"NewTrackTitle" = "Nuova pista";
+"MailSubjectNewTrack" = "MX-Tracks New track '%@'";
+"NewtrackCoordinatesFix" = "Si prega di attendere che le coordinate 'stabilizzare' prima di inviare %@";
+"Newtrackname" = "Nuova pista";
+
+/* TrackErrorView */
+"TrackErrorTitle" = "Segnala un errore dei dati";
+"MailSubjectErrorTrack" = "Error in trackdata for track ID:%d";
+
+/* Favorites */
+"FavoriteAddedTop" = "Favorita";
+"FavoriteAddedBottom" = "aggiunto";
+"FavoriteAddedBottomError" = "esiste già";
+
+/* Trackloading */
+"TracksAddedTop" = "%d pista";
+"TracksAddedBottom" = "aggiornato";
+"TracksRead" = "%d piste leggere";
+"TrackUpdateLoading" = "aggiornamenti pista caricamento";
+"TrackUpdateLoaded" = "aggiornamenti pista caricata";
+
+/*Webview */
+"NetworkError" = "Errore di rete";
+
+/* Locationmanager */
+"LocationServicesDisabled" = "I servizi di localizzazione per mx tracks sono disabilitati - si prega di attivarli!";
+"LocationManagerError" = "Errore durante la determinazione della posizione - servizi di localizzazione attivano e di rete!";
+
+/* Track Context menu to the left */
+"MenuMiscellaneous" = "Miscellaneo";
+"MenuData" = "Dati";
+"MenuReportNewTrack" = "Nuova pista";
+"MenuReportTrackError" = "Errori ei dati";
+"MenuActions" = "Azioni";
+"MenuShowMap" = "Mostra mappa";
+"MenuShowNearbyTracks" = "Mostra vicine piste";
+"MenuNavigate" = "Navigare";
+"MenuFunctions"="Funzioni";
+
+/* Number of ratings */
+"NumberOfRatings"="(%@ voti)";
+
+/* Map type of map */
+"MapTypeStandard"="Standard";
+"MapTypeSatellite"="Satellite";
+"MapTypeHybrid"="Ibrida";
+
+/* Labels for Track Error and new track dialog */
+"LabelTrackName"="nome pista";
+"LabelDescription"="descrizione";
+"TracknamePlaceholder"="inserire il nome pista";
+
+/* Info dialog */
+"Testernames"="Nina Kaas #168, Oliver Kaas #503, Matthias Hitz #701, Håkan Enegård (swedish texts), Robin Kappel (french texts), Steffany Staman (dutch translation), Vito Ronzano (iPad testing), Moritz Weickardt (iPhone testing), Denis König, Christian Schäfer, Martin Anderson";
+"info.copyright"="© 2013 Christian Kaas & CROSS magazin - tutti i diritti riservati - la copia o l'estrazione dei dati forniti con l'applicazione è vietato e punibile in base al diritto internazionale.";
+
+/* request for first picture upload */
+"agreement.pictureupload"="È qui per dichiarare di avere i diritti per caricare le immagini di postare qui ed esplicitamente concedere Christian Kaas e Triple Verlag GmbH (CROSS magazin)‚ il diritto non esclusivo di utilizzare le immagini per qualsiasi scopo.";
+"Agree.button"="Concordare";
+
+/* Ratings disliking */
+"ratingdislike.title"="Recensione offensivo";
+"ratingdislike.message"="Questo Recensione / commento deve essere considerato offensivo?";
+"dislike.button"="Marchio offensiva";
+
+/* Ratings */
+/* need a name when posting comments and ratings */
+"ratings.rating"="Voto";
+"ratings.username"="Alias";
+"ratings.comment"="Commento";
+"ratings.aliasAlertTitle"="Alias mancanti";
+"ratings.needaname"="Inserisci un alias!";
+"ratings.enteryournamehere" = "Alias";
+
+/* Alert OK Button */
+"alert.OK"="OK";
+
+/* FGallery */
+"Back"="Ritorno";
+"See all"="Vedi tutti";
+"of"="di";
+"Close"="Chiudere";
+
+/* IDMPhotoBrowser */
+"Done"="Finito";

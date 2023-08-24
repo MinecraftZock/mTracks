@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/dark_blue"
+              android:minWidth="280dp"
+              android:orientation="vertical"
+              android:padding="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <RadioGroup
+            android:id="@+id/radioGroupMapLayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RadioButton
+                android:id="@+id/radioMapStd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/normal"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <RadioButton
+                android:id="@+id/radioMapStellite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/satellite"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <RadioButton
+                android:id="@+id/radioMapHybrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hybrid"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <RadioButton
+                android:id="@+id/radioMapTerrain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terrain"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+Motocross track directory for Europe (~2100) and USA (~1700),
+actual tracks from following countries are in the app: Germany, Austria, Netherlands, Belgium, France, Switzerland, Italy, Spain, Sweden, Denmark, Norway, Czech, Poland, Hungarian and Great Britain.
+
+Tracks can be searched by name, event or country
+
+Not finding any track is past, now you drive directly to it, without spending extra time for searching it
+
+Tracks are displayed as list (order by name or distance) or displayed on a map, with additive distance to actual position.
+
+Useful information are included, soil type, length, fees an opening hours (if provided from track owner) as well.
+
+With a touch event, track information can be required with mail, web or phone from the track owner as well
+Coordinates can be shared with friends or other guys

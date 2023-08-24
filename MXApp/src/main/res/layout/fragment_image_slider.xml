@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".ActivityImageSlider">
+
+    <!--
+         This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows.
+    -->
+
+    <com.ortiz.touchview.TouchImageView
+        android:id="@+id/imageFullSize"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loading"
+        android:scaleType="fitCenter"/>
+
+</FrameLayout>
