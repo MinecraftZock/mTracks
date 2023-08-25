@@ -1,12 +1,12 @@
-MX Tracks info
-==============
+MX Tracks
+=========
 
-Android App für Motocross Strecken
+Android App for motocross tracks
 
-Testen
-------
+Testing
+-------
 
-nur die permissions setzen
+only set permissions
 
 	./gradlew :MXPro:grantDebugPermission -Ppermissions=android.permission.ACCESS_FINE_LOCATION,android.permission.ACCESS_COARSE_LOCATION
 
@@ -17,11 +17,8 @@ Tests mit den permissions durchführen
 ./gradlew :MXPro:grantDebugPermission -Ppermissions=android.permission.ACCESS_FINE_LOCATION,android.permission.ACCESS_COARSE_LOCATION &&
 ./gradlew :MXApp:connectedAdminDebugAndroidTest
 
-neue Google App Store version
----------
+New Google App Store version
+-----------------------------
 
     ./gradlew :MXApp:newVersion
     git push --tags
-    
-[android]: https://developer.android.com/sdk/
-[reversProxy]: https://github.com/ACRA/acralyzer/wiki/Setting-up-a-reverse-proxy/
