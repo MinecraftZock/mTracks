@@ -44,13 +44,19 @@ jobs:
       - name: Install Android SDK
         uses: malinskiy/action-android/install-sdk@release/0.1.4
       - name: Build project
-        run: ./gradlew assembleRelease :MXApp:publishPaidReleaseBundle :MXApp:publishFreeReleaseBundle :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
+        run: ./gradlew assembleRelease
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
           ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
           GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
+      - name: Publish Free
+        run: ./gradlew :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
+      - name: Publish Pad
+        run: ./gradlew :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=alpha
+      - name: Publish Admin
+        run: ./gradlew :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
