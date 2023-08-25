@@ -28,7 +28,7 @@ static def getLatestGitHash() {
 
 static def getGitCommitCount() {
     def process = "git rev-list HEAD --count".execute()
-    return process.text.toInteger()
+    return process.text.toInteger() + 2109
 }
 
 static def getUnixCreateTime() {
