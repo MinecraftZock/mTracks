@@ -32,6 +32,10 @@ jobs:
           fi
           echo "PRE_RELEASE=$prerelease" >> $GITHUB_ENV
           echo "prerelease=$prerelease"
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v3
         with:
