@@ -42,7 +42,11 @@ jobs:
       - name: Build project
         run: ./gradlew assembleRelease
         env:
-          VERSION: ${{steps.tagger.outputs.tag}}
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
+          ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
+          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -50,9 +54,5 @@ jobs:
           prerelease: ${{ env.PRE_RELEASE }}
           name: ${{steps.tagger.outputs.tag}}
           generate_release_notes: true
-          files: |
-            LogcatCrashlyticLib/build/outputs/aar/LogcatCrashlytic-release.aar
-            LogcatCountlyLib/build/outputs/aar/LogcatCountly-release.aar
-            LogcatCoreLib/build/outputs/aar/LogcatCore-release.aar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

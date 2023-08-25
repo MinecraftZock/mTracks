@@ -99,7 +99,7 @@ android {
     // testBuildType "release"
 
     signingConfigs {
-        debug {
+        debugCI {
             storeFile file('./debug.keystore')
             storePassword "android"
             keyPassword "android"
@@ -122,7 +122,9 @@ android {
 
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
+            if (System.getenv("CI") == "true") { // Github action
+                signingConfig signingConfigs.debugCI
+            }
             //applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
             buildConfigField "boolean", "FILE_LOGGING", "true"
