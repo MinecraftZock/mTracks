@@ -44,7 +44,7 @@ jobs:
       - name: Install Android SDK
         uses: malinskiy/action-android/install-sdk@release/0.1.4
       - name: Build project
-        run: ./gradlew assembleRelease
+        run: ./gradlew :MXApp:assembleRelease
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
