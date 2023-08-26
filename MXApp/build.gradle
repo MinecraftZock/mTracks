@@ -242,7 +242,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
     implementation "com.google.android.libraries.places:places:3.0.0"
     implementation "com.android.volley:volley:1.2.1" // maybe no more needed
-    implementation 'com.google.maps.android:android-maps-utils:2.2.5'
+    implementation 'com.google.maps.android:android-maps-utils:3.5.3'
 
     // Testing-only dependencies
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
