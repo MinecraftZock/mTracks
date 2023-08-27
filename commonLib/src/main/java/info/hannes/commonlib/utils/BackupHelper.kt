@@ -32,9 +32,10 @@ object BackupHelper {
     @Throws(IOException::class)
     private fun copyPrivateToPublicWithLog(context: Context, appName: String, dbDir: String, dbVersion: Int): String {
         val sdf = SimpleDateFormat("yyyy.MM.dd_HHmmss", Locale.getDefault())
-        val shareTempDir = context.externalCacheDir.toString() + File.separator +
-                SHARE_FILE_PREFIX + appName.replace(" ".toRegex(), "") + "_" +
-                sdf.format(System.currentTimeMillis()) + File.separator
+        val shareTempDir = context.externalCacheDir.toString() + File.separator + SHARE_FILE_PREFIX + appName.replace(
+            " ".toRegex(),
+            ""
+        ) + "_" + sdf.format(System.currentTimeMillis()) + File.separator
         val shareTempPrefsDir = shareTempDir + File.separator + "shared_prefs" + File.separator
         val shareTempFilesDir = shareTempDir + File.separator + "files" + File.separator
         val shareTempFiles = File(shareTempFilesDir)
@@ -43,24 +44,16 @@ object BackupHelper {
         shareTempPrefs.mkdirs()
         val fromDB = context.getDatabasePath(dbDir)
         val zipFileName: String?
-        val toDB = File(
-            shareTempDir +
-                    dbDir.replace(
-                        ".db", "v" +
-                                dbVersion + "." + sdf.format(System.currentTimeMillis()) + ".db"
-                    )
-        )
+        val toDB = File(shareTempDir + dbDir.replace(".db", "v" + dbVersion + "." + sdf.format(System.currentTimeMillis()) + ".db"))
         copyFile(fromDB, toDB)
         val files: MutableList<String?> = ArrayList()
         files.add(toDB.absolutePath)
 
         // json files
         context.filesDir.listFiles()?.forEach { fileJson ->
-            if (!fileJson.name.startsWith("DATA_") &&
-                !fileJson.name.contains("_") &&
-                !fileJson.name.endsWith("history") &&
-                !fileJson.isDirectory &&
-                !fileJson.name.contains(".")
+            if (!fileJson.name.startsWith("DATA_") && !fileJson.name.contains("_") && !fileJson.name.endsWith("history") && !fileJson.isDirectory && !fileJson.name.contains(
+                    "."
+                )
             ) {
                 val jsonTo = File(shareTempFilesDir + fileJson.name + ".json")
                 copyFile(fileJson, jsonTo)

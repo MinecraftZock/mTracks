@@ -50,6 +50,9 @@ subprojects {
     // Optionally configure plugin
     ktlint {
         debug = false
+        android = true
+        verbose = true
+        outputColorName.set("RED")
     }
 }
 

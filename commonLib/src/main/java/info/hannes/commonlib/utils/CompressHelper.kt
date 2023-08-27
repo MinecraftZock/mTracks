@@ -6,6 +6,7 @@ import java.util.zip.ZipOutputStream
 
 object CompressHelper {
     private const val BUFFER = 2048
+
     @JvmStatic
     @Throws(IOException::class)
     fun zip(files: List<String?>, zipFile: String?) {

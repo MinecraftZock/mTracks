@@ -27,11 +27,13 @@ object DateHelper {
         val day = floor((minutes / 60 / 24).toDouble()).toInt()
         val hour = floor((minutes / 60).toDouble()).toInt() - day * 24
         val min = (minutes - hour * 60 - day * 24 * 60).toFloat().roundToInt()
-        return (if (day > 0)
+        val prefix = if (day > 0) {
             String.format(Locale.getDefault(), "%d", day) + "d"
-        else
-            "") + String.format(Locale.getDefault(), "%02d", hour) + ":" + String.format(
-            Locale.getDefault(), "%02d", min
-        )
+        }
+        else {
+            ""
+        }
+        return prefix + String.format(Locale.getDefault(), "%02d", hour) + ":" +
+                String.format(Locale.getDefault(), "%02d", min)
     }
 }
