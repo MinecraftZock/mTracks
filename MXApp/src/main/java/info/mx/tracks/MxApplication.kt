@@ -7,9 +7,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
 import android.provider.Settings
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.multidex.MultiDex
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
 import info.hannes.timber.FileLoggingTree
@@ -141,7 +143,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
         }
 
         OpGetRouteOperation.deleteOldRoutes()
-        doSync(false, false, BuildConfig.FLAVOR)
+        doSync(updateProvider = false, force = false, flavor = BuildConfig.FLAVOR)
     }
 
     companion object {

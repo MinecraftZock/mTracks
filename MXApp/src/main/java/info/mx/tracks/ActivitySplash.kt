@@ -73,7 +73,7 @@ class ActivitySplash : ActivityAppBase() {
                 try {
                     while (splashActive && ms < splashTime) {
                         if (!paused) {
-                            ms = ms + 100
+                            ms += 100
                         }
                         sleep(100)
                     }
@@ -93,8 +93,4 @@ class ActivitySplash : ActivityAppBase() {
         finish()
     }
 
-    companion object {
-
-        protected val TAG = "Splash"
-    }
 }
