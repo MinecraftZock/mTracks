@@ -47,9 +47,6 @@ jobs:
         run: ./gradlew assembleDebug
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          ALIAS_NAME: ${{ secrets.ALIAS_NAME }}
-          ALIAS_PASS: ${{ secrets.ALIAS_PASS }}
           GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
 #      - name: Run tests
 #        run: ./gradlew test

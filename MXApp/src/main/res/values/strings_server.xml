@@ -3,9 +3,6 @@
 
     <string-array name="server_list">
         <item>@string/BACKEND_PROD_URL</item>
-        <item>http://hannes-vaio/backend</item>
-        <item>http://HannesMacAir256:8080/backend</item>
-        <item>http://hannes-mac-pro:8080/backend</item>
         <item>http://192.168.178.23:8080/backend</item>
         <item>http://10.0.2.2:8080/backend</item>
         <item>http://10.0.2.1:8080/backend</item>
