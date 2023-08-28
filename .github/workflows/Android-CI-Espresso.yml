@@ -9,24 +9,13 @@ on:
   pull_request_target:
 
 jobs:
-  BuildTest:
-    name: Build and test JDK ${{ matrix.java_version }} ${{ matrix.api }} ${{ matrix.tag }} ${{ matrix.abi }}
+  BuildFlavors:
+    name: Build All and test JDK
     runs-on: macOS-latest
     strategy:
       fail-fast: false
       matrix:
         java_version: [ 17 ]
-        api: [ 28 ]
-        abi: [ x86_64 ]
-        tag: [ 'default' ]
-#        include:
-#          #          - api: 31
-#          #            abi: x86_64
-#          #            tag: 'google_apis'
-#          - api: 30
-#            abi: x86_64
-#            tag: 'google_apis'
-#            java_version: 17
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,11 +39,52 @@ jobs:
           GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
 #      - name: Run tests
 #        run: ./gradlew test
+      - name: cleanup
+        run: ./signing/cleanup.sh
+  TestPro:
+    name: Test Pro JDK ${{ matrix.java_version }} ${{ matrix.api }} ${{ matrix.tag }} ${{ matrix.abi }}
+    runs-on: macOS-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java_version: [ 17 ]
+        api: [ 28 ]
+        abi: [ x86_64 ]
+        tag: [ 'default' ]
+    #        include:
+    #          #          - api: 31
+    #          #            abi: x86_64
+    #          #            tag: 'google_apis'
+    #          - api: 30
+    #            abi: x86_64
+    #            tag: 'google_apis'
+    #            java_version: 17
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: ${{ matrix.java_version }}
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.4
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: Debug keystore
+        run: keytool -genkey -v -keystore ./MXApp/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      - name: Build project
+        run: ./gradlew :MXApp:assemblePaidDebug
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
       - name: Run instrumentation tests
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
           cmd: |
-            ./gradlew :MXApp:connectedAdminDebugAndroidTest --continue
+            ./gradlew :MXApp:connectedPaidDebugAndroidTest --continue
           api: ${{ matrix.api }}
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
