@@ -8,29 +8,32 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
+import junit.framework.TestCase.assertTrue
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestName
 import org.junit.runner.RunWith
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -41,10 +44,12 @@ import java.util.concurrent.TimeoutException
  * https://www.guru99.com/uiautomatorviewer-tutorial.html
  */
 @RunWith(AndroidJUnit4::class)
-@SdkSuppress(minSdkVersion = 18)
 class NavigationTest {
 
     private lateinit var device: UiDevice
+
+    @get:Rule
+    var nameRule = TestName()
 
     /**
      * Create launcher Intent Use PackageManager to get the launcher package name
@@ -119,7 +124,6 @@ class NavigationTest {
     }
 
     @Test
-//    @Ignore("It's not finished")
     fun openMap() {
         acceptChangesIfNeeded()
         allowPermissionsIfNeeded()
@@ -128,12 +132,22 @@ class NavigationTest {
             device.pressBack()
         }
 
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+
         val openButton = onView(
                 Matchers.allOf(ViewMatchers.withContentDescription("open"),
                         ViewMatchers.withParent(withId(R.id.toolbar)),
                         ViewMatchers.isDisplayed())
         )
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
         openButton.perform(ViewActions.click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3")
 
         val menuMap = device.findObject(UiSelector().className("android.widget.CheckedTextView").text("Map"))
         if (menuMap.exists()) {
@@ -154,6 +168,9 @@ class NavigationTest {
         val bundle = Bundle()
         bundle.putString("openMap", "0")
         getInstrumentation().sendStatus(0, bundle)
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
     }
 
     private fun allowPermissionsIfNeeded() {
