@@ -1,24 +1,28 @@
 package info.mx.tracks
 
+import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.espresso.screenshot.captureToBitmap
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SdkSuppress
 import androidx.test.filters.Suppress
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestName
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@SdkSuppress(minSdkVersion = 18)
 class SplashTest {
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule(ActivitySplash::class.java)
+    val activityScenarioRule = activityScenarioRule<ActivitySplash>()
+
+    @get:Rule
+    var nameRule = TestName()
 
     @Test
     @Suppress
@@ -79,6 +83,13 @@ class SplashTest {
         val appCompatCheckedTextView3 = onView(
                 allOf(withId(R.id.design_menu_item_text), withText("Strecken"), isDisplayed()))
         appCompatCheckedTextView3.perform(click())
+    }
+
+    @Test
+    fun smokeTestSimplyStart() {
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}")
     }
 
 }

@@ -96,8 +96,7 @@ jobs:
         with:
           name: MXPro-Screenshots
           path: |
-            MXApp/build/outputs/connected_android_test_additional_output/debugAndroidTest/connected
-            MXApp/build/outputs/androidTest-results/connected
+            MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
       - name: cleanup
         run: ./signing/cleanup.sh
   Check:
