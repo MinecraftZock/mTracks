@@ -2,4 +2,5 @@
 max_line_length = 150
 
 [*.{kt, kts}]
-ktlint_disabled_rules=no-wildcard-imports,import-ordering,max-line-length,import-ordering,no-blank-line-before-rbrace,final-newline,indent,no-multi-spaces,comment-spacing,parameter-list-wrapping
+ktlint_code_style = ktlint_official
+ktlint_disabled_rules=spacing-between-declarations-with-annotations,no-wildcard-imports,multiline-if-else,import-ordering,max-line-length,import-ordering,no-blank-line-before-rbrace,final-newline,indent,no-multi-spaces,comment-spacing,parameter-list-wrapping

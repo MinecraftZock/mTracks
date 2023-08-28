@@ -45,7 +45,7 @@ abstract class TrackingApplication : Application() {
     @Synchronized
     fun getTracker(): Tracker? {
         if (tracker == null) {
-            tracker =  TrackerBuilder(trackerUrl, siteId, trackerName).build(Matomo.getInstance(this))
+            tracker = TrackerBuilder(trackerUrl, siteId, trackerName).build(Matomo.getInstance(this))
         }
         return tracker
     }
