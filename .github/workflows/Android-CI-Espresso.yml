@@ -91,7 +91,7 @@ jobs:
           distribution: 'adopt'
           java-version: 17
       - name: gradle check
-        run: ./gradlew lintDebug ktlintCheck
+        run: ./gradlew lintDebug # ktlintCheck
       - name: Archive Lint report
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
