@@ -30,8 +30,6 @@ jobs:
         run: ./signing/decrypt.sh
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-      - name: Debug keystore
-        run: keytool -genkey -v -keystore ./MXApp/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
       - name: Build project
         run: ./gradlew assembleDebug
         env:
