@@ -35,8 +35,8 @@ jobs:
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
           GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
-#      - name: Run tests
-#        run: ./gradlew test
+      #      - name: Run tests
+      #        run: ./gradlew test
       - name: cleanup
         run: ./signing/cleanup.sh
   TestPro:
@@ -90,14 +90,14 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
-          name: MXPro-Screenshots
+          name: MXPro-Screenshots-${{ github.head_ref || github.ref_name }}
           path: |
             MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
       - name: Archive Espresso results
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
-          name: MXPro-Espresso
+          name: MXPro-Espresso-${{ github.head_ref || github.ref_name }}
           path: |
             MXApp/build/outputs/androidTest-results/connected
       - name: cleanup
@@ -119,5 +119,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: MX-Lint-report
+          name: MX-Lint-report-${{ github.head_ref || github.ref_name }}
           path: ./**/build/reports/lint-results*.html
