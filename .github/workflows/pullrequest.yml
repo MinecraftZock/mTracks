@@ -146,6 +146,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 17
+      - name: Run unit tests
+        run: ./gradlew test
       - name: gradle check
         run: ./gradlew lintDebug # ktlintCheck
       - name: Archive Lint report
