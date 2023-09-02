@@ -275,7 +275,7 @@ abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigati
         private const val BACK = "back"
 
         //        try {
-        //            context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+        //            context.getPackageManager().getPackageInfoCompat("com.facebook.katana", 0);
         //            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://groups/1435212740065304"));
         //        } catch (Exception e) {
         //            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/groups/1435212740065304"));

@@ -62,7 +62,7 @@ abstract class TrackingApplication : Application() {
         fun getVersion(context: Context): Long {
             var version = 0
             try {
-                val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+                val pInfo = context.packageManager.getPackageInfoCompat(context.packageName, 0)
                 version = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     try {
                         pInfo.longVersionCode.toInt()
@@ -83,7 +83,7 @@ abstract class TrackingApplication : Application() {
         fun getVersionName(context: Context): String {
             var version = ""
             try {
-                val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+                val pInfo = context.packageManager.getPackageInfoCompat(context.packageName, 0)
                 version = pInfo.versionName
             } catch (ignored: NameNotFoundException) {
             }
@@ -91,4 +91,5 @@ abstract class TrackingApplication : Application() {
             return version
         }
     }
+
 }
