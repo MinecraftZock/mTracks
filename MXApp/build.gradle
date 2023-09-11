@@ -21,6 +21,13 @@ def commitSHA1 = 'COMMIT_SHA1'
 def pushServerSleep = 'PUSH_SERVER_SLEEP'
 def unixTime = 'UNIX_TIME_CREATED'
 
+def keystorePropertiesFile = rootProject.file("signing/keystore.properties");
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+
 static def getLatestGitHash() {
     def process = "git rev-parse --short HEAD".execute()
     return process.text.toString().trim()
@@ -109,9 +116,9 @@ android {
         }
         release {
             storeFile file('../signing/release.keystore')
-            storePassword System.getenv("KEYSTORE_PASS")
-            keyAlias System.getenv("ALIAS_NAME")
-            keyPassword System.getenv("ALIAS_PASS")
+            storePassword keystoreProperties.getProperty('storePassword')
+            keyAlias keystoreProperties.getProperty('keyAlias')
+            keyPassword keystoreProperties.getProperty('keyPassword')
         }
     }
     packagingOptions {
