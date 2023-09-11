@@ -11,6 +11,12 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+def keystorePropertiesFile = rootProject.file("signing/keystore.properties");
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 def mapKey = System.getenv("releaseKey") ? System.getenv("releaseKey") : "dummy"
 def backendKey = "BACKEND_PROD_URL"
 def backendUrl = System.getenv(backendKey) ? System.getenv(backendKey) : "http://backend.org"
@@ -20,12 +26,6 @@ def SHOW_WEATHER = 'SHOW_WEATHER'
 def commitSHA1 = 'COMMIT_SHA1'
 def pushServerSleep = 'PUSH_SERVER_SLEEP'
 def unixTime = 'UNIX_TIME_CREATED'
-
-def keystorePropertiesFile = rootProject.file("signing/keystore.properties");
-def keystoreProperties = new Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
 
 
 static def getLatestGitHash() {
