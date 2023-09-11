@@ -23,6 +23,7 @@ pushd signing
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ~/.android/debug.keystore -out ./signing/debug.keystore.enc
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./MXApp/google-services.json -out ./MXApp/google-services.json.enc
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/Surveilance-playstore.json -out ./signing/Surveilance-playstore.json.enc
+#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/keystore.properties -out ./signing/keystore.properties.enc
 
 # shellcheck disable=SC2038
 find . -name "*.keystore.enc" | xargs ls -la
@@ -41,5 +42,7 @@ echo google-services.json
 openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in ../MXApp/google-services.json.enc -out ../MXApp/google-services.json
 echo Surveilance-playstore.json
 openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in Surveilance-playstore.json.enc -out Surveilance-playstore.json
+echo keystore.properties
+openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in keystore.properties.enc -out keystore.properties
 
 popd 1>/dev/null

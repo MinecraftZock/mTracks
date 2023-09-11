@@ -28,3 +28,4 @@ google-services.json
 release.keystore
 debug.keystore
 Surveilance-playstore.json
+keystore.properties
