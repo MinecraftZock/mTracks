@@ -17,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def mapKey = System.getenv("releaseKey") ? System.getenv("releaseKey") : "dummy"
+def mapKey = keystoreProperties.getProperty('mapKey') ? keystoreProperties.getProperty('mapKey') : "dummy"
 def backendKey = "BACKEND_PROD_URL"
 def backendUrl = System.getenv(backendKey) ? System.getenv(backendKey) : "http://backend.org"
 
