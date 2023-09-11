@@ -19,7 +19,7 @@ if (keystorePropertiesFile.exists()) {
 
 def mapKey = keystoreProperties.getProperty('mapKey') ? keystoreProperties.getProperty('mapKey') : "dummy"
 def backendKey = "BACKEND_PROD_URL"
-def backendUrl = System.getenv(backendKey) ? System.getenv(backendKey) : "http://backend.org"
+def backendUrl = keystoreProperties.getProperty(backendKey) ? keystoreProperties.getProperty(backendKey) : "http://backend.org"
 
 def httpLoggingLevel = 'HTTP_LOGGING_LEVEL'
 def SHOW_WEATHER = 'SHOW_WEATHER'
