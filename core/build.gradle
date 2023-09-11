@@ -32,10 +32,9 @@ dependencies {
 }
 
 android {
-    compileSdkVersion defaultCompileSdkVersion
-
     defaultConfig {
         minSdkVersion defaultMinSdkVersion
+        compileSdk defaultCompileSdkVersion
         targetSdkVersion defaultTargetSdkVersion
         consumerProguardFiles 'proguard-core.txt'
     }
