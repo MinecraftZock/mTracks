@@ -77,17 +77,16 @@ static void pushTag() {
 }
 
 android {
-
-    compileSdkVersion defaultCompileSdkVersion
-
     defaultConfig {
+        compileSdk defaultCompileSdkVersion
+        targetSdkVersion defaultTargetSdkVersion
+
         versionCode getGitCommitCount()
         minSdkVersion defaultMinSdkVersion
         versionName getVersion()
 
         resValue "string", "GOOGLE_MAP_API_KEY", mapKey.toString()
         resValue "string", backendKey, backendUrl.toString()
-        targetSdkVersion defaultTargetSdkVersion
         buildConfigField "Boolean", SHOW_WEATHER, "true"
         buildConfigField "String", httpLoggingLevel, "\"NONE\""  //NONE, BASIC, HEADERS, BODY
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
