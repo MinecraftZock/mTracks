@@ -47,7 +47,6 @@ jobs:
         run: ./gradlew :MXApp:assembleRelease
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
       - name: Publish Free
         run: ./gradlew :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
       - name: Publish Pad

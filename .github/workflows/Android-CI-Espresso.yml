@@ -32,7 +32,6 @@ jobs:
         run: ./gradlew assembleDebug
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
       #      - name: Run tests
       #        run: ./gradlew test
       - name: cleanup
@@ -73,7 +72,6 @@ jobs:
         run: ./gradlew :MXApp:assemblePaidDebug
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-          GOOGLE_MAP_API_KEY: ${{ secrets.GOOGLE_MAP_API_KEY }}
       - name: Run instrumentation tests
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
