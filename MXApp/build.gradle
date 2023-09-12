@@ -17,6 +17,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// TODO redundant code, same like RxCommLib
 def mapKey = keystoreProperties.getProperty('mapKey') ? keystoreProperties.getProperty('mapKey') : "dummy"
 def backendKey = "BACKEND_PROD_URL"
 def backendUrl = keystoreProperties.getProperty(backendKey) ? keystoreProperties.getProperty(backendKey) : "http://backend.org"

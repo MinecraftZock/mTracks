@@ -3,8 +3,15 @@ plugins {
     id 'kotlin-android'
 }
 
+// TODO redundant code, same like MxApp
+def keystorePropertiesFile = rootProject.file("signing/keystore.properties");
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 def backendKey = "BACKEND_PROD_URL"
-def backendUrl = System.getenv(backendKey) ? System.getenv(backendKey) : "http://backend.org"
+def backendUrl = keystoreProperties.getProperty(backendKey) ? keystoreProperties.getProperty(backendKey) : "http://backend.org"
 
 dependencies {
     implementation project(':commonLib')
