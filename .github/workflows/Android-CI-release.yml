@@ -48,9 +48,9 @@ jobs:
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Publish Free
-        run: ./gradlew :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
-      - name: Publish Pad
-        run: ./gradlew :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=alpha
+        run: ./gradlew :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=production
+      - name: Publish Paid
+        run: ./gradlew :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=production
       - name: Publish Admin
         run: ./gradlew :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
       - name: Create Release
