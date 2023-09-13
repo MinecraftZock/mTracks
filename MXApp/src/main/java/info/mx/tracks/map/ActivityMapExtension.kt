@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
+import com.sothree.slidinguppanel.PanelState
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.DeviceTools
@@ -91,19 +92,19 @@ class ActivityMapExtension : ActivityDrawerBase() {
         }
     }
 
-    fun setFabPosition(panelState: SlidingUpPanelLayout.PanelState, headerHeight: Int, position: Float) {
+    fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {
         when (panelState) {
-            SlidingUpPanelLayout.PanelState.EXPANDED -> Unit
-            SlidingUpPanelLayout.PanelState.COLLAPSED -> {
+            PanelState.EXPANDED -> Unit
+            PanelState.COLLAPSED -> {
                 fabMenu?.visibility = View.VISIBLE
                 fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, headerHeight + fabPadding)
             }
-            SlidingUpPanelLayout.PanelState.ANCHORED -> fabMenu?.visibility = View.VISIBLE
-            SlidingUpPanelLayout.PanelState.HIDDEN -> {
+            PanelState.ANCHORED -> fabMenu?.visibility = View.VISIBLE
+            PanelState.HIDDEN -> {
                 fabMenu?.visibility = View.GONE
                 fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, fabPadding)
             }
-            SlidingUpPanelLayout.PanelState.DRAGGING -> {
+            PanelState.DRAGGING -> {
                 fabMenu?.close(false)
                 fabMenu?.alpha = 1 - position
                 fabMenu?.setPadding(
