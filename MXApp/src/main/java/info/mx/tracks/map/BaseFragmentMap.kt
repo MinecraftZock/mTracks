@@ -35,9 +35,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.maps.android.PolyUtil
 import com.robotoworks.mechanoid.db.SQuery
+import com.sothree.slidinguppanel.PanelSlideListener
+import com.sothree.slidinguppanel.PanelState
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
