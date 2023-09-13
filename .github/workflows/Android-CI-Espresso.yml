@@ -7,6 +7,20 @@ on:
   pull_request:
 
 jobs:
+  env-job:
+    runs-on: ubuntu-latest
+    outputs:
+      modified-branch-name: ${{ steps.env.outputs.MODIFIED_BRANCH_NAME }}
+    name: Modify branch name
+    steps:
+      - name: Sets MODIFIED_BRANCH_NAME
+        id: env
+        env:
+          name: "${{env.BRANCH_NAME}}"
+        run: |
+          echo "MODIFIED_BRANCH_NAME=${name//\//-}" >> ${GITHUB_OUTPUT}
+          cat ${GITHUB_OUTPUT}
+
   BuildFlavors:
     name: Build All and test JDK
     runs-on: macOS-latest
@@ -39,6 +53,8 @@ jobs:
   TestPro:
     name: Test Pro JDK ${{ matrix.java_version }} ${{ matrix.api }} ${{ matrix.tag }} ${{ matrix.abi }}
     runs-on: macOS-latest
+    needs:
+      - env-job
     strategy:
       fail-fast: false
       matrix:
@@ -57,6 +73,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.6.0
+      - name: show envs
+        run: |
+          echo ${{ needs.env-job.outputs.modified-branch-name }}
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v3
         with:
@@ -86,14 +105,14 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
-          name: MXPro-Screenshots-${{ github.head_ref || github.ref_name }}
+          name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}
           path: |
             MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
       - name: Archive Espresso results
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
-          name: MXPro-Espresso-${{ github.head_ref || github.ref_name }}
+          name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}
           path: |
             MXApp/build/outputs/androidTest-results/connected
       - name: cleanup
@@ -101,9 +120,14 @@ jobs:
   Check:
     name: Check
     runs-on: ubuntu-latest
+    needs:
+      - env-job
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: show envs
+        run: |
+          echo ${{ needs.env-job.outputs.modified-branch-name }}
       - uses: gradle/wrapper-validation-action@v1
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v3.6.0
@@ -116,5 +140,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: MX-Lint-report-${{ github.head_ref || github.ref_name }}
+          name: MX-Lint-report-${{ needs.env-job.outputs.modified-branch-name }}
           path: ./**/build/reports/lint-results*.html
