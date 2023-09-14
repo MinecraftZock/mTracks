@@ -246,7 +246,7 @@ dependencies {
     implementation "androidx.room:room-testing:$room"
 
     implementation 'com.github.hannesa2:ChangeLog:3.5'
-    implementation 'com.github.AppDevNext.Logcat:LogcatCrashlyticLib:2.12'
+    implementation 'com.github.AppDevNext.Logcat:LogcatCrashlyticLib:2.13'
 
     // core
     implementation 'com.github.hannesa2:mechanoid:4.3'
