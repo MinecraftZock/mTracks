@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * [Gist](https://gist.github.com/skyfishjy/443b7448f59be978bc59)
  */
-abstract class CursorRecyclerViewAdapter<VH : RecyclerView.ViewHolder?>(var cursor: Cursor?) : RecyclerView.Adapter<VH>() {
+abstract class CursorRecyclerViewAdapter<VH : RecyclerView.ViewHolder>(var cursor: Cursor?) : RecyclerView.Adapter<VH>() {
 
     private var dataValid: Boolean
     private var rowIdColumn: Int

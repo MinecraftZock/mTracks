@@ -27,7 +27,7 @@ import kotlin.math.roundToInt
  * [Gist](https://gist.github.com/skyfishjy/443b7448f59be978bc59)
  */
 class ImageCursorAdapter(private val activity: Activity, cursor: Cursor?, private val size: Int, private val openDetailActivity: Boolean) :
-    CursorRecyclerViewAdapter<ImageCursorAdapter.ViewHolder?>(cursor) {
+    CursorRecyclerViewAdapter<ImageCursorAdapter.ViewHolder>(cursor) {
 
     private var trackId: Long = 0
 
@@ -45,13 +45,13 @@ class ImageCursorAdapter(private val activity: Activity, cursor: Cursor?, privat
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder?, cursor: Cursor?) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, cursor: Cursor?) {
         val record = PicturesRecord.fromCursor(cursor)
         trackId = SQuery.newQuery().expr(Tracks.REST_ID, SQuery.Op.EQ, record.trackRestId).firstLong(Tracks.CONTENT_URI, Tracks._ID)
-        val imgView = viewHolder?.imageView
-        imgView?.setTag(R.string.HLIST_REST_ID, record.restId)
-        imgView?.setTag(R.string.HLIST_POSITION, cursor!!.position)
-        imgView?.setOnClickListener { v: View ->
+        val imgView = viewHolder.imageView
+        imgView.setTag(R.string.HLIST_REST_ID, record.restId)
+        imgView.setTag(R.string.HLIST_POSITION, cursor!!.position)
+        imgView.setOnClickListener { v: View ->
             if (openDetailActivity) {
                 openImageSlideActivity(v.getTag(R.string.HLIST_REST_ID) as Long)
             }
@@ -64,11 +64,11 @@ class ImageCursorAdapter(private val activity: Activity, cursor: Cursor?, privat
                 )
             }
         }
-        val imgApproved = viewHolder?.imageApproved
-        imgApproved?.visibility = if (isAdmin && record.restId > 0) View.VISIBLE else View.GONE
-        imgApproved?.setImageLevel((record.approved + 1).toInt())
-        imgApproved?.tag = record.id
-        imgApproved?.setOnClickListener(object : On3StateClickListener() {
+        val imgApproved = viewHolder.imageApproved
+        imgApproved.visibility = if (isAdmin && record.restId > 0) View.VISIBLE else View.GONE
+        imgApproved.setImageLevel((record.approved + 1).toInt())
+        imgApproved.tag = record.id
+        imgApproved.setOnClickListener(object : On3StateClickListener() {
             override fun onClick(view: View) {
                 val pictureId = view.tag as Long
                 val recordP = PicturesRecord.get(pictureId)
