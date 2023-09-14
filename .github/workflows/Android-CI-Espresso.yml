@@ -30,7 +30,7 @@ jobs:
         java_version: [ 17 ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.6.0
+        uses: actions/checkout@v4
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v3
         with:
@@ -72,7 +72,7 @@ jobs:
     #            java_version: 17
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.6.0
+        uses: actions/checkout@v4
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
@@ -124,7 +124,7 @@ jobs:
       - env-job
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
