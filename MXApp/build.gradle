@@ -28,55 +28,6 @@ def commitSHA1 = 'COMMIT_SHA1'
 def pushServerSleep = 'PUSH_SERVER_SLEEP'
 def unixTime = 'UNIX_TIME_CREATED'
 
-
-static def getLatestGitHash() {
-    def process = "git rev-parse --short HEAD".execute()
-    return process.text.toString().trim()
-}
-
-static def getGitCommitCount() {
-    def process = "git rev-list HEAD --count".execute()
-    return process.text.toInteger() + 2109
-}
-
-static def getUnixCreateTime() {
-    def process = "date +%s".execute()
-    return process.text.toString().trim()
-}
-
-static def getTag() {
-    def process = "date +%y-%m".execute()
-    def version = process.text.toString().trim()
-    return version + "." + getGitCommitCount()
-}
-
-static def getVersion() {
-    return getTag() + "-" + getLatestGitHash()
-}
-
-static void newTag() {
-    println "Add new tag"
-    def processLastCommitMessage = "git log -1 --pretty=%B".execute()
-    def message = processLastCommitMessage.text.toString().trim()
-    println "new message -> " + message
-    def tagCommand = "git tag -a " + getTag() + " -m \"" + message + "\""
-    println "command=" + tagCommand
-
-    def sOut = new StringBuilder(), sErr = new StringBuilder()
-    def process = ["bash", "-c", tagCommand, "-m", message].execute()
-    process.consumeProcessOutput(sOut, sErr)
-    process.waitForOrKill(1000)
-    println "out> $sOut err> $sErr"
-}
-
-static void pushTag() {
-    def sOut = new StringBuilder(), sErr = new StringBuilder()
-    def process = "git push --tags".execute()
-    process.consumeProcessOutput(sOut, sErr)
-    process.waitForOrKill(2000)
-    println "out> $sOut err> $sErr"
-}
-
 android {
     defaultConfig {
         compileSdk defaultCompileSdkVersion
@@ -343,4 +294,52 @@ tasks.register("tagNewVersion") {
 play {
     serviceAccountCredentials = file("../signing/Surveilance-playstore.json")
     track = 'alpha'
+}
+
+static def getLatestGitHash() {
+    def process = "git rev-parse --short HEAD".execute()
+    return process.text.toString().trim()
+}
+
+static def getGitCommitCount() {
+    def process = "git rev-list HEAD --count".execute()
+    return process.text.toInteger() + 2109
+}
+
+static def getUnixCreateTime() {
+    def process = "date +%s".execute()
+    return process.text.toString().trim()
+}
+
+static def getTag() {
+    def process = "date +%y-%m".execute()
+    def version = process.text.toString().trim()
+    return version + "." + getGitCommitCount()
+}
+
+static def getVersion() {
+    return getTag() + "-" + getLatestGitHash()
+}
+
+static void newTag() {
+    println "Add new tag"
+    def processLastCommitMessage = "git log -1 --pretty=%B".execute()
+    def message = processLastCommitMessage.text.toString().trim()
+    println "new message -> " + message
+    def tagCommand = "git tag -a " + getTag() + " -m \"" + message + "\""
+    println "command=" + tagCommand
+
+    def sOut = new StringBuilder(), sErr = new StringBuilder()
+    def process = ["bash", "-c", tagCommand, "-m", message].execute()
+    process.consumeProcessOutput(sOut, sErr)
+    process.waitForOrKill(1000)
+    println "out> $sOut err> $sErr"
+}
+
+static void pushTag() {
+    def sOut = new StringBuilder(), sErr = new StringBuilder()
+    def process = "git push --tags".execute()
+    process.consumeProcessOutput(sOut, sErr)
+    process.waitForOrKill(2000)
+    println "out> $sOut err> $sErr"
 }
