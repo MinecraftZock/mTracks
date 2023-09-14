@@ -14,17 +14,17 @@ import info.mx.tracks.R
  * [Gist](https://gist.github.com/tuanchauict/c6c1eda617523de224c5)
  */
 class TestHeaderCursorAdapter(val context: Context, cursor: Cursor?, sections: List<Section>?) :
-    HeaderCursorRecyclerViewAdapter<RecyclerView.ViewHolder?>(cursor, sections) {
+    HeaderCursorRecyclerViewAdapter<RecyclerView.ViewHolder>(cursor, sections) {
 
     internal inner class HeaderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var textView: TextView = itemView.findViewById(R.id.text)
+        private var textView: TextView = itemView.findViewById(R.id.text)
         fun setHeader(header: String?) {
             textView.text = header
         }
     }
 
     internal inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var textView: TextView = itemView.findViewById(R.id.text)
+        private var textView: TextView = itemView.findViewById(R.id.text)
 
         @SuppressLint("SetTextI18n")
         fun setName(name: String) {
@@ -32,11 +32,11 @@ class TestHeaderCursorAdapter(val context: Context, cursor: Cursor?, sections: L
         }
     }
 
-    override fun onBindSectionHeaderViewHolder(headerHolder: RecyclerView.ViewHolder?, header: String?) {
+    override fun onBindSectionHeaderViewHolder(headerHolder: RecyclerView.ViewHolder, header: String?) {
         (headerHolder as HeaderHolder).setHeader(header)
     }
 
-    override fun onBindItemViewHolder(itemHolder: RecyclerView.ViewHolder?, cursor: Cursor?) {
+    override fun onBindItemViewHolder(itemHolder: RecyclerView.ViewHolder, cursor: Cursor?) {
         (itemHolder as ItemHolder).setName("Position = " + cursor?.position)
     }
 

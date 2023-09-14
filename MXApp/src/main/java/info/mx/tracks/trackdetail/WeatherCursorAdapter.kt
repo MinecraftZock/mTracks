@@ -26,7 +26,7 @@ import kotlin.math.roundToInt
 /**
  * [Gist](https://gist.github.com/skyfishjy/443b7448f59be978bc59)
  */
-class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecyclerViewAdapter<WeatherCursorAdapter.ViewHolder?>(cursor) {
+class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecyclerViewAdapter<WeatherCursorAdapter.ViewHolder>(cursor) {
     private val gson: Gson = Gson()
     private var dayList: ArrayList<Int>? = null
 
@@ -45,7 +45,7 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
     }
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
-    override fun onBindViewHolder(viewHolder: ViewHolder?, cursor: Cursor?) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, cursor: Cursor?) {
         val recWeather = WeatherRecord.fromCursor(cursor)
         if (recWeather.type == "D") {
             val timeDay = gson.fromJson(recWeather.content, TimeDay::class.java)
@@ -53,21 +53,21 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
             if (!MxPreferences.getInstance().unitsKm) {
                 sdf = SimpleDateFormat("E MM.dd")
             }
-            viewHolder?.textDate?.text = sdf.format(Date(timeDay.dt * 1000))
-            viewHolder?.imageWeather?.setImageResource(getWeatherIcon(timeDay.weather))
+            viewHolder.textDate.text = sdf.format(Date(timeDay.dt * 1000))
+            viewHolder.imageWeather.setImageResource(getWeatherIcon(timeDay.weather))
             if (timeDay.temp != null) {
-                viewHolder?.textTemp?.text = timeDay.temp.day.roundToInt().toString() + "°"
+                viewHolder.textTemp.text = timeDay.temp.day.roundToInt().toString() + "°"
             } else {
-                viewHolder?.textTemp?.text = ""
+                viewHolder.textTemp.text = ""
             }
             if (timeDay.weather != null && timeDay.weather.size > 0) {
-                viewHolder?.textText?.text = timeDay.weather[0].description
+                viewHolder.textText.text = timeDay.weather[0].description
             } else {
-                viewHolder?.textText?.text = ""
+                viewHolder.textText.text = ""
             }
             val isOpen = isDayOpen(timeDay.dt)
-            viewHolder?.imageOpen?.visibility = if (isOpen) View.VISIBLE else View.GONE
-            viewHolder?.textAddIt?.visibility = View.GONE
+            viewHolder.imageOpen.visibility = if (isOpen) View.VISIBLE else View.GONE
+            viewHolder.textAddIt.visibility = View.GONE
         } else if (recWeather.type == "H") {
             Timber.d("TimeHour:%s", recWeather.content)
             val timeHour = gson.fromJson(recWeather.content, TimeHour::class.java)
@@ -75,22 +75,22 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
             if (!MxPreferences.getInstance().unitsKm) {
                 sdf = SimpleDateFormat("E MM.dd\nhh:mm a")
             }
-            viewHolder?.textDate?.text = sdf.format(Date(timeHour.dt * 1000))
-            viewHolder?.imageWeather?.setImageResource(getWeatherIcon(timeHour.weather))
+            viewHolder.textDate.text = sdf.format(Date(timeHour.dt * 1000))
+            viewHolder.imageWeather.setImageResource(getWeatherIcon(timeHour.weather))
             if (timeHour.main != null) {
-                viewHolder?.textTemp?.text = timeHour.main.temp.roundToInt().toString() + "°"
+                viewHolder.textTemp.text = timeHour.main.temp.roundToInt().toString() + "°"
             } else {
-                viewHolder?.textTemp?.text = ""
+                viewHolder.textTemp.text = ""
             }
             if (timeHour.weather != null && timeHour.weather.size > 0) {
-                viewHolder?.textTemp?.text = timeHour.weather[0].description
+                viewHolder.textTemp.text = timeHour.weather[0].description
             } else {
-                viewHolder?.textTemp?.text = ""
+                viewHolder.textTemp.text = ""
             }
             val isOpen = isDayOpen(timeHour.dt)
-            viewHolder?.imageOpen?.visibility =
+            viewHolder.imageOpen.visibility =
                 if (isOpen) View.VISIBLE else View.GONE
-            viewHolder?.textAddIt?.visibility = View.GONE
+            viewHolder.textAddIt.visibility = View.GONE
         }
     }
 

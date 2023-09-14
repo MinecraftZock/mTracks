@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * [Gist](https://gist.github.com/tuanchauict/c6c1eda617523de224c5)
  */
-abstract class HeaderCursorRecyclerViewAdapter<VH : RecyclerView.ViewHolder?>(cursor: Cursor?, sections: List<Section>?) :
+abstract class HeaderCursorRecyclerViewAdapter<VH : RecyclerView.ViewHolder>(cursor: Cursor?, sections: List<Section>?) :
     CursorRecyclerViewAdapter<VH>(cursor) {
 
     class Section(var itemCount: Int, var text: String)
@@ -50,7 +50,7 @@ abstract class HeaderCursorRecyclerViewAdapter<VH : RecyclerView.ViewHolder?>(cu
     }
 
     override fun onBindViewHolder(viewHolder: VH, position: Int) {
-        if (viewHolder!!.itemViewType == TYPE_HEADER) {
+        if (viewHolder.itemViewType == TYPE_HEADER) {
             onBindSectionHeaderViewHolder(viewHolder, sectionsIndexer[position])
         } else {
             cursor!!.moveToPosition(position - countNumberSectionsBefore(position))

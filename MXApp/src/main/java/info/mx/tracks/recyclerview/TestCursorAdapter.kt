@@ -12,7 +12,7 @@ import info.mx.tracks.R
  * Created by skyfishjy on 10/31/14.
  * [Gist](https://gist.github.com/skyfishjy/443b7448f59be978bc59)
  */
-class TestCursorAdapter(cursor: Cursor) : CursorRecyclerViewAdapter<TestCursorAdapter.ViewHolder?>(cursor) {
+class TestCursorAdapter(cursor: Cursor) : CursorRecyclerViewAdapter<TestCursorAdapter.ViewHolder>(cursor) {
 
     class ViewHolder internal constructor(view: View) : RecyclerView.ViewHolder(view) {
         var imageView: ImageView = view.findViewById(R.id.imagePicture)
@@ -24,8 +24,8 @@ class TestCursorAdapter(cursor: Cursor) : CursorRecyclerViewAdapter<TestCursorAd
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder?, cursor: Cursor?) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, cursor: Cursor?) {
         val record = MyListItem.fromCursor(cursor)!!
-        viewHolder?.imageView?.contentDescription = record.name
+        viewHolder.imageView.contentDescription = record.name
     }
 }
