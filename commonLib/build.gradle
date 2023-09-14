@@ -29,6 +29,6 @@ dependencies {
     api('com.github.matomo-org:matomo-sdk-android:v4.1.2') {
         exclude group: 'com.jakewharton.timber', module: 'timber'
     }
-    implementation "androidx.core:core-ktx:1.10.0"
+    implementation "androidx.core:core-ktx:1.12.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
