@@ -28,9 +28,9 @@ plugins {
 println "Gradle uses Java ${Jvm.current()}"
 
 ext {
-    defaultCompileSdkVersion = 33
+    defaultCompileSdkVersion = 34
     defaultMinSdkVersion = 21
-    defaultTargetSdkVersion = 33
+    defaultTargetSdkVersion = 34
     koin_version = "3.3.2"
     AndroidX = "1.6.1"
     gsonVersion = "2.10.1"
