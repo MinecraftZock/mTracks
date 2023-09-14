@@ -70,7 +70,7 @@ allprojects {
 
     configurations.all {
         resolutionStrategy {
-            force("com.google.auto.value:auto-value-annotations:1.6.3")
+            force("com.google.auto.value:auto-value-annotations:1.10.4")
         }
     }
 }
