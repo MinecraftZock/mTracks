@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.view.*
@@ -17,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -442,6 +444,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                 }
                 Timber.i("onLoadFinished Tracks:${cursor.count} loader:${loader.id}")
             }
+
             LOADER_PROGRESS -> {
                 cursor.moveToFirst()
                 if (cursor.count > 0 && cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != null &&
@@ -466,6 +469,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             LOADER_TRACKS -> if (sortOrder != TracksGesSum.DISTANCE2LOCATION) {
                 mAdapter!!.swapCursor(null)
             }
+
             LOADER_PROGRESS -> binding.lyImportProgress.visibility = View.GONE
         }
     }
@@ -483,7 +487,10 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         diskReceiver = DiskReceiver()
         val filter = IntentFilter()
         filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW)
-        requireActivity().registerReceiver(diskReceiver, filter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireActivity().registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else
+            requireActivity().registerReceiver(diskReceiver, filter)
 
         if (adapterTracksSort == null) {
             loaderManager.restartLoader(LOADER_TRACKS, this.arguments, this)

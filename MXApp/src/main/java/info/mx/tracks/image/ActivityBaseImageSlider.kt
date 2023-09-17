@@ -1,9 +1,11 @@
 package info.mx.tracks.image
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,6 +20,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.DiskReceiver
 import info.mx.tracks.R
 import info.mx.tracks.databinding.ActivityImageSlideBinding
+import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
 import info.mx.tracks.sqlite.TracksRecord
@@ -136,7 +139,10 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
         diskReceiver = DiskReceiver()
         val filter = IntentFilter()
         filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW)
-        registerReceiver(diskReceiver, filter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else
+            registerReceiver(diskReceiver, filter)
         supportLoaderManager.initLoader(LOADER_PICTURE_THUMBS, null, this)
     }
 
