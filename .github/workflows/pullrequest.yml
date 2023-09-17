@@ -65,9 +65,6 @@ jobs:
         abi: [ x86_64 ]
         tag: [ 'google_apis' ]
     #        include:
-    #          #          - api: 31
-    #          #            abi: x86_64
-    #          #            tag: 'google_apis'
     #          - api: 30
     #            abi: x86_64
     #            tag: 'google_apis'
