@@ -54,12 +54,13 @@ jobs:
         run: ./signing/cleanup.sh
   TestPro:
     name: Test Pro ${{ matrix.api }} ${{ matrix.abi }} ${{ matrix.tag }}
-    runs-on: macOS-latest
+    runs-on: ${{ matrix.os }}
     needs:
       - env-job
     strategy:
       fail-fast: false
       matrix:
+        os: [ macOS-latest ]
         java_version: [ 17 ]
         api: [ 28 ]
         abi: [ x86_64 ]
