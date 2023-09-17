@@ -89,10 +89,6 @@ jobs:
         run: ./signing/decrypt.sh
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-      - name: Build project
-        run: ./gradlew :MXApp:assemblePaidDebug
-        env:
-          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Run instrumentation tests
         uses: hannesa2/action-android/emulator-run-cmd@0.1.4.10
         with:
