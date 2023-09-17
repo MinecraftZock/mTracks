@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
+import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.multidex.MultiDex
@@ -15,19 +16,19 @@ import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
 import info.hannes.timber.FileLoggingTree
-import info.mx.tracks.ops.OpSyncFromServerOperation
-import info.mx.tracks.ops.google.OpGetRouteOperation
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.room.MxMemDatabase
-import info.mx.tracks.service.LocationJobService
-import info.mx.tracks.service.LocationRecalculateService
-import info.mx.tracks.sqlite.MxInfoDBOpenHelper
 import info.mx.tracks.koin.appModule
 import info.mx.tracks.koin.dbModule
 import info.mx.tracks.koin.flavorModule
 import info.mx.tracks.koin.restModule
+import info.mx.tracks.ops.OpSyncFromServerOperation
+import info.mx.tracks.ops.google.OpGetRouteOperation
+import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.MxMemDatabase
+import info.mx.tracks.service.LocationJobService
+import info.mx.tracks.service.LocationRecalculateService
 import info.mx.tracks.service.RecalculateDistance
+import info.mx.tracks.sqlite.MxInfoDBOpenHelper
 import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -71,7 +72,10 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
         RxJavaPlugins.setErrorHandler { throwable -> Timber.e(throwable) }
 
-        registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS), Context.RECEIVER_NOT_EXPORTED)
+        } else
+            registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS))
 
         LocationJobService.scheduleJob(applicationContext)
 

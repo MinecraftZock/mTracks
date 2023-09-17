@@ -1,9 +1,11 @@
 package info.hannes.mxadmin.picture;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +14,7 @@ import android.view.View;
 import com.robotoworks.mechanoid.db.SQuery;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -172,7 +175,10 @@ public abstract class ActivityBaseImageStageSlider extends ActivityRx implements
         diskReceiver = new DiskReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW);
-        registerReceiver(diskReceiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else
+            registerReceiver(diskReceiver, filter);
         getSupportLoaderManager().initLoader(LOADER_PICTURE_THUMBS, null, this);
     }
 

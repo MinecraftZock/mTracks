@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -145,7 +146,10 @@ class FragmentTrackListTab : FragmentBase() {
         super.onResume()
 
         val filterIUpdate = IntentFilter(RecalculateDistance.DISTANCE_NEW)
-        requireActivity().registerReceiver(registerDistanceReceiver, filterIUpdate)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireActivity().registerReceiver(registerDistanceReceiver, filterIUpdate, Context.RECEIVER_NOT_EXPORTED)
+        } else
+            requireActivity().registerReceiver(registerDistanceReceiver, filterIUpdate)
     }
 
     override fun onPause() {
