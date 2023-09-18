@@ -32,7 +32,8 @@ class ActivityTrackListTest {
 
     @Test
     fun smokeTestSimplyStart() {
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+        // This is the first time settings activity with always changed version number
+        //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
         Espresso.pressBack()
         Thread.sleep(4000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
