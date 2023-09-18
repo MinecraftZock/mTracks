@@ -27,14 +27,11 @@ public abstract class AbstractOpPostRatingsOperation extends Operation {
 		
 		@Override
 		public Intent findMatchOnConstraint(OperationServiceBridge bridge, Intent intent) {
-			Intent existingRequest = bridge.findPendingRequestByActionWithExtras(AbstractOpPostRatingsOperation.ACTION_OP_POST_RATINGS, intent.getExtras());
-			
-			return existingRequest;
-			
+            return bridge.findPendingRequestByActionWithExtras(AbstractOpPostRatingsOperation.ACTION_OP_POST_RATINGS, intent.getExtras());
 		}
 	}
 	
-	public static final Intent newIntent() {
+	public static Intent newIntent() {
 		Intent intent = new Intent(ACTION_OP_POST_RATINGS);
 		intent.setClass(Mechanoid.getApplicationContext(), MxInfoService.class);
 		
