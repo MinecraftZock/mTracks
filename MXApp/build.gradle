@@ -203,7 +203,7 @@ dependencies {
     implementation 'com.github.hannesa2:mechanoid:4.3'
     implementation project(path: ':RxCommLib')
     implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+    implementation 'net.lingala.zip4j:zip4j:2.11.5'
     implementation 'com.github.hannesa2:android-emulator-detector:1.4.2'
     implementation "com.google.android.gms:play-services-maps:18.1.0"
     implementation "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
