@@ -66,6 +66,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         operationContext = context
         val webClient = MxCoreApplication.mxInfo
+        CountingIdlingResourceSingleton.increment()
 
         try {
             val trackCount = SQuery.newQuery().count(Tracks.CONTENT_URI)
@@ -111,6 +112,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
                 doCleanFromDecline()
 
                 MxPreferences.getInstance().edit().putLastSyncTime(System.currentTimeMillis()).apply()
+
+                CountingIdlingResourceSingleton.decrement()
             }
             LoggingHelper.setMessage("")
             val bundle = Bundle()
@@ -123,6 +126,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
                 LoggingHelper.setMessage(e.message)
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
+            CountingIdlingResourceSingleton.decrement()
             return OperationResult.error(e)
         } catch (e: Exception) {
             Timber.e(e)
@@ -132,6 +136,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             LoggingHelper.setMessage("")
+            CountingIdlingResourceSingleton.decrement()
             return OperationResult.error(e)
         }
 

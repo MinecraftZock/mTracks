@@ -60,17 +60,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macOS-latest ]
+        os: [ ARM64 ]
         java_version: [ 17 ]
-        api: [ 28 ]
-        abi: [ x86_64 ]
+        api: [ 34 ]
+        abi: [ arm64-v8a ]
         tag: [ 'google_apis' ]
-        include:
-          - os: ARM64
-            java_version: 17
-            api: 34
-            abi: arm64-v8a
-            tag: 'google_apis'
+#        include:
+#          - os: macOS-latest
+#            java_version: 17
+#            api: 28
+#            abi: x86_64
+#            tag: 'google_apis'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
