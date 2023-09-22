@@ -46,8 +46,6 @@ jobs:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Build project
         run: ./gradlew assembleDebug
-        env:
-          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       #      - name: Run tests
       #        run: ./gradlew test
       - name: cleanup
