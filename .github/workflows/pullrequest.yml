@@ -72,8 +72,10 @@ jobs:
 #            abi: x86_64
 #            tag: 'google_apis'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
@@ -82,6 +84,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: ${{ matrix.java_version }}
+      - name: prepare
+        run: brew install exiftool imagemagick
       - name: Install Android SDK
         uses: hannesa2/action-android/install-sdk@0.1.4.10
       - name: Decrypt keystore
@@ -112,6 +116,19 @@ jobs:
           name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}
           path: |
             MXApp/build/outputs/androidTest-results/connected
+      - name: Compare screenshots
+        run: |
+          ./signing/cleanup.sh
+          ls -la MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
+          cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ 14/* screenshotsToCompare
+          ./screenShotCompare.sh
+      - name: Archive screenshots diffs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: MXPro-diffs-${{ needs.env-job.outputs.modified-branch-name }}
+          path: |
+            screenshotDiffs
       - name: cleanup
         run: ./signing/cleanup.sh
   Check:
