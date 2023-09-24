@@ -102,7 +102,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
     private fun startLocationUpdates() {
 
         if (permissionHelper.hasLocationPermission()) {
-            val handlerThread = HandlerThread("my handlerthread")
+            val handlerThread = HandlerThread("location handlerthread")
             handlerThread.start()
             LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(requestDay, mLocationCallback!!, handlerThread.looper)
