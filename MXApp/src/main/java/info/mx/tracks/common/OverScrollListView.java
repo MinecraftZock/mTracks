@@ -30,6 +30,7 @@ public class OverScrollListView extends ListView {
 
     private void init() {
         setOverScrollMode(OVER_SCROLL_ALWAYS);
+        setScrollbarFadingEnabled(false);
     }
 
     @Override
