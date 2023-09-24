@@ -18,6 +18,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.HandlerThread
 import androidx.core.app.NotificationCompat
+import androidx.work.Configuration
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationCallback
@@ -54,6 +55,11 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
     private val isConnected = googleApiClient != null && googleApiClient!!.isConnected
 
     private val requestDay = REQUEST_DAY
+
+    init {
+        // need minimum 1000 job ids
+        Configuration.Builder().setJobSchedulerJobIdRange(0, 1000).build()
+    }
 
     override fun onStartJob(jobParam: JobParameters): Boolean {
         jobParameters = jobParam
