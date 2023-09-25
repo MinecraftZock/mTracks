@@ -15,7 +15,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
-import info.hannes.timber.FileLoggingTree
 import info.mx.tracks.koin.appModule
 import info.mx.tracks.koin.dbModule
 import info.mx.tracks.koin.flavorModule
@@ -125,7 +124,6 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
     final override fun setLogging2File(base: Context?) {
         @Suppress("ConstantConditionIf")
         if (BuildConfig.DEBUG) {
-            externalCacheDir?.let { FileLoggingTree(it).apply { Timber.plant(this) } }
             Timber.plant(DebugFormatTree())
         } else {
             FirebaseCrashlytics.getInstance().setCustomKey("VERSION_NAME", BuildConfig.VERSION_NAME)
