@@ -3,10 +3,6 @@ plugins {
     id 'kotlin-android'
 }
 
-dependencies {
-    api "com.google.code.gson:gson:${gsonVersion}"
-}
-
 android {
     defaultConfig {
         compileSdk defaultCompileSdkVersion
@@ -14,7 +10,6 @@ android {
         targetSdkVersion defaultTargetSdkVersion
         consumerProguardFiles 'proguard-RxCommLib.pro'
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -22,7 +17,6 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -33,5 +27,8 @@ android {
         abortOnError false
     }
     namespace 'info.mx.rxcommdata'
+}
 
+dependencies {
+    api "com.google.code.gson:gson:${gsonVersion}"
 }
