@@ -484,7 +484,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         googleApiClient?.let {
             if (it.isConnected && permissionHelper.hasLocationPermission()) {
                 val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                     DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, location)
                 }
             }
@@ -863,9 +863,11 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     googleApiClient?.let {
                         if (it.isConnected && permissionHelper.hasLocationPermission()) {
                             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                                Ops.execute(AbstractOpGetRouteOperation.newIntent(recordTrack!!.id, location.latitude, location.longitude))
-                                restartLastLocationDisplay(cursor, location)
+                            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                                location?.let {
+                                    Ops.execute(AbstractOpGetRouteOperation.newIntent(recordTrack!!.id, location.latitude, location.longitude))
+                                    restartLastLocationDisplay(cursor, location)
+                                }
                             }
                         }
                     }
@@ -1028,8 +1030,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     }
                 }
             } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    onLocationChanged(location)
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    location?.let { it: Location ->
+                        onLocationChanged(it)
+                    }
                 }
             }
         }
