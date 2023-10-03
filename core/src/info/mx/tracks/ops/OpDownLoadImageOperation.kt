@@ -53,6 +53,7 @@ internal class OpDownLoadImageOperation : AbstractOpDownLoadImageOperation(), Co
                 if (response.code() == 200) {
                     val file = File(fileTo)
                     val fileOutputStream = FileOutputStream(file)
+                    Timber.w("body=${response.body().toString()}")
                     IOUtils.write(response.body()!!.bytes(), fileOutputStream)
                     res = true
                 }

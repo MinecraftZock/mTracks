@@ -9,7 +9,7 @@ import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.TrackstageBrother
 
 class StepsBrotherAdapter : BaseAdapter() {
 
-    var steps = arrayOfNulls<Step>(3)
+    private var steps = arrayOfNulls<Step>(3)
 
     init {
         steps[0] = Step()
