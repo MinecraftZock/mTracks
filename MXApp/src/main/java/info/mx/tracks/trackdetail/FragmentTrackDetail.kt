@@ -84,6 +84,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentTrackDetailBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -740,33 +741,41 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var res = super.onOptionsItemSelected(item)
 
-        if (item.itemId == R.id.menu_track_edit) {
-            openEdit(recordId)
-            res = true
-        } else if (item.itemId == R.id.menu_event_add) {
-            addEvent()
-            res = true
-        } else if (item.itemId == R.id.menu_navigation) {
-            doOpenNavigation()
-            res = true
-        } else if (item.itemId == R.id.menu_detail_globus) {
-            val recTrack = TracksRecord.get(recordId)
-            if (recTrack != null) {
-                trackLoc = Location("trackloc")
-                trackLoc!!.latitude = SecHelper.entcryptXtude(recTrack.latitude)
-                trackLoc!!.longitude = SecHelper.entcryptXtude(recTrack.longitude)
-                doOpenMap(trackLoc!!)
+        when (item.itemId) {
+            R.id.menu_track_edit -> {
+                openEdit(recordId)
+                res = true
             }
-            res = true
-        } else if (item.itemId == R.id.menu_detail_radar) {
-            // TODO
-            res = false
-        } else if (item.itemId == R.id.menu_detail_share) {
-            doShare()
-            res = false
-        } else if (item.itemId == R.id.menu_favorit) {
-            toggleFavorite(item)
-            res = true
+            R.id.menu_event_add -> {
+                addEvent()
+                res = true
+            }
+            R.id.menu_navigation -> {
+                doOpenNavigation()
+                res = true
+            }
+            R.id.menu_detail_globus -> {
+                val recTrack = TracksRecord.get(recordId)
+                if (recTrack != null) {
+                    trackLoc = Location("trackloc")
+                    trackLoc!!.latitude = SecHelper.entcryptXtude(recTrack.latitude)
+                    trackLoc!!.longitude = SecHelper.entcryptXtude(recTrack.longitude)
+                    doOpenMap(trackLoc!!)
+                }
+                res = true
+            }
+            R.id.menu_detail_radar -> {
+                // TODO
+                res = false
+            }
+            R.id.menu_detail_share -> {
+                doShare()
+                res = false
+            }
+            R.id.menu_favorit -> {
+                toggleFavorite(item)
+                res = true
+            }
         }
         return res
     }
