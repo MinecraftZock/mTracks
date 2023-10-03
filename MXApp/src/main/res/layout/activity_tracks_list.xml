@@ -40,6 +40,7 @@
             android:src="@drawable/fab_add"/>
 
         <include
+            android:id="@+id/fab_layout"
             layout="@layout/layout_fab"
             android:visibility="gone"/>
 

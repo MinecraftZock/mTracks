@@ -9,7 +9,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.DeviceTools
@@ -18,6 +17,7 @@ import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentEmpty
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
+import info.mx.tracks.databinding.ActivityTracksListBinding
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.settings.ActivitySetting
@@ -34,12 +34,12 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
      */
     private var mTwoPane: Boolean = false
-    private var fabMenu: FloatingActionMenu? = null
-    private var fabSingle: FloatingActionButton? = null
 
     private val detailTagFragment: FragmentTrackDetailTab by lazy { supportFragmentManager.findFragmentByTag(FragmentTrackDetailTab.TAG) as FragmentTrackDetailTab }
 
     private lateinit var fragmentTrackListTab: FragmentTrackListTab
+
+    private lateinit var binding: ActivityTracksListBinding
 
     override fun onResume() {
         super.onResume()
@@ -52,31 +52,31 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tracks_list)
+        binding = ActivityTracksListBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         fragmentTrackListTab = supportFragmentManager.findFragmentByTag(FragmentTrackListTab.TAG) as FragmentTrackListTab
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        fabSingle = findViewById(R.id.fab_single)
-        fabSingle!!.setOnClickListener {
+        binding.fabSingle.setOnClickListener {
             val intentAddEdit = Intent(this@ActivityTrackList, ActivityTrackEdit::class.java)
             this@ActivityTrackList.startActivity(intentAddEdit)
         }
-        fabMenu = findViewById(R.id.menuFab)
-        fabMenu!!.setClosedOnTouchOutside(true)
+        binding.fabLayout.menuFab.setClosedOnTouchOutside(true)
 
         findViewById<View>(R.id.fabEvent).setOnClickListener {
-            fabMenu!!.close(false)
+            binding.fabLayout.menuFab.close(false)
             this@ActivityTrackList.detailTagFragment.addEvent()
         }
         findViewById<View>(R.id.fabPictures).setOnClickListener {
-            fabMenu!!.close(false)
+            binding.fabLayout.menuFab.close(false)
             this@ActivityTrackList.detailTagFragment.doPicturePick()
         }
         findViewById<View>(R.id.fabComment).setOnClickListener {
-            fabMenu!!.close(false)
+            binding.fabLayout.menuFab.close(false)
             this@ActivityTrackList.detailTagFragment.addRating()
         }
 
@@ -90,7 +90,6 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         } else if (cl.isFirstRun) {
             cl.fullLogDialog.show()
         }
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -140,8 +139,8 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
      */
     override fun onItemSelected(id: Long) {
         if (mTwoPane) {
-            fabSingle!!.visibility = View.GONE
-            fabMenu!!.visibility = View.VISIBLE
+            binding.fabSingle.visibility = View.GONE
+            binding.fabLayout.menuFab.visibility = View.VISIBLE
             // In two-pane mode, show the detail view in this activity by adding or replacing the detail fragment using a fragment transaction.
             val arguments = Bundle()
             arguments.putLong(RECORD_ID_LOCAL, id)
