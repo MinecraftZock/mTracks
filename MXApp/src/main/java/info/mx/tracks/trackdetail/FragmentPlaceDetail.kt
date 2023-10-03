@@ -39,7 +39,6 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)

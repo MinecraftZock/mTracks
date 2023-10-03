@@ -69,6 +69,8 @@ import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
 abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks,
@@ -107,7 +109,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
         override fun onPanelSlide(panel: View, slideOffset: Float) {
             val params = slidingBody!!.layoutParams
-            params.height = Math.round(panel.measuredHeight * slideOffset) // panel.getHeight(); //-height;
+            params.height = (panel.measuredHeight * slideOffset).roundToInt() // panel.getHeight(); //-height;
             slidingBody!!.layoutParams = params
             Timber.d("${panel.height}/${params.height} offset:$slideOffset")
             setFabPosition(PanelState.DRAGGING, slideOffset)
@@ -257,8 +259,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     return
                 }
                 for (location in locationResult.locations) {
-                    val recalcDistance = RecalculateDistance(requireContext())
-                    recalcDistance.recalculateTracks(location, "map")
+                    val recalculateDistance = RecalculateDistance(requireContext())
+                    recalculateDistance.recalculateTracks(location, "map")
 
                     headerView!!.setLocation(location)
                 }
@@ -366,8 +368,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     val markerAllLocation = mapMarker.position
                     val screeAllPosition = projection.toScreenLocation(markerAllLocation)
 
-                    val diffX = Math.abs(screenPosition.x - screeAllPosition.x)
-                    val diffY = Math.abs(screenPosition.y - screeAllPosition.y)
+                    val diffX = abs(screenPosition.x - screeAllPosition.x)
+                    val diffY = abs(screenPosition.y - screeAllPosition.y)
                     if (diffX < TOLERANCE && diffY < TOLERANCE) {
 
                         if (Build.VERSION.SDK_INT >= 26) {
