@@ -13,55 +13,39 @@ import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.libraries.places.api.Places
 import info.hannes.commonlib.LocationHelper
 import info.mx.tracks.R
 import info.mx.tracks.adapter.AdapterBitmaps
+import info.mx.tracks.databinding.FragmentPlaceDetailBinding
 import info.mx.tracks.map.MxPlace
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
 
-    private lateinit var tvWebSite: TextView
-    private lateinit var tvPhone: TextView
-    private lateinit var lyWebSite: LinearLayout
-    private lateinit var lyPhone: LinearLayout
-    private lateinit var tvAddress: TextView
-    private lateinit var hImgGallery: RecyclerView
-    private lateinit var ratingBar: RatingBar
-    lateinit var scrollView: NestedScrollView
-        private set
     private var mxPlace: MxPlace? = null
-    private lateinit var lyRating: LinearLayout
     private lateinit var photoAdapter: AdapterBitmaps
+    val scrollContent: NestedScrollView?
+        get() = _binding?.scrollContent
+
+    private var _binding: FragmentPlaceDetailBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        @SuppressLint("InflateParams")
-        val view = inflater.inflate(R.layout.fragment_place_detail, null)
+        _binding = FragmentPlaceDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        scrollView = view.findViewById(R.id.scrollContent)
-        ratingBar = view.findViewById(R.id.poi_rating)
-        hImgGallery = view.findViewById(R.id.poi_hImgGalery)
-
-        tvAddress = view.findViewById(R.id.poi_detail_Address)
-        tvWebSite = view.findViewById(R.id.poi_detail_website)
-        tvPhone = view.findViewById(R.id.poi_detail_phone)
-        lyWebSite = view.findViewById(R.id.poi_layoutwebsite)
-        lyRating = view.findViewById(R.id.poi_layoutRating)
-        lyPhone = view.findViewById(R.id.poi_layoutphone)
-
-        tvPhone.setOnTouchListener(object : FeedBackTouchListener() {
+        binding.poiDetailPhone.setOnTouchListener(object : FeedBackTouchListener() {
 
             override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
                 var res = false // super.onTouch(view, motionEvent);
@@ -83,7 +67,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
             }
         })
 
-        tvWebSite.setOnTouchListener(object : FeedBackTouchListener() {
+        binding.poiDetailWebsite.setOnTouchListener(object : FeedBackTouchListener() {
 
             override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
                 var res = false // super.onTouch(view, motionEvent);
@@ -101,6 +85,11 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
 
         setHasOptionsMenu(true)
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
@@ -137,32 +126,32 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
 
     private fun fillMask(mxPlace: MxPlace) {
 
-        lyRating.visibility = if (mxPlace.rating < 0) View.GONE else View.VISIBLE
-        ratingBar.rating = mxPlace.rating
+        binding.poiLayoutRating.visibility = if (mxPlace.rating < 0) View.GONE else View.VISIBLE
+        binding.poiRating.rating = mxPlace.rating
 
         if (mxPlace.phoneNumber == null || mxPlace.phoneNumber == "") {
-            lyPhone.visibility = LinearLayout.GONE
+            binding.poiLayoutphone.visibility = LinearLayout.GONE
         } else {
-            lyPhone.visibility = LinearLayout.VISIBLE
-            tvPhone.text = mxPlace.phoneNumber
+            binding.poiLayoutphone.visibility = LinearLayout.VISIBLE
+            binding.poiDetailPhone.text = mxPlace.phoneNumber
         }
 
         if (mxPlace.websiteUri == null || mxPlace.websiteUri.toString() == "") {
-            lyWebSite.visibility = LinearLayout.GONE
+            binding.poiLayoutwebsite.visibility = LinearLayout.GONE
         } else {
-            lyWebSite.visibility = LinearLayout.VISIBLE
-            tvWebSite.text = mxPlace.websiteUri.toString()
+            binding.poiLayoutwebsite.visibility = LinearLayout.VISIBLE
+            binding.poiDetailWebsite.text = mxPlace.websiteUri.toString()
         }
 
-        tvAddress.text = mxPlace.address.toString().replace(", ", "\n")
-        hImgGallery.visibility = if (mxPlace.photoList.size == 0) View.GONE else View.VISIBLE
+        binding.poiDetailAddress.text = mxPlace.address.toString().replace(", ", "\n")
+        binding.poiHImgGalery.visibility = if (mxPlace.photoList.size == 0) View.GONE else View.VISIBLE
 
         val layoutRecycler = LinearLayoutManager(activity)
         layoutRecycler.orientation = LinearLayoutManager.HORIZONTAL
-        hImgGallery.layoutManager = layoutRecycler
+        binding.poiHImgGalery.layoutManager = layoutRecycler
 
         photoAdapter = AdapterBitmaps(mxPlace.photoList)
-        hImgGallery.adapter = photoAdapter
+        binding.poiHImgGalery.adapter = photoAdapter
 
         mxPlace.setOnPhotoReadyCallBack(this)
 
@@ -175,8 +164,8 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
 
     override fun onPhotoReceived(photoList: List<Bitmap>) {
         photoAdapter = AdapterBitmaps(photoList)
-        hImgGallery.adapter = photoAdapter
-        hImgGallery.visibility = View.VISIBLE
+        binding.poiHImgGalery.adapter = photoAdapter
+        binding.poiHImgGalery.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
