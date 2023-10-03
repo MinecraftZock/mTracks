@@ -21,10 +21,12 @@ import androidx.core.app.NotificationCompat
 import androidx.work.Configuration
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.NotificationHelper
@@ -234,10 +236,12 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
         private const val JOB_ID_DISTANCE = 0
         const val SECONDS_UPDATE = 30
         const val SECONDS_UPDATE_FAST = 10
-        val REQUEST_DAY = LocationRequest.create()
-            .setInterval((SECONDS_UPDATE * 1000).toLong()) // force a new location every X minutes
-            .setFastestInterval((SECONDS_UPDATE_FAST * 1000).toLong()) // can maximal triggered by other apps; 15 ?
-            .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+        // force a new location every X minutes
+        val REQUEST_DAY = LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, SECONDS_UPDATE * 1000L).apply {
+            setMinUpdateDistanceMeters(200f) // meters
+            setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
+            setWaitForAccurateLocation(true)
+        }.build()
 
         // schedule the start of the service every 5 - 60 seconds
         fun scheduleJob(context: Context) {

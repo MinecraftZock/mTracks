@@ -19,6 +19,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.telephony.TelephonyManager
 import android.text.Html
@@ -480,13 +481,15 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             prefs.edit().putFirstTimeUse(false).commit()
         }
 
-        var last: Location? = null
         googleApiClient?.let {
             if (it.isConnected && permissionHelper.hasLocationPermission()) {
-                last = LocationServices.FusedLocationApi.getLastLocation(it)
+                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, location)
+                }
             }
         }
-        DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, last)
+        DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, null)
         binding.trDetailRating.rating = java.lang.Float.parseFloat(trackRec.rating)
         binding.trDetailDifficult.rating = trackRec.schwierigkeit.toFloat()
 
@@ -856,23 +859,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     cursor.moveToFirst()
                 }
                 if (cursor.count == 1) {
-                    var lastLocation: Location? = null
                     recordTrack = TracksgesRecord.fromCursor(cursor)
                     googleApiClient?.let {
                         if (it.isConnected && permissionHelper.hasLocationPermission()) {
-                            lastLocation = LocationServices.FusedLocationApi.getLastLocation(it)
-                            lastLocation?.let { location ->
+                            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                                 Ops.execute(AbstractOpGetRouteOperation.newIntent(recordTrack!!.id, location.latitude, location.longitude))
+                                restartLastLocationDisplay(cursor, location)
                             }
                         }
                     }
-                    recordTrackDist = TracksDistanceRecord.fromCursor(cursor, lastLocation)
-                    fillMask(recordTrack)
-                    val bundle = Bundle()
-                    bundle.putLong(TRACK_REST_ID, recordTrack!!.restId)
-                    bundle.putLong(RECORD_ID_LOCAL, recordTrack!!.id)
-                    loaderManager.restartLoader(LOADER_WEATHER, bundle, this)
-                    loaderManager.restartLoader(LOADER_ROUTE, bundle, this)
+                    restartLastLocationDisplay(cursor, null)
                 }
             }
 
@@ -903,6 +900,16 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 }
             }
         }
+    }
+
+    private fun restartLastLocationDisplay(cursor: Cursor, lastLocation: Location?) {
+        recordTrackDist = TracksDistanceRecord.fromCursor(cursor, lastLocation)
+        fillMask(recordTrack)
+        val bundle = Bundle()
+        bundle.putLong(TRACK_REST_ID, recordTrack!!.restId)
+        bundle.putLong(RECORD_ID_LOCAL, recordTrack!!.id)
+        loaderManager.restartLoader(LOADER_WEATHER, bundle, this)
+        loaderManager.restartLoader(LOADER_ROUTE, bundle, this)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
@@ -1009,15 +1016,21 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             // if's already requested
             return
         }
-        googleApiClient?.let {
-            LocationServices.FusedLocationApi.requestLocationUpdates(it, LocationJobService.REQUEST_DAY, this)
-
-            var last: Location? = null
+        googleApiClient?.let { it ->
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
             if (it.isConnected) {
-                last = LocationServices.FusedLocationApi.getLastLocation(it)
-            }
-            if (last != null) {
-                onLocationChanged(last)
+                fusedLocationClient.requestLocationUpdates(LocationJobService.REQUEST_DAY, this, Looper.getMainLooper())
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    location?.let { it: Location ->
+                        onLocationChanged(it)
+                    } ?: kotlin.run {
+                        // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
+                    }
+                }
+            } else {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    onLocationChanged(location)
+                }
             }
         }
     }
@@ -1025,7 +1038,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     private fun stopLocationUpdates() {
         googleApiClient?.let {
             if (it.isConnected) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(it, this)
+                LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(this)
             }
         }
     }
