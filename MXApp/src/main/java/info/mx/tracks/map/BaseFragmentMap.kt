@@ -484,7 +484,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             .addToBackStack(null)
             .commitAllowingStateLoss()
 
-        slidingDrawer!!.scrollableView = fragmentPlace.scrollView
+        slidingDrawer!!.scrollableView = fragmentPlace.scrollContent
     }
 
     protected open fun openStageInSlider(id: Long) {
