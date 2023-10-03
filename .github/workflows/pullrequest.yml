@@ -51,7 +51,7 @@ jobs:
       - name: cleanup
         run: ./signing/cleanup.sh
   TestPro:
-    name: Test Pro ${{ matrix.api }} ${{ matrix.abi }} ${{ matrix.tag }}
+    name: Test Pro ${{ matrix.os }} ${{ matrix.api }} ${{ matrix.abi }} ${{ matrix.tag }}
     runs-on: ${{ matrix.os }}
     needs:
       - env-job
