@@ -30,7 +30,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.math.roundToInt
 
-internal class OpGetWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoinComponent {
+internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoinComponent {
 
     private val dataManagerCore: DataManagerCore by inject()
 
@@ -94,11 +94,7 @@ internal class OpGetWeatherCachedOperation : AbstractOpGetWeatherCachedOperation
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             val track = trackRec!!.trackname
-            Timber.w(
-                "OpGetWeatherCachedOperation/ServiceException '$track' " + Log.getStackTraceString(
-                    e
-                )
-            )
+            Timber.w("OpWeatherCachedOperation/ServiceException '$track' " + Log.getStackTraceString(e))
             return OperationResult.error(e)
         } catch (je: JsonSyntaxException) {
             return OperationResult.ok(bundle)
@@ -107,7 +103,7 @@ internal class OpGetWeatherCachedOperation : AbstractOpGetWeatherCachedOperation
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             val track = if (trackRec != null) trackRec.trackname else trackRec?.restId.toString() + ""
-            Timber.w("OpGetWeatherCachedOperation/Exception '$track' " + Log.getStackTraceString(e))
+            Timber.w("OpWeatherCachedOperation/Exception '$track' " + Log.getStackTraceString(e))
             return OperationResult.error(e)
         }
         return OperationResult.ok(bundle)

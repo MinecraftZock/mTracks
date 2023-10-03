@@ -24,7 +24,7 @@ public abstract class AbstractOpGetWeatherCachedOperation extends Operation {
 	static class Configuration extends OperationConfiguration {
 		@Override 
 		public Operation createOperation() {
-			return new OpGetWeatherCachedOperation();
+			return new OpWeatherCachedOperation();
 		}
 		
 		@Override
@@ -32,8 +32,8 @@ public abstract class AbstractOpGetWeatherCachedOperation extends Operation {
 			android.os.Bundle matcher = new android.os.Bundle();
 			android.os.Bundle intentExtras = intent.getExtras();
 			matcher.putLong(
-				OpGetWeatherCachedOperation.EXTRA_TRACK_CLIENT_ID, 
-				intentExtras.getLong(OpGetWeatherCachedOperation.EXTRA_TRACK_CLIENT_ID));
+				OpWeatherCachedOperation.EXTRA_TRACK_CLIENT_ID,
+				intentExtras.getLong(OpWeatherCachedOperation.EXTRA_TRACK_CLIENT_ID));
 			
 			Intent existingRequest = bridge.findPendingRequestByActionWithExtras(AbstractOpGetWeatherCachedOperation.ACTION_OP_GET_WEATHER_CACHED, matcher);
 

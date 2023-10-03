@@ -30,7 +30,7 @@ public abstract class AbstractMxInfoServiceOperationConfigurationRegistry extend
 		registerOperationConfiguration(OpDownLoadImageOperation.ACTION_OP_DOWN_LOAD_IMAGE, new OpDownLoadImageOperation.Configuration());
 		registerOperationConfiguration(OpGetLatLngOperation.ACTION_OP_GET_LAT_LNG, new OpGetLatLngOperation.Configuration());
 		registerOperationConfiguration(OpGetWeatherOperation.ACTION_OP_GET_WEATHER, new OpGetWeatherOperation.Configuration());
-		registerOperationConfiguration(OpGetWeatherCachedOperation.ACTION_OP_GET_WEATHER_CACHED, new OpGetWeatherCachedOperation.Configuration());
+		registerOperationConfiguration(OpWeatherCachedOperation.ACTION_OP_GET_WEATHER_CACHED, new OpWeatherCachedOperation.Configuration());
 	}
 	
 	protected void registerOperationConfiguration(String action, OperationConfiguration config) {
