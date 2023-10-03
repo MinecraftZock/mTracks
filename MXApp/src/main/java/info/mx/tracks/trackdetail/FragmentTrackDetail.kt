@@ -68,6 +68,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
+
 class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener,
     ConnectionCallbacks, OnConnectionFailedListener {
 
@@ -265,14 +266,16 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_image_pick) {
-            doPicturePick()
-            return true
-        } else if (item.itemId == R.id.menu_image_make) {
-            doPictureMake()
-            return true
-        } else {
-            return super.onContextItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_image_pick -> {
+                doPicturePick()
+                true
+            }
+            R.id.menu_image_make -> {
+                doPictureMake()
+                true
+            }
+            else -> super.onContextItemSelected(item)
         }
     }
 
@@ -286,6 +289,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     saveColor = view.background
                     view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_blue))
                 }
+
                 MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> view.background = saveColor
             }
             return false
@@ -367,6 +371,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     val intentM = AbstractOpPostImagesOperation.newIntent()
                     Ops.execute(intentM)
                 }
+
                 SELECT_PHOTO -> {
                     val uri = imageReturnedIntent!!.data
 
@@ -493,7 +498,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
         binding.trLayoutDifficult.visibility = if (trackRec.schwierigkeit == 0L) View.GONE else View.VISIBLE
         binding.trLayoutRating.visibility = if (trackRec.trackaccess == "D") View.GONE else View.VISIBLE
-        val hideZeiten = trackRec.hoursmonday == null &&
+        val hideTimes = trackRec.hoursmonday == null &&
                 trackRec.hourstuesday == null &&
                 trackRec.hourswednesday == null &&
                 trackRec.hoursthursday == null &&
@@ -508,7 +513,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 trackRec.opensaturday == 0L &&
                 trackRec.opensunday == 0L
 
-        binding.trLayoutOpening.visibility = if (hideZeiten) View.GONE else View.VISIBLE
+        binding.trLayoutOpening.visibility = if (hideTimes) View.GONE else View.VISIBLE
         binding.trLayoutInfo.visibility = if (trackRec.mxtrack == 1L || trackRec.quad == 1L || trackRec.a4x4 == 1L || trackRec.endruo == 1L ||
             trackRec.utv == 1L || trackRec.facebook != null && trackRec.facebook != ""
         )
@@ -819,15 +824,16 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     override fun onCreateLoader(loader: Int, bundle: Bundle?): Loader<Cursor> {
-        when (loader) {
-            LOADER_TRACK -> return SQuery.newQuery().expr(Tracksges._ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
+        return when (loader) {
+            LOADER_TRACK -> SQuery.newQuery().expr(Tracksges._ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
                 .createSupportLoader(Tracksges.CONTENT_URI, null, null)
-            LOADER_WEATHER -> return SQuery.newQuery()
+
+            LOADER_WEATHER -> SQuery.newQuery()
                 .expr(Weather.TRACK_CLIENT_ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
                 .expr(Weather.TYPE, Op.EQ, "D")
                 .createSupportLoader(Weather.CONTENT_URI, null, Weather.DT)
             //LOADER_ROUTE
-            else -> return SQuery.newQuery()
+            else -> SQuery.newQuery()
                 .expr(Route.TRACK_CLIENT_ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
                 .createSupportLoader(Route.CONTENT_URI, null, Route.CREATED)
         }
@@ -860,6 +866,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     loaderManager.restartLoader(LOADER_ROUTE, bundle, this)
                 }
             }
+
             LOADER_WEATHER -> {
                 Timber.i("onLoadFinished Weather: %s TrackRestId: %s %s", cursor.count, recordTrack!!.restId, recordTrack!!.trackname)
                 if (cursor.isBeforeFirst) {
@@ -875,6 +882,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 }
 
             }
+
             LOADER_ROUTE -> {
                 Timber.i("onLoadFinished Route: %s TrackRestId:%s %s", cursor.count, recordTrack!!.restId, recordTrack!!.trackname)
                 if (cursor.isBeforeFirst) {
@@ -892,6 +900,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         when (loader.id) {
             LOADER_ROUTE -> {
             }
+
             LOADER_WEATHER -> adapterWeather!!.swapCursor(null)
         }
     }
@@ -1046,7 +1055,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             AbstractMxInfoDBOpenHelper.Sources.TRACKSGES
         )
         val curs = query.select(Tracksges.CONTENT_URI, arrayOf(Tracksges._ID), sort)
-        // von der Map gibt es keine Position
+        // from Map there is no position
         if (!requireArguments().containsKey(CURSOR_POSITION)) {
             while (curs.moveToNext()) {
                 if (curs.getLong(0) == newId) {
@@ -1106,7 +1115,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 if (intent.resolveActivity(activity.packageManager) != null) {
                     try {
                         activity.startActivity(intent)
-                    } catch (ActivityNotFoundException: Exception) {
+                    } catch (e: ActivityNotFoundException) {
                         Timber.e("ActivityNotFoundException ACTION_VIEW not possible for%s", url)
                         if (url.startsWith("http://")) {
                             openWebSite(activity, urls.replace("http://", "https://"))
@@ -1118,28 +1127,28 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             }
         }
 
-        private fun doSelectDlg(activity: Activity, welche: Int, gesString: String) {
+        private fun doSelectDlg(activity: Activity, which: Int, gesString: String) {
             val alertChoice: Dialog
             val sortItems = gesString.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val builder = AlertDialog.Builder(activity)
-            // telefon bekommt ein icon
-            if (welche == R.string.phone) {
+            // telephone with an icon
+            if (which == R.string.phone) {
                 val inflater = activity.layoutInflater
                 @SuppressLint("InflateParams") val viewHeader = inflater.inflate(R.layout.dialog_header_image, null)
                 (viewHeader.findViewById<View>(R.id.dialogheader_button) as ImageView).setImageResource(android.R.drawable.ic_menu_call)
-                (viewHeader.findViewById<View>(R.id.dialogheader_text) as TextView).text = activity.getString(welche)
+                (viewHeader.findViewById<View>(R.id.dialogheader_text) as TextView).text = activity.getString(which)
                 builder.setCustomTitle(viewHeader)
             } else {
-                builder.setTitle(activity.getString(welche))
+                builder.setTitle(activity.getString(which))
             }
             builder.setItems(sortItems) { _, item ->
                 //FIXME
                 //                alertChoice.dismiss();
-                if (welche == R.string.phone) {
+                if (which == R.string.phone) {
                     val intent = Intent(Intent.ACTION_DIAL)
                     intent.data = Uri.parse("tel:" + sortItems[item])
                     activity.startActivity(intent)
-                } else if (welche == R.string.website) {
+                } else if (which == R.string.website) {
                     var url = sortItems[item]
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
                         url = "http://$url"

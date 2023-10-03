@@ -191,7 +191,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         this.isClickable = true
         when (layoutSty) {
             PoiDetailStyle.DETAIL_TRACK -> {}
-            else -> {}
+            else -> Unit
         }
         this.isClickable = true
         this.orientation = HORIZONTAL
