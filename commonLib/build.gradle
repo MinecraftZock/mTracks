@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.material:material:1.9.0"
+    implementation "com.google.android.material:material:1.10.0"
 
     api('com.github.matomo-org:matomo-sdk-android:4.2-beta3') {
         exclude group: 'com.jakewharton.timber', module: 'timber'
