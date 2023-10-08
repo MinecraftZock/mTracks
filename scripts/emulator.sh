@@ -253,7 +253,7 @@ function deleteAVD {
 function killAndDeleteOneEmulatorInstance {
    local CONSOLE_PORT=$1
 
-   sleep 5s && killEmulator $CONSOLE_PORT &
+   sleep 4s && killEmulator $CONSOLE_PORT &
    sleep 5s && deleteAVD $CONSOLE_PORT &
 }
 
