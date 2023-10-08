@@ -16,13 +16,10 @@ import org.junit.rules.TestName
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SplashTest {
+class SplashTest: BaseSyncTest() {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<ActivitySplash>()
-
-    @get:Rule
-    var nameRule = TestName()
 
     @Test
     @Suppress
