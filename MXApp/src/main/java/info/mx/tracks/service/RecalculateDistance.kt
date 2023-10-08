@@ -33,6 +33,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.*
+import kotlin.math.roundToInt
 
 class RecalculateDistance(private val context: Context) : KoinComponent {
 
@@ -51,7 +52,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                     val lastKnown = Location("lastKnown")
                     lastKnown.latitude = lat
                     lastKnown.longitude = lon
-                    proceedWithDistance(location, Math.round(lastKnown.distanceTo(location)), source)
+                    proceedWithDistance(location, lastKnown.distanceTo(location).roundToInt(), source)
                 },
                 { t -> Timber.e(t) },
                 { proceedWithDistance(location, Integer.MAX_VALUE, source) }
@@ -72,12 +73,12 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         if (distance > DISTANCE_MIN_TO_RECALC) {
 
             val records = calculateDistanceOnTracks(mxMemDatabase, location)
-            if (records.size > 0) {
+            if (records.isNotEmpty()) {
                 val trackLoc = Location("track")
                 trackLoc.latitude = records[0].lat
                 trackLoc.longitude = records[0].lon
-                capturedLatLng.distToNearest = Math.round(trackLoc.distanceTo(location))
-                extra = updateNotification(Math.round(trackLoc.distanceTo(location)), records[0].id!!)
+                capturedLatLng.distToNearest = trackLoc.distanceTo(location).roundToInt()
+                extra = updateNotification(trackLoc.distanceTo(location).roundToInt(), records[0].id!!)
                 if (MxCoreApplication.isAdmin) {
                     val trackRecord = TracksRecord.get(records[0].id!!)
                     if (trackRecord != null) {
@@ -86,7 +87,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                 }
             }
         } else {
-            updateNotification4Admin(Math.round(distance.toFloat()), ACTION_IGNORED)
+            updateNotification4Admin(distance.toFloat().roundToInt(), ACTION_IGNORED)
             capturedLatLng.action = ACTION_IGNORED
             extra = " min distance"
         }
@@ -209,7 +210,9 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         val longText = context.getString(R.string.notification_big)
         val trackRecord = TracksRecord.get(track_id)
         val dateStr =
-            DateHelper.getTimeStrFromMinutesDay(Math.round(((trackRecord!!.lastAsked + WAIT_TO_ASK - System.currentTimeMillis()) / 1000 / 60).toFloat()))
+            DateHelper.getTimeStrFromMinutesDay(
+                ((trackRecord!!.lastAsked + WAIT_TO_ASK - System.currentTimeMillis()) / 1000 / 60).toFloat().roundToInt()
+            )
         if (trackRecord.lastAsked + WAIT_TO_ASK > System.currentTimeMillis()) {
             extra = "WAIT_TO_ASK $dateStr"
             return extra
@@ -308,7 +311,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                         val trackLocation = Location("track")
                         trackLocation.latitude = tracksDistance.lat
                         trackLocation.longitude = tracksDistance.lon
-                        distance = Math.round(location.distanceTo(trackLocation))
+                        distance = location.distanceTo(trackLocation).roundToInt()
                         tracksDistance.distance = distance.toLong()
                     }
                     records.add(tracksDistance)
