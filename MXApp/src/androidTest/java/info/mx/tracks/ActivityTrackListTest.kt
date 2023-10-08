@@ -23,24 +23,10 @@ import java.util.concurrent.TimeUnit
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTrackListTest {
+class ActivityTrackListTest: BaseSyncTest() {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<ActivityTrackList>()
-
-    @get:Rule
-    var nameRule = TestName()
-
-    @Before
-    fun registerIdlingResource() {
-        IdlingPolicies.setIdlingResourceTimeout(4, TimeUnit.MINUTES)
-        IdlingRegistry.getInstance().register(CountingIdlingResourceSingleton.countingIdlingResource)
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(CountingIdlingResourceSingleton.countingIdlingResource)
-    }
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
