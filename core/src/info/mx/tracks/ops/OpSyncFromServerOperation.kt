@@ -112,12 +112,11 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
                 doCleanFromDecline()
 
                 MxPreferences.getInstance().edit().putLastSyncTime(System.currentTimeMillis()).apply()
-
-                CountingIdlingResourceSingleton.decrement()
             }
             LoggingHelper.setMessage("")
             val bundle = Bundle()
             bundle.putString(COUNTRY_RESULT, countryResult)
+            CountingIdlingResourceSingleton.decrement()
             return OperationResult.ok(bundle)
         } catch (e: ServiceException) {
             Timber.e(e)
