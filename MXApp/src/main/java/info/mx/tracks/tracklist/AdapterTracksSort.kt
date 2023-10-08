@@ -16,7 +16,7 @@ import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.LayoutHelper
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.room.TracksDistance
+import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.sqlite.TracksGesSumRecord
 import java.util.*
 import kotlin.math.roundToInt

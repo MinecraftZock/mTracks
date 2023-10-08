@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -41,7 +40,7 @@ import info.mx.tracks.common.OverScrollListView
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.databinding.ScreenListWithProgressbarBinding
-import info.mx.tracks.room.MxMemDatabase
+import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.settings.ActivityFilter

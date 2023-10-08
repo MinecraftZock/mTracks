@@ -2,7 +2,7 @@ package info.mx.tracks.koin
 
 import androidx.room.Room
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.room.MxMemDatabase
+import info.mx.tracks.room.memory.MxMemDatabase
 import org.koin.dsl.module
 
 val dbModule = module {

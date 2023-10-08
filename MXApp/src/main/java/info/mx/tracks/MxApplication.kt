@@ -23,7 +23,7 @@ import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.ops.google.OpGetRouteOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.room.MxMemDatabase
+import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.LocationRecalculateService
 import info.mx.tracks.service.RecalculateDistance
