@@ -1,4 +1,4 @@
-package info.mx.tracks.room
+package info.mx.tracks.room.memory.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

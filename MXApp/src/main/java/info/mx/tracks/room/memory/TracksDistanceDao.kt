@@ -1,6 +1,7 @@
-package info.mx.tracks.room
+package info.mx.tracks.room.memory
 
 import androidx.room.*
+import info.mx.tracks.room.memory.entity.TracksDistance
 import io.reactivex.Flowable
 
 @Dao

@@ -20,8 +20,8 @@ import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.room.MxMemDatabase
-import info.mx.tracks.room.TracksDistance
+import info.mx.tracks.room.memory.entity.TracksDistance
+import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.tracks.sqlite.CountryRecord
 import info.mx.tracks.sqlite.MxInfoDBContract

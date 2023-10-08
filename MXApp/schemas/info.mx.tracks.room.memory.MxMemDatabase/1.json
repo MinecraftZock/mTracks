@@ -34,18 +34,19 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7782c9e3ddfe1a9e352009c845027f58\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7782c9e3ddfe1a9e352009c845027f58')"
     ]
   }
 }
