@@ -98,7 +98,7 @@ class NavigationTest {
         getInstrumentation().sendStatus(0, bundle)
     }
 
-//    @Test
+    //    @Test
     fun startDetailFromList() {
         acceptChangesIfNeeded()
         allowPermissionsIfNeeded()
@@ -108,7 +108,7 @@ class NavigationTest {
         }
         onView(isRoot()).perform(waitId(R.id.layoutPoiHeaderMain, TimeUnit.SECONDS.toMillis(WAIT_FOR_IMPORT)))
         device.findObject(By.res(MX_PACKAGE, "layoutPoiHeaderMain"))
-                .click()
+            .click()
 
         clickOkIfNeeded()
 
@@ -137,9 +137,11 @@ class NavigationTest {
             .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 
         val openButton = onView(
-                Matchers.allOf(ViewMatchers.withContentDescription("open"),
-                        ViewMatchers.withParent(withId(R.id.toolbar)),
-                        ViewMatchers.isDisplayed())
+            Matchers.allOf(
+                ViewMatchers.withContentDescription("open"),
+                ViewMatchers.withParent(withId(R.id.toolbar)),
+                ViewMatchers.isDisplayed()
+            )
         )
         onView(isRoot())
             .captureToBitmap()
@@ -159,8 +161,9 @@ class NavigationTest {
         }
 
         val clusterIcon = device.findObject(
-                UiSelector().className("android.widget.ImageView")
-                        .resourceId("$MX_PACKAGE:id/map_cluster_btn"))
+            UiSelector().className("android.widget.ImageView")
+                .resourceId("$MX_PACKAGE:id/map_cluster_btn")
+        )
         assertTrue(clusterIcon.exists())
 
         clickOkIfNeeded()
@@ -176,8 +179,9 @@ class NavigationTest {
     private fun allowPermissionsIfNeeded() {
         if (Build.VERSION.SDK_INT >= 23) {
             val allowPermissions = device.findObject(
-                    UiSelector().className("android.widget.Button")
-                            .resourceId("com.android.packageinstaller:id/permission_allow_button"))
+                UiSelector().className("android.widget.Button")
+                    .resourceId("com.android.packageinstaller:id/permission_allow_button")
+            )
             if (allowPermissions.exists()) {
                 try {
                     allowPermissions.click()
@@ -205,8 +209,9 @@ class NavigationTest {
 
     private fun clickOkIfNeeded() {
         val okButton = device.findObject(
-                UiSelector().className("android.widget.Button")
-                        .resourceId("android:id/button1"))
+            UiSelector().className("android.widget.Button")
+                .resourceId("android:id/button1")
+        )
         if (okButton.exists()) {
             try {
                 okButton.click()
@@ -218,8 +223,9 @@ class NavigationTest {
 
     private fun onSettingsActivity(): Boolean {
         val version = device.findObject(
-                UiSelector().className("android.widget.TextView")
-                        .resourceId("$MX_PACKAGE:id/setting_version"))
+            UiSelector().className("android.widget.TextView")
+                .resourceId("$MX_PACKAGE:id/setting_version")
+        )
         return version.exists()
     }
 
@@ -263,10 +269,10 @@ class NavigationTest {
 
                     // timeout happens
                     throw PerformException.Builder()
-                            .withActionDescription(this.description)
-                            .withViewDescription(HumanReadables.describe(view))
-                            .withCause(TimeoutException())
-                            .build()
+                        .withActionDescription(this.description)
+                        .withViewDescription(HumanReadables.describe(view))
+                        .withCause(TimeoutException())
+                        .build()
                 }
             }
         }
