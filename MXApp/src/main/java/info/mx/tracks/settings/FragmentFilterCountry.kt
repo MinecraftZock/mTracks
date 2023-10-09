@@ -3,33 +3,33 @@ package info.mx.tracks.settings
 import android.content.Context
 import android.database.Cursor
 import android.graphics.drawable.Drawable
-import info.mx.tracks.base.ListFragmentBase
-import info.mx.tracks.sqlite.MxInfoDBContract.Countrycount
-import info.mx.tracks.R
 import android.os.Bundle
 import android.view.Menu
-import info.mx.tracks.sqlite.CountrycountRecord
-import timber.log.Timber
-import android.widget.CheckBox
-import info.mx.tracks.sqlite.CountryRecord
-import android.widget.TextView
-import com.robotoworks.mechanoid.db.SQuery
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
+import com.robotoworks.mechanoid.db.SQuery
+import info.mx.tracks.R
+import info.mx.tracks.base.ListFragmentBase
+import info.mx.tracks.sqlite.CountryRecord
+import info.mx.tracks.sqlite.CountrycountRecord
 import info.mx.tracks.sqlite.MxInfoDBContract
-import java.util.*
+import info.mx.tracks.sqlite.MxInfoDBContract.Countrycount
+import timber.log.Timber
+import java.util.Locale
 
 class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<Cursor> {
-    private var mAdapter: SimpleCursorAdapter? = null
-    private val projection =
-        arrayOf(Countrycount.COUNTRY, Countrycount.COUNTRY, Countrycount.SHOW, Countrycount.COUNT)
+
+    private lateinit var adapter: SimpleCursorAdapter
+    private val projection = arrayOf(Countrycount.COUNTRY, Countrycount.COUNTRY, Countrycount.SHOW, Countrycount.COUNT)
     private val to = intArrayOf(
         R.id.tvFilterCountryText,
         R.id.imFilterCountry,
@@ -47,10 +47,9 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
 
     private fun fillData() {
         // Create an empty adapter we will use to display the loaded data.
-        mAdapter =
-            SimpleCursorAdapter(requireActivity(), R.layout.item_country, null, projection, to, 0)
-        mAdapter!!.viewBinder = ViewBinderCountry(requireActivity())
-        listAdapter = mAdapter
+        adapter = SimpleCursorAdapter(requireActivity(), R.layout.item_country, null, projection, to, 0)
+        adapter.viewBinder = ViewBinderCountry(requireActivity())
+        listAdapter = adapter
     }
 
     private inner class ViewBinderCountry(private val context: Context) :
@@ -68,13 +67,9 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
                         requireActivity().packageName
                     )
                     (view as ImageView).setImageResource(id)
-                    Timber.d("im " + cRec.id + " " + cRec.country + " " + cRec.count + " " + cRec.show)
+                    Timber.d("im ${cRec.id} ${cRec.country} ${cRec.count} ${cRec.show}")
                 } else {
-                    Timber.d(
-                        "im " + cursor.getString(0) + " xx " + cursor.getString(2) + " " + cursor.getString(
-                            3
-                        )
-                    )
+                    Timber.d("im ${cursor.getString(0)} xx ${cursor.getString(2)} ${cursor.getString(3)}")
                 }
                 res = true
             } else if (view.id == R.id.chkFilterCountry) {
@@ -113,11 +108,11 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
         Timber.d("CountryCount " + data.count)
-        mAdapter!!.swapCursor(data)
+        adapter.swapCursor(data)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        mAdapter!!.swapCursor(null)
+        adapter.swapCursor(null)
     }
 
     override fun onListItemClick(listView: ListView, view: View, position: Int, id: Long) {
@@ -138,7 +133,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         if (item.itemId == R.id.action_settings_filter_country) {
             val anz: Int
             val query = SQuery.newQuery()
-            anz = if (ausgeblendet == 0) {
+            anz = if (hided == 0) {
                 query.expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 1) // obsolete
                 MxInfoDBContract.Country.newBuilder().setShow(0).update(query, true)
             } else {
@@ -158,17 +153,13 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     private fun getIcon4SetAllCountry(context: Context): Drawable? {
-        ausgeblendet = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
+        hided = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
             .count(MxInfoDBContract.Country.CONTENT_URI)
         val all = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
-        val drawable: Drawable?
-        drawable = if (ausgeblendet == 0) {
+        val drawable: Drawable? = if (hided == 0) {
             ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
-        } else if (ausgeblendet == all) {
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.actionbar_checkbox_empty
-            )
+        } else if (hided == all) {
+            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)
         } else {
             ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_grey)
         }
@@ -176,6 +167,6 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     companion object {
-        private var ausgeblendet = 0
+        private var hided = 0
     }
 }
