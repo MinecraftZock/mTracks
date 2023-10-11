@@ -26,7 +26,7 @@ class ActivityFilterTest : BaseSyncTest() {
     )
 
     @Test
-    fun smokeTestSimplyStart() {
+    fun filterTest() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
