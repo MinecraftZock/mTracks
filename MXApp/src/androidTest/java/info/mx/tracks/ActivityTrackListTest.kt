@@ -4,6 +4,8 @@ import android.Manifest
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
@@ -31,7 +33,18 @@ class ActivityTrackListTest : BaseSyncTest() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-down1")
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-down2")
+
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeUp())
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeUp())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-up1")
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-up2")
+
     }
 
 }
