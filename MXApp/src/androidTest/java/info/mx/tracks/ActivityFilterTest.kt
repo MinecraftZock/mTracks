@@ -2,6 +2,7 @@ package info.mx.tracks
 
 import android.Manifest
 import androidx.test.core.graphics.writeToTestStorage
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers
@@ -31,10 +32,16 @@ class ActivityFilterTest : BaseSyncTest() {
 
     @Test
     fun filterTest() {
+        // This is the first time settings activity with always changed version number
+        Espresso.pressBack()
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-start")
+
         val openButton = onView(
             Matchers.allOf(
                 ViewMatchers.withContentDescription("open"),
-                ViewMatchers.withParent(ViewMatchers.withId(R.id.toolbar)),
+                ViewMatchers.withParent(withId(R.id.toolbar)),
                 ViewMatchers.isDisplayed()
             )
         )
@@ -47,10 +54,21 @@ class ActivityFilterTest : BaseSyncTest() {
         onView(isRoot())
             .captureToBitmap()
             .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
-        // This is the first time settings activity with always changed version number
-        //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
-//        Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+        onView(withId(R.id.lyCountries)).perform(click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3")
+
+        Espresso.pressBack()
+        onView(withId(R.id.tvFilterSa)).perform(click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-Sa")
+
+        onView(withId(R.id.tvFilterFr)).perform(click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-Fr")
     }
 
 }
