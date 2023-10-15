@@ -54,11 +54,17 @@ class SplashTest : BaseSyncTest() {
             )
         )
         appCompatImageButton2.perform(click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-0")
 
         val appCompatCheckedTextView = onView(
             allOf(withId(R.id.design_menu_item_text), withText("Filter"), isDisplayed())
         )
         appCompatCheckedTextView.perform(click())
+        onView(isRoot())
+            .captureToBitmap()
+            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 
         val appCompatImageButton3 = onView(
             allOf(
