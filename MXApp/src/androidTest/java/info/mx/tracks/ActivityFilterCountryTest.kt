@@ -15,6 +15,7 @@ import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.settings.ActivityFilterCountry
+import info.mx.tracks.tools.ReverseProtocol
 import org.hamcrest.Matchers.anything
 import org.junit.Rule
 import org.junit.Test
@@ -34,6 +35,12 @@ class ActivityFilterCountryTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        onData(anything())
+//        onData(instanceOf(MyAdapterItem::class.java))
+            .atPosition(0)
+            .usingAdapterViewProtocol(ReverseProtocol())
+            .perform(click())
+
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
