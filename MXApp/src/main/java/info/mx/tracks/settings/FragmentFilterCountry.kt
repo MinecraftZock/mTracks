@@ -147,8 +147,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_settings_filter_country).icon =
-            getIcon4SetAllCountry(requireActivity())
+        menu.findItem(R.id.action_settings_filter_country).icon = getIcon4SetAllCountry(requireActivity())
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -156,12 +155,10 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         hided = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
             .count(MxInfoDBContract.Country.CONTENT_URI)
         val all = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
-        val drawable: Drawable? = if (hided == 0) {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
-        } else if (hided == all) {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)
-        } else {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_grey)
+        val drawable: Drawable? = when (hided) {
+            0 -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
+            all -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)
+            else -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_grey)
         }
         return drawable
     }
