@@ -20,8 +20,7 @@ object LocationHelper {
             .count(MxInfoDBContract.Country.CONTENT_URI) == 1
 
     fun hideAmerica(context: Context) {
-        val countries =
-            SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
+        val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
         for (country in countries) {
             val latitude = CountryTools.getLatitude(country.country)
             val longitude = CountryTools.getLongitude(country.country)

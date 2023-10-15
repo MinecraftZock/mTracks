@@ -39,7 +39,10 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val list = getView()?.findViewById<ListView>(android.R.id.list)
+        list!!.isScrollbarFadingEnabled = false
         fillData()
+
         setEmptyText(getString(R.string.empty))
         setHasOptionsMenu(true)
         loaderManager.initLoader(0, this.arguments, this)
@@ -59,8 +62,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
             val cRec = CountrycountRecord.fromCursor(cursor)
             if (view.id == R.id.imFilterCountry) {
                 if (cursor.getString(columnIndex) != null) {
-                    val value =
-                        cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
+                    val value = cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
                     val id = requireActivity().resources.getIdentifier(
                         value,
                         "drawable",
@@ -147,8 +149,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_settings_filter_country).icon =
-            getIcon4SetAllCountry(requireActivity())
+        menu.findItem(R.id.action_settings_filter_country).icon = getIcon4SetAllCountry(requireActivity())
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -156,12 +157,10 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         hided = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
             .count(MxInfoDBContract.Country.CONTENT_URI)
         val all = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
-        val drawable: Drawable? = if (hided == 0) {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
-        } else if (hided == all) {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)
-        } else {
-            ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_grey)
+        val drawable: Drawable? = when (hided) {
+            0 -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
+            all -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)
+            else -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_grey)
         }
         return drawable
     }

@@ -45,4 +45,5 @@ class BackDialog : DialogFragment(), View.OnClickListener {
         intent.addCategory(Intent.CATEGORY_HOME)
         this.startActivity(intent)
     }
+
 }
