@@ -39,7 +39,10 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val list = getView()?.findViewById<ListView>(android.R.id.list)
+        list!!.isScrollbarFadingEnabled = false
         fillData()
+
         setEmptyText(getString(R.string.empty))
         setHasOptionsMenu(true)
         loaderManager.initLoader(0, this.arguments, this)
@@ -59,8 +62,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
             val cRec = CountrycountRecord.fromCursor(cursor)
             if (view.id == R.id.imFilterCountry) {
                 if (cursor.getString(columnIndex) != null) {
-                    val value =
-                        cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
+                    val value = cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
                     val id = requireActivity().resources.getIdentifier(
                         value,
                         "drawable",

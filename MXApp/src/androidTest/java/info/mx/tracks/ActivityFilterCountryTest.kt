@@ -34,6 +34,9 @@ class ActivityFilterCountryTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        onView(withId(R.id.action_settings_filter_country)).perform(click())
+        Thread.sleep(1000)
+
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
@@ -45,6 +48,17 @@ class ActivityFilterCountryTest : BaseSyncTest() {
             .atPosition(3)
             .perform(click())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
+        onView(withId(android.R.id.list)).perform(swipeDown())
+        onView(withId(android.R.id.list)).perform(swipeDown())
+        onView(withId(android.R.id.list)).perform(swipeDown())
+        onView(withId(android.R.id.list)).perform(swipeDown())
+        // hide USA
+        onData(anything())
+            .inAdapterView(isAssignableFrom(ListView::class.java))
+            .atPosition(42)
+            .perform(click())
+        Thread.sleep(1000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-5")
     }
 
 }
