@@ -62,13 +62,13 @@ import java.util.*
  * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
  */
 class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks, OnConnectionFailedListener {
-    private var mAdapter: SimpleCursorAdapter? = null
+    private var adapter: SimpleCursorAdapter? = null
     private var adapterTracksSort: AdapterTracksSort? = null
-    private var mCallbacks = sEmptyCallbacks
-    private var mActivatedPosition = ListView.INVALID_POSITION
+    private var callbacks = sEmptyCallbacks
+    private var activatedPosition = ListView.INVALID_POSITION
 
     // If non-null, this is the current filter the user has provided.
-    private var mCurFilter: String? = null
+    private var curFilter: String? = null
 
     private var isFav: Boolean = false
     private var diskReceiver: DiskReceiver? = null
@@ -77,7 +77,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     private var googleApiClient: GoogleApiClient? = null
     private var searchView: SearchView? = null
     private var searchAutoComplete: SearchAutoComplete? = null
-    private var mLocationCallback: LocationCallback? = null
+    private var locationCallback: LocationCallback? = null
 
     val mxMemDatabase: MxMemDatabase by inject()
 
@@ -104,7 +104,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         // ImportProgress issue
         binding.lyImportProgress.visibility = View.GONE
 
-        mLocationCallback = object : LocationCallback() {
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 if (context == null) {
                     return
@@ -135,13 +135,13 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FILTER)) {
-            mCurFilter = savedInstanceState.getString(FILTER)
+            curFilter = savedInstanceState.getString(FILTER)
             if (searchView != null) {
                 if (searchAutoComplete != null) {
-                    searchAutoComplete!!.setText(mCurFilter)
+                    searchAutoComplete!!.setText(curFilter)
                 }
                 searchView!!.isIconified = false
-                Timber.d("searchView %s", mCurFilter)
+                Timber.d("searchView %s", curFilter)
             }
         }
 
@@ -166,17 +166,17 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             adapterTracksSort = AdapterTracksSort(requireActivity())
             binding.listOverview.adapter = adapterTracksSort
         } else {
-            mAdapter =
+            adapter =
                 SimpleCursorAdapter(requireActivity(), R.layout.item_track, null, ViewBinderTracks.projectionGesSum, ViewBinderTracks.toGesSum, 0)
-            binding.listOverview.adapter = mAdapter
+            binding.listOverview.adapter = adapter
             viewBinder = ViewBinderTracks(requireActivity(), null, true)
-            mAdapter!!.viewBinder = viewBinder
+            adapter!!.viewBinder = viewBinder
         }
 
         binding.listOverview.emptyView = binding.txtNoDisplays
         binding.listOverview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, id ->
             if (isTablet) {
-                mCallbacks.onItemSelected(id)
+                callbacks.onItemSelected(id)
             } else {
                 this@FragmentTrackList.openDetail(id, position)
             }
@@ -203,13 +203,13 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         // Activities containing this fragment must implement its callbacks.
         check(context is Callbacks) { "Activity must implement fragment's callbacks." }
 
-        mCallbacks = context
+        callbacks = context
     }
 
     override fun onDetach() {
         super.onDetach()
 
-        mCallbacks = sEmptyCallbacks
+        callbacks = sEmptyCallbacks
     }
 
     /**
@@ -223,20 +223,20 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
 
     private fun setActivatedPosition(position: Int) {
         if (position == ListView.INVALID_POSITION) {
-            binding.listOverview.setItemChecked(mActivatedPosition, false)
+            binding.listOverview.setItemChecked(activatedPosition, false)
         } else {
             binding.listOverview.setItemChecked(position, true)
         }
-        mActivatedPosition = position
+        activatedPosition = position
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         //        super.onSaveInstanceState(outState);
-        outState.putString(FILTER, mCurFilter)
+        outState.putString(FILTER, curFilter)
         super.onSaveInstanceState(Bundle())
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
+        if (activatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
+            outState.putInt(STATE_ACTIVATED_POSITION, activatedPosition)
         }
     }
 
@@ -246,7 +246,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         Timber.d("open:$id")
         bundle.putLong(FragmentUpDown.RECORD_ID_LOCAL, id)
         bundle.putString(FragmentUpDown.CONTENT_URI, TracksGesSum.CONTENT_URI.toString())
-        bundle.putString(FragmentUpDown.FILTER, mCurFilter)
+        bundle.putString(FragmentUpDown.FILTER, curFilter)
         if (this@FragmentTrackList.arguments != null) {
             bundle.putString(
                 FragmentUpDown.ORDER, this@FragmentTrackList.requireArguments().getString(FragmentUpDown.ORDER)!!
@@ -279,9 +279,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
         }
 
-        if (searchView != null && mCurFilter != null && mCurFilter != "") {
+        if (searchView != null && curFilter != null && curFilter != "") {
             if (searchAutoComplete != null) {
-                searchAutoComplete!!.setText(mCurFilter)
+                searchAutoComplete!!.setText(curFilter)
             }
             searchView!!.isIconified = false
         } else {
@@ -320,11 +320,11 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
             searchView!!.setIconifiedByDefault(true)
             searchView!!.setOnQueryTextListener(queryTextListener)
-            if (mCurFilter != null && mCurFilter != "") {
+            if (curFilter != null && curFilter != "") {
                 if (searchAutoComplete != null) {
                     searchItem.expandActionView()
                     //                    searchView.setIconified(false);
-                    searchAutoComplete!!.setText(mCurFilter)
+                    searchAutoComplete!!.setText(curFilter)
                 }
             }
         }
@@ -344,13 +344,13 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     protected fun setFilter2Fragment(filterString: String) {
-        if (mCurFilter == null) {
-            mCurFilter = ""
+        if (curFilter == null) {
+            curFilter = ""
         }
 
-        if (mCurFilter != filterString && isAdded) {
-            mCurFilter = filterString
-            if (mCurFilter != null && mCurFilter != "") {
+        if (curFilter != filterString && isAdded) {
+            curFilter = filterString
+            if (curFilter != null && curFilter != "") {
                 searchView!!.isIconified = false
             }
             loaderManager.restartLoader(LOADER_TRACKS, this@FragmentTrackList.arguments, this@FragmentTrackList)
@@ -403,7 +403,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                     bundle = Bundle()
                 }
                 val order = bundle.getString(FragmentUpDown.ORDER)!!.lowercase(Locale.getDefault())
-                Timber.i("onCreateLoader $order $mCurFilter")
+                Timber.i("onCreateLoader $order $curFilter")
                 isFav = order == TracksGesSum.RATING.lowercase(Locale.getDefault())
                 val isStage = order == TracksGesSum.APPROVED.lowercase(Locale.getDefault())
                 val isOnlyForeign = bundle.getBoolean(ONLY_FOREIGN, false)
@@ -411,7 +411,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                 if (isStage) {
                     query = QueryHelper.buildStageFilter(query, isOnlyForeign)
                 } else {
-                    query = QueryHelper.buildUserTrackSearchFilter(query, mCurFilter, isFav, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
+                    query = QueryHelper.buildUserTrackSearchFilter(query, curFilter, isFav, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
                 }
                 return query.createSupportLoader(TracksGesSum.CONTENT_URI, null, order)
             }
@@ -426,7 +426,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             LOADER_TRACKS -> {
                 val order = requireArguments().getString(FragmentUpDown.ORDER)!!.lowercase(Locale.getDefault())
                 if (order != TracksGesSum.DISTANCE2LOCATION) {
-                    mAdapter!!.swapCursor(cursor)
+                    adapter!!.swapCursor(cursor)
                 }
                 if (cursor.count == 0) {
                     val gesAnz = SQuery.newQuery()
@@ -466,7 +466,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onLoaderReset(loader: Loader<Cursor>) {
         when (loader.id) {
             LOADER_TRACKS -> if (sortOrder != TracksGesSum.DISTANCE2LOCATION) {
-                mAdapter!!.swapCursor(null)
+                adapter!!.swapCursor(null)
             }
 
             LOADER_PROGRESS -> binding.lyImportProgress.visibility = View.GONE
@@ -543,7 +543,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
 
     private fun stopLocationUpdates() {
         if (googleApiClient!!.isConnected) {
-            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(mLocationCallback!!)
+            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(locationCallback!!)
         }
     }
 
@@ -552,7 +552,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         if (Objects.requireNonNull(permissionHelper).hasLocationPermission()) {
             if (context != null) {
                 LocationServices.getFusedLocationProviderClient(requireContext())
-                    .requestLocationUpdates(LocationJobService.REQUEST_DAY, mLocationCallback!!, Looper.getMainLooper())
+                    .requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())
             }
         }
     }
