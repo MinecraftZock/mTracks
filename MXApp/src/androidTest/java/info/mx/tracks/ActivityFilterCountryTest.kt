@@ -47,7 +47,9 @@ class ActivityFilterCountryTest : BaseSyncTest() {
             .inAdapterView(isAssignableFrom(ListView::class.java))
             .atPosition(3)
             .perform(click())
+        Thread.sleep(1000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
+
         onView(withId(android.R.id.list)).perform(swipeDown())
         onView(withId(android.R.id.list)).perform(swipeDown())
         onView(withId(android.R.id.list)).perform(swipeDown())
