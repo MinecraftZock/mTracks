@@ -14,6 +14,7 @@ import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.settings.ActivityFilterCountry
 import org.hamcrest.Matchers.anything
 import org.junit.Rule

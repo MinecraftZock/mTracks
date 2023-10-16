@@ -14,6 +14,7 @@ import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.junit.Rule
@@ -53,11 +54,11 @@ class ActivityTrackDetailTest : BaseSyncTest() {
 //        onView(withId(R.id.tr_gen_detail_name)).check(matches(withText("Aalborg Daal Banen")));
 
         onView(withId(R.id.viewPager)).perform(swipeLeft())
-        Thread.sleep(100)
+        Thread.sleep(200)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-events")
         onView(withId(R.id.viewPager)).perform(swipeRight())
         onView(withId(R.id.viewPager)).perform(swipeRight())
-        Thread.sleep(100)
+        Thread.sleep(200)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-comment")
     }
 
