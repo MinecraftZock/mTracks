@@ -6,7 +6,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.swipeLeft
+import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -48,6 +51,14 @@ class ActivityTrackDetailTest : BaseSyncTest() {
 //        onData(withId(R.id.list_overview)).atPosition(1).perform(click())
 //        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-d1")
 //        onView(withId(R.id.tr_gen_detail_name)).check(matches(withText("Aalborg Daal Banen")));
+
+        onView(withId(R.id.viewPager)).perform(swipeLeft())
+        Thread.sleep(100)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-events")
+        onView(withId(R.id.viewPager)).perform(swipeRight())
+        onView(withId(R.id.viewPager)).perform(swipeRight())
+        Thread.sleep(100)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-comment")
     }
 
 }
