@@ -8,6 +8,7 @@ import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.settings.ActivityFilter
 import org.junit.Rule
 import org.junit.Test
