@@ -36,6 +36,15 @@ class ActivityTrackListTest : BaseSyncTest() {
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
         onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-down1")
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-down2")
+
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeUp())
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeUp())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-up1")
+        onView(ViewMatchers.withId(R.id.list_overview)).perform(ViewActions.swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-up2")
+
     }
 
 }
