@@ -127,14 +127,14 @@ abstract class MxCoreApplication : MxAccessApplication() {
         fun clearDB() {
             // cache
             val recThumbs = SQuery.newQuery().expr(Pictures.LOCALTHUMB, Op.NEQ, "")
-                    .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
+                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
             for (rec in recThumbs) {
                 val file = File(rec.localthumb)
                 Timber.d("Delete thumb %s", rec.localthumb)
                 file.delete()
             }
             val recLocal = SQuery.newQuery().expr(Pictures.LOCALFILE, Op.NEQ, "")
-                    .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
+                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
             for (rec in recLocal) {
                 val file = File(rec.localfile)
                 Timber.d("Delete local %s", rec.localfile)
@@ -156,11 +156,11 @@ abstract class MxCoreApplication : MxAccessApplication() {
         fun showDlgHtml(context: Context, title: Spanned, text: Spanned) {
             val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder.setMessage(text)
-                    .setCancelable(true)
-                    .setTitle(title)
-                    .setPositiveButton(android.R.string.ok) { dialog, id ->
-                        // MainActivity.this.finish();
-                    }
+                .setCancelable(true)
+                .setTitle(title)
+                .setPositiveButton(android.R.string.ok) { dialog, id ->
+                    // MainActivity.this.finish();
+                }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
         }
