@@ -2,6 +2,7 @@ package info.mx.tracks
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.text.Spanned
 import com.robotoworks.mechanoid.Mechanoid
 import com.robotoworks.mechanoid.db.SQuery
@@ -64,7 +65,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
             protected set
         private var mxServerUrl: String? = null
         private var trackApp = true
-        var isEmulator = false
+        var isEmulator = Build.HARDWARE.equals("ranchu")
         var logLevel: HttpLoggingInterceptor.Level = HttpLoggingInterceptor.Level.NONE
 
         fun readSettings() {
