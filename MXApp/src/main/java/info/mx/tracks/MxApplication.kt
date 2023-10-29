@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat.registerReceiver
 import androidx.multidex.MultiDex
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import info.hannes.commonlib.TrackingApplication.Companion.applicationScope
 import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
@@ -29,6 +30,8 @@ import info.mx.tracks.service.LocationRecalculateService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.sqlite.MxInfoDBOpenHelper
 import io.reactivex.plugins.RxJavaPlugins
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
@@ -91,7 +94,9 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
             modules(flavorModule)
         }
 
-        prepareMemoryDatabase()
+        applicationScope.launch {
+            prepareMemoryDatabase()
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -133,17 +138,18 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     override fun confirmPicture(context: Context, restId: Long, statusCurrent: Int) = Unit
 
-    override fun checkToRepairOrSync() {
-        if (MxPreferences.getInstance().repairDB) {
-            if (MxInfoDBOpenHelper.getDatabase() != null) {
-                MxInfoDBOpenHelper.getDatabase().close()
+    override suspend fun checkToRepairOrSync() {
+        applicationScope.async {
+            if (MxPreferences.getInstance().repairDB) {
+                if (MxInfoDBOpenHelper.getDatabase() != null) {
+                    MxInfoDBOpenHelper.getDatabase().close()
+                }
+                val db = File(MxInfoDBOpenHelper.getDir(applicationContext))
+
+                db.delete()
+                MxPreferences.getInstance().edit().putRepairDB(false).commit()
             }
-            val db = File(MxInfoDBOpenHelper.getDir(applicationContext))
-
-            db.delete()
-            MxPreferences.getInstance().edit().putRepairDB(false).commit()
-        }
-
+        }.await()
         OpGetRouteOperation.deleteOldRoutes()
         doSync(updateProvider = false, force = false, flavor = BuildConfig.FLAVOR)
     }

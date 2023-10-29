@@ -35,6 +35,8 @@ import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.tools.PermissionHelper
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -236,6 +238,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
         private const val JOB_ID_DISTANCE = 0
         const val SECONDS_UPDATE = 30
         const val SECONDS_UPDATE_FAST = 10
+
         // force a new location every X minutes
         val REQUEST_DAY = LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, SECONDS_UPDATE * 1000L).apply {
             setMinUpdateDistanceMeters(200f) // meters
@@ -245,30 +248,33 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
 
         // schedule the start of the service every 5 - 60 seconds
         fun scheduleJob(context: Context) {
-            if (MxPreferences.getInstance().agreeTrackSurveillance) {
-                val serviceComponent = ComponentName(context, LocationJobService::class.java)
-                val builder = JobInfo.Builder(JOB_ID_DISTANCE, serviceComponent)
-                builder.setPersisted(true)
+            val applicationScope = MainScope()
+            applicationScope.launch {
+                if (MxPreferences.getInstance().agreeTrackSurveillance) {
+                    val serviceComponent = ComponentName(context, LocationJobService::class.java)
+                    val builder = JobInfo.Builder(JOB_ID_DISTANCE, serviceComponent)
+                    builder.setPersisted(true)
 
-                // not for periodic
-                builder.setMinimumLatency((5 * 1000).toLong()) // wait at least
-                builder.setOverrideDeadline((120 * 1000).toLong()) // maximum delay
+                    // not for periodic
+                    builder.setMinimumLatency((5 * 1000).toLong()) // wait at least
+                    builder.setOverrideDeadline((120 * 1000).toLong()) // maximum delay
 
-                // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //     builder.setPeriodic(SECONDS_UPDATE_FAST * 60 * 1000, 20 * 1000);
-                // } else {
-                //     builder.setPeriodic(SECONDS_UPDATE_FAST * 60 * 1000);
-                // }
+                    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //     builder.setPeriodic(SECONDS_UPDATE_FAST * 60 * 1000, 20 * 1000);
+                    // } else {
+                    //     builder.setPeriodic(SECONDS_UPDATE_FAST * 60 * 1000);
+                    // }
 
-                // builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
-                // builder.setRequiresDeviceIdle(true); // device should be idle
-                // builder.setRequiresCharging(false); // we don't care if the device is charging or not
-                val jobScheduler: JobScheduler? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    context.getSystemService(JobScheduler::class.java)
-                } else {
-                    context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                    // builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
+                    // builder.setRequiresDeviceIdle(true); // device should be idle
+                    // builder.setRequiresCharging(false); // we don't care if the device is charging or not
+                    val jobScheduler: JobScheduler? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        context.getSystemService(JobScheduler::class.java)
+                    } else {
+                        context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                    }
+                    jobScheduler?.schedule(builder.build())
                 }
-                jobScheduler?.schedule(builder.build())
             }
         }
 

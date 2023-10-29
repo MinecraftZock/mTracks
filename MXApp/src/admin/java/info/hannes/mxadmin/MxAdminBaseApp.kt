@@ -4,6 +4,8 @@ import android.content.Context
 import info.hannes.mechadmin.WebClient
 import info.hannes.mxadmin.service.DataManagerAdmin
 import info.mx.tracks.MxApplication
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 abstract class MxAdminBaseApp : MxApplication() {
@@ -13,7 +15,10 @@ abstract class MxAdminBaseApp : MxApplication() {
     override fun onCreate() {
         super.onCreate()
         sInstance = this
-        createApiClients()
+        val applicationScope = MainScope()
+        applicationScope.launch {
+            createApiClients()
+        }
     }
 
     private fun createApiClients() {
