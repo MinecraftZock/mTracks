@@ -22,12 +22,13 @@ import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.databinding.ContentFragmentDetailTabsIndicatorBinding
 import info.mx.tracks.ops.AbstractOpGetWeatherCachedOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
+import info.mx.tracks.ops.CountingIdlingResourceSingleton
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TracksgesRecord
 import info.mx.tracks.util.ZoomOutPageTransformer
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 import kotlin.math.roundToInt
 
 class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {

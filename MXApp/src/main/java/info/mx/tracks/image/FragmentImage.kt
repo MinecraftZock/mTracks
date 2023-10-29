@@ -5,7 +5,11 @@ import android.database.Cursor
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -16,7 +20,7 @@ import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.PicturesRecord
 
 class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
-    var imageRestId: Long = 0
+    private var imageRestId: Long = 0
     private var _binding: FragmentImageSliderBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -59,7 +63,7 @@ class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
-    fun setImage(record: PicturesRecord) {
+    private fun setImage(record: PicturesRecord) {
         val point = Point()
 
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -70,7 +74,8 @@ class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             val windowInsets: WindowInsets = windowMetrics.windowInsets
 
             val insets = windowInsets.getInsetsIgnoringVisibility(
-                WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout())
+                WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout()
+            )
             val insetsWidth = insets.right + insets.left
             val insetsHeight = insets.top + insets.bottom
 
@@ -93,7 +98,7 @@ class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             point.y
         else
             point.x
-        val pictureShown = PictureHelper.checkAndSetImage(activity, record, binding.imageFullSize, record.localfile, size)
+        val pictureShown = PictureHelper.checkAndSetImage(requireContext(), record, binding.imageFullSize, record.localfile, size)
         // stop loading file changes
         if (pictureShown) {
             loaderManager.destroyLoader(LOADER_PICTURE_FULL_SIZE)
