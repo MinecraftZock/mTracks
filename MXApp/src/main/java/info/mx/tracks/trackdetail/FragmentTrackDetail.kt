@@ -1064,14 +1064,6 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     override fun onConnectionSuspended(arg0: Int) {}
 
-    private fun uploadImage(distance: Long) {
-        if (distance > 2000) {
-            doPicturePick()
-        } else {
-            doPictureMake()
-        }
-    }
-
     override fun fillNextPrevId(newId: Long) {
         var isFav = false
         var sort: String? = ""
