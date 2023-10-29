@@ -45,6 +45,7 @@ import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper
 import info.hannes.commonlib.utils.FileHelper
+import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.*
@@ -273,10 +274,12 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 doPicturePick()
                 true
             }
+
             R.id.menu_image_make -> {
                 doPictureMake()
                 true
             }
+
             else -> super.onContextItemSelected(item)
         }
     }
@@ -456,6 +459,12 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         adapterWeather = WeatherCursorAdapter(requireActivity(), null)
         binding.hWeatherGalery.layoutManager = layoutRecyclerW
         binding.hWeatherGalery.adapter = adapterWeather
+        // in CI we don't show weather.
+        // TOOD a good usecase to use mocking
+        if (BuildConfig.RUN_CI)
+            binding.hWeatherGalery.visibility = View.INVISIBLE
+        else
+            binding.hWeatherGalery.visibility = View.VISIBLE
 
         trackLoc = Location("trackLocation")
         trackLoc!!.latitude = SecHelper.entcryptXtude(trackRec.latitude)
@@ -749,14 +758,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 openEdit(recordId)
                 res = true
             }
+
             R.id.menu_event_add -> {
                 addEvent()
                 res = true
             }
+
             R.id.menu_navigation -> {
                 doOpenNavigation()
                 res = true
             }
+
             R.id.menu_detail_globus -> {
                 val recTrack = TracksRecord.get(recordId)
                 if (recTrack != null) {
@@ -767,14 +779,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 }
                 res = true
             }
+
             R.id.menu_detail_radar -> {
                 // TODO
                 res = false
             }
+
             R.id.menu_detail_share -> {
                 doShare()
                 res = false
             }
+
             R.id.menu_favorit -> {
                 toggleFavorite(item)
                 res = true
@@ -876,7 +891,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             }
 
             LOADER_WEATHER -> {
-                Timber.i("onLoadFinished Weather: %s TrackRestId: %s %s", cursor.count, recordTrack!!.restId, recordTrack!!.trackname)
+                Timber.i("onLoadFinished Weather: ${cursor.count} TrackRestId: ${recordTrack!!.restId} ${recordTrack!!.trackname}")
                 if (cursor.isBeforeFirst) {
                     cursor.moveToFirst()
                 }
