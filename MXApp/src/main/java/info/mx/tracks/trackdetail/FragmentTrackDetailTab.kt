@@ -22,7 +22,7 @@ import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.databinding.ContentFragmentDetailTabsIndicatorBinding
 import info.mx.tracks.ops.AbstractOpGetWeatherCachedOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
-import info.mx.tracks.ops.CountingIdlingResourceSingleton
+import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TracksgesRecord
@@ -34,6 +34,7 @@ import kotlin.math.roundToInt
 class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     private lateinit var adapter: AdapterFragmentTab
     private var adapterImages: ImageCursorAdapter? = null
+    private var oldPictureCount = 0
 
     private val fragmentTrackDetail: FragmentTrackDetail?
         get() {
@@ -221,8 +222,14 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
                     loaderManager.restartLoader(LOADER_PICTURE_THUMBS, bundle, this)
                 }
             }
+
             LOADER_PICTURE_THUMBS -> {
                 adapterImages!!.swapCursor(cursor)
+                if (oldPictureCount != cursor.count)
+                    repeat((0..<cursor.count).count()) {
+                        PictureIdlingResource.increment(it, cursor.count)
+                    }
+                oldPictureCount = cursor.count
                 binding.trLayoutUploadHorizontalGen.visibility = if (cursor.count == 0) View.GONE else View.VISIBLE
             }
         }

@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -15,7 +16,10 @@ import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -35,6 +39,18 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+
+    @Before
+    fun pictureIdlingBefore() {
+        registerIdlingResource()
+        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
+    }
+
+    @After
+    fun pictureIdlingBeforeAfter() {
+        unregisterIdlingResource()
+        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
+    }
 
     @Test
     fun detailTrack() {
