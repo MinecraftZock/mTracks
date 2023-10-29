@@ -23,6 +23,7 @@ def backendKey = "BACKEND_PROD_URL"
 def backendUrl = keystoreProperties.getProperty(backendKey) ? keystoreProperties.getProperty(backendKey) : "http://backend.org"
 
 def httpLoggingLevel = 'HTTP_LOGGING_LEVEL'
+def RUN_CI = 'RUN_CI'
 def SHOW_WEATHER = 'SHOW_WEATHER'
 def commitSHA1 = 'COMMIT_SHA1'
 def pushServerSleep = 'PUSH_SERVER_SLEEP'
@@ -96,9 +97,11 @@ android {
         debug {
             if (System.getenv("CI") == "true") { // Github action
                 signingConfig signingConfigs.debugCI
+                buildConfigField "boolean", RUN_CI, "true"
             }
             //applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
+            buildConfigField "boolean", RUN_CI, "false"
             buildConfigField "boolean", "FILE_LOGGING", "true"
             buildConfigField "String", httpLoggingLevel, "\"BODY\""  //NONE, BASIC, HEADERS, BODY
             buildConfigField 'int', pushServerSleep, '1000'
@@ -107,6 +110,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
             //define whether log output gets logged into log file
+            buildConfigField "boolean", RUN_CI, "false"
             buildConfigField "boolean", "FILE_LOGGING", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg', 'proguard_admin.cfg', 'proguard_admin_mechanoid.cfg', '../core/proguard_core.txt', 'proguard-RxCommAdminLib'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), "$projectDir/proguard.cfg", "$projectDir/proguard_admin.cfg", "$projectDir/proguard_admin_mechanoid.cfg", "$projectDir/proguard-test-rules.pro", '$projectDir/proguard-RxCommAdminLib'
