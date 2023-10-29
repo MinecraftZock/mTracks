@@ -9,6 +9,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.net.ServiceClient
 import com.robotoworks.mechanoid.ops.Ops
+import info.hannes.commonlib.TrackingApplication
 import info.hannes.commonlib.TrackingApplication.Companion.appTracker
 import info.hannes.commonlib.utils.ExternalStorage
 import info.mx.comlib.prefs.CommLibPrefs
@@ -21,6 +22,8 @@ import info.mx.tracks.rest.MxInfo
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.koinApplication
 import org.matomo.sdk.extra.TrackHelper
@@ -37,8 +40,10 @@ abstract class MxCoreApplication : MxAccessApplication() {
         Mechanoid.init(this)
         CommLibPrefs.init(this)
 
-        createApiClient()
-        checkToRepairOrSync()
+        TrackingApplication.applicationScope.launch(Dispatchers.Default) {
+            createApiClient()
+            checkToRepairOrSync()
+        }
 
         readSettings()
 
@@ -52,7 +57,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
     protected open fun setLogging2File(base: Context?) = Unit
 
-    abstract fun checkToRepairOrSync()
+    abstract suspend fun checkToRepairOrSync()
 
     abstract fun confirmPicture(context: Context, restId: Long, statusCurrent: Int)
 

@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.*
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -36,6 +37,7 @@ import info.mx.tracks.sqlite.MxInfoDBContract.Importstatus
 import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
 import info.mx.tracks.sqlite.MxInfoDBOpenHelper
 import info.mx.tracks.util.NetworkUtils
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -144,7 +146,9 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 if (CommLibPrefs.instance.serverUrl != newServerUrl) {
                     CommLibPrefs.instance.edit().putServerUrl(newServerUrl).commit()
                     updateBackendInfo()
-                    MxCoreApplication.createApiClient()
+                    lifecycleScope.launch {
+                        MxCoreApplication.createApiClient()
+                    }
                     MxCoreApplication.clearDB()
                     MxCoreApplication.doSync(false, true, BuildConfig.FLAVOR)
                 }
@@ -290,6 +294,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 mAdapter!!.swapCursor(null)
                 lyProgress!!.visibility = View.GONE
             }
+
             LOADER_PROGRESS -> lyProgress!!.visibility = View.GONE
         }
     }

@@ -6,6 +6,9 @@ import android.content.Context
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.provider.Settings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.matomo.sdk.Matomo
 import org.matomo.sdk.Tracker
 import org.matomo.sdk.TrackerBuilder
@@ -38,8 +41,11 @@ abstract class TrackingApplication : Application() {
         if (isDebug) {
             androidId = "debug"
         }
-        appTracker = getTracker()
-        appTracker!!.userId = androidId
+        applicationScope = MainScope()
+        applicationScope.launch(Dispatchers.Default) {
+            appTracker = getTracker()
+            appTracker!!.userId = androidId
+        }
     }
 
     @Synchronized
@@ -51,7 +57,7 @@ abstract class TrackingApplication : Application() {
     }
 
     companion object {
-
+        var applicationScope = MainScope()
         var isDebug = false
         var appTracker: Tracker? = null
             private set
