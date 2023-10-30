@@ -11,7 +11,7 @@ import com.robotoworks.mechanoid.ops.Ops
 import info.mx.tracks.R
 import info.mx.tracks.ops.AbstractOpDownLoadImageOperation
 import info.mx.tracks.ops.AbstractOpResetLocalImagesOperation
-import info.mx.tracks.ops.CountingIdlingResourceSingleton
+import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.PicturesRecord
 import timber.log.Timber
@@ -64,6 +64,7 @@ object PictureHelper {
                 //                /shell/emulated/0/Android/data/info.hannes.mxadmin/files/id298_480.png <-- real
                 val drawable = Drawable.createFromPath(filepathLocal)
                 imgView.setImageDrawable(drawable)
+                PictureIdlingResource.decrement()
 
                 // local images seems to be corrupt
                 if (drawable == null) {
