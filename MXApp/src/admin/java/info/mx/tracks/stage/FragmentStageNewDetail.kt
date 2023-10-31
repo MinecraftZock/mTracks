@@ -24,8 +24,8 @@ import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.SecHelper
-import info.mx.tracks.common.StageHelperExtension
 import info.mx.tracks.common.StatusHelper
+import info.mx.tracks.common.getStageValues
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
@@ -292,11 +292,11 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
                     fillMask(recordStage)
                     val txt: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         Html.fromHtml(
-                            StageHelperExtension.getStageValues(cursor),
+                            cursor.getStageValues(),
                             Html.FROM_HTML_MODE_LEGACY
                         )
                     } else {
-                        Html.fromHtml(StageHelperExtension.getStageValues(cursor))
+                        Html.fromHtml(cursor.getStageValues())
                     }
                     binding.trDetailStage.text = txt
                     val bundle = Bundle()
