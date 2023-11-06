@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Build
+import android.os.StrictMode
 import android.provider.Settings
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.multidex.MultiDex
@@ -63,6 +64,16 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
         isDebug = BuildConfig.DEBUG
         isAdmin = isDebug
         showWeather = BuildConfig.SHOW_WEATHER
+
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyDialog()
+                .penaltyLog()
+                .build()
+        )
 
         // for 15 minutes disable admin
         if (!isGoogleTests) {
