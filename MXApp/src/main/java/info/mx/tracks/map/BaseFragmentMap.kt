@@ -888,7 +888,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
             LOADER_STAGE -> {
                 StageHelperExtension.clearStageMarkers()
-                StageHelperExtension.addStageMarkers(map, cursor, true)
+                map?.let {
+                    StageHelperExtension.addStageMarkers(it, cursor, true)
+                }
             }
 
             LOADER_ROUTE -> {
