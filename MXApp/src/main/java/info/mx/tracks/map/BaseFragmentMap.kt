@@ -116,6 +116,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
 
         override fun onPanelStateChanged(panel: View, previousState: PanelState, newState: PanelState) {
+            val heightHeader = panel.findViewById<View>(R.id.layoutPoiHeader).height
             when (newState) {
                 PanelState.ANCHORED -> {
                     closeSearch()
@@ -123,23 +124,24 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         requireActivity().invalidateOptionsMenu()
                     }
 
-                    val heightHeader = panel.findViewById<View>(R.id.layoutPoiHeader).height
                     val params = slidingBody!!.layoutParams
                     params.height = panel.height //-height;
                     Timber.d(panel.height.toString() + "-" + heightHeader + "=" + params.height)
                     setFabPosition(PanelState.ANCHORED, 0f)
                 }
+
                 PanelState.COLLAPSED -> if (isAdded) {
-                    val height = panel.findViewById<View>(R.id.layoutPoiHeader).height
-                    Timber.d("${panel.id} height:${panel.height} new:$height")
-                    slidingDrawer!!.panelHeight = height
+                    Timber.d("${panel.id} height:${panel.height} new:$heightHeader")
+                    slidingDrawer!!.panelHeight = heightHeader
                     if (activity != null) {
                         requireActivity().invalidateOptionsMenu()
                     }
                     setFabPosition(PanelState.COLLAPSED, 0f)
                 }
+
                 PanelState.DRAGGING -> {
                 }
+
                 PanelState.EXPANDED -> {
                     Timber.d("onPanelExpanded() %s", panel.height)
                     if (activity != null) {
@@ -147,6 +149,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     }
                     setFabPosition(PanelState.EXPANDED, 0f)
                 }
+
                 PanelState.HIDDEN -> {
                     Timber.d("onPanelHidden()")
                     setFabPosition(PanelState.HIDDEN, 0f)
@@ -816,10 +819,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 query = getTracksQuery(bundle, query)
                 query.createSupportLoader(Tracksges.CONTENT_URI, null, Tracksges.TRACKNAME)
             }
+
             LOADER_STAGE -> StageHelperExtension.getStageQuery(0, true).createSupportLoader(Trackstage.CONTENT_URI, null, Trackstage.CREATED)
             LOADER_ROUTE -> SQuery.newQuery()
                 .expr(Route.TRACK_CLIENT_ID, SQuery.Op.EQ, bundle!!.getLong(TRACK_CLIENT_ID))
                 .createSupportLoader(Route.CONTENT_URI, null, Route.CREATED)
+
             LOADER_PROGRESS -> SQuery.newQuery().createSupportLoader(Importstatus.CONTENT_URI, null, Importstatus.CREATED + " desc")
             else -> throw RuntimeException("bad")
         }
@@ -880,10 +885,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     searchList!!.adapter = searchAdapter
                 }
             }
+
             LOADER_STAGE -> {
                 StageHelperExtension.clearStageMarkers()
-                StageHelperExtension.addStageMarkers(map, cursor, true)
+                map?.let {
+                    StageHelperExtension.addStageMarkers(it, cursor, true)
+                }
             }
+
             LOADER_ROUTE -> {
                 Timber.i("onLoadFinished Route:${cursor.count}")
                 if (cursor.isBeforeFirst) {
@@ -897,8 +906,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     val gson = Gson()
                     val routes = gson.fromJson(routeRecord.content, Routes::class.java)
                     var count = 0
-                    for (route in routes.routes) {
-                        val decodedPath = PolyUtil.decode(route.overviewPolyline.points)
+                    routes.routes.forEach {
+                        val decodedPath = PolyUtil.decode(it.overviewPolyline.points)
                         polylineRoute = map!!.addPolyline(
                             PolylineOptions().addAll(decodedPath)
                                 .width(10f)
@@ -913,6 +922,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     }
                 }
             }
+
             LOADER_PROGRESS -> {
                 cursor.moveToFirst()
                 if (cursor.count > 0 && cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != null &&
@@ -937,10 +947,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 // clusterMarkerManager.removeAllMarker();
                 searchAdapter!!.swapCursor(null)
             }
+
             LOADER_STAGE -> StageHelperExtension.clearStageMarkers()
             LOADER_ROUTE -> if (polylineRoute != null) {
                 polylineRoute!!.remove()
             }
+
             LOADER_PROGRESS -> lyProgress!!.visibility = View.GONE
         }
     }
