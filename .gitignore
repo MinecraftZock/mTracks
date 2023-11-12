@@ -29,3 +29,6 @@ release.keystore
 debug.keystore
 Surveilance-playstore.json
 keystore.properties
+
+/screenshotDiffs
+/artifacts
