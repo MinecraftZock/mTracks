@@ -120,6 +120,17 @@ jobs:
           ls -la MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
           cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ 14/* screenshotsToCompare
           ./screenShotCompare.sh
+      - name: comment pull request
+        if: ${{ always() }} # failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '😞 Error during screenshot compare!'
+            })
       - name: Archive screenshots diffs
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
