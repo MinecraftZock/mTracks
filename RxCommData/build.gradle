@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace 'info.mx.rxcommdata'
     defaultConfig {
         compileSdk defaultCompileSdkVersion
         minSdkVersion defaultMinSdkVersion
@@ -26,7 +27,6 @@ android {
     lint {
         abortOnError false
     }
-    namespace 'info.mx.rxcommdata'
 }
 
 dependencies {

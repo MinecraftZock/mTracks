@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace 'info.hannes.commonlib'
     defaultConfig {
         minSdkVersion defaultMinSdkVersion
         compileSdk defaultCompileSdkVersion
@@ -20,7 +21,6 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    namespace 'info.hannes.commonlib'
 }
 
 dependencies {

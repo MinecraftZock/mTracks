@@ -30,6 +30,7 @@ def pushServerSleep = 'PUSH_SERVER_SLEEP'
 def unixTime = 'UNIX_TIME_CREATED'
 
 android {
+    namespace 'info.mx.tracks'
     defaultConfig {
         compileSdk defaultCompileSdkVersion
         targetSdkVersion defaultTargetSdkVersion
@@ -154,8 +155,6 @@ android {
         checkReleaseBuilds false
         disable 'MissingTranslation', 'UnusedResources', 'InvalidPackage', 'Range'
     }
-    namespace 'info.mx.tracks'
-
 }
 
 dependencies {

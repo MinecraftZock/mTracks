@@ -36,6 +36,7 @@ dependencies {
 }
 
 android {
+    namespace 'info.mx.rxcommlibrary'
     defaultConfig {
         minSdkVersion defaultMinSdkVersion
         compileSdk defaultCompileSdkVersion
@@ -63,6 +64,4 @@ android {
     lint {
         abortOnError false
     }
-    namespace 'info.mx.rxcommlibrary'
-
 }
