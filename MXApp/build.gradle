@@ -119,7 +119,7 @@ android {
         }
     }
 
-    flavorDimensions "kind"
+    flavorDimensions = ["kind"]
     productFlavors {
         paid {
             dimension "kind"
