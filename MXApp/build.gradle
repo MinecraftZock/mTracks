@@ -98,10 +98,11 @@ android {
             if (System.getenv("CI") == "true") { // Github action
                 signingConfig signingConfigs.debugCI
                 buildConfigField "boolean", RUN_CI, "true"
-            }
+            } else
+                buildConfigField "boolean", RUN_CI, "false"
+
             //applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
-            buildConfigField "boolean", RUN_CI, "false"
             buildConfigField "boolean", "FILE_LOGGING", "true"
             buildConfigField "String", httpLoggingLevel, "\"BODY\""  //NONE, BASIC, HEADERS, BODY
             buildConfigField 'int', pushServerSleep, '1000'
