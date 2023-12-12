@@ -172,7 +172,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
-    freeImplementation "com.google.android.gms:play-services-ads:22.5.0"
+    freeImplementation "com.google.android.gms:play-services-ads:22.6.0"
 
     // Koin main features for Android
     implementation "io.insert-koin:koin-android:$koin_version"
