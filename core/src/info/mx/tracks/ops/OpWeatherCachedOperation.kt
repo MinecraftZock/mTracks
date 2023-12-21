@@ -152,11 +152,11 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
         }
         try {
             if (anonym && ANONYM_ENABLED) {
-                // then anonym
-                val resultAnonym = getWeatherFromInternetAnonym(weatherClient, requestAnonym)
-                resAll = resultAnonym!!.readAsText()
-                val resultAnonymParse = resultAnonym.parse()
-                storeResult2DBAnonym(context, args.trackClientId, gson, resultAnonymParse)
+                // then anonymous
+                val resultAnonymous = getWeatherFromInternetAnonym(weatherClient, requestAnonym)
+                resAll = resultAnonymous!!.readAsText()
+                val anonymousParse = resultAnonymous.parse()
+                storeResult2DBAnonym(context, args.trackClientId, gson, anonymousParse)
             }
             postWeatherToMX(args.trackClientId, resAll)
         } catch (e: ServiceException) {
