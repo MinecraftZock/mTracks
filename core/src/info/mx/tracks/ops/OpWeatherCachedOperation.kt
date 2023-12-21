@@ -170,6 +170,10 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
             Timber.w("empty track")
             return
         }
+        if (content.isNullOrEmpty()) {
+            Timber.e("No weather content for $trackClientId")
+            return
+        }
         try {
             val webClient = mxInfo
             val requestBody = PostWeatherRequest(
