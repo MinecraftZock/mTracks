@@ -1,9 +1,12 @@
 package info.mx.tracks
 
 import android.Manifest
+import android.widget.ListView
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
@@ -11,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.tracklist.ActivityTrackList
+import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,7 +36,35 @@ class ActivityTrackListTest : BaseSyncTest() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
+
+        Espresso.onData(Matchers.anything())
+            .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
+            .atPosition(10)
+            .perform(ViewActions.scrollTo())
+        Thread.sleep(1000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-10")
+
+        Espresso.onData(Matchers.anything())
+            .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
+            .atPosition(20)
+            .perform(ViewActions.scrollTo())
+        Thread.sleep(1000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-20")
+
+        Espresso.onData(Matchers.anything())
+            .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
+            .atPosition(30)
+            .perform(ViewActions.scrollTo())
+        Thread.sleep(1000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-30")
+
+        Espresso.onData(Matchers.anything())
+            .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
+            .atPosition(40)
+            .perform(ViewActions.scrollTo())
+        Thread.sleep(1000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-40")
     }
 
 }
