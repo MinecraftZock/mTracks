@@ -175,7 +175,7 @@ dependencies {
     freeImplementation "com.google.android.gms:play-services-ads:22.6.0"
 
     // Koin main features for Android
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation libs.koin.android
 
     // Java Compatibility
     implementation "io.insert-koin:koin-android-compat:$koin_version"

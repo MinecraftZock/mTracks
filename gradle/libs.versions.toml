@@ -1,0 +1,7 @@
+[versions]
+koin = "3.5.3"
+
+[libraries]
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+
+[plugins]
