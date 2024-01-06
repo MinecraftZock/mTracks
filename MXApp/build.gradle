@@ -254,7 +254,7 @@ def generateGitChangelog() {
     procGenerateAdmin.waitForProcessOutput(System.out, System.err)
 }
 
-task newVersion() {
+tasks.register('newVersion') {
     if (gradle.startParameter.taskNames.contains("staticAnalysis")) {
         println("Running static analysis: disabling release builds!")
         config.params.disableReleaseBuilds = true
