@@ -4,7 +4,7 @@ plugins {
 }
 
 // TODO redundant code, same like MxApp
-def keystorePropertiesFile = rootProject.file("signing/keystore.properties");
+def keystorePropertiesFile = rootProject.file("signing/keystore.properties")
 def keystoreProperties = new Properties()
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
