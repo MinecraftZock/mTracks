@@ -64,7 +64,7 @@ dependencies {
     api 'com.google.maps.android:android-maps-utils:3.8.2'
 
     // Koin main features for Android
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation libs.koin.android
 
     api "androidx.legacy:legacy-support-v4:1.6.1"
     api "androidx.appcompat:appcompat:1.6.1"
