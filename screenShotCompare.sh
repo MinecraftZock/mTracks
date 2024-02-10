@@ -5,5 +5,38 @@ set -x
 ./git-diff-image/install.sh
 GIT_DIFF_IMAGE_OUTPUT_DIR=$diffFiles git diff-image
 
+source scripts/lib.sh
+
+PR=$(echo "$GITHUB_REF_NAME" | sed "s/\// /" | awk '{print $1}')
+echo pr=$PR
+brew install jq
+
+# delete all old comments, starting with "Screenshot differs:"
+oldComments=$(curl_gh -X GET https://api.github.com/repos/"$GITHUB_REPOSITORY"/issues/"$PR"/comments | jq '.[] | (.id |tostring) + "|" + (.user.login | test("github-actions") | tostring) + "|" + (.body | test("Screenshot differs:.*") | tostring)' | grep "true|true" | tr -d "\"" | cut -f1 -d"|")
+echo "comments=$comments"
+echo "$oldComments" | while read comment; do
+  echo "delete comment=$comment"
+  curl_gh -X DELETE https://api.github.com/repos/"$GITHUB_REPOSITORY"/issues/comments/"$comment"
+done
+
+pushd $diffFiles
+body=""
+COUNTER=0
+for f in *.png; do
+  (( COUNTER++ ))
+  newName="$1-${f}"
+  mv "${f}" "$newName"
+  echo "==> Uploaded screenshot $newName"
+  curl -i -F "file=@$newName" https://www.mxtracks.info/github
+  echo "==> Add screenshot comment $PR"
+  body="$body ![screenshot](https://www.mxtracks.info/github/uploads/$newName) <br/><br/>"
+done
+
+if [ ! "$body" == "" ]; then
+  curl_gh -X POST https://api.github.com/repos/"$GITHUB_REPOSITORY"/issues/$PR/comments -d "{ \"body\" : \"Screenshot differs: $COUNTER $body \" }"
+fi
+
+popd 1>/dev/null
+
 # set error when diffs are there
 [ "$(ls -A $diffFiles)" ] && exit 1 || exit 0
