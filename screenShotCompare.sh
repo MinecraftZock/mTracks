@@ -29,7 +29,7 @@ for f in *.png; do
   echo "==> Uploaded screenshot $newName"
   curl -i -F "file=@$newName" https://www.mxtracks.info/github
   echo "==> Add screenshot comment $PR"
-  body="$body ![screenshot](https://www.mxtracks.info/github/uploads/$newName) <br/><br/>"
+  body="$body ${f}![screenshot](https://www.mxtracks.info/github/uploads/$newName) <br/><br/>"
 done
 
 if [ ! "$body" == "" ]; then
