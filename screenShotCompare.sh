@@ -33,7 +33,7 @@ for f in *.png; do
 done
 
 if [ ! "$body" == "" ]; then
-  curl_gh -X POST https://api.github.com/repos/"$GITHUB_REPOSITORY"/issues/$PR/comments -d "{ \"body\" : \"Screenshot differs: $COUNTER $body \" }"
+  curl_gh -X POST https://api.github.com/repos/"$GITHUB_REPOSITORY"/issues/$PR/comments -d "{ \"body\" : \"Screenshot differs: $COUNTER <br/><br/> $body \" }"
 fi
 
 popd 1>/dev/null
