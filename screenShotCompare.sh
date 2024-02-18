@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 diffFiles=./screenshotDiffs
 mkdir $diffFiles
 #cp MPChartExample/build/outputs/connected_android_test_additional_output/debugAndroidTest/connected/emulator\(AVD\)\ -\ 9/* screenshotsToCompare
@@ -22,14 +24,24 @@ done
 pushd $diffFiles
 body=""
 COUNTER=0
+ls -la
+
+# ignore an error, when no files where found https://unix.stackexchange.com/a/723909/201876
+setopt no_nomatch
 for f in *.png; do
-  (( COUNTER++ ))
-  newName="$1-${f}"
-  mv "${f}" "$newName"
-  echo "==> Uploaded screenshot $newName"
-  curl -i -F "file=@$newName" https://www.mxtracks.info/github
-  echo "==> Add screenshot comment $PR"
-  body="$body ${f}![screenshot](https://www.mxtracks.info/github/uploads/$newName) <br/><br/>"
+  if [[ ${f} == "*.png" ]]
+  then
+    echo "nothing found"
+  else
+    (( COUNTER++ ))
+
+    newName="$1-${f}"
+    mv "${f}" "$newName"
+    echo "==> Uploaded screenshot $newName"
+    curl -i -F "file=@$newName" https://www.mxtracks.info/github
+    echo "==> Add screenshot comment $PR"
+    body="$body ${f}![screenshot](https://www.mxtracks.info/github/uploads/$newName) <br/><br/>"
+  fi
 done
 
 if [ ! "$body" == "" ]; then
