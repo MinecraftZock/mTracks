@@ -25,12 +25,13 @@ jobs:
           cat ${GITHUB_OUTPUT}
 
   BuildFlavors:
-    name: Build All and test JDK
-    runs-on: macOS-latest
+    name: Build All and test
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         java_version: [ 17 ]
+        os: [ macos-12 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -141,9 +142,13 @@ jobs:
           [ "$(git status -s -uno)" ] && exit 1 || exit 0
   Check:
     name: Check
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs:
       - env-job
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-22.04 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
