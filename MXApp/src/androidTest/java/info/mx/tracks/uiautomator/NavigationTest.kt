@@ -159,10 +159,10 @@ class NavigationTest {
             }
         }
 
-        val clusterIcon = device.findObject(
-            UiSelector().className("android.widget.ImageView")
-                .resourceId("$MX_PACKAGE:id/map_cluster_btn")
-        )
+//        val clusterIcon = device.findObject(
+//            UiSelector().className("android.widget.ImageView")
+//                .resourceId("$MX_PACKAGE:id/map_cluster_btn")
+//        )
         // assertTrue(clusterIcon.exists())
 
         clickOkIfNeeded()
