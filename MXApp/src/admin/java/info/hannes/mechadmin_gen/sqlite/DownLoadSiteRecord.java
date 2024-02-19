@@ -21,29 +21,29 @@ import info.hannes.mechadmin_gen.sqlite.MxCalContract.DownLoadSite.Builder;
 
 public class DownLoadSiteRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<DownLoadSiteRecord> sFactory = new ActiveRecordFactory<DownLoadSiteRecord>() {
-		@Override
-		public DownLoadSiteRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+    private static final ActiveRecordFactory<DownLoadSiteRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public DownLoadSiteRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return DownLoadSite.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
-	
-	public static ActiveRecordFactory<DownLoadSiteRecord> getFactory() {
-		return sFactory;
-	}
+        @Override
+        public Uri getContentUri() {
+            return DownLoadSite.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
+
+    public static ActiveRecordFactory<DownLoadSiteRecord> getFactory() {
+        return sFactory;
+    }
 
     public static final Creator<DownLoadSiteRecord> CREATOR
-    	= new Creator<DownLoadSiteRecord>() {
+            = new Creator<>() {
         public DownLoadSiteRecord createFromParcel(Parcel in) {
             return new DownLoadSiteRecord(in);
         }
@@ -52,25 +52,25 @@ public class DownLoadSiteRecord extends ActiveRecord implements Parcelable {
             return new DownLoadSiteRecord[size];
         }
     };
-    
+
     public static String[] PROJECTION = {
-    	DownLoadSite._ID,
-    	DownLoadSite.REST_ID,
-    	DownLoadSite.DISPLAY,
-    	DownLoadSite.URL,
-    	DownLoadSite.CREATEDATE,
-    	DownLoadSite.QUELLFILE_ID
+            DownLoadSite._ID,
+            DownLoadSite.REST_ID,
+            DownLoadSite.DISPLAY,
+            DownLoadSite.URL,
+            DownLoadSite.CREATEDATE,
+            DownLoadSite.QUELLFILE_ID
     };
-    
+
     public interface Indices {
-    	int _ID = 0;
-    	int REST_ID = 1;
-    	int DISPLAY = 2;
-    	int URL = 3;
-    	int CREATEDATE = 4;
-    	int QUELLFILE_ID = 5;
+        int _ID = 0;
+        int REST_ID = 1;
+        int DISPLAY = 2;
+        int URL = 3;
+        int CREATEDATE = 4;
+        int QUELLFILE_ID = 5;
     }
-    
+
     private long mRestId;
     private boolean mRestIdDirty;
     private String mDisplay;
@@ -81,177 +81,177 @@ public class DownLoadSiteRecord extends ActiveRecord implements Parcelable {
     private boolean mCreatedateDirty;
     private long mQuellfileId;
     private boolean mQuellfileIdDirty;
-    
+
     @Override
     protected String[] _getProjection() {
-    	return PROJECTION;
+        return PROJECTION;
     }
-    
+
     public void setRestId(long restId) {
-    	mRestId = restId;
-    	mRestIdDirty = true;
+        mRestId = restId;
+        mRestIdDirty = true;
     }
-    
+
     public long getRestId() {
-    	return mRestId;
+        return mRestId;
     }
-    
+
     public void setDisplay(String display) {
-    	mDisplay = display;
-    	mDisplayDirty = true;
+        mDisplay = display;
+        mDisplayDirty = true;
     }
-    
+
     public String getDisplay() {
-    	return mDisplay;
+        return mDisplay;
     }
-    
+
     public void setUrl(String url) {
-    	mUrl = url;
-    	mUrlDirty = true;
+        mUrl = url;
+        mUrlDirty = true;
     }
-    
+
     public String getUrl() {
-    	return mUrl;
+        return mUrl;
     }
-    
+
     public void setCreatedate(long createdate) {
-    	mCreatedate = createdate;
-    	mCreatedateDirty = true;
+        mCreatedate = createdate;
+        mCreatedateDirty = true;
     }
-    
+
     public long getCreatedate() {
-    	return mCreatedate;
+        return mCreatedate;
     }
-    
+
     public void setQuellfileId(long quellfileId) {
-    	mQuellfileId = quellfileId;
-    	mQuellfileIdDirty = true;
+        mQuellfileId = quellfileId;
+        mQuellfileIdDirty = true;
     }
-    
+
     public long getQuellfileId() {
-    	return mQuellfileId;
+        return mQuellfileId;
     }
-    
-    
+
+
     public DownLoadSiteRecord() {
-    	super(DownLoadSite.CONTENT_URI);
-	}
-	
-	private DownLoadSiteRecord(Parcel in) {
-    	super(DownLoadSite.CONTENT_URI);
-    	
-		setId(in.readLong());
-		
-		mRestId = in.readLong();
-		mDisplay = in.readString();
-		mUrl = in.readString();
-		mCreatedate = in.readLong();
-		mQuellfileId = in.readLong();
-		
-		boolean[] dirtyFlags = new boolean[5];
-		in.readBooleanArray(dirtyFlags);
-		mRestIdDirty = dirtyFlags[0];
-		mDisplayDirty = dirtyFlags[1];
-		mUrlDirty = dirtyFlags[2];
-		mCreatedateDirty = dirtyFlags[3];
-		mQuellfileIdDirty = dirtyFlags[4];
-	}
-	
-	@Override
-	public int describeContents() {
-	    return 0;
-	}
-	
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(getId());
-		dest.writeLong(mRestId);
-		dest.writeString(mDisplay);
-		dest.writeString(mUrl);
-		dest.writeLong(mCreatedate);
-		dest.writeLong(mQuellfileId);
-		dest.writeBooleanArray(new boolean[] {
-			mRestIdDirty,
-			mDisplayDirty,
-			mUrlDirty,
-			mCreatedateDirty,
-			mQuellfileIdDirty
-		});
-	}
-	
-	@Override
-	protected AbstractValuesBuilder createBuilder() {
-		Builder builder = DownLoadSite.newBuilder();
+        super(DownLoadSite.CONTENT_URI);
+    }
 
-		if(mRestIdDirty) {
-			builder.setRestId(mRestId);
-		}
-		if(mDisplayDirty) {
-			builder.setDisplay(mDisplay);
-		}
-		if(mUrlDirty) {
-			builder.setUrl(mUrl);
-		}
-		if(mCreatedateDirty) {
-			builder.setCreatedate(mCreatedate);
-		}
-		if(mQuellfileIdDirty) {
-			builder.setQuellfileId(mQuellfileId);
-		}
-		
-		return builder;
-	}
-	
+    private DownLoadSiteRecord(Parcel in) {
+        super(DownLoadSite.CONTENT_URI);
+
+        setId(in.readLong());
+
+        mRestId = in.readLong();
+        mDisplay = in.readString();
+        mUrl = in.readString();
+        mCreatedate = in.readLong();
+        mQuellfileId = in.readLong();
+
+        boolean[] dirtyFlags = new boolean[5];
+        in.readBooleanArray(dirtyFlags);
+        mRestIdDirty = dirtyFlags[0];
+        mDisplayDirty = dirtyFlags[1];
+        mUrlDirty = dirtyFlags[2];
+        mCreatedateDirty = dirtyFlags[3];
+        mQuellfileIdDirty = dirtyFlags[4];
+    }
+
     @Override
-	public void makeDirty(boolean dirty){
-		mRestIdDirty = dirty;
-		mDisplayDirty = dirty;
-		mUrlDirty = dirty;
-		mCreatedateDirty = dirty;
-		mQuellfileIdDirty = dirty;
-	}
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	protected void setPropertiesFromCursor(Cursor c) {
-		setId(c.getLong(Indices._ID));
-		setRestId(c.getLong(Indices.REST_ID));
-		setDisplay(c.getString(Indices.DISPLAY));
-		setUrl(c.getString(Indices.URL));
-		setCreatedate(c.getLong(Indices.CREATEDATE));
-		setQuellfileId(c.getLong(Indices.QUELLFILE_ID));
-	}
-	
-	public static DownLoadSiteRecord fromCursor(Cursor c) {
-	    DownLoadSiteRecord item = new DownLoadSiteRecord();
-	    
-		item.setPropertiesFromCursor(c);
-		
-		item.makeDirty(false);
-		
-	    return item;
-	}
-	
-	public static DownLoadSiteRecord fromBundle(Bundle bundle, String key) {
-		bundle.setClassLoader(DownLoadSiteRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
-	}
-	
-	public static DownLoadSiteRecord get(long id) {
-	    Cursor c = null;
-	    
-	    ContentResolver resolver = Mechanoid.getContentResolver();
-	    
-	    try {
-	        c = resolver.query(DownLoadSite.CONTENT_URI.buildUpon()
-			.appendPath(String.valueOf(id)).build(), PROJECTION, null, null, null);
-	        
-	        if(!c.moveToFirst()) {
-	            return null;
-	        }
-	        
-	        return fromCursor(c);
-	    } finally {
-	        Closeables.closeSilently(c);
-	    }
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeLong(mRestId);
+        dest.writeString(mDisplay);
+        dest.writeString(mUrl);
+        dest.writeLong(mCreatedate);
+        dest.writeLong(mQuellfileId);
+        dest.writeBooleanArray(new boolean[]{
+                mRestIdDirty,
+                mDisplayDirty,
+                mUrlDirty,
+                mCreatedateDirty,
+                mQuellfileIdDirty
+        });
+    }
+
+    @Override
+    protected AbstractValuesBuilder createBuilder() {
+        Builder builder = DownLoadSite.newBuilder();
+
+        if (mRestIdDirty) {
+            builder.setRestId(mRestId);
+        }
+        if (mDisplayDirty) {
+            builder.setDisplay(mDisplay);
+        }
+        if (mUrlDirty) {
+            builder.setUrl(mUrl);
+        }
+        if (mCreatedateDirty) {
+            builder.setCreatedate(mCreatedate);
+        }
+        if (mQuellfileIdDirty) {
+            builder.setQuellfileId(mQuellfileId);
+        }
+
+        return builder;
+    }
+
+    @Override
+    public void makeDirty(boolean dirty) {
+        mRestIdDirty = dirty;
+        mDisplayDirty = dirty;
+        mUrlDirty = dirty;
+        mCreatedateDirty = dirty;
+        mQuellfileIdDirty = dirty;
+    }
+
+    @Override
+    protected void setPropertiesFromCursor(Cursor c) {
+        setId(c.getLong(Indices._ID));
+        setRestId(c.getLong(Indices.REST_ID));
+        setDisplay(c.getString(Indices.DISPLAY));
+        setUrl(c.getString(Indices.URL));
+        setCreatedate(c.getLong(Indices.CREATEDATE));
+        setQuellfileId(c.getLong(Indices.QUELLFILE_ID));
+    }
+
+    public static DownLoadSiteRecord fromCursor(Cursor c) {
+        DownLoadSiteRecord item = new DownLoadSiteRecord();
+
+        item.setPropertiesFromCursor(c);
+
+        item.makeDirty(false);
+
+        return item;
+    }
+
+    public static DownLoadSiteRecord fromBundle(Bundle bundle, String key) {
+        bundle.setClassLoader(DownLoadSiteRecord.class.getClassLoader());
+        return bundle.getParcelable(key);
+    }
+
+    public static DownLoadSiteRecord get(long id) {
+        Cursor c = null;
+
+        ContentResolver resolver = Mechanoid.getContentResolver();
+
+        try {
+            c = resolver.query(DownLoadSite.CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(id)).build(), PROJECTION, null, null, null);
+
+            if (!c.moveToFirst()) {
+                return null;
+            }
+
+            return fromCursor(c);
+        } finally {
+            Closeables.closeSilently(c);
+        }
+    }
 }
