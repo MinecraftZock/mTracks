@@ -1,10 +1,13 @@
 package info.mx.tracks.room
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import info.mx.tracks.room.entity.Track
 import info.mx.tracks.room.entity.TrackStage
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TrackDao {
@@ -50,10 +53,13 @@ interface TrackDao {
 //
 //    @Query("SELECT * FROM Track WHERE id IN (:ids)")
 //    fun loadAllByIds(ids: IntArray): List<Track>
-//
-//    @Query("SELECT * FROM Track WHERE id = :id")
-//    fun loadById(id: Long): Maybe<Track>
-//
+
+    @Query("SELECT * FROM Track WHERE id = :id")
+    fun loadById(id: Long): Flow<Track>
+
+    @Query("SELECT * FROM Track WHERE restId = :restId")
+    fun loadByRestId(restId: Long): Flow<Track>
+
 //    //    @Query("SELECT * FROM Track WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
 //    //    User findByName(String first, String last);
 //
@@ -62,6 +68,9 @@ interface TrackDao {
 //
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    fun insertTracksAll(comments: List<Track>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTrack(track: Track)
 
     @Update
     fun update(track: Track)
