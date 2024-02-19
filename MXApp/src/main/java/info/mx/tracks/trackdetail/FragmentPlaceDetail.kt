@@ -23,6 +23,7 @@ import com.google.android.libraries.places.api.Places
 import info.hannes.commonlib.LocationHelper
 import info.mx.tracks.R
 import info.mx.tracks.adapter.AdapterBitmaps
+import info.mx.tracks.common.parcelable
 import info.mx.tracks.databinding.FragmentPlaceDetailBinding
 import info.mx.tracks.map.MxPlace
 import kotlinx.coroutines.launch
@@ -36,11 +37,12 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
         get() = _binding?.scrollContent
 
     private var _binding: FragmentPlaceDetailBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentPlaceDetailBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -94,7 +96,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
 
     override fun onResume() {
         super.onResume()
-        mxPlace = arguments?.getParcelable(PLACE)
+        mxPlace = arguments?.parcelable(PLACE)
         mxPlace?.let {
             fillMask(it)
         }
@@ -118,6 +120,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
                         view.setBackgroundColor(ContextCompat.getColor(it, R.color.dark_blue))
                     }
                 }
+
                 MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> view.background = saveColor
             }
             return false
