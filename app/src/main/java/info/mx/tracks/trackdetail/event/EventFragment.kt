@@ -9,7 +9,7 @@ import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.databinding.FragmentRecyclerListBinding
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,6 +25,7 @@ class EventFragment : FragmentUpDown() {
     private val binding get() = _binding!!
 
     private val eventViewModel: EventViewModel by viewModel()
+    private val trackDetailViewModel: TrackDetailViewModel by viewModel()
 
     val mxDatabase: MxDatabase by inject()
 
@@ -79,12 +80,13 @@ class EventFragment : FragmentUpDown() {
     override fun fillMask(newId: Long) {
         requireArguments().putLong(RECORD_ID_LOCAL, newId)
 
-        val tracksRecord = TracksRecord.get(newId)
+        trackDetailViewModel.getTrackById(newId).observe(viewLifecycleOwner) { track ->
 
-        eventViewModel.allEvents(tracksRecord.restId).observe(viewLifecycleOwner) { events ->
-            adapter.setData(Data.db(events))
+            eventViewModel.allEvents(track.restId).observe(viewLifecycleOwner) { events ->
+                adapter.setData(Data.db(events))
+            }
+
+            eventViewModel.getNewRemoteData(track.restId)
         }
-
-        eventViewModel.getNewRemoteData(tracksRecord.restId)
     }
 }
