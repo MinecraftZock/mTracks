@@ -6,6 +6,7 @@ import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.comment.CommentRepository
 import info.mx.tracks.trackdetail.comment.CommentViewModel
+import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import info.mx.tracks.trackdetail.event.EventRepository
 import info.mx.tracks.trackdetail.event.EventViewModel
 import org.koin.dsl.module
@@ -16,6 +17,7 @@ val appModule = module {
     single { AppNavigationMenu() }
     single { AddMobHelper(get()) }
     single { EventViewModel() }
+    single { TrackDetailViewModel() }
     single { EventRepository() }
     single { CommentViewModel() }
     single { CommentRepository() }
