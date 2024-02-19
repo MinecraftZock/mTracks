@@ -9,7 +9,7 @@ import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.databinding.FragmentRecyclerListBinding
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,6 +25,7 @@ class CommentFragment : FragmentUpDown() {
     private val binding get() = _binding!!
 
     private val commentViewModel: CommentViewModel by viewModel()
+    private val trackDetailViewModel: TrackDetailViewModel by viewModel()
 
     val mxDatabase: MxDatabase by inject()
 
@@ -78,12 +79,10 @@ class CommentFragment : FragmentUpDown() {
     override fun fillMask(localId: Long) {
         requireArguments().putLong(RECORD_ID_LOCAL, localId)
 
-        val tracksRecord = TracksRecord.get(localId)
-
-        commentViewModel.allCommentsByTrackId(tracksRecord.restId).observe(viewLifecycleOwner) { comments ->
-            adapter.setData(Data.db(comments))
+        trackDetailViewModel.getTrackById(localId).observe(viewLifecycleOwner) { track ->
+            commentViewModel.allCommentsByTrackId(track.restId).observe(viewLifecycleOwner) { comments ->
+                adapter.setData(Data.db(comments))
+            }
         }
-
-        commentViewModel.getNewRemoteData(tracksRecord.restId)
     }
 }
