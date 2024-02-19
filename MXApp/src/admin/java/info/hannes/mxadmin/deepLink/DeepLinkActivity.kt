@@ -8,6 +8,7 @@ import android.os.Bundle
 import info.hannes.mxadmin.base.ActivityAdminBase
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxCoreApplication.Companion.doSync
+import info.mx.tracks.common.parcelable
 import timber.log.Timber
 
 class DeepLinkActivity : ActivityAdminBase() {
@@ -19,7 +20,7 @@ class DeepLinkActivity : ActivityAdminBase() {
         super.onCreate(savedInstanceState)
         Timber.d(intent.toString())
         if (savedInstanceState != null && savedInstanceState.containsKey(DEEP_LINK)) {
-            saveIntent = savedInstanceState.getParcelable(DEEP_LINK)
+            saveIntent = savedInstanceState.parcelable(DEEP_LINK)
         }
     }
 
