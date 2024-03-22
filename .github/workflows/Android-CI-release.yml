@@ -54,7 +54,7 @@ jobs:
       - name: Publish Admin
         run: ./gradlew :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{steps.tagger.outputs.tag}}
           prerelease: ${{ env.PRE_RELEASE }}
