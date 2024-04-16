@@ -155,7 +155,7 @@ jobs:
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
-      - uses: gradle/wrapper-validation-action@v2
+      - uses: gradle/wrapper-validation-action@v3
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
