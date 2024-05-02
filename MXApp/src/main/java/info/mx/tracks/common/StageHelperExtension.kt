@@ -115,7 +115,7 @@ fun Cursor.getStageValues(): String {
                 if (this.getString(i) != null && this.getString(i) != "0" && this.getString(i) != "0.0"
                     && this.getString(i) != ""
                 ) {
-                    res += "${this.getColumnName(i)}=${this.getString(i)}.trimIndent()"
+                    res += "${this.getColumnName(i)}=${this.getString(i).trimIndent()}"
                 }
             }
         }
