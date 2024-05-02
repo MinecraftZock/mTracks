@@ -31,7 +31,7 @@ ext {
     defaultCompileSdkVersion = 34
     defaultMinSdkVersion = 21
     defaultTargetSdkVersion = 34
-    koin_version = "3.5.3"
+    koin_version = "3.5.6"
     gsonVersion = "2.10.1"
     retrofitVersion = "2.9.0"
     rxAndroidVersion = "2.1.1"
