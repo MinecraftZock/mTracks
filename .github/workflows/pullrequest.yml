@@ -100,7 +100,7 @@ jobs:
           api: ${{ matrix.api }}
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
-          cmdOptions: -noaudio -no-boot-anim -no-window
+          cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
           bootTimeout: 840 # seconds = 12 minutes
       - name: Archive screenshots
         if: ${{ always() }}
