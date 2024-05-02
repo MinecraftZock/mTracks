@@ -112,10 +112,8 @@ fun Cursor.getStageValues(): String {
                 this.getColumnName(i) != Trackstage.CREATED &&
                 this.getColumnName(i) != Trackstage.APPROVED
             ) {
-                if (this.getString(i) != null && this.getString(i) != "0" && this.getString(i) != "0.0"
-                    && this.getString(i) != ""
-                ) {
-                    res += "${this.getColumnName(i)}=${this.getString(i).trimIndent()}"
+                if (this.getString(i) != null && this.getString(i) != "0" && this.getString(i) != "0.0" && this.getString(i) != "") {
+                    res += "\n${this.getColumnName(i)}=${this.getString(i).trimIndent()}"
                 }
             }
         }
