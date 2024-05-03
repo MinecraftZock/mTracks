@@ -200,7 +200,7 @@ dependencies {
     implementation 'com.github.MikeOrtiz:TouchImageView:3.6'
 
     implementation "androidx.browser:browser:1.8.0"
-    implementation "androidx.vectordrawable:vectordrawable-animated:1.1.0"
+    implementation "androidx.vectordrawable:vectordrawable-animated:1.2.0"
 
     implementation "androidx.room:room-runtime:$room"
     kapt "androidx.room:room-compiler:$room"
