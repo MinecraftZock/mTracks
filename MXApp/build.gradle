@@ -185,7 +185,7 @@ dependencies {
     // Navigation Graph
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
     // Jetpack Compose
-    implementation "io.insert-koin:koin-androidx-compose:3.5.3"
+    implementation "io.insert-koin:koin-androidx-compose:3.5.6"
 
     // crash
     def work_version = "2.9.0"
