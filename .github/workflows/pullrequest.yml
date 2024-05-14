@@ -25,7 +25,7 @@ jobs:
           cat ${GITHUB_OUTPUT}
 
   BuildFlavors:
-    name: Build All and test
+    name: Build
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -48,8 +48,6 @@ jobs:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Build project
         run: ./gradlew assembleDebug
-      #      - name: Run tests
-      #        run: ./gradlew test
       - name: cleanup
         run: ./signing/cleanup.sh
   TestPro:
@@ -161,6 +159,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 17
+      #      - name: Run tests
+      #        run: ./gradlew test
       - name: gradle check
         run: ./gradlew lintDebug # ktlintCheck
       - name: Archive Lint report
