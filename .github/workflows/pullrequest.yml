@@ -99,7 +99,7 @@ jobs:
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
           cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
-          bootTimeout: 840 # seconds = 12 minutes
+          bootTimeout: 180 # 840 seconds = 12 minutes
       - name: Archive screenshots
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
