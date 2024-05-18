@@ -64,13 +64,13 @@ jobs:
         tag: [ 'google_apis' ]
         emulatorApi: [ 14 ]
         java_version: [ 17 ]
-    #        include:
-    #          - os: macOS-latest
-    #            api: 28
-    #            abi: x86_64
-    #            tag: 'google_apis'
-    #            emulatorApi: 9
-    #            java_version: 17
+        include:
+          - os: evo
+            api: 28
+            abi: x86_64
+            tag: 'google_apis'
+            emulatorApi: 9
+            java_version: 17
     steps:
       - uses: actions/checkout@v4
         with:
@@ -85,8 +85,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: ${{ matrix.java_version }}
-      - name: prepare
-        run: brew install exiftool imagemagick
+      #      - name: prepare
+      #        run: brew install exiftool imagemagick
       - name: Install Android SDK
         uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
