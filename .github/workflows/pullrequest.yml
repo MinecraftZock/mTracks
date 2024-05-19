@@ -62,6 +62,7 @@ jobs:
         api: [ 34 ]
         abi: [ arm64-v8a ]
         tag: [ 'google_apis' ]
+        emulatorApi: [ 14 ]
         java_version: [ 17 ]
     #        include:
     #          - os: macOS-latest
@@ -69,6 +70,7 @@ jobs:
     #            api: 28
     #            abi: x86_64
     #            tag: 'google_apis'
+    #            emulatorApi: [ 9 ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -120,7 +122,9 @@ jobs:
         run: |
           ./signing/cleanup.sh
           ls -la MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-          cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ 14/* screenshotsToCompare
+          set -x
+          cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
+          set +x
           echo ${{ env.resourceRunID }}
           ./screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs
@@ -135,7 +139,7 @@ jobs:
       - name: Show git status
         if: ${{ always() }}
         run: |
-          git add screenshotsToCompare
+          git add screenshotsToCompare${{ matrix.emulatorApi }}
           git status
           [ "$(git status -s -uno)" ] && exit 1 || exit 0
   Check:
