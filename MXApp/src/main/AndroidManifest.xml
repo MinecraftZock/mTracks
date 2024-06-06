@@ -179,6 +179,7 @@
             android:name="info.mx.tracks.ops.google.MxGoogleService"
             android:foregroundServiceType="dataSync"
             android:exported="false" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
