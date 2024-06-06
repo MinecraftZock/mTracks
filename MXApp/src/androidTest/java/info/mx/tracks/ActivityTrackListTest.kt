@@ -30,9 +30,8 @@ class ActivityTrackListTest : BaseSyncTest() {
     @Test
     fun showTrackListTest() {
         // This is the first time settings activity with always changed version number
-        //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
     }
 
 }
