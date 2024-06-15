@@ -54,12 +54,12 @@ class NetworkProblemAdapter(private val context: Context) : RecyclerView.Adapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val networkProblem: RxNetworkProblem = listNP[position]
         holder.textTime.text = sdf.format(
-            Date(java.lang.Long.valueOf(networkProblem.getChanged().toLong()) * 1000)
+            Date(java.lang.Long.valueOf(networkProblem.changed?.toLong() ?: 0) * 1000)
         )
-        holder.textCount.text = position.toString() + "/" + networkProblem.getTracks()
-        holder.textReason.setText(networkProblem.getReason())
+        holder.textCount.text = position.toString() + "/" + networkProblem.tracks
+        holder.textReason.setText(networkProblem.reason)
         if (position == listNP.size - 1) {
-            requestData(java.lang.Long.valueOf(listNP[listNP.size - 1].getChanged().toLong()) * 1000)
+            requestData(java.lang.Long.valueOf(listNP[listNP.size - 1].changed?.toLong() ?: 0) * 1000)
         }
     }
 
