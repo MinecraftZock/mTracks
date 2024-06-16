@@ -181,4 +181,11 @@
     <string name="show_pro_dialog">You found a function, which is only in PRO version available. To enable this function you can purchase the PRO
         version</string>
     <string name="jump_google_play_store">Jump to Google Play Store</string>
+    <string name="monday">mo</string>
+    <string name="tuesday">tu</string>
+    <string name="thurday">th</string>
+    <string name="wednesday">we</string>
+    <string name="friday">fr</string>
+    <string name="saturday">sa</string>
+    <string name="sunday">so</string>
 </resources>

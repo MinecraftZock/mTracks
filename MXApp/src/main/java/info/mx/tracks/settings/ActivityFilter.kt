@@ -17,8 +17,8 @@ import info.mx.tracks.ActivityAppBase
 import info.mx.tracks.MxCoreApplication.Companion.isAdmin
 import info.mx.tracks.R
 import info.mx.tracks.adapter.ArrayAdapterRightAlign
-import info.mx.tracks.common.LayoutHelper
 import info.mx.tracks.common.QueryHelper
+import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.databinding.ActivityFilterBinding
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService.Companion.restartService
@@ -74,43 +74,43 @@ class ActivityFilter : ActivityAppBase() {
         binding.include.tvFilterMo.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenMo((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterDi.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenDi((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterMi.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenMi((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterDo.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenDo((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterFr.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenFr((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterSa.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenSa((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
         binding.include.tvFilterSo.setOnClickListener { v: View ->
             v.tag = !(v.tag as Boolean)
             prefs.edit().putSearchOpenSo((v.tag as Boolean)).commit()
-            LayoutHelper.setDayLayout(this@ActivityFilter, v, (v.tag as Boolean))
+            v.setDayLayout(v.tag as Boolean)
             setTrackCount()
         }
 
@@ -251,13 +251,13 @@ class ActivityFilter : ActivityAppBase() {
         binding.include.tvFilterFr.tag = prefs.searchOpenFr
         binding.include.tvFilterSa.tag = prefs.searchOpenSa
         binding.include.tvFilterSo.tag = prefs.searchOpenSo
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterMo, prefs.searchOpenMo)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterDi, prefs.searchOpenDi)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterMi, prefs.searchOpenMi)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterDo, prefs.searchOpenDo)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterFr, prefs.searchOpenFr)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterSa, prefs.searchOpenSa)
-        LayoutHelper.setDayLayout(this, binding.include.tvFilterSo, prefs.searchOpenSo)
+        binding.include.tvFilterMo.setDayLayout(prefs.searchOpenMo)
+        binding.include.tvFilterDi.setDayLayout(prefs.searchOpenDi)
+        binding.include.tvFilterMi.setDayLayout(prefs.searchOpenMi)
+        binding.include.tvFilterDo.setDayLayout(prefs.searchOpenDo)
+        binding.include.tvFilterFr.setDayLayout(prefs.searchOpenFr)
+        binding.include.tvFilterSa.setDayLayout(prefs.searchOpenSa)
+        binding.include.tvFilterSo.setDayLayout(prefs.searchOpenSo)
         binding.include.filterOnlyOpen.isChecked = prefs.onlyOpen
         binding.include.filterOnlyApproved.isChecked = prefs.onlyApproved
         binding.include.filterShowmx.isChecked = prefs.showMx

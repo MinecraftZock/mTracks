@@ -175,4 +175,12 @@
         kannst du die PRO Version erwerben.
     </string>
     <string name="jump_google_play_store">Öffne Google Play Store</string>
+
+    <string name="monday">mo</string>
+    <string name="tuesday">di</string>
+    <string name="thurday">do</string>
+    <string name="wednesday">mi</string>
+    <string name="friday">fr</string>
+    <string name="saturday">sa</string>
+    <string name="sunday">so</string>
 </resources>

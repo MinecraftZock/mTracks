@@ -17,8 +17,8 @@ import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
-import info.mx.tracks.common.LayoutHelper
 import info.mx.tracks.common.SecHelper
+import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract.TracksGesSum
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
@@ -108,7 +108,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 res = true
             } else if (view.id == R.id.tr_mo || view.id == R.id.tr_tu || view.id == R.id.tr_we || view.id == R.id.tr_th || view.id == R.id.tr_fr || view.id == R.id.tr_sa || view.id == R.id.tr_so) {
                 val value = cursor.getInt(columnIndex)
-                LayoutHelper.setDayLayout(context, view, value == 1)
+                view.setDayLayout(value == 1)
                 when (view.id) {
                     R.id.tr_mo -> (view as TextView).text = shortWeekdays[2]
                     R.id.tr_tu -> (view as TextView).text = shortWeekdays[3]
