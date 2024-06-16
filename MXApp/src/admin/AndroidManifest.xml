@@ -6,8 +6,6 @@
         android:glEsVersion="0x00020000"
         android:required="true"/>
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-
     <application
         android:name="info.hannes.mxadmin.MxAppAdmin"
         android:hardwareAccelerated="true"
@@ -90,13 +88,11 @@
 
         <service
             android:name="info.hannes.mechadmin_gen.ops.mxcal.MxCalService"
-            android:foregroundServiceType="dataSync"
             android:exported="false">
         </service>
 
         <service
             android:name="info.hannes.mechadmin_gen.ops.StageingService"
-            android:foregroundServiceType="dataSync"
             android:exported="false">
         </service>
 
