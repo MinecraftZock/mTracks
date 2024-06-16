@@ -14,7 +14,7 @@ import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
-import info.mx.tracks.common.LayoutHelper
+import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.sqlite.TracksGesSumRecord
@@ -151,13 +151,13 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
             val id = context.resources.getIdentifier(country, "drawable", context.packageName)
             tr_country.setImageResource(id)
             tr_ratingBar.rating = track.rating.toFloat()
-            LayoutHelper.setDayLayout(context, tr_mo, track.openmondays == 1L)
-            LayoutHelper.setDayLayout(context, tr_tu, track.opentuesdays == 1L)
-            LayoutHelper.setDayLayout(context, tr_we, track.openwednesday == 1L)
-            LayoutHelper.setDayLayout(context, tr_th, track.openthursday == 1L)
-            LayoutHelper.setDayLayout(context, tr_fr, track.openfriday == 1L)
-            LayoutHelper.setDayLayout(context, tr_sa, track.opensaturday == 1L)
-            LayoutHelper.setDayLayout(context, tr_so, track.opensunday == 1L)
+            tr_mo.setDayLayout(track.openmondays == 1L)
+            tr_tu.setDayLayout(track.opentuesdays == 1L)
+            tr_we.setDayLayout(track.openwednesday == 1L)
+            tr_th.setDayLayout(track.openthursday == 1L)
+            tr_fr.setDayLayout(track.openfriday == 1L)
+            tr_sa.setDayLayout(track.opensaturday == 1L)
+            tr_so.setDayLayout(track.opensunday == 1L)
             tr_mo.text = shortWeekdays[2]
             tr_tu.text = shortWeekdays[3]
             tr_we.text = shortWeekdays[4]

@@ -24,7 +24,7 @@ import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.DistanceHelper.checkDistance4View
 import info.mx.tracks.common.DistanceHelper.setDistanceString
-import info.mx.tracks.common.LayoutHelper
+import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.*
 import info.mx.tracks.sqlite.MxInfoDBContract.*
@@ -94,13 +94,13 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         } else {
             viewName.text = stageRecord.trackname
         }
-        LayoutHelper.setDayLayout(context, viewMo, stageRecord.openmondays == 1L)
-        LayoutHelper.setDayLayout(context, viewTu, stageRecord.opentuesdays == 1L)
-        LayoutHelper.setDayLayout(context, viewWe, stageRecord.openwednesday == 1L)
-        LayoutHelper.setDayLayout(context, viewTh, stageRecord.openthursday == 1L)
-        LayoutHelper.setDayLayout(context, viewFr, stageRecord.openfriday == 1L)
-        LayoutHelper.setDayLayout(context, viewSa, stageRecord.opensaturday == 1L)
-        LayoutHelper.setDayLayout(context, viewSo, stageRecord.opensunday == 1L)
+        viewMo.setDayLayout(stageRecord.openmondays == 1L)
+        viewTu.setDayLayout(stageRecord.opentuesdays == 1L)
+        viewWe.setDayLayout(stageRecord.openwednesday == 1L)
+        viewTh.setDayLayout(stageRecord.openthursday == 1L)
+        viewFr.setDayLayout(stageRecord.openfriday == 1L)
+        viewSa.setDayLayout(stageRecord.opensaturday == 1L)
+        viewSo.setDayLayout(stageRecord.opensunday == 1L)
         viewMo.text = shortWeekdays[2]
         viewTu.text = shortWeekdays[3]
         viewWe.text = shortWeekdays[4]
@@ -165,13 +165,13 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         viewRating.rating = poiRecord.rating.toFloat()
         viewName.text =
             (if (isAdmin && poiRecord.approved == -1L) "--" else "") + poiRecord.trackname
-        LayoutHelper.setDayLayout(context, viewMo, poiRecord.openmondays == 1L)
-        LayoutHelper.setDayLayout(context, viewTu, poiRecord.opentuesdays == 1L)
-        LayoutHelper.setDayLayout(context, viewWe, poiRecord.openwednesday == 1L)
-        LayoutHelper.setDayLayout(context, viewTh, poiRecord.openthursday == 1L)
-        LayoutHelper.setDayLayout(context, viewFr, poiRecord.openfriday == 1L)
-        LayoutHelper.setDayLayout(context, viewSa, poiRecord.opensaturday == 1L)
-        LayoutHelper.setDayLayout(context, viewSo, poiRecord.opensunday == 1L)
+        viewMo.setDayLayout(poiRecord.openmondays == 1L)
+        viewTu.setDayLayout(poiRecord.opentuesdays == 1L)
+        viewWe.setDayLayout(poiRecord.openwednesday == 1L)
+        viewTh.setDayLayout(poiRecord.openthursday == 1L)
+        viewFr.setDayLayout(poiRecord.openfriday == 1L)
+        viewSa.setDayLayout(poiRecord.opensaturday == 1L)
+        viewSo.setDayLayout(poiRecord.opensunday == 1L)
         viewMo.text = shortWeekdays[2]
         viewTu.text = shortWeekdays[3]
         viewWe.text = shortWeekdays[4]
