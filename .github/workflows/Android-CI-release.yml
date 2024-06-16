@@ -6,9 +6,17 @@ on:
       - '*'
 
 jobs:
-  build:
+  publishRelease:
     name: Publish release
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flavor: [ "free", "paid" ]
+        target: [ "production" ]
+        include:
+          - flavor: "admin"
+            target: "alpha"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,12 +55,37 @@ jobs:
         run: ./gradlew :MXApp:assembleRelease
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-      - name: Publish Free
-        run: ./gradlew :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=production
-      - name: Publish Paid
-        run: ./gradlew :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=production
-      - name: Publish Admin
-        run: ./gradlew :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
+      - name: Publish {{ matrix.flavor }} to ${{ matrix.target }}
+        run: ./gradlew :MXApp:publish${{ matrix.flavor }}ReleaseBundle -Dorg.gradle.project.track=${{ matrix.target }}
+
+  createRelease:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs:
+      - publishRelease
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get the version
+        id: tagger
+        uses: jimschubert/query-tag-action@v2
+        with:
+          skip-unshallow: 'true'
+          abbrev: false
+          commit-ish: HEAD
+      - name: Check pre-release
+        run: |
+          echo "tag=${{steps.tagger.outputs.tag}}"
+          if [[ ${{ steps.tagger.outputs.tag }} == *alpha* || ${{ steps.tagger.outputs.tag }} == *beta* ]]
+          then
+             prerelease=true
+          else
+             prerelease=false
+          fi
+          echo "PRE_RELEASE=$prerelease" >> $GITHUB_ENV
+          echo "prerelease=$prerelease"
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
