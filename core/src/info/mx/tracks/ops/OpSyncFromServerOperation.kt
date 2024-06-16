@@ -15,10 +15,6 @@ import android.provider.Settings.Secure
 import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -56,15 +52,17 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
 
-class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), ConnectionCallbacks, OnConnectionFailedListener, CoreKoinComponent {
+
+class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinComponent {
     private var lastKnown: Location? = null
-    private var googleApiClient: GoogleApiClient? = null
     private lateinit var operationContext: OperationContext
 
     private val dataManagerCore: DataManagerCore by inject()
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         operationContext = context
+        requestLastLocation()
+
         val webClient = MxCoreApplication.mxInfo
         CountingIdlingResourceSingleton.increment()
 
@@ -346,9 +344,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
         for (record in tracks) {
             val coder = Geocoder(context)
             try {
-                val adresses = coder.getFromLocation(
-                    SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1
-                )
+                val adresses = coder.getFromLocation(SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
                 if (adresses != null && adresses.size > 0) {
                     val country = adresses[0].countryCode
                     Timber.d("${record.trackname}  country:$country")
@@ -731,12 +727,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
         var res: Int
         operationContext = context
         try {
-            googleApiClient = GoogleApiClient.Builder(context.applicationContext)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .addOnConnectionFailedListener(this)
-                .build()
-
             val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
 
             if (maxCreated == 0) {
@@ -1253,30 +1243,23 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), Connectio
         return result
     }
 
-    override fun onConnected(connectionHint: Bundle?) {
-        if (googleApiClient!!.isConnected) {
-            try {
-                if (!(ActivityCompat.checkSelfPermission(
-                        operationContext.applicationContext,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(
-                                operationContext.applicationContext,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED)
-                ) {
-                    LocationServices.getFusedLocationProviderClient(operationContext.applicationContext).lastLocation
-                        .addOnSuccessListener { last -> lastKnown = last }
-                }
-            } catch (ignored: Exception) {
+    private fun requestLastLocation() {
+        try {
+            if (!(ActivityCompat.checkSelfPermission(
+                    operationContext.applicationContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(
+                            operationContext.applicationContext,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED)
+            ) {
+                LocationServices.getFusedLocationProviderClient(operationContext.applicationContext).lastLocation
+                    .addOnSuccessListener { last -> lastKnown = last }
             }
-
+        } catch (ignored: Exception) {
         }
     }
-
-    override fun onConnectionFailed(result: ConnectionResult) {}
-
-    override fun onConnectionSuspended(arg0: Int) {}
 
     companion object {
 
