@@ -24,8 +24,6 @@
     <!-- needed for pre-oreo devices-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <application
         android:name="info.mx.tracks.MxApplication"
         android:allowBackup="true"
