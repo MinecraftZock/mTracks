@@ -20,7 +20,7 @@
     <dimen name="weather_img_size_dp">40dp</dimen>
 
     <dimen name="mx_track_day_padding">18dp</dimen>
-    <dimen name="mx_track_day_padding_width">22dp</dimen>
+    <dimen name="mx_track_day_padding_width">24dp</dimen>
     <dimen name="mx_filter_day_padding">25dp</dimen>
     <dimen name="mx_fontsize_xxsmall">10dp</dimen>
     <dimen name="mx_fontsize_xsmall">12dp</dimen>

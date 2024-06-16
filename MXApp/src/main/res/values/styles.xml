@@ -141,7 +141,7 @@
     </style>
 
     <style name="mx_style_openday_track" parent="mx_style_openday">
-        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:layout_marginRight">2dp</item>
         <item name="android:layout_width">@dimen/mx_track_day_padding_width</item>
         <item name="android:layout_height">@dimen/mx_track_day_padding</item>
     </style>
