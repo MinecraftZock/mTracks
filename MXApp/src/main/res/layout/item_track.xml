@@ -11,16 +11,17 @@
     android:background="@drawable/list_item_selector"
     android:showDividers="beginning"
     tools:ignore="SelectableText"
-    android:paddingRight="@dimen/tracklist_right_padding">
+    android:paddingStart="1dp"
+    android:paddingEnd="@dimen/tracklist_right_padding">
 
     <ImageView
         android:id="@+id/tr_track_access"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="top|left"
+        android:layout_gravity="top|start"
         android:layout_marginTop="5dp"
         android:contentDescription="TODO"
-        android:gravity="center_vertical|left"
+        android:gravity="center_vertical|start"
         android:scaleType="fitCenter"
         android:src="@drawable/flag_blau_hell"
         tools:ignore="HardcodedText,ContentDescription"/>
@@ -29,10 +30,10 @@
         android:id="@+id/layoutPoiHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|left"
+        android:gravity="center_vertical|start"
         android:orientation="vertical"
-        android:paddingLeft="1dp"
-        android:paddingRight="7dp">
+        android:paddingEnd="7dp"
+        android:paddingStart="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,13 +44,13 @@
                 android:id="@+id/tr_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:maxLines="1"
-                android:paddingLeft="0dip"
-                android:paddingRight="5dip"
+                android:paddingEnd="5dip"
+                android:paddingStart="1dip"
                 android:singleLine="true"
                 android:textAppearance="@style/textAppearanceModerate"
                 android:textStyle="bold"
@@ -59,9 +60,11 @@
                 android:id="@+id/tr_country"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mx_fontsize_moderate"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:contentDescription="Country"
                 android:scaleType="fitEnd"
-                tools:src="@drawable/ad2x"/>
+                android:src="@drawable/ad2x"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,58 +76,52 @@
             <TextView
                 android:id="@+id/tr_mo"
                 style="@style/mx_style_openday_track"
-                android:text="mo">
-            </TextView>
+                android:text="@string/monday" />
 
             <TextView
                 android:id="@+id/tr_tu"
                 style="@style/mx_style_openday_track"
-                android:text="di">
-            </TextView>
+                android:text="@string/tuesday" />
 
             <TextView
                 android:id="@+id/tr_we"
                 style="@style/mx_style_openday_track"
-                android:text="mi">
-            </TextView>
+                android:text="@string/wednesday"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/tr_th"
                 style="@style/mx_style_openday_track"
-                android:text="do">
-            </TextView>
+                android:text="@string/thurday" />
 
             <TextView
                 android:id="@+id/tr_fr"
                 style="@style/mx_style_openday_track"
-                android:text="fr">
-            </TextView>
+                android:text="@string/friday" />
 
             <TextView
                 android:id="@+id/tr_sa"
                 style="@style/mx_style_openday_track"
-                android:text="sa">
-            </TextView>
+                android:text="@string/saturday" />
 
             <TextView
                 android:id="@+id/tr_so"
                 style="@style/mx_style_openday_track"
-                android:text="so">
-            </TextView>
+                android:text="@string/sunday" />
 
             <View
                 android:id="@+id/textView1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <include
                 layout="@layout/distance_background"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:paddingLeft="0dp"
-                android:paddingRight="1dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="1dp"
                 />
 
         </LinearLayout>
@@ -140,10 +137,10 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:numStars="5"
                 android:rating="1.5"/>
 
@@ -152,19 +149,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/tr_camera"
-                android:layout_toRightOf="@+id/tr_ratingBar"
+                android:layout_toStartOf="@+id/tr_camera"
+                android:layout_toEndOf="@+id/tr_ratingBar"
+                android:contentDescription="Contains Calendar"
                 android:scaleType="fitEnd"
-                android:src="@android:drawable/ic_menu_my_calendar"/>
+                android:src="@android:drawable/ic_menu_my_calendar"
+                tools:ignore="HardcodedText" />
 
             <ImageView
                 android:id="@+id/tr_camera"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:contentDescription="Contains images"
                 android:scaleType="centerInside"
-                android:src="@android:drawable/ic_menu_camera"/>
+                android:src="@android:drawable/ic_menu_camera"
+                tools:ignore="HardcodedText" />
 
         </RelativeLayout>
 
@@ -178,9 +179,11 @@
                 android:id="@+id/tr_list_eventlogo"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="Contains events"
                 android:scaleType="fitStart"
-                android:src="@drawable/xcc_logo_at"/>
+                android:src="@drawable/xcc_logo_at"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/tr_list_event"
@@ -189,7 +192,8 @@
                 android:gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"
-                tools:text="Event Text"/>
+                tools:text="Event Text" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -204,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:singleLine="true"
                 android:textAppearance="@style/textAppearanceSmall"
                 android:textColor="@color/font_color_grey"
