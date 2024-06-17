@@ -5,6 +5,7 @@ import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.comment.CommentRepository
 import info.mx.tracks.trackdetail.comment.CommentViewModel
+import info.mx.tracks.trackdetail.detail.TrackDetailRepository
 import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import info.mx.tracks.trackdetail.event.EventRepository
 import info.mx.tracks.trackdetail.event.EventViewModel
@@ -20,6 +21,7 @@ val appModule = module {
     single { EventRepository() }
     single { CommentViewModel() }
     single { CommentRepository() }
+    single { TrackDetailRepository() }
 
     //factory { MySimplePresenter(get()) }
 }
