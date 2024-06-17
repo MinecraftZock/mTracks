@@ -47,6 +47,7 @@ jobs:
         with:
           path: |
             ./**/build
+            .gradle
           key: ${{ env.CACHE_KEY }}
   TestPro:
     name: Test Pro
@@ -97,6 +98,7 @@ jobs:
         with:
           path: |
             ./**/build
+            .gradle
           key: ${{ env.CACHE_KEY }}
       - name: Run instrumentation tests
         uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
