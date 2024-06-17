@@ -12,6 +12,7 @@ import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class CommentFragment : FragmentUpDown() {
 
@@ -80,6 +81,7 @@ class CommentFragment : FragmentUpDown() {
         requireArguments().putLong(RECORD_ID_LOCAL, localId)
 
         trackDetailViewModel.getTrackById(localId).observe(viewLifecycleOwner) { track ->
+            Timber.d(track.toString())
             commentViewModel.allCommentsByTrackId(track.restId).observe(viewLifecycleOwner) { comments ->
                 adapter.setData(Data.db(comments))
             }
