@@ -46,8 +46,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ./MXApp/build/outputs/apk/paid/debug
-            ./MXApp/build/outputs/apk/androidTest/paid/debug/
+            ./**/build
           key: ${{ env.CACHE_KEY }}
   TestPro:
     name: Test Pro
@@ -97,8 +96,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ./MXApp/build/outputs/apk/paid/debug
-            ./MXApp/build/outputs/apk/androidTest/paid/debug/
+            ./**/build
           key: ${{ env.CACHE_KEY }}
       - name: Run instrumentation tests
         uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
