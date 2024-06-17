@@ -95,8 +95,8 @@ class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.Load
         mAdapter!!.swapCursor(null)
     }
 
-    override fun fillMask(newId: Long) {
-        requireArguments().putLong(RECORD_ID_LOCAL, newId)
+    override fun fillMask(localId: Long) {
+        requireArguments().putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_RATINGS, arguments, this)
     }
 

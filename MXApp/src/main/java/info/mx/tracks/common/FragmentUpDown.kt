@@ -83,7 +83,7 @@ abstract class FragmentUpDown : FragmentBase() {
         }
     }
 
-    abstract fun fillMask(newId: Long)
+    abstract fun fillMask(localId: Long)
 
     companion object {
 

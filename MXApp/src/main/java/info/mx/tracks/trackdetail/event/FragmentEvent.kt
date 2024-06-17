@@ -99,8 +99,8 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         mAdapter!!.swapCursor(null)
     }
 
-    override fun fillMask(newId: Long) {
-        requireArguments().putLong(RECORD_ID_LOCAL, newId)
+    override fun fillMask(localId: Long) {
+        requireArguments().putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_EVENTS, arguments, this)
     }
 

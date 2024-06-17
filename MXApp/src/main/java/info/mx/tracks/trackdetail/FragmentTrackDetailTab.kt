@@ -106,9 +106,9 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         }
     }
 
-    override fun fillMask(newId: Long) {
+    override fun fillMask(localId: Long) {
         val bundle = Bundle()
-        bundle.putLong(RECORD_ID_LOCAL, newId)
+        bundle.putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_TRACK, bundle, this)
 
         for (i in 0 until adapter.count) {
@@ -116,7 +116,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
             if (fragment != null) {
                 // Tablets have a FragmentTrackList
                 if (fragment is FragmentUpDown) {
-                    fragment.fillMask(newId)
+                    fragment.fillMask(localId)
                 }
             } else {
                 Timber.d("fragment not found $i/${adapter.count} null")
