@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
 env:
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} | sed 's:.*/::'
   resourceRunID: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
@@ -155,5 +155,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: MX-Lint-report-${{ env.BRANCH_NAME }}
+          name: MX-Lint-report-${{ env.BRANCH_NAME }} | sed 's:.*/::'
           path: ./**/build/reports/lint-results*.html
