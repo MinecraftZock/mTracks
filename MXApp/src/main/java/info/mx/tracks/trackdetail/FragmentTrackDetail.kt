@@ -1064,12 +1064,12 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     override fun onConnectionSuspended(arg0: Int) {}
 
-    override fun fillNextPrevId(newId: Long) {
+    override fun fillNextPrevId(localId: Long) {
         var isFav = false
         var sort: String? = ""
         currPosition = -1
-        prevId = 0L
-        nextId = 0L
+        prevLocalId = 0L
+        nextLocalId = 0L
         if (requireArguments().containsKey(CURSOR_POSITION)) {
             currPosition = requireArguments().getInt(CURSOR_POSITION)
             if (requireArguments().containsKey(ORDER)) {
@@ -1091,7 +1091,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         // from Map there is no position
         if (!requireArguments().containsKey(CURSOR_POSITION)) {
             while (curs.moveToNext()) {
-                if (curs.getLong(0) == newId) {
+                if (curs.getLong(0) == localId) {
                     currPosition = curs.position
                     requireArguments().putInt(CURSOR_POSITION, currPosition)
                     break
@@ -1101,11 +1101,11 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         try {
             if (currPosition > 0) {
                 curs.moveToPosition(currPosition - 1)
-                prevId = curs.getLong(0)
+                prevLocalId = curs.getLong(0)
             }
             if (currPosition < curs.count - 1) {
                 curs.moveToPosition(currPosition + 1)
-                nextId = curs.getLong(0)
+                nextLocalId = curs.getLong(0)
             }
         } catch (ignored: Exception) {
         }
