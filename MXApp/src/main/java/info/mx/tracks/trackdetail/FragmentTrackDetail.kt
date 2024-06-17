@@ -439,10 +439,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         view.setTextColor(Color.WHITE)
     }
 
-    override fun fillMask(newId: Long) {
-        recordId = newId
+    override fun fillMask(localId: Long) {
+        recordId = localId
         val bundle = Bundle()
-        bundle.putLong(RECORD_ID_LOCAL, newId)
+        bundle.putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_TRACK, bundle, this)
     }
 
