@@ -10,20 +10,6 @@ env:
   resourceRunID: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
-  env-job:
-    runs-on: ubuntu-latest
-    outputs:
-      modified-branch-name: ${{ steps.env.outputs.MODIFIED_BRANCH_NAME }}
-    name: Modify branch name
-    steps:
-      - name: Sets MODIFIED_BRANCH_NAME
-        id: env
-        env:
-          name: "${{env.BRANCH_NAME}}"
-        run: |
-          echo "MODIFIED_BRANCH_NAME=${name//\//-}" >> ${GITHUB_OUTPUT}
-          cat ${GITHUB_OUTPUT}
-
   BuildFlavors:
     name: Build
     runs-on: ${{ matrix.os }}
@@ -53,8 +39,6 @@ jobs:
   TestPro:
     name: Test Pro
     runs-on: ${{ matrix.os }}
-    needs:
-      - env-job
     strategy:
       fail-fast: false
       matrix:
@@ -78,7 +62,7 @@ jobs:
           submodules: true
       - name: show envs
         run: |
-          echo ${{ needs.env-job.outputs.modified-branch-name }}
+          echo ${{ env.BRANCH_NAME }}
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
@@ -106,14 +90,14 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-Screenshots-${{ env.BRANCH_NAME }}-${{ matrix.emulatorApi }}
           path: |
             MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
       - name: Archive Espresso results ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-Espresso-${{ env.BRANCH_NAME }}-${{ matrix.emulatorApi }}
           path: |
             MXApp/build/outputs/androidTest-results/connected
       - name: Compare screenshots ${{ matrix.emulatorApi }}
@@ -132,7 +116,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-diffs-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-diffs-${{ env.BRANCH_NAME }}-${{ matrix.emulatorApi }}
           path: |
             screenshotDiffs
       - name: cleanup
@@ -146,8 +130,6 @@ jobs:
   Check:
     name: Check
     runs-on: ${{ matrix.os }}
-    needs:
-      - env-job
     strategy:
       fail-fast: false
       matrix:
@@ -157,7 +139,7 @@ jobs:
         uses: actions/checkout@v4
       - name: show envs
         run: |
-          echo ${{ needs.env-job.outputs.modified-branch-name }}
+          echo ${{ env.BRANCH_NAME }}
       - uses: gradle/actions/wrapper-validation@v3
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
@@ -172,5 +154,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: MX-Lint-report-${{ needs.env-job.outputs.modified-branch-name }}
+          name: MX-Lint-report-${{ env.BRANCH_NAME }}
           path: ./**/build/reports/lint-results*.html
