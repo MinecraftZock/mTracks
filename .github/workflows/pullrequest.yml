@@ -7,6 +7,7 @@ on:
   pull_request:
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  CACHE_KEY: ${{ github.run_id }}
   resourceRunID: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
@@ -21,6 +22,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Show cache key
+        run: |
+          echo GITHUB_RUN_ID=${GITHUB_RUN_ID}
+          echo CACHE_KEY=${{ env.CACHE_KEY }}
+          echo github.run_id=${{ github.run_id }}
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
@@ -33,12 +39,21 @@ jobs:
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Build project
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug assembleAndroidTest
       - name: cleanup
         run: ./signing/cleanup.sh
+      - name: Cache apk
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./MXApp/build/outputs/apk/paid/debug
+            ./MXApp/build/outputs/apk/androidTest/paid/debug/
+          key: ${{ env.CACHE_KEY }}
   TestPro:
     name: Test Pro
     runs-on: ${{ matrix.os }}
+    needs:
+      - BuildFlavors
     strategy:
       fail-fast: false
       matrix:
@@ -64,6 +79,7 @@ jobs:
         run: |
           echo BRANCH_NAME=${{ env.BRANCH_NAME }}
           echo GITHUB_RUN_ID=${GITHUB_RUN_ID}
+          echo CACHE_KEY=${{ env.CACHE_KEY }}
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
@@ -77,6 +93,13 @@ jobs:
         run: ./signing/decrypt.sh
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: restore apk
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./MXApp/build/outputs/apk/paid/debug
+            ./MXApp/build/outputs/apk/androidTest/paid/debug/
+          key: ${{ env.CACHE_KEY }}
       - name: Run instrumentation tests
         uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
         with:
