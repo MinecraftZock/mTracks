@@ -56,7 +56,6 @@ class ActivityTrackListTest : BaseSyncTest() {
         // This is the first time settings activity with always changed version number
 //        Espresso.pressBack()
         onView(withId(R.id.menu_search)).perform(click())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-click")
 
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("aa"))
         Thread.sleep(WAIT_EDIT)
