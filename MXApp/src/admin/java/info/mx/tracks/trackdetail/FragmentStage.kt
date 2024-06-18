@@ -136,9 +136,9 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
-    override fun fillMask(newId: Long) {
+    override fun fillMask(newLocalId: Long) {
         if (arguments != null) {
-            requireArguments().putLong(RECORD_ID_LOCAL, newId)
+            requireArguments().putLong(RECORD_ID_LOCAL, newLocalId)
             loaderManager.restartLoader(LOADER_STAGE, arguments, this)
         }
     }
