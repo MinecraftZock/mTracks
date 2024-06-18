@@ -18,8 +18,8 @@ abstract class FragmentUpDown : FragmentBase() {
     private var contentUri: String? = null
     var recordId: Long = 0
         protected set
-    protected var prevId = 0L
-    protected var nextId = 0L
+    protected var prevLocalId = 0L
+    protected var nextLocalId = 0L
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         MxPreferences.getInstance().edit().putRestoreID(recordId).putRestoreContentUri(contentUri).commit()
@@ -50,16 +50,16 @@ abstract class FragmentUpDown : FragmentBase() {
         }
     }
 
-    protected open fun fillNextPrevId(newId: Long) {
-        nextId = SQuery.newQuery().expr("_id", Op.GT, newId).firstLong(Uri.parse(contentUri), "_id", "_id asc")
-        prevId = SQuery.newQuery().expr("_id", Op.LT, newId).firstLong(Uri.parse(contentUri), "_id", "_id desc")
+    protected open fun fillNextPrevId(localId: Long) {
+        nextLocalId = SQuery.newQuery().expr("_id", Op.GT, localId).firstLong(Uri.parse(contentUri), "_id", "_id asc")
+        prevLocalId = SQuery.newQuery().expr("_id", Op.LT, localId).firstLong(Uri.parse(contentUri), "_id", "_id desc")
     }
 
     fun moveUp() {
-        if (prevId > 0) {
-            val x = prevId
+        if (prevLocalId > 0) {
+            val x = prevLocalId
             requireArguments().putInt(CURSOR_POSITION, requireArguments().getInt(CURSOR_POSITION) - 1)
-            fillMask(prevId)
+            fillMask(prevLocalId)
             recordId = x
             requireArguments().putLong(RECORD_ID_LOCAL, recordId)
             MxPreferences.getInstance().edit().putRestoreID(recordId).commit()
@@ -70,10 +70,10 @@ abstract class FragmentUpDown : FragmentBase() {
     }
 
     fun moveDown() {
-        if (nextId > 0) {
-            val x = nextId
+        if (nextLocalId > 0) {
+            val x = nextLocalId
             requireArguments().putInt(CURSOR_POSITION, requireArguments().getInt(CURSOR_POSITION) + 1)
-            fillMask(nextId)
+            fillMask(nextLocalId)
             recordId = x
             requireArguments().putLong(RECORD_ID_LOCAL, recordId)
             MxPreferences.getInstance().edit().putRestoreID(recordId).commit()
