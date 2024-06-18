@@ -117,6 +117,7 @@ class SplashTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        Thread.sleep(300)
         onView(isRoot())
             .captureToBitmap()
             .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}")
