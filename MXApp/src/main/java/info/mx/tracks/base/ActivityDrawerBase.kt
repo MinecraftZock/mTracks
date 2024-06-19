@@ -176,7 +176,7 @@ abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigati
                 val qWfIntent = Intent(this, ActivityTrackEdit::class.java)
                 val bundle = Bundle()
                 bundle.putString(FragmentUpDown.CONTENT_URI, MxInfoDBContract.Tracksges.CONTENT_URI.toString())
-                bundle.putLong(FragmentUpDown.RECORD_ID_LOCAL, this.detailFragmentTab!!.recordId) // FIXME
+                bundle.putLong(FragmentUpDown.RECORD_ID_LOCAL, this.detailFragmentTab!!.recordLocalId) // FIXME
                 qWfIntent.putExtras(bundle)
                 startActivity(qWfIntent)
                 result = true
@@ -184,7 +184,7 @@ abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigati
         } else if (menuItem.itemId == R.id.drawer_event_add) {
             if (this is ActivityTrackDetail) {
                 val parent = this
-                val record = TracksRecord.get(parent.detailFragmentTab!!.recordId)
+                val record = TracksRecord.get(parent.detailFragmentTab!!.recordLocalId)
                 if (record != null) {
                     EventHelper().doAddEvent(parent, record)
                 }
@@ -192,7 +192,7 @@ abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigati
             }
         } else if (menuItem.itemId == R.id.drawer_track_feedback) {
             if (this is ActivityTrackDetail) {
-                val record = TracksRecord.get(this.detailFragmentTab!!.recordId)
+                val record = TracksRecord.get(this.detailFragmentTab!!.recordLocalId)
                 if (record != null) {
                     doFeedBackDialog(record.trackname)
                 }
@@ -201,7 +201,7 @@ abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigati
         } else if (menuItem.itemId == R.id.drawer_navigation) {
             if (this is ActivityTrackDetail) {
 
-                val record = TracksRecord.get(this.detailFragmentTab!!.recordId)
+                val record = TracksRecord.get(this.detailFragmentTab!!.recordLocalId)
                 if (record != null) {
                     LocationHelper.openNavi(
                         this, null,

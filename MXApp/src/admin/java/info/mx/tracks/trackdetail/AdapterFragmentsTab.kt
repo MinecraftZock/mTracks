@@ -7,7 +7,7 @@ import info.mx.tracks.MxApplication
 
 import info.mx.tracks.R
 
-class AdapterFragmentTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(context, fm, arguments) {
+class AdapterFragmentsTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(context, fm, arguments) {
 
     override fun getTabsInfo(): List<TabFragmentInfo> {
         val tabs = super.getTabsInfo()

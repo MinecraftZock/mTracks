@@ -52,11 +52,11 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         )
         adapterStage!!.viewBinder = StageViewBinder(this, requireActivity(), dataManagerAdmin)
         listRatings.adapter = adapterStage
-        recordId = 0
+        recordLocalId = 0
         if (arguments != null && requireArguments().containsKey(RECORD_ID_LOCAL)) {
-            recordId = requireArguments().getLong(RECORD_ID_LOCAL)
+            recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
         }
-        fillMask(recordId)
+        fillMask(recordLocalId)
         if (!isGoogleTests) loaderManager.initLoader(LOADER_STAGE, arguments, this)
         setHasOptionsMenu(true)
         return view
@@ -136,9 +136,9 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
-    override fun fillMask(newLocalId: Long) {
+    override fun fillMask(localId: Long) {
         if (arguments != null) {
-            requireArguments().putLong(RECORD_ID_LOCAL, newLocalId)
+            requireArguments().putLong(RECORD_ID_LOCAL, localId)
             loaderManager.restartLoader(LOADER_STAGE, arguments, this)
         }
     }
@@ -164,7 +164,7 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var res = super.onOptionsItemSelected(item)
         if (item.itemId == R.id.menu_track_edit) {
-            openEdit(recordId)
+            openEdit(recordLocalId)
             res = true
         }
         return res

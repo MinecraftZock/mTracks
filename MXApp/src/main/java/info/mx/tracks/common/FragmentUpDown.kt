@@ -16,14 +16,14 @@ import timber.log.Timber
 
 abstract class FragmentUpDown : FragmentBase() {
     private var contentUri: String? = null
-    var recordId: Long = 0
+    var recordLocalId: Long = 0
         protected set
     protected var prevLocalId = 0L
     protected var nextLocalId = 0L
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        MxPreferences.getInstance().edit().putRestoreID(recordId).putRestoreContentUri(contentUri).commit()
-        savedInstanceState.putLong(RECORD_ID_LOCAL, recordId)
+        MxPreferences.getInstance().edit().putRestoreID(recordLocalId).putRestoreContentUri(contentUri).commit()
+        savedInstanceState.putLong(RECORD_ID_LOCAL, recordLocalId)
         savedInstanceState.putString(CONTENT_URI, contentUri)
         super.onSaveInstanceState(savedInstanceState)
     }
@@ -35,7 +35,7 @@ abstract class FragmentUpDown : FragmentBase() {
             throw IllegalArgumentException("CONTENT_URI missing " + arguments?.toString())
         }
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
-            recordId = requireArguments().getLong(RECORD_ID_LOCAL)
+            recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
         } else {
             throw IllegalArgumentException("RECORD_ID_LOCAL missing ")
         }
@@ -45,7 +45,7 @@ abstract class FragmentUpDown : FragmentBase() {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null) {
             Timber.d(savedInstanceState.toString())
-            recordId = savedInstanceState.getLong(RECORD_ID_LOCAL)
+            recordLocalId = savedInstanceState.getLong(RECORD_ID_LOCAL)
             contentUri = savedInstanceState.getString(CONTENT_URI)
         }
     }
@@ -60,9 +60,9 @@ abstract class FragmentUpDown : FragmentBase() {
             val x = prevLocalId
             requireArguments().putInt(CURSOR_POSITION, requireArguments().getInt(CURSOR_POSITION) - 1)
             fillMask(prevLocalId)
-            recordId = x
-            requireArguments().putLong(RECORD_ID_LOCAL, recordId)
-            MxPreferences.getInstance().edit().putRestoreID(recordId).commit()
+            recordLocalId = x
+            requireArguments().putLong(RECORD_ID_LOCAL, recordLocalId)
+            MxPreferences.getInstance().edit().putRestoreID(recordLocalId).commit()
         } else {
             Timber.w(getString(R.string.empty))
             Toast.makeText(activity, getString(R.string.empty), Toast.LENGTH_SHORT).show()
@@ -74,9 +74,9 @@ abstract class FragmentUpDown : FragmentBase() {
             val x = nextLocalId
             requireArguments().putInt(CURSOR_POSITION, requireArguments().getInt(CURSOR_POSITION) + 1)
             fillMask(nextLocalId)
-            recordId = x
-            requireArguments().putLong(RECORD_ID_LOCAL, recordId)
-            MxPreferences.getInstance().edit().putRestoreID(recordId).commit()
+            recordLocalId = x
+            requireArguments().putLong(RECORD_ID_LOCAL, recordLocalId)
+            MxPreferences.getInstance().edit().putRestoreID(recordLocalId).commit()
         } else {
             Timber.w(getString(R.string.empty))
             Toast.makeText(activity, getString(R.string.empty), Toast.LENGTH_SHORT).show()

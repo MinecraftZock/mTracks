@@ -30,23 +30,23 @@ class FragmentChanges : FragmentUpDown() {
         changesListView.layoutManager = mLayoutManager
         changesListView.adapter = changeAdapter
 
-        recordId = 0
+        recordLocalId = 0
         arguments?.let {
             if (it.containsKey(RECORD_ID_LOCAL)) {
-                recordId = it.getLong(RECORD_ID_LOCAL)
-                fillMask(recordId)
+                recordLocalId = it.getLong(RECORD_ID_LOCAL)
+                fillMask(recordLocalId)
             }
         }
 
         return view
     }
 
-    override fun fillMask(newId: Long) {
+    override fun fillMask(localId: Long) {
         arguments?.let {
-            it.putLong(RECORD_ID_LOCAL, newId)
+            it.putLong(RECORD_ID_LOCAL, localId)
 
             val track = SQuery.newQuery()
-                .expr(MxInfoDBContract.Tracks._ID, SQuery.Op.EQ, newId).selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
+                .expr(MxInfoDBContract.Tracks._ID, SQuery.Op.EQ, localId).selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
 
             changeAdapter!!.requestData(track.restId)
         }
