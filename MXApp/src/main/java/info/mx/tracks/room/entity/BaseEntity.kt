@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 abstract class BaseEntity(
-        @field:SerializedName("id") @PrimaryKey(autoGenerate = true) var id: Long?,
+        @field:SerializedName("id") @PrimaryKey(autoGenerate = true) var id: Long,
         @field:SerializedName("restId") var restId: Long = 0,
         @field:SerializedName("changed") var changed: Long = 0
 ) {
     @Ignore
-    constructor() : this(null, System.currentTimeMillis())
+    constructor() : this(-1, System.currentTimeMillis())
 
     override fun toString(): String {
-        return id.toString() + ":" + changed.toString()
+        return "$id:$changed"
     }
 }

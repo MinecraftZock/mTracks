@@ -12,6 +12,7 @@ import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class EventFragment : FragmentUpDown() {
 
@@ -77,16 +78,18 @@ class EventFragment : FragmentUpDown() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun fillMask(newId: Long) {
-        requireArguments().putLong(RECORD_ID_LOCAL, newId)
+    override fun fillMask(localId: Long) {
+        requireArguments().putLong(RECORD_ID_LOCAL, localId)
 
-        trackDetailViewModel.getTrackById(newId).observe(viewLifecycleOwner) { track ->
+        trackDetailViewModel.getTrackById(localId).observe(viewLifecycleOwner) { track ->
+            Timber.d("localId=$localId $track")
+            track?.let {
+                eventViewModel.allEvents(track.restId).observe(viewLifecycleOwner) { events ->
+                    adapter.setData(Data.db(events))
+                }
 
-            eventViewModel.allEvents(track.restId).observe(viewLifecycleOwner) { events ->
-                adapter.setData(Data.db(events))
+                eventViewModel.getNewRemoteData(track.restId)
             }
-
-            eventViewModel.getNewRemoteData(track.restId)
         }
     }
 }
