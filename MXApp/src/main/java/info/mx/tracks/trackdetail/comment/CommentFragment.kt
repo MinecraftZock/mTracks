@@ -38,6 +38,8 @@ class CommentFragment : FragmentUpDown() {
         // keyboard hide
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
+        localTrackId = requireArguments().getLong(RECORD_ID_LOCAL)
+
         val layoutManager = LinearLayoutManager(context)
         binding.listRecyclerEntries.layoutManager = layoutManager
         binding.listRecyclerEntries.setEmptyView(binding.txtNoEntry)
@@ -81,9 +83,11 @@ class CommentFragment : FragmentUpDown() {
         requireArguments().putLong(RECORD_ID_LOCAL, localId)
 
         trackDetailViewModel.getTrackById(localId).observe(viewLifecycleOwner) { track ->
-            Timber.d(track.toString())
-            commentViewModel.allCommentsByTrackId(track.restId).observe(viewLifecycleOwner) { comments ->
-                adapter.setData(Data.db(comments))
+            Timber.d("localId=$localId $track")
+            track?.let {
+                commentViewModel.allCommentsByTrackId(it.restId).observe(viewLifecycleOwner) { comments ->
+                    adapter.setData(Data.db(comments))
+                }
             }
         }
     }
