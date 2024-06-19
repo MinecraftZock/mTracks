@@ -16,7 +16,6 @@ import info.mx.comAdminlib.retrofit.service.model.Approved;
 import info.mx.comlib.retrofit.service.data.Data;
 import info.mx.comlib.retrofit.service.data.RxNetworkProblem;
 import info.mx.tracks.MxAccessApplication;
-import info.mx.tracks.data.DataManagerBase;
 import info.mx.tracks.ops.OpPostImagesOperation;
 import info.mx.tracks.sqlite.MxInfoDBContract;
 import info.mx.tracks.sqlite.PicturesRecord;
@@ -30,7 +29,7 @@ import retrofit2.Response;
  * desired output ready for the UI.
  * It returns observables that emit data models.
  */
-public class DataManagerAdmin extends DataManagerBase {
+public class DataManagerAdmin extends DataManagerAdminBase {
 
     private final ApiAdminClient apiAdminClient;
 

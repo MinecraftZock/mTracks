@@ -13,43 +13,7 @@ import java.io.IOException
  * desired output ready for the UI.
  * It returns observables that emit data models.
  */
-open class DataManagerCore(protected val commApiClient: CommApiClient) : DataManagerBase() {
-
-    @Throws(IOException::class)
-    fun getTracks(
-        fromDate: Int,
-        androidid: String,
-        appversion: Long,
-        androidversion: Int,
-        country: String,
-        flavor: String,
-        ip: String
-    ): Response<List<TrackR>> {
-        val trackBody = TrackBody()
-        trackBody.changed = fromDate
-        trackBody.androidversion = androidversion
-        trackBody.androidid = androidid
-        trackBody.appversion = appversion.toInt()
-        trackBody.country = country
-        trackBody.flavor = flavor
-        trackBody.setIp(ip)
-        return commApiClient.tracksService.getTracks(trackBody, basic).execute()
-    }
-
-    @Throws(IOException::class)
-    fun getRatings(fromDate: Long): Response<List<RatingR>> {
-        return commApiClient.tracksService.getRatings(fromDate, basic).execute()
-    }
-
-    @Throws(IOException::class)
-    fun getPictures(fromDate: Long): Response<List<PictureR>> {
-        return commApiClient.tracksService.getPictures(fromDate, basic).execute()
-    }
-
-    @Throws(IOException::class)
-    fun getSeries(fromDate: Long): Response<List<SerieR>> {
-        return commApiClient.tracksService.getSeries(fromDate, basic).execute()
-    }
+open class DataManagerCore(private val commApiClient: CommApiClient) : DataManagerBase() {
 
     @Throws(IOException::class)
     fun getWeather4Track(trackRestID: Long, unit: String, lang: String): Response<String> {
