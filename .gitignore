@@ -32,3 +32,5 @@ keystore.properties
 
 /screenshotDiffs
 /artifacts
+
+.kotlin
