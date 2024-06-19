@@ -73,6 +73,6 @@ open class Track(
 ) : BaseEntity() {
 
     override fun toString(): String {
-        return id.toString() + ":" + changed.toString() + " " + restId
+        return "$id:$changed restId=$restId"
     }
 }
