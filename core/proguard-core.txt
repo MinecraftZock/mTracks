@@ -41,7 +41,7 @@
     @com.google.inject.InjectView <fields>;
 }
 
--keep class info.mx.tracks.data.DataManager{*;}
+-keep class info.mx.tracks.data.DataManagerApp{*;}
 
 ### Viewpageindicator ###
 -dontwarn com.viewpagerindicator.**

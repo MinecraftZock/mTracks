@@ -32,8 +32,7 @@ import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.common.LoggingHelper
 import info.mx.tracks.common.SecHelper
-import info.mx.tracks.data.DataManagerCore
-import info.mx.tracks.koin.CoreKoinComponent
+import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.*
 import info.mx.tracks.sqlite.*
@@ -45,6 +44,7 @@ import info.mx.tracks.util.checkResponseCodeOk
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.util.UnzipUtil
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.*
@@ -53,11 +53,11 @@ import java.net.UnknownHostException
 import java.util.*
 
 
-class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinComponent {
+class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinComponent {
     private var lastKnown: Location? = null
     private lateinit var operationContext: OperationContext
 
-    private val dataManagerCore: DataManagerCore by inject()
+    private val dataManagerApp: DataManagerApp by inject()
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         operationContext = context
@@ -249,7 +249,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinC
         val opName = "Pictures"
         val maxCreated = SQuery.newQuery().firstInt(Pictures.CONTENT_URI, "max(" + Pictures.CHANGED + ")")
 
-        val picturesResponse = dataManagerCore.getPictures(maxCreated.toLong())
+        val picturesResponse = dataManagerApp.getPictures(maxCreated.toLong())
 
         picturesResponse.checkResponseCodeOk()
 
@@ -748,7 +748,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinC
             ip = NetworkUtils.getIPAddress(true)
 
             androidId += Secure.getString(context.applicationContext.contentResolver, Secure.ANDROID_ID)
-            val tracksResponse = dataManagerCore.getTracks(
+            val tracksResponse = dataManagerApp.getTracks(
                 maxCreated,
                 androidId,
                 TrackingApplication.getVersion(context.applicationContext),
@@ -998,15 +998,15 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinC
             .expr(Ratings.REST_ID, Op.NEQ, -1)
             .firstLong(Ratings.CONTENT_URI, "max(" + Ratings.CHANGED + ")")
 
-        val ratingsResponse = dataManagerCore.getRatings(maxCreated / 1000)
+        val ratingsResponse = dataManagerApp.getRatings(maxCreated / 1000)
 
-        ratingsResponse.checkResponseCodeOk()
+        ratingsResponse?.checkResponseCodeOk()
 
         LoggingHelper.setMessage("$DOWNLOAD $opName")
         var zlrUpdated = 0
         var zlrInserted = 0
         val contentValuesRatingsList = ArrayList<ContentValues>()
-        for (trackREST in ratingsResponse.body()!!) {
+        for (trackREST in ratingsResponse?.body()!!) {
 
             if (context.isAborted) {
                 return
@@ -1069,7 +1069,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), CoreKoinC
         val opName = "Series"
         val maxCreated = SQuery.newQuery().firstInt(Series.CONTENT_URI, "max(" + Series.CHANGED + ")")
 
-        val seriesResponse = dataManagerCore.getSeries(maxCreated.toLong())
+        val seriesResponse = dataManagerApp.getSeries(maxCreated.toLong())
 
         seriesResponse.checkResponseCodeOk()
 
