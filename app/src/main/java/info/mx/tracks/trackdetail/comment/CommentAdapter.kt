@@ -92,7 +92,7 @@ internal class CommentAdapter(private val context: Context) : RecyclerView.Adapt
                 tvNote.visibility = View.VISIBLE
                 tvNote.text = comment.note
             }
-            tvNote.alpha = if (comment.id!! < 1) 0.5F else 1.0F
+            tvNote.alpha = if (comment.id < 1) 0.5F else 1.0F
 
             ratingComment.rating = comment.rating.toFloat()
             tvDatum.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(comment.changed * 1000))
