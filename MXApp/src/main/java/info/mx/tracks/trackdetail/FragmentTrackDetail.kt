@@ -232,17 +232,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     override fun onResume() {
         super.onResume()
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
-            recordId = requireArguments().getLong(RECORD_ID_LOCAL)
-            fillMask(recordId)
+            recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
+            fillMask(recordLocalId)
 
             if (requireArguments().containsKey(RecalculateDistance.EDIT)) {
-                val trackRecord = TracksgesRecord.get(recordId)
+                val trackRecord = TracksgesRecord.get(recordLocalId)
                 if (trackRecord != null) {
                     MxCoreApplication
                         .trackEvent("check " + " " + requireArguments().getBoolean(RecalculateDistance.EDIT), trackRecord.trackname)
                 }
                 if (requireArguments().getBoolean(RecalculateDistance.EDIT)) {
-                    openEdit(recordId)
+                    openEdit(recordLocalId)
                 }
                 requireArguments().remove(RecalculateDistance.EDIT)
             }
@@ -304,9 +304,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     override fun onActivityResult(requestCode: Int, resultCode: Int, imageReturnedIntent: Intent?) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent)
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
-            recordId = requireArguments().getLong(RECORD_ID_LOCAL)
+            recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
             if (recordTrack == null) {
-                recordTrack = TracksgesRecord.get(recordId)
+                recordTrack = TracksgesRecord.get(recordLocalId)
             }
         }
         if (recordTrack == null) {
@@ -440,7 +440,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     override fun fillMask(localId: Long) {
-        recordId = localId
+        recordLocalId = localId
         val bundle = Bundle()
         bundle.putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_TRACK, bundle, this)
@@ -710,7 +710,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     private fun toggleFavorite(item: MenuItem?) {
-        val recTrack = TracksRecord.get(recordId)
+        val recTrack = TracksRecord.get(recordLocalId)
         if (recTrack != null) {
             val isFavorite = SQuery.newQuery().expr(Favorits.TRACK_REST_ID, Op.EQ, recTrack.restId).exists(Favorits.CONTENT_URI)
             if (isFavorite) {
@@ -755,7 +755,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
         when (item.itemId) {
             R.id.menu_track_edit -> {
-                openEdit(recordId)
+                openEdit(recordLocalId)
                 res = true
             }
 
@@ -770,7 +770,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             }
 
             R.id.menu_detail_globus -> {
-                val recTrack = TracksRecord.get(recordId)
+                val recTrack = TracksRecord.get(recordLocalId)
                 if (recTrack != null) {
                     trackLoc = Location("trackloc")
                     trackLoc!!.latitude = SecHelper.entcryptXtude(recTrack.latitude)
@@ -799,13 +799,13 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     fun addEvent() {
-        TracksRecord.get(recordId)?.let {
+        TracksRecord.get(recordLocalId)?.let {
             EventHelper().doAddEvent(requireActivity(), it)
         }
     }
 
     fun addRating() {
-        TracksRecord.get(recordId)?.let {
+        TracksRecord.get(recordLocalId)?.let {
             CommentHelper.doAddRating(requireActivity(), it)
         }
     }
@@ -819,7 +819,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     private fun doShare() {
-        val record = TracksRecord.get(recordId)
+        val record = TracksRecord.get(recordLocalId)
         if (record != null) {
             val lat = SecHelper.entcryptXtude(record.latitude)
             val lon = SecHelper.entcryptXtude(record.longitude)
@@ -833,7 +833,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     private fun doOpenNavigation() {
-        val record = TracksRecord.get(recordId)
+        val record = TracksRecord.get(recordLocalId)
         if (record != null) {
             LocationHelper.openNavi(
                 requireContext(), record.trackname,

@@ -32,14 +32,14 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
-    private lateinit var adapter: AdapterFragmentTab
+    private lateinit var adapterFragmentsTab: AdapterFragmentsTab
     private var adapterImages: ImageCursorAdapter? = null
     private var oldPictureCount = 0
 
     private val fragmentTrackDetail: FragmentTrackDetail?
         get() {
             var fragmentTrackDetail: FragmentTrackDetail? = null
-            for (i in 0 until adapter.count) {
+            for (i in 0 until adapterFragmentsTab.count) {
                 val fragment = findPagerFragmentByPosition(i)
                 if (fragment != null) {
                     if (fragment is FragmentTrackDetail) {
@@ -60,9 +60,9 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         _binding = ContentFragmentDetailTabsIndicatorBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        adapter = AdapterFragmentTab(requireActivity(), childFragmentManager, requireArguments())
+        adapterFragmentsTab = AdapterFragmentsTab(requireActivity(), childFragmentManager, requireArguments())
 
-        binding.viewPager.adapter = adapter
+        binding.viewPager.adapter = adapterFragmentsTab
         binding.viewPager.currentItem = MxPreferences.getInstance().tabDetailPosition
         binding.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -99,10 +99,10 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
 
     override fun onResume() {
         super.onResume()
-        adapter.notifyDataSetChanged()
+        adapterFragmentsTab.notifyDataSetChanged()
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
-            recordId = requireArguments().getLong(RECORD_ID_LOCAL)
-            fillMask(recordId)
+            recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
+            fillMask(recordLocalId)
         }
     }
 
@@ -111,7 +111,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         bundle.putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_TRACK, bundle, this)
 
-        for (i in 0 until adapter.count) {
+        for (i in 0 until adapterFragmentsTab.count) {
             val fragment = findPagerFragmentByPosition(i)
             if (fragment != null) {
                 // Tablets have a FragmentTrackList
@@ -119,15 +119,15 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
                     fragment.fillMask(localId)
                 }
             } else {
-                Timber.d("fragment not found $i/${adapter.count} null")
+                Timber.d("fragment not found $i/${adapterFragmentsTab.count} null")
             }
         }
     }
 
     private fun findPagerFragmentByPosition(position: Int): Fragment? {
-        var result = parentFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapter.getItemId(position))
+        var result = parentFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapterFragmentsTab.getItemId(position))
         if (result == null) {
-            result = childFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapter.getItemId(position))
+            result = childFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapterFragmentsTab.getItemId(position))
         }
         return result
     }
