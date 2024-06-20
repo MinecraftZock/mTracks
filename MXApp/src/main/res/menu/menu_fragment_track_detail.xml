@@ -40,7 +40,7 @@
         android:visible="false"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item
-        android:id="@+id/menu_favorit"
+        android:id="@+id/menu_favorite"
         android:icon="@drawable/star2x"
         android:orderInCategory="50"
         android:title="@string/favorit"

@@ -743,7 +743,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             )
             menu.findItem(R.id.menu_track_edit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
             menu.findItem(R.id.menu_navigation).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_favorit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            menu.findItem(R.id.menu_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
         } else {
             menu.findItem(R.id.menu_detail_globus).isVisible = true
         }
@@ -790,7 +790,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 res = false
             }
 
-            R.id.menu_favorit -> {
+            R.id.menu_favorite -> {
                 toggleFavorite(item)
                 res = true
             }

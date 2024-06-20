@@ -150,7 +150,7 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.menu_detail_globus).isVisible = false
         menu.findItem(R.id.menu_detail_radar).isVisible = false
-        menu.findItem(R.id.menu_favorit).isVisible = false
+        menu.findItem(R.id.menu_favorite).isVisible = false
         menu.findItem(R.id.menu_detail_share).isVisible = false
         menu.findItem(R.id.menu_detail_radar).isVisible = false
         menu.findItem(R.id.menu_navigation).isVisible = false
