@@ -235,6 +235,12 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     androidTestImplementation "androidx.test:rules:1.5.0" //    GrantPermissionRule
+
+    // repeat flaky test
+    // https://github.com/AdevintaSpain/Barista
+    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
 }
 
 def generateGitChangelog() {
