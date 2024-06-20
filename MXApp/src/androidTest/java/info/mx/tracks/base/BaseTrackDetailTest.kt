@@ -61,7 +61,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        onView(withId(android.R.id.button2)).perform(click())
 //        onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
 //
 //        onData(withId(R.id.list_overview)).atPosition(1).perform(click())
 //        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-d1")
@@ -74,6 +74,10 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         onView(withId(R.id.viewPager)).perform(swipeRight())
         Thread.sleep(200)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-comment")
+        onView(withId(R.id.viewPager)).perform(swipeLeft())
+        Thread.sleep(200)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-info")
+
     }
 
 }
