@@ -26,9 +26,9 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
+import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -136,7 +136,7 @@ class NavigationTest {
             .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 
         val openButton = onView(
-            Matchers.allOf(
+            allOf(
                 ViewMatchers.withContentDescription("open"),
                 ViewMatchers.withParent(withId(R.id.toolbar)),
                 ViewMatchers.isDisplayed()

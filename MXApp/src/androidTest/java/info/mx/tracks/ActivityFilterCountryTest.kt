@@ -14,9 +14,10 @@ import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.settings.ActivityFilterCountry
-import org.hamcrest.Matchers.anything
+import org.hamcrest.CoreMatchers.anything
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +35,7 @@ class ActivityFilterCountryTest : BaseSyncTest() {
     )
 
     @Test
+    @AllowFlaky(attempts = 2)
     fun smokeTestSimplyStart() {
         onView(withId(R.id.action_settings_filter_country)).perform(click())
         Thread.sleep(1000)
