@@ -22,6 +22,7 @@ import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.ops.google.PictureIdlingResource
+import info.mx.tracks.rule.DisableAnimationsRule
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.junit.After
 import org.junit.Before
@@ -44,6 +45,9 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+
+    @get:Rule
+    val disableAnimationsRule: DisableAnimationsRule = DisableAnimationsRule()
 
     @Before
     fun pictureIdlingBefore() {
