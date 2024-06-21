@@ -237,6 +237,32 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.5.0" //    GrantPermissionRule
 }
 
+tasks.register('disableAnimation') {
+    doLast {
+//        def adb = "$System.env.ANDROID_HOME/platform-tools/adb"
+//        def adbExe = "${android.getAdbExe().toString()}"
+        def command = 'adb shell settings put global window_animation_scale 0'
+        println "disableAnimation '" + command + "'"
+        def adbOutput = command.execute([], project.rootDir).text.trim()
+        println "enableMock output=" + adbOutput
+
+        command = 'adb shell settings put global transition_animation_scale 0'
+        println "disableAnimation '" + command + "'"
+        adbOutput = command.execute([], project.rootDir).text.trim()
+        println "enableMock output=" + adbOutput
+
+        command = 'adb shell settings put global animator_duration_scale 0'
+        println "disableAnimation '" + command + "'"
+        adbOutput = command.execute([], project.rootDir).text.trim()
+        println "enableMock output=" + adbOutput
+    }
+}
+
+//https://stackoverflow.com/a/36343828/1079990
+gradle.projectsEvaluated {
+    connectedPaidDebugAndroidTest.dependsOn disableAnimation
+}
+
 def generateGitChangelog() {
     def out = services.get(StyledTextOutputFactory).create("")
     out.style(Style.Normal).text("generateGitChangelog for admin, paid and free ")
