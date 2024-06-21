@@ -259,6 +259,12 @@ tasks.register('disableAnimation') {
         println "disableAnimation '" + command + "'"
         adbOutput = command.execute([], project.rootDir).text.trim()
         println "enableMock output=" + adbOutput
+
+        // no blinking cursor in EditView
+        def command = 'adb shell settings put secure show_ime_with_hard_keyboard 0'
+        println "disableAnimation '" + command + "'"
+        def adbOutput = command.execute([], project.rootDir).text.trim()
+        println "enableMock output=" + adbOutput
     }
 }
 
