@@ -9,10 +9,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -81,31 +83,38 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         Thread.sleep(200)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-info")
 
+        // favorite
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite1")
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite2")
+        Thread.sleep(5000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite3")
 
+        // up/down
+        onView(withId(R.id.menu_next)).perform(click())
+        Thread.sleep(4000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-next")
+        onView(withId(R.id.menu_prev)).perform(click())
+        Thread.sleep(4000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-prev")
+
+        // edit
+        onView(withId(R.id.menu_track_edit)).perform(click())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editTop")
+        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
+        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editBottom")
+        Espresso.pressBack()
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editFinished")
+
+        // open menu
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-openMenu")
+
+        // map
+        onView(withText("Show on map")).perform(click())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-map")
     }
 
-//    @Test
-//    fun optionMenuFlavor() {
-//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open")
-//
-////        onView(withText("Show on map")).perform(click())
-////        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-globus")
-////        Thread.sleep(2000)
-//
-//        onView(withId(R.id.menu_favorite)).perform(click())
-//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite1")
-//    }
-//
-//    @Test
-//    fun optionMenuMap() {
-//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
-//        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
-//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open")
-//    }
 }
