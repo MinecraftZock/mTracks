@@ -156,6 +156,10 @@ android {
         checkReleaseBuilds false
         disable 'MissingTranslation', 'UnusedResources', 'InvalidPackage', 'Range'
     }
+    // https://stackoverflow.com/a/67635863/1079990
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
