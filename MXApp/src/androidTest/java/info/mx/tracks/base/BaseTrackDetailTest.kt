@@ -83,15 +83,20 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         Thread.sleep(200)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-info")
 
+        // favorite
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite1")
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite2")
+        Thread.sleep(5000)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite3")
 
         // up/down
         onView(withId(R.id.menu_next)).perform(click())
+        Thread.sleep(4000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-next")
         onView(withId(R.id.menu_prev)).perform(click())
+        Thread.sleep(4000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-prev")
 
         // edit
