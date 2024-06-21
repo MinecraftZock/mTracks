@@ -18,6 +18,7 @@ abstract class BaseSyncTest {
     @Before
     fun registerIdlingResource() {
         IdlingPolicies.setIdlingResourceTimeout(4, TimeUnit.MINUTES)
+        IdlingPolicies.setMasterPolicyTimeout(2, TimeUnit.MINUTES);
         IdlingRegistry.getInstance().register(CountingIdlingResourceSingleton.countingIdlingResource)
     }
 
