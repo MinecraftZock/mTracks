@@ -9,6 +9,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -95,9 +96,12 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
 
         // edit
         onView(withId(R.id.menu_track_edit)).perform(click())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-edit")
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editTop")
+        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
+        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editBottom")
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-edit2")
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editFinished")
 
         // open menu
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
