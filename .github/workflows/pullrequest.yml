@@ -58,10 +58,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ARM64 ]
+        os: [ ubuntu-latest ]
         api: [ 34 ]
-        abi: [ arm64-v8a ]
-        tag: [ 'google_apis' ]
+        abi: [ x86_64 ]
+        tag: [ 'default' ]
         emulatorApi: [ 14 ]
         java_version: [ 17 ]
         include:
