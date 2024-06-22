@@ -109,7 +109,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
         override fun onPanelSlide(panel: View, slideOffset: Float) {
             val params = slidingBody!!.layoutParams
-            params.height = (panel.measuredHeight * slideOffset).roundToInt() // panel.getHeight(); //-height;
+            params.height = (panel.measuredHeight * slideOffset).roundToInt() // panel.getHeight(); //-height
             slidingBody!!.layoutParams = params
             Timber.d("${panel.height}/${params.height} offset:$slideOffset")
             setFabPosition(PanelState.DRAGGING, slideOffset)
@@ -125,7 +125,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     }
 
                     val params = slidingBody!!.layoutParams
-                    params.height = panel.height //-height;
+                    params.height = panel.height //-height
                     Timber.d(panel.height.toString() + "-" + heightHeader + "=" + params.height)
                     setFabPosition(PanelState.ANCHORED, 0f)
                 }
@@ -464,7 +464,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             .addToBackStack(null)
             .commitAllowingStateLoss()
 
-        //FIXME slidingDrawer.setScrollableView(fragmentTrackDetail.getScrollView());
+        //FIXME slidingDrawer.setScrollableView(fragmentTrackDetail.getScrollView())
         currId = id
         val bundle = Bundle()
         bundle.putLong(TRACK_CLIENT_ID, id)
@@ -553,7 +553,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        searchAdapter = SimpleCursorAdapter(context, R.layout.item_track, null, ViewBinderTracks.projectionGes, ViewBinderTracks.toGes, 0)
+        searchAdapter = SimpleCursorAdapter(context, R.layout.item_track, null, ViewBinderTracks.projectionGesSum, ViewBinderTracks.toGes, 0)
         val viewBinder = ViewBinderTracks(context, null, false)
         searchAdapter!!.viewBinder = viewBinder
     }
@@ -944,7 +944,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         when (loader.id) {
             LOADER_TRACKS -> {
                 map?.clearTrackMarkers()
-                // clusterMarkerManager.removeAllMarker();
+                // clusterMarkerManager.removeAllMarker()
                 searchAdapter!!.swapCursor(null)
             }
 
@@ -1015,8 +1015,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         if (map != null && map!!.cameraPosition != null) {
             if (map!!.cameraPosition.zoom < 20) {
                 //                CameraUpdate newPos = CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target,
-                //                        map.getCameraPosition().zoom + 2);
-                //                map.animateCamera(newPos);
+                //                        map.getCameraPosition().zoom + 2)
+                //                map.animateCamera(newPos)
                 map!!.animateCamera(CameraUpdateFactory.zoomIn())
                 Timber.d("animateCameraZoomIn %s", MxPreferences.getInstance().mapZoom)
             }
@@ -1073,7 +1073,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private fun hideKeyBoard() {
         if (searchView != null) {
             val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             imm.hideSoftInputFromWindow(searchView!!.windowToken, 0)
             isKeyboardActive = false
         }

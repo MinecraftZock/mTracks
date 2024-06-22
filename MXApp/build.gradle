@@ -131,6 +131,7 @@ android {
             dimension "kind"
             applicationId 'info.hannes.mxadmin'
             versionNameSuffix "-Admin"
+            buildConfigField 'int', pushServerSleep, '1500'
             buildConfigField "Boolean", SHOW_WEATHER, "false"
         }
         free {
@@ -196,6 +197,7 @@ dependencies {
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
     implementation 'androidx.multidex:multidex:2.0.1'
 
     adminImplementation 'org.jsoup:jsoup:1.17.2'
@@ -207,9 +209,12 @@ dependencies {
     implementation "androidx.vectordrawable:vectordrawable-animated:1.2.0"
 
     implementation "androidx.room:room-runtime:$room"
+    implementation "androidx.room:room-ktx:$room"
     kapt "androidx.room:room-compiler:$room"
     implementation "androidx.room:room-rxjava2:$room"
     implementation "androidx.room:room-testing:$room"
+
+    //implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     implementation 'com.github.hannesa2:ChangeLog:3.5'
     implementation 'com.github.AppDevNext.Logcat:LogcatCrashlyticLib:3.2'
