@@ -21,7 +21,7 @@ import timber.log.Timber
  *
  * @see SystemUiHider
  */
-class ActivitySplash : ActivityAppBase() {
+class ActivitySplash : ActivityBase() {
     private var ms: Long = 0
     private val splashTime: Long = 1000
     private val splashActive = true

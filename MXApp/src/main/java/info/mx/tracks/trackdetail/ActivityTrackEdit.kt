@@ -5,10 +5,10 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import info.hannes.commonlib.DialogHelper
 import info.hannes.commonlib.DialogHelper.doAskYesNo
-import info.mx.tracks.ActivityAppBase
+import info.mx.tracks.ActivityBase
 import info.mx.tracks.R
 
-class ActivityTrackEdit : ActivityAppBase() {
+class ActivityTrackEdit : ActivityBase() {
 
     private var fragmentTrackEdit: FragmentTrackEdit? = null
 

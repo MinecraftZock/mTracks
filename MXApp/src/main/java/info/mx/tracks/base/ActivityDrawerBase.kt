@@ -21,7 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import info.hannes.commonlib.LocationHelper
 import info.hannes.commonlib.dialog.BackDialog
-import info.mx.tracks.ActivityAppBase
+import info.mx.tracks.ActivityBase
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.SecHelper
@@ -39,7 +39,7 @@ import info.mx.tracks.util.EventHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-abstract class ActivityDrawerBase : ActivityAppBase(), NavigationView.OnNavigationItemSelectedListener, KoinComponent {
+abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationItemSelectedListener, KoinComponent {
 
     private var drawerToggle: ActionBarDrawerToggle? = null
     private lateinit var drawerLayout: DrawerLayout

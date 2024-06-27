@@ -2,13 +2,13 @@ package info.mx.tracks.settings
 
 import android.os.Bundle
 import info.hannes.changelog.LollipopFixedWebView
-import info.mx.tracks.ActivityAppBase
+import info.mx.tracks.ActivityBase
 import info.mx.tracks.R
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 
-class ActivityAcknowledgement : ActivityAppBase() {
+class ActivityAcknowledgement : ActivityBase() {
 
     private val contentString: String
         get() {

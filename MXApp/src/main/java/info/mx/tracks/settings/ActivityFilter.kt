@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.RatingBar.OnRatingBarChangeListener
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
-import info.mx.tracks.ActivityAppBase
+import info.mx.tracks.ActivityBase
 import info.mx.tracks.MxCoreApplication.Companion.isAdmin
 import info.mx.tracks.R
 import info.mx.tracks.adapter.ArrayAdapterRightAlign
@@ -27,7 +27,7 @@ import info.mx.tracks.sqlite.CountryRecord
 import info.mx.tracks.sqlite.MxInfoDBContract.Country
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
 
-class ActivityFilter : ActivityAppBase() {
+class ActivityFilter : ActivityBase() {
 
     private lateinit var binding: ActivityFilterBinding
 
