@@ -12,20 +12,20 @@ import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import org.koin.android.ext.android.inject
 
-abstract class ActivityAppBase : ActivityRx() {
+abstract class ActivityBase : ActivityRx() {
 
     val permissionHelper: PermissionHelper by inject()
 
     private val addMobHelper: AddMobHelper by inject()
 
-    private var mOperationListener: OperationServiceListener? = null
+    private var operationListener: OperationServiceListener? = null
     private val appPROPackageName = "info.mx.tracks"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MxCoreApplication.trackActivity(javaClass.simpleName)
 
-        mOperationListener = OperationErrorPeerCertificateServiceListener(this)
+        operationListener = OperationErrorPeerCertificateServiceListener(this)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -36,13 +36,13 @@ abstract class ActivityAppBase : ActivityRx() {
 
     override fun onResume() {
         super.onResume()
-        Ops.bindListener(mOperationListener)
+        Ops.bindListener(operationListener)
         addMobHelper.onResume(this)
     }
 
     override fun onPause() {
         super.onPause()
-        Ops.unbindListener(mOperationListener)
+        Ops.unbindListener(operationListener)
         addMobHelper.onPause(this)
     }
 
