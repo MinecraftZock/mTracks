@@ -77,8 +77,6 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
 
         })
 
-        setHasOptionsMenu(true)
-
         if (requireArguments().containsKey(FragmentTrackDetail.IN_SLIDER) &&
             requireArguments().getBoolean(FragmentTrackDetail.IN_SLIDER)
         ) {
