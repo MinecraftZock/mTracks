@@ -126,11 +126,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           emulatorApi: ${{ matrix.emulatorApi }}
         run: |
-          ./signing/cleanup.sh
           ls -la MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-          set -x
           cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
-          set +x
           echo ${{ env.resourceRunID }}
           ./screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs ${{ matrix.emulatorApi }}
