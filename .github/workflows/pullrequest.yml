@@ -62,20 +62,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ARM64 ]
+        os: [ ubuntu-latest ]
         api: [ 34 ]
-        abi: [ arm64-v8a ]
+        abi: [ x86_64 ]
         tag: [ 'google_apis' ]
         emulatorApi: [ 14 ]
         java_version: [ 17 ]
-    #        include:
-    #          - os: macOS-latest
-    #            api: 28
-    #            abi: x86_64
-    #            tag: 'google_apis'
-    #            emulatorApi: 9
-    #            java_version: 17
     steps:
+      - name: kvm support
+        run: |
+          egrep -c '(vmx|svm)' /proc/cpuinfo
+          id
+          sudo adduser $USER kvm
+          sudo chown -R $USER /dev/kvm
+          id
+      - name: prepare
+        run: |
+          sudo apt-get update && sudo apt-get install -y exiftool imagemagick xdg-utils libimage-exiftool-perl zsh jq xorg
+      #          brew install exiftool imagemagick
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -89,8 +93,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: ${{ matrix.java_version }}
-      - name: prepare
-        run: brew install exiftool imagemagick
+      #      - name: prepare
+      #        run: brew install exiftool imagemagick
       - name: Install Android SDK
         uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
@@ -127,8 +131,10 @@ jobs:
           emulatorApi: ${{ matrix.emulatorApi }}
         run: |
           ls -la MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-          cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator\(AVD\)\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
+          cp MXApp/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
           echo ${{ env.resourceRunID }}
+          export DISPLAY=:99
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           ./screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs ${{ matrix.emulatorApi }}
         if: ${{ always() }}
