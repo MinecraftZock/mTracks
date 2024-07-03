@@ -22,8 +22,7 @@ class UActivityMapTest: BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
-        Espresso.pressBack()
-        Thread.sleep(6000)
+        Thread.sleep(1000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open")
     }
 
