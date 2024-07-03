@@ -8,22 +8,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.CaptureToBitmapAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
+import info.mx.tracks.BitmapReceiver
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import org.hamcrest.CoreMatchers.notNullValue
@@ -132,8 +132,7 @@ class NavigationTest {
         }
 
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-1")))
 
         val openButton = onView(
             Matchers.allOf(
@@ -143,12 +142,10 @@ class NavigationTest {
             )
         )
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-2")))
         openButton.perform(ViewActions.click())
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-3")))
 
         val menuMap = device.findObject(UiSelector().className("android.widget.CheckedTextView").text("Map"))
         if (menuMap.exists()) {
@@ -171,8 +168,7 @@ class NavigationTest {
         bundle.putString("openMap", "0")
         getInstrumentation().sendStatus(0, bundle)
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-4")))
     }
 
     private fun allowPermissionsIfNeeded() {

@@ -1,10 +1,9 @@
 package info.mx.tracks
 
-import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.CaptureToBitmapAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.Suppress
@@ -56,16 +55,14 @@ class SplashTest : BaseSyncTest() {
         )
         appCompatImageButton2.perform(click())
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-0")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-0")))
 
         val appCompatCheckedTextView = onView(
             allOf(withId(R.id.design_menu_item_text), withText("Filter"), isDisplayed())
         )
         appCompatCheckedTextView.perform(click())
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-1")))
 
         val appCompatImageButton3 = onView(
             allOf(
@@ -119,8 +116,7 @@ class SplashTest : BaseSyncTest() {
     fun smokeTestSimplyStart() {
         Thread.sleep(300)
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}")
+            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}")))
     }
 
 }
