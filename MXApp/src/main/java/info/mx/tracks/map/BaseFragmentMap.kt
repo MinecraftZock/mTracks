@@ -49,6 +49,7 @@ import info.mx.tracks.map.MapButtonsOverlay.MapOverlayButtonsListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailHeaderListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailStyle
 import info.mx.tracks.map.cluster.MapClusterOptionsProvider
+import info.mx.tracks.ops.MapIdlingResourceSingleton
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.google.Routes
 import info.mx.tracks.room.MxDatabase
@@ -409,6 +410,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
+        MapIdlingResourceSingleton.decrement()
         map!!.setOnMapLoadedCallback {
             if (searchView != null) {
                 searchView!!.visibility = View.VISIBLE
@@ -419,6 +421,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     zoomToInterestLocation()
                 }
             }
+            MapIdlingResourceSingleton.increment()
         }
 
         updateClustering(true)
