@@ -55,6 +55,7 @@ import info.mx.tracks.map.MapButtonsOverlay.MapOverlayButtonsListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailHeaderListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailStyle
 import info.mx.tracks.map.cluster.MapClusterOptionsProvider
+import info.mx.tracks.ops.MapIdlingResourceSingleton
 import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.google.Routes
@@ -433,19 +434,20 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
+        MapIdlingResourceSingleton.decrement()
         map!!.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
             override fun onMapLoaded() {
-                if (searchView != null) {
-                    searchView!!.visibility = View.VISIBLE
-                }
-                if (isAdded) {
-                    loaderManager.initLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-                    if (interestLatLng != null) {
-                        zoomToInterestLocation()
-                    }
+            if (searchView != null) {
+                searchView!!.visibility = View.VISIBLE
+            }
+            if (isAdded) {
+                loaderManager.initLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                if (interestLatLng != null) {
+                    zoomToInterestLocation()
                 }
             }
-        })
+            MapIdlingResourceSingleton.increment()
+        }})
 
         updateClustering(true)
     }

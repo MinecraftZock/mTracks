@@ -52,6 +52,7 @@ import info.mx.tracks.BuildConfig
 import info.mx.tracks.databinding.FragmentTrackEditBinding
 import info.mx.tracks.ops.AbstractOpGetLatLngOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
+import info.mx.tracks.ops.MapIdlingResourceSingleton
 import timber.log.Timber
 import java.lang.NullPointerException
 import java.util.*
@@ -653,7 +654,11 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 map!!.uiSettings.isMapToolbarEnabled = false
                 map!!.setOnMarkerDragListener(this@BaseFragmentTrackEdit)
                 map!!.setOnMarkerClickListener(this@BaseFragmentTrackEdit)
-                map!!.setOnMapLoadedCallback { doAfterMapLoaded() }
+                MapIdlingResourceSingleton.decrement()
+                map!!.setOnMapLoadedCallback {
+                    doAfterMapLoaded()
+                    MapIdlingResourceSingleton.increment()
+                }
                 fillMask(id)
                 setUpLocationClientIfNeeded()
             })
