@@ -20,7 +20,7 @@ class UActivityMapTest: BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
-        Thread.sleep(1000)
+        Thread.sleep(4000)
         onView(isRoot()).perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-open")))
     }
 

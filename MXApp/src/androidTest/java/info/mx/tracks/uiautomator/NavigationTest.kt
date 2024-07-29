@@ -87,6 +87,8 @@ class NavigationTest {
 
         // Wait for the app to appear
         device.wait(Until.hasObject(By.pkg(MX_PACKAGE).depth(0)), LAUNCH_TIMEOUT.toLong())
+
+        Thread.sleep(WAIT_FOR_IMPORT)
     }
 
     @Test
@@ -228,7 +230,7 @@ class NavigationTest {
 
         private const val MX_PACKAGE = BuildConfig.APPLICATION_ID
         private const val LAUNCH_TIMEOUT = 5000
-        private const val WAIT_FOR_IMPORT = 255L
+        private const val WAIT_FOR_IMPORT = 2255L
 
         /**
          * Perform action of waiting for a specific view id.

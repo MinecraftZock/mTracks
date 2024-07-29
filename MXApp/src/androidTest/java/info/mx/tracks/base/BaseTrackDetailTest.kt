@@ -110,6 +110,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
 
         // edit
         onView(withId(R.id.menu_track_edit)).perform(click())
+        Thread.sleep(4000)
         onView(isRoot())
             .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-editTop")))
         onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
@@ -127,6 +128,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
 
         // map
         onView(withText("Show on map")).perform(click())
+        Thread.sleep(4000)
         onView(isRoot())
             .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-map")))
     }
