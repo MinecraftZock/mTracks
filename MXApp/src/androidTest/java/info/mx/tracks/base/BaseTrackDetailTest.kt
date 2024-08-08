@@ -2,23 +2,20 @@ package info.mx.tracks.base
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.CaptureToBitmapAction
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeDown
-import androidx.test.espresso.action.ViewActions.swipeLeft
-import androidx.test.espresso.action.ViewActions.swipeRight
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import info.mx.tracks.BitmapReceiver
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.ops.google.PictureIdlingResource
@@ -64,7 +61,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         if (pressBack)
             Espresso.pressBack()
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-1")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1") })
 //        onView(withId(android.R.id.button2)).perform(click())
 //        onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
 //        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
@@ -76,61 +73,61 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         onView(withId(R.id.viewPager)).perform(swipeLeft())
         Thread.sleep(200)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-events")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-events") })
         onView(withId(R.id.viewPager)).perform(swipeRight())
         onView(withId(R.id.viewPager)).perform(swipeRight())
         Thread.sleep(200)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-comment")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-comment") })
         onView(withId(R.id.viewPager)).perform(swipeLeft())
         Thread.sleep(200)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-info")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-info") })
 
         // favorite
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-favorite1")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite1") })
         onView(withId(R.id.menu_favorite)).perform(click())
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-favorite2")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite2") })
         Thread.sleep(5000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-favorite3")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-favorite3") })
 
         // up/down
         onView(withId(R.id.menu_next)).perform(click())
         Thread.sleep(4000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-next")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-next") })
         onView(withId(R.id.menu_prev)).perform(click())
         Thread.sleep(4000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-prev")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-prev") })
 
         // edit
         onView(withId(R.id.menu_track_edit)).perform(click())
         Thread.sleep(4000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-editTop")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editTop") })
         onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
         onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-editBottom")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editBottom") })
         Espresso.pressBack()
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-editFinished")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editFinished") })
 
         // open menu
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-openMenu")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-openMenu") })
 
         // map
         onView(withText("Show on map")).perform(click())
         Thread.sleep(4000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-map")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-map") })
     }
 
 }
