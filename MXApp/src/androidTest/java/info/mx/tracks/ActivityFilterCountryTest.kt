@@ -1,10 +1,12 @@
 package info.mx.tracks
 
 import android.Manifest
+import android.graphics.Bitmap
 import android.widget.ListView
+import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.CaptureToBitmapAction
+import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
@@ -41,17 +43,17 @@ class ActivityFilterCountryTest : BaseSyncTest() {
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-2")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1") })
         onView(withId(android.R.id.list)).perform(swipeDown())
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-3")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3") })
         onData(anything())
             .inAdapterView(isAssignableFrom(ListView::class.java))
             .atPosition(3)
             .perform(click())
         Thread.sleep(1000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-4")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4") })
 
         onView(withId(android.R.id.list)).perform(swipeDown())
         onView(withId(android.R.id.list)).perform(swipeDown())
@@ -64,7 +66,7 @@ class ActivityFilterCountryTest : BaseSyncTest() {
             .perform(click())
         Thread.sleep(1000)
         onView(isRoot())
-            .perform(CaptureToBitmapAction(BitmapReceiver("${javaClass.simpleName}_${nameRule.methodName}-5")))
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-5") })
     }
 
 }
