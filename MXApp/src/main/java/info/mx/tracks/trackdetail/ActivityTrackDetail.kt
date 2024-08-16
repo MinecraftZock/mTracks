@@ -44,19 +44,19 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         // Get intent, action and MIME type
         openDetail(intent)
 
-        val fabMenu = findViewById<FloatingActionMenu>(R.id.menuFab)
-        fabMenu.setClosedOnTouchOutside(true)
+        val menuFab = findViewById<FloatingActionMenu>(R.id.menuFab)
+        menuFab.setClosedOnTouchOutside(true)
 
         findViewById<View>(R.id.fabEvent).setOnClickListener {
-            fabMenu.close(false)
+            menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addEvent()
         }
         findViewById<View>(R.id.fabPictures).setOnClickListener {
-            fabMenu.close(false)
+            menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.doPicturePick()
         }
         findViewById<View>(R.id.fabComment).setOnClickListener {
-            fabMenu.close(false)
+            menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
     }
