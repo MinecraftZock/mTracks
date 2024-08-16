@@ -20,6 +20,7 @@ import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
+import info.mx.tracks.databinding.ActivityTrackDetailBinding
 import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
 import info.mx.tracks.prefs.MxPreferences
@@ -32,6 +33,7 @@ import java.util.*
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
 
     var detailFragmentTab: FragmentTrackDetailTab? = null
+    private lateinit var binding: ActivityTrackDetailBinding
 
     //    FragmentManager.getFragments can only be called from within the same library group (groupId=com.android.support) less... (⌘F1)
     //    This inspection looks at Android API calls that have been annotated with various support annotations (such as RequiresPermission or
@@ -39,24 +41,23 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_track_detail)
+        binding = ActivityTrackDetailBinding.inflate(layoutInflater)
 
         // Get intent, action and MIME type
         openDetail(intent)
 
-        val menuFab = findViewById<FloatingActionMenu>(R.id.menuFab)
-        menuFab.setClosedOnTouchOutside(true)
+        binding.fablayout.menuFab.setClosedOnTouchOutside(true)
 
-        findViewById<View>(R.id.fabEvent).setOnClickListener {
-            menuFab.close(false)
+        binding.fablayout.fabLayout.fabEvent.setOnClickListener {
+            binding.fablayout.menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addEvent()
         }
-        findViewById<View>(R.id.fabPictures).setOnClickListener {
-            menuFab.close(false)
+        binding.fablayout.fabLayout.fabPictures.setOnClickListener {
+            binding.fablayout.menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.doPicturePick()
         }
-        findViewById<View>(R.id.fabComment).setOnClickListener {
-            menuFab.close(false)
+        binding.fablayout.fabLayout.fabComment.setOnClickListener {
+            binding.fablayout.menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
     }
@@ -205,8 +206,8 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
         fun createDeepLinkIntent(context: Context, uri: Uri?): Intent {
             val localId = SQuery.newQuery()
-                    .expr(Tracks.REST_ID, SQuery.Op.EQ, uri!!.getQueryParameter("trackid"))
-                    .firstLong(Tracks.CONTENT_URI, Tracks._ID)
+                .expr(Tracks.REST_ID, SQuery.Op.EQ, uri!!.getQueryParameter("trackid"))
+                .firstLong(Tracks.CONTENT_URI, Tracks._ID)
             val intent = Intent(context, ActivityTrackDetail::class.java)
             intent.putExtra(RECORD_ID_LOCAL, localId)
             intent.putExtra(CONTENT_URI, Tracksges.CONTENT_URI.toString())
@@ -231,21 +232,21 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
             val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder
-                    .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
-                    .setView(if (uris.size == 1) listView else gridView)
-                    .setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        for (uri in uris) {
-                            val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
-                            Ops.execute(intentM)
-                            if (clip) {
-                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val data = ClipData.newPlainText("", "")
-                                clipboard.setPrimaryClip(data)
-                            }
+                .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
+                .setView(if (uris.size == 1) listView else gridView)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    for (uri in uris) {
+                        val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
+                        Ops.execute(intentM)
+                        if (clip) {
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val data = ClipData.newPlainText("", "")
+                            clipboard.setPrimaryClip(data)
                         }
                     }
+                }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.window!!.setLayout(AdapterImageUrisAdapter.getDesiredScreenWidth(), AdapterImageUrisAdapter.getDesiredScreenHeight())
             alertDialog.show()
