@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.sothree.slidinguppanel.PanelState
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
+import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.prefs.MxPreferences
@@ -80,7 +81,7 @@ class ActivityMapExtension : ActivityDrawerBase() {
         if (cl.isFirstRunEver) {
             val settingIntent = Intent(this, ActivitySetting::class.java)
             startActivity(settingIntent)
-        } else if (cl.isFirstRun) {
+        } else if (cl.isFirstRun && !MxCoreApplication.isEmulator) {
             cl.fullLogDialog.show()
         }
     }

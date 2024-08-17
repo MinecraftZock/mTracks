@@ -472,7 +472,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         binding.distanceContainer.trDetailDistance.tag = trackLoc
         binding.trDetailCoordinates.tag = trackLoc
         val prefs = MxPreferences.getInstance()
-        if (prefs.firstTimeUse) {
+        if (prefs.firstTimeUse && !MxCoreApplication.isEmulator) {
             MxCoreApplication.showDlgHtml(
                 requireActivity(),
                 Html.fromHtml(requireActivity().getString(R.string.firstime_title)),
