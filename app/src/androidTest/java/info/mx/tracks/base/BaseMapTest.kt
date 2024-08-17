@@ -60,6 +60,8 @@ abstract class BaseMapTest(private val restTrackId: Long, private val pressBack:
             Espresso.pressBack()
 
 //        Espresso.pressBack()
+
+        Thread.sleep(1000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 
         onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
