@@ -13,7 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment
 
 //enables the scrolling in a Scrollview
 class FragmentMapScroll : SupportMapFragment() {
-    private var mListener: OnTouchListener? = null
+    private var listener: OnTouchListener? = null
 
     override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?, savedInstance: Bundle?): View {
         val layout = super.onCreateView(layoutInflater, viewGroup, savedInstance)
@@ -28,8 +28,8 @@ class FragmentMapScroll : SupportMapFragment() {
         return layout
     }
 
-    fun setListener(listener: OnTouchListener) {
-        mListener = listener
+    fun setListener(onTouchListener: OnTouchListener) {
+        listener = onTouchListener
     }
 
     interface OnTouchListener {
@@ -39,10 +39,10 @@ class FragmentMapScroll : SupportMapFragment() {
     inner class TouchableWrapper(context: Context) : FrameLayout(context) {
 
         override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-            if (mListener != null) {
+            if (listener != null) {
                 when (event.action) {
-                    MotionEvent.ACTION_DOWN -> mListener!!.onTouch()
-                    MotionEvent.ACTION_UP -> mListener!!.onTouch()
+                    MotionEvent.ACTION_DOWN -> listener!!.onTouch()
+                    MotionEvent.ACTION_UP -> listener!!.onTouch()
                 }
             }
             return super.dispatchTouchEvent(event)

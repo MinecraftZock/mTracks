@@ -22,7 +22,6 @@ import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
-import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.sqlite.TracksRecord
@@ -157,19 +156,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         transaction.replace(R.id.fragment_container_detail, detailFragmentTab!!, FragmentTrackDetailTab.TAG)
         // transaction.addToBackStack(null);
         transaction.commit()
-    }
-
-    private fun getBundlePrepared(intent: Intent): Bundle? {
-        var bundle = intent.extras
-        // during share url this values are not delivered
-        if (intent.extras != null && !intent.extras!!.containsKey(CONTENT_URI)) {
-            bundle = Bundle(intent.extras)
-            bundle.putString(CONTENT_URI, MxPreferences.getInstance().restoreContentUri)
-            if (!intent.extras!!.containsKey(RECORD_ID_LOCAL)) {
-                bundle.putLong(RECORD_ID_LOCAL, MxPreferences.getInstance().restoreID)
-            }
-        }
-        return bundle
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

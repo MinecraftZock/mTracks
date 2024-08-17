@@ -9,9 +9,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import com.github.clans.fab.FloatingActionMenu
 import info.hannes.changelog.ChangeLog
-import info.hannes.commonlib.utils.DeviceTools
+import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentEmpty
@@ -80,7 +79,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
             this@ActivityTrackList.detailTagFragment.addRating()
         }
 
-        DeviceTools.setPhoneHasNoOptionsBtn(this)
+        this.setPhoneHasNoOptionsBtn()
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityTrackList.javaClass.simpleName).apply()
 
         val cl = ChangeLog(this)
