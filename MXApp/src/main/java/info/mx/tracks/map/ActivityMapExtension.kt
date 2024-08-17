@@ -8,9 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
 import com.sothree.slidinguppanel.PanelState
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import info.hannes.changelog.ChangeLog
-import info.hannes.commonlib.utils.DeviceTools
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
@@ -100,11 +98,13 @@ class ActivityMapExtension : ActivityDrawerBase() {
                 fabMenu?.visibility = View.VISIBLE
                 fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, headerHeight + fabPadding)
             }
+
             PanelState.ANCHORED -> fabMenu?.visibility = View.VISIBLE
             PanelState.HIDDEN -> {
                 fabMenu?.visibility = View.GONE
                 fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, fabPadding)
             }
+
             PanelState.DRAGGING -> {
                 fabMenu?.close(false)
                 fabMenu?.alpha = 1 - position
