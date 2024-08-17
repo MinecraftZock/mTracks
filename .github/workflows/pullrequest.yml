@@ -126,6 +126,7 @@ jobs:
           path: |
             MXApp/build/outputs/androidTest-results/connected
       - name: Compare screenshots ${{ matrix.emulatorApi }}
+        if: ${{ always() }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           emulatorApi: ${{ matrix.emulatorApi }}
