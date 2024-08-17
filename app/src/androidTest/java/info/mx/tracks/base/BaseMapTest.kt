@@ -7,10 +7,14 @@ import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.rule.GrantPermissionRule
+import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.ops.google.PictureIdlingResource
@@ -55,8 +59,18 @@ abstract class BaseMapTest(private val restTrackId: Long, private val pressBack:
         if (pressBack)
             Espresso.pressBack()
 
-        Espresso.pressBack()
+//        Espresso.pressBack()
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+
+        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2detailClick")
+
+        onView(withId(R.id.layoutPoiHeaderMain)).perform(swipeUp())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3swipeUp")
+
+        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4detailClick")
+
 //        onView(withId(android.R.id.button2)).perform(click())
 //        onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
 //        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
