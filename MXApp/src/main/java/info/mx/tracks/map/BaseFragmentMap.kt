@@ -103,6 +103,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private var viewFilterActive: ImageView? = null
     private var isKeyboardActive = false
     private var inPlaceSearch = false
+    @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
 
     private val poiPanelSlideListener = object : PanelSlideListener {
@@ -161,7 +162,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private val interstitialHandler = Handler(Looper.getMainLooper())
     private val visibleMarkers = ArrayList<Marker>()
     private var dragTargetId: Long = 0L
-    private var mLocationCallback: LocationCallback? = null
+    private var locationCallback: LocationCallback? = null
 
     private var _binding: FragmentMapBinding? = null
 
@@ -231,7 +232,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
         }
 
-        binding.mapButtonsOvelay.setListener(this)
+        binding.mapButtonsOverlay.setListener(this)
         val prefs = MxPreferences.getInstance()
 
         prefMapLayerListener = OnSharedPreferenceChangeListener { prefsKind, key ->
@@ -256,7 +257,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             interestLatLng = LatLng(prefs.mapLatitude.toDouble(), prefs.mapLongitude.toDouble())
         }
 
-        mLocationCallback = object : LocationCallback() {
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 if (context == null) {
                     return
@@ -538,7 +539,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             searchAutoComplete!!.setText("")
         }
         if (googleApiClient!!.isConnected) {
-            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(mLocationCallback!!)
+            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(locationCallback!!)
         }
         loaderManager.destroyLoader(LOADER_PROGRESS)
     }
@@ -563,7 +564,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         if (Objects.requireNonNull(permissionHelper).hasLocationPermission()) {
             if (context != null) {
                 LocationServices.getFusedLocationProviderClient(requireContext())
-                    .requestLocationUpdates(LocationJobService.REQUEST_DAY, mLocationCallback!!, Looper.getMainLooper())
+                    .requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())
             }
         }
     }
@@ -705,9 +706,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         searchListLayout!!.visibility = visibility
         if (map != null) {
             if (visibility == View.VISIBLE) {
-                binding.mapButtonsOvelay.visibility = View.GONE
+                binding.mapButtonsOverlay.visibility = View.GONE
             } else {
-                binding.mapButtonsOvelay.visibility = View.VISIBLE
+                binding.mapButtonsOverlay.visibility = View.VISIBLE
             }
         }
     }
@@ -970,7 +971,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     override fun onMapButtonStageClicked() {
-        val show = binding.mapButtonsOvelay.toggleStageShow()
+        val show = binding.mapButtonsOverlay.toggleStageShow()
         if (show) {
             loaderManager.restartLoader(LOADER_STAGE, null, this)
         } else {
@@ -979,7 +980,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     override fun onMapButtonTracksClicked() {
-        val show = binding.mapButtonsOvelay.toggleTracksShow()
+        val show = binding.mapButtonsOverlay.toggleTracksShow()
         if (show) {
             loaderManager.initLoader(LOADER_TRACKS, null, this)
         } else {
@@ -988,7 +989,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     override fun onMapButtonTrafficClicked() {
-        val show = binding.mapButtonsOvelay.toggleTrafficShow()
+        val show = binding.mapButtonsOverlay.toggleTrafficShow()
         if (map != null) {
             map!!.isTrafficEnabled = show
             MxPreferences.getInstance().edit().putMapTraffic(show).commit()
@@ -1006,7 +1007,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     override fun onMapButtonClusterClicked() {
-        val show = binding.mapButtonsOvelay.toggleClusterShow()
+        val show = binding.mapButtonsOverlay.toggleClusterShow()
         MxPreferences.getInstance().edit().putMapCluster(show).commit()
         updateClustering(show)
     }

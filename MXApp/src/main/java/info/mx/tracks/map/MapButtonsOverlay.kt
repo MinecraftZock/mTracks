@@ -51,14 +51,14 @@ class MapButtonsOverlay(context: Context, attrs: AttributeSet) : LinearLayout(co
                     if (MxPreferences.getInstance().mapTraffic) R.drawable.map_traffic_on_btn else R.drawable.map_traffic_off_btn)
             clusterBtn.setBackgroundResource(
                     if (MxPreferences.getInstance().mapCluster) R.drawable.map_cluster_on_btn else R.drawable.map_cluster_off_btn)
-            setAdmindView()
+            setAdminView()
         }
 
         setParentLayoutParams()
         setButtonActions()
     }
 
-    private fun setAdmindView() {
+    private fun setAdminView() {
         tracksBtn.visibility = if (MxCoreApplication.isAdmin) View.VISIBLE else View.GONE
         stageBtn.visibility = if (MxCoreApplication.isAdmin) View.VISIBLE else View.GONE
     }
