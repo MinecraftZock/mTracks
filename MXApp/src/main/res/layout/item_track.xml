@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/layoutPoiHeaderMain"
+<LinearLayout android:id="@+id/layoutPoiHeaderMain"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/list_item_selector"
     android:baselineAligned="false"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
-    android:background="@drawable/list_item_selector"
-    android:showDividers="beginning"
-    tools:ignore="SelectableText"
+    android:paddingEnd="@dimen/tracklist_right_padding"
     android:paddingStart="1dp"
-    android:paddingEnd="@dimen/tracklist_right_padding">
+    android:showDividers="beginning"
+    tools:ignore="SelectableText">
 
     <ImageView
         android:id="@+id/tr_track_access"
@@ -24,7 +23,7 @@
         android:gravity="center_vertical|start"
         android:scaleType="fitCenter"
         android:src="@drawable/flag_blau_hell"
-        tools:ignore="HardcodedText,ContentDescription"/>
+        tools:ignore="HardcodedText,ContentDescription" />
 
     <LinearLayout
         android:id="@+id/layoutPoiHeader"
@@ -120,9 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:paddingStart="0dp"
                 android:paddingEnd="1dp"
-                />
+                android:paddingStart="0dp" />
 
         </LinearLayout>
 
@@ -212,8 +210,7 @@
                 android:singleLine="true"
                 android:textAppearance="@style/textAppearanceSmall"
                 android:textColor="@color/font_color_grey"
-                tools:text="Address"
-                />
+                tools:text="Address" />
 
         </LinearLayout>
     </LinearLayout>
