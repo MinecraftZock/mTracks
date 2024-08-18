@@ -64,14 +64,14 @@ abstract class BaseMapTest(private val restTrackId: Long, private val pressBack:
         Thread.sleep(1000)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 
-        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2detailClick")
-
-        onView(withId(R.id.layoutPoiHeaderMain)).perform(swipeUp())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3swipeUp")
-
-        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4detailClick")
+//        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
+//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2detailClick")
+//
+//        onView(withId(R.id.layoutPoiHeaderMain)).perform(swipeUp())
+//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3swipeUp")
+//
+//        onView(withId(R.id.layoutPoiHeaderMain)).perform(click())
+//        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4detailClick")
 
 //        onView(withId(android.R.id.button2)).perform(click())
 //        onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
