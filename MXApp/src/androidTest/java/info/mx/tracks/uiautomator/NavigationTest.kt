@@ -3,6 +3,7 @@ package info.mx.tracks.uiautomator
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +15,11 @@ import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -87,6 +88,8 @@ class NavigationTest {
 
         // Wait for the app to appear
         device.wait(Until.hasObject(By.pkg(MX_PACKAGE).depth(0)), LAUNCH_TIMEOUT.toLong())
+
+        Thread.sleep(WAIT_FOR_IMPORT)
     }
 
     @Test
@@ -132,8 +135,7 @@ class NavigationTest {
         }
 
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1") })
 
         val openButton = onView(
             Matchers.allOf(
@@ -143,12 +145,10 @@ class NavigationTest {
             )
         )
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2") })
         openButton.perform(ViewActions.click())
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3")
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3") })
 
         val menuMap = device.findObject(UiSelector().className("android.widget.CheckedTextView").text("Map"))
         if (menuMap.exists()) {
@@ -171,8 +171,7 @@ class NavigationTest {
         bundle.putString("openMap", "0")
         getInstrumentation().sendStatus(0, bundle)
         onView(isRoot())
-            .captureToBitmap()
-            .writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4") })
     }
 
     private fun allowPermissionsIfNeeded() {
@@ -232,7 +231,7 @@ class NavigationTest {
 
         private const val MX_PACKAGE = BuildConfig.APPLICATION_ID
         private const val LAUNCH_TIMEOUT = 5000
-        private const val WAIT_FOR_IMPORT = 255L
+        private const val WAIT_FOR_IMPORT = 2255L
 
         /**
          * Perform action of waiting for a specific view id.
