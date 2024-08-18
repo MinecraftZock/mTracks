@@ -40,17 +40,17 @@ abstract class BaseMapTest(private val restTrackId: Long, private val pressBack:
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
-    @Before
-    fun pictureIdlingBefore() {
-        registerIdlingResource()
-        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
-    }
-
-    @After
-    fun pictureIdlingBeforeAfter() {
-        unregisterIdlingResource()
-        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
-    }
+//    @Before
+//    fun pictureIdlingBefore() {
+//        registerIdlingResource()
+//        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
+//    }
+//
+//    @After
+//    fun pictureIdlingBeforeAfter() {
+//        unregisterIdlingResource()
+//        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
+//    }
 
     @Test
     fun detailMap() {
