@@ -75,8 +75,6 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
             override fun onPageScrollStateChanged(state: Int) {}
         })
 
-        setHasOptionsMenu(true)
-
         if (requireArguments().containsKey(FragmentTrackDetail.IN_SLIDER) &&
             requireArguments().getBoolean(FragmentTrackDetail.IN_SLIDER)
         ) {
