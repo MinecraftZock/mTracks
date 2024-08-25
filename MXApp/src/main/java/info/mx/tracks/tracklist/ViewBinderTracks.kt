@@ -55,16 +55,16 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
     }
 
     @SuppressLint("DiscouragedApi")
-    override fun setViewValue(view: View, cursor: Cursor, columnIndex: Int): Boolean {
+    override fun setViewValue(view: View, tracksGesSumCursor: Cursor, columnIndex: Int): Boolean {
         var res = false
         try {
             if (view.id == R.id.tr_list_event) {
-                val value = cursor.getString(columnIndex)
+                val value = tracksGesSumCursor.getString(columnIndex)
                 val ly = view.parent as LinearLayout
                 ly.visibility = if (value == null || value == "") View.GONE else View.VISIBLE
             } else if (view.id == R.id.tr_track_access) {
                 var iconRes = R.drawable.flag_blau_hell
-                val value = cursor.getString(columnIndex)
+                val value = tracksGesSumCursor.getString(columnIndex)
                 if (value != null) {
                     iconRes = when (value) {
                         "R" -> R.drawable.flag_race_hell
@@ -73,7 +73,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                         else -> R.drawable.flag_blau_hell
                     }
                 }
-                val viewTrackInf = getViewTrackInfoFromCursor(cursor, withSum)
+                val viewTrackInf = getViewTrackInfoFromCursor(tracksGesSumCursor, withSum)
                 (view as ImageView).setImageBitmap(
                     BitmapHelper.getBitmap(
                         context,
@@ -83,32 +83,32 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 )
                 res = true
             } else if (view.id == R.id.tr_camera) {
-                val value = cursor.getInt(columnIndex)
+                val value = tracksGesSumCursor.getInt(columnIndex)
                 view.visibility = if (value == 0) ImageView.GONE else ImageView.VISIBLE
                 res = true
             } else if (view.id == R.id.tr_calendar) {
-                val value = cursor.getInt(columnIndex)
+                val value = tracksGesSumCursor.getInt(columnIndex)
                 view.visibility = if (value == 0) ImageView.GONE else ImageView.VISIBLE
                 res = true
             } else if (view.id == R.id.tr_country) {
-                if (cursor.getString(columnIndex) != null) {
-                    val value = cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
+                if (tracksGesSumCursor.getString(columnIndex) != null) {
+                    val value = tracksGesSumCursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
                     val id = context.resources.getIdentifier(value, "drawable", context.packageName)
                     (view as ImageView).setImageResource(id)
                 }
                 res = true
             } else if (view.id == R.id.tr_ratingBar) {
-                val value = cursor.getFloat(columnIndex)
+                val value = tracksGesSumCursor.getFloat(columnIndex)
                 val ratingBar = view as RatingBar
                 ratingBar.rating = value
                 res = true
             } else if (view.id == R.id.tr_name) {
-                var valueN = cursor.getString(columnIndex)
+                var valueN = tracksGesSumCursor.getString(columnIndex)
                 if (valueN == null || valueN.trim { it <= ' ' } == "" && BuildConfig.FLAVOR.equals(
                         "admin",
                         ignoreCase = true
                     )) {
-                    val viewTrackInf = getViewTrackInfoFromCursor(cursor, withSum)
+                    val viewTrackInf = getViewTrackInfoFromCursor(tracksGesSumCursor, withSum)
                     val track = TracksRecord.get(viewTrackInf.id)
                     if (track != null) {
                         valueN = track.restId.toString() + " " + track.approved
@@ -117,7 +117,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 (view as TextView).text = valueN
                 res = true
             } else if (view.id == R.id.tr_mo || view.id == R.id.tr_tu || view.id == R.id.tr_we || view.id == R.id.tr_th || view.id == R.id.tr_fr || view.id == R.id.tr_sa || view.id == R.id.tr_so) {
-                val value = cursor.getInt(columnIndex)
+                val value = tracksGesSumCursor.getInt(columnIndex)
                 view.setDayLayout(value == 1)
                 when (view.id) {
                     R.id.tr_mo -> (view as TextView).text = shortWeekdays[2]
@@ -129,13 +129,13 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                     R.id.tr_so -> (view as TextView).text = shortWeekdays[1]
                 }
                 res = true
-            } else if (columnIndex == cursor.getColumnIndexOrThrow(TracksGesSum.DISTANCE2LOCATION)) {
+            } else if (columnIndex == tracksGesSumCursor.getColumnIndexOrThrow(TracksGesSum.DISTANCE2LOCATION)) {
                 if (permissionHelper.hasLocationPermission()) {
                     (view.parent as ViewGroup).visibility = View.VISIBLE
-                    val distanceOld = cursor.getInt(columnIndex)
+                    val distanceOld = tracksGesSumCursor.getInt(columnIndex)
                     var distNew = distanceOld
                     if (myLoc != null) {
-                        val viewTrackInf = getViewTrackInfoFromCursor(cursor, withSum)
+                        val viewTrackInf = getViewTrackInfoFromCursor(tracksGesSumCursor, withSum)
                         val trackLoc = Location("track")
                         trackLoc.latitude = SecHelper.entcryptXtude(viewTrackInf.latitude)
                         trackLoc.longitude = SecHelper.entcryptXtude(viewTrackInf.longitude)
@@ -169,7 +169,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
             }
         } catch (e: Exception) {
             try {
-                val viewTrackInf = getViewTrackInfoFromCursor(cursor, withSum)
+                val viewTrackInf = getViewTrackInfoFromCursor(tracksGesSumCursor, withSum)
                 val track = TracksRecord.get(viewTrackInf.id)
                 if (track != null) {
                     val trackName = track.trackname
