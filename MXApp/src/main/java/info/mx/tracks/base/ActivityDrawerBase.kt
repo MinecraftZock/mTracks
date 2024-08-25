@@ -131,6 +131,8 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
     /**
      * To prevent user to accidentally leave the app with the back button.
      */
+    @Deprecated("Deprecated in Java")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
@@ -232,7 +234,7 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
 
     }
 
-    protected fun doSendTrackMail(name: String, desc: String) {
+    private fun doSendTrackMail(name: String, desc: String) {
         val i = Intent(Intent.ACTION_SEND)
         i.type = "message/rfc822"
         i.putExtra(Intent.EXTRA_EMAIL, arrayOf("appdev.droider@gmail.com"))
