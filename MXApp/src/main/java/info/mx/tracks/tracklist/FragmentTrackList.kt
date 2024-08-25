@@ -110,8 +110,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                     return
                 }
                 for (location in locationResult.locations) {
-                    val recalcDistance = RecalculateDistance(requireContext())
-                    recalcDistance.recalculateTracks(location, "list")
+                    val recalculateDistance = RecalculateDistance(requireContext())
+                    recalculateDistance.recalculateTracks(location, "list")
 
                     viewBinder?.setMyLocation(location)
                 }
