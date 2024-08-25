@@ -1,5 +1,6 @@
 package info.mx.tracks.trackdetail
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -60,9 +61,10 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
+    @SuppressLint("MissingSuperCall")
+    override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        openDetail(intent)
+        intent?.let { openDetail(it) }
     }
 
     override fun onResume() {
@@ -173,6 +175,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         //skip onBackPressed logic and close Activity
         finish()
