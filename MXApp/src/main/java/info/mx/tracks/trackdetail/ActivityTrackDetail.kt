@@ -15,16 +15,14 @@ import android.widget.GridView
 import android.widget.ListView
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
-import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.Ops
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
-import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
+import info.mx.tracks.common.parcelableArrayListExtra
+import info.mx.tracks.common.parcelableExtra
 import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
 import java.util.*
@@ -112,7 +110,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     }
 
     private fun handleSendImage(intent: Intent) {
-        val imageUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val imageUri = intent.parcelableExtra<Uri>(Intent.EXTRA_STREAM)
         if (imageUri != null) {
             // Update UI to reflect image being shared
             Timber.d("share %s", imageUri)
@@ -139,7 +137,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     //    }
 
     private fun handleSendMultipleImages(intent: Intent) {
-        val imageUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+        val imageUris = intent.parcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
         if (imageUris != null) {
             val bundle = getBundlePrepared(intent)
             val track2Share = bundle?.getLong(RECORD_ID_LOCAL)?.let { TracksRecord.get(it) }
@@ -175,6 +173,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         return super.onOptionsItemSelected(item)
     }
 
+    @Deprecated("Deprecated in Java")
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         //skip onBackPressed logic and close Activity
@@ -191,16 +190,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     }
 
     companion object {
-
-        fun createDeepLinkIntent(context: Context, uri: Uri?): Intent {
-            val localId = SQuery.newQuery()
-                    .expr(Tracks.REST_ID, SQuery.Op.EQ, uri!!.getQueryParameter("trackid"))
-                    .firstLong(Tracks.CONTENT_URI, Tracks._ID)
-            val intent = Intent(context, ActivityTrackDetail::class.java)
-            intent.putExtra(RECORD_ID_LOCAL, localId)
-            intent.putExtra(CONTENT_URI, Tracksges.CONTENT_URI.toString())
-            return intent
-        }
 
         fun askImportDlg(context: Context, uris: ArrayList<Uri>, track2Share: TracksRecord?, clip: Boolean) {
             if (uris.size == 0 || track2Share == null) {
