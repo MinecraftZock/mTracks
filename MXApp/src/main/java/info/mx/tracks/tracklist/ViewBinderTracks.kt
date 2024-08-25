@@ -1,5 +1,6 @@
 package info.mx.tracks.tracklist
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Color
@@ -34,17 +35,25 @@ import kotlin.math.roundToInt
 
 class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) : SimpleCursorAdapter.ViewBinder, KoinComponent {
 
-    private val shortWeekdays: Array<String>
+    private val shortWeekdays: Array<String> = DateHelper.shortWeekdays
     private val withSum: Boolean
     private val showKm: Boolean
     private var myLoc: Location?
 
     val permissionHelper: PermissionHelper by inject()
 
+    init {
+        val prefs = MxPreferences.getInstance()
+        showKm = prefs.unitsKm
+        this.myLoc = myLoc
+        this.withSum = withSum
+    }
+
     fun setMyLocation(myLoc: Location?) {
         this.myLoc = myLoc
     }
 
+    @SuppressLint("DiscouragedApi")
     override fun setViewValue(view: View, cursor: Cursor, columnIndex: Int): Boolean {
         var res = false
         try {
@@ -269,11 +278,4 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
         )
     }
 
-    init {
-        shortWeekdays = DateHelper.shortWeekdays
-        val prefs = MxPreferences.getInstance()
-        showKm = prefs.unitsKm
-        this.myLoc = myLoc
-        this.withSum = withSum
-    }
 }
