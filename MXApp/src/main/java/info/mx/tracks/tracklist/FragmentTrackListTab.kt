@@ -1,5 +1,6 @@
 package info.mx.tracks.tracklist
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -143,6 +144,7 @@ class FragmentTrackListTab : FragmentBase() {
         callbacks = null
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
 
