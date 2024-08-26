@@ -1,0 +1,138 @@
+package info.mx.tracks.room.entity
+
+import androidx.room.DatabaseView
+
+// Source
+// https://github.com/android/trackr/blob/9b7c22d6e7b2782959389ed115730efcfcddc790/shared/src/main/java/com/example/android/trackr/data/Views.kt#L19
+
+@DatabaseView(
+    """
+        select
+			trackname as trackname, 
+			Approved as Approved,
+			Distance2location as distance2location, 
+			Openmondays as openmondays, 
+			Opentuesdays as opentuesdays, 
+			Openwednesday as openwednesday, Openthursday as openthursday, 
+			Openfriday as openfriday, Opensaturday as opensaturday, 
+			Opensunday as opensunday,
+			Country as country, trackaccess as trackaccess, 
+			restId as restId, Track.id as _id, brands as brands, 
+			Metatext as metatext,
+			Kidstrack as Kidstrack, Supercross as Supercross, 
+			Shower as Shower, Cleaning as Cleaning, 
+			Electricity as Electricity, Camping as Camping,
+			Latitude as Latitude, Longitude as Longitude,
+			Hoursmonday as Hoursmonday,    
+			Hourstuesday as Hourstuesday,
+			Hourswednesday as Hourswednesday,
+			Hoursthursday as Hoursthursday,
+			Hoursfriday as Hoursfriday,
+			Hourssaturday as Hourssaturday,
+			Hourssunday as Hourssunday,
+			validuntil as validuntil,
+			Url as Url,
+			Phone as Phone,
+			Contact as Contact,
+			Notes as Notes,
+			Tracklength as Tracklength,
+			Soiltype as Soiltype,
+			facebook as facebook,
+			adress as adress,
+			Licence as Licence,
+			Fees as Fees,
+			feescamping as feescamping,
+			daysopen as daysopen,
+			noiselimit as noiselimit,
+			campingrvrvhookup as campingrvrvhookup,
+			singletracks as singletracks,
+			mxtrack as mxtrack,
+			a4x4 as a4x4,
+			enduro as endruo,
+			utv as utv,
+			quad as quad,
+			trackstatus as trackstatus,
+			areatype as areatype,
+			schwierigkeit as schwierigkeit,
+			indoor as indoor,
+            (cast (ifnull(RatingSum.ratingAvg,0) as real)) as rating,
+            (cast(ifnull(picturecount,0) as integer)) as picturecount,
+            (cast(ifnull(eventcount,0) as integer)) as eventcount
+        from Track
+            left join PictureSum on Track.restId = PictureSum.trackRestId
+            left join EventSum on Track.restId = eventsum.trackRestId
+            left join RatingSum on Track.restId = ratingsum.trackRestId
+    """
+)
+data class TracksGes(
+    val trackName: String,
+    val approved: Int,
+    val distance2location: Float,
+    val openMondays: Int,
+    val openTuesdays: Int,
+    val openWednesday: Int,
+    val openThursday: Int,
+    val openFriday: Int,
+    val openSaturday: Int,
+    val openSunday: Int,
+    val country: String,
+    val trackAccess: String,
+    val restId: Long,
+    val _id: Long,
+    val brands: String,
+    val metatext: String,
+    val kidsTrack: Int,
+    val superCross: Int,
+    val shower: Int,
+    val cleaning: Int,
+    val electricity: Int,
+    val camping: Int,
+    val latitude: Double,
+    val longitude: Double,
+    val hoursMonday: String,
+    val hoursTuesday: String,
+    val hoursWednesday: String,
+    val hoursThursday: String,
+    val hoursFriday: String,
+    val hoursSaturday: String,
+    val hoursSunday: String,
+    val validUntil: Int,
+    val url: String,
+    val phone: String,
+    val contact: String,
+    val notes: String,
+    val trackLength: Int,
+    val soilType: String,
+    val facebook: String,
+    val address: String,
+    val licence: String,
+    val fees: String,
+    val feesCamping: Int,
+    val daysOpen: String,
+    val noiseLimit: Int,
+    val campingRvrvHookup: Int,
+    val singleTracks: Int,
+    val mxTrack: Int,
+    val a4x4: Int,
+    val enduro: Int,
+    val utv: Int,
+    val quad: Int,
+    val trackStatus: String,
+    val areaType: String,
+    val schwierigkeit: Int,
+    val indoor: Int,
+    val rating: Float,
+    val pictureCount: Int,
+    val eventCount: Int
+
+//    @Relation(
+//        parentColumn = "id",
+//        entity = Tag::class,
+//        entityColumn = "id",
+//        associateBy = Junction(
+//            value = TaskTag::class,
+//            parentColumn = "taskId",
+//            entityColumn = "tagId"
+//        )
+//    )
+)
