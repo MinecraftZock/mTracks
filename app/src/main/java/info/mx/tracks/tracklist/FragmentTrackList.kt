@@ -79,7 +79,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     private var searchAutoComplete: SearchAutoComplete? = null
     private var locationCallback: LocationCallback? = null
 
-    val mxMemDatabase: MxMemDatabase by inject()
+    private val mxMemDatabase: MxMemDatabase by inject()
 
     private var _binding: ScreenListWithProgressbarBinding? = null
 
