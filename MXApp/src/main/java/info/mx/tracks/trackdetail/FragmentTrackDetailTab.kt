@@ -1,5 +1,6 @@
 package info.mx.tracks.trackdetail
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -66,13 +67,14 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         binding.viewPager.currentItem = MxPreferences.getInstance().tabDetailPosition
         binding.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
+            override fun onPageScrollStateChanged(state: Int) = Unit
 
             override fun onPageSelected(position: Int) {
                 MxPreferences.getInstance().edit().putTabDetailPosition(position).apply()
             }
 
-            override fun onPageScrollStateChanged(state: Int) {}
         })
 
         setHasOptionsMenu(true)
@@ -132,6 +134,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         return result
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun fillMask(trackRec: TracksgesRecord) {
         trackRec.trackname?.let {
             MxCoreApplication.trackEvent("TrackOpen", it)
