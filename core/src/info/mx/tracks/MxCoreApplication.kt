@@ -64,6 +64,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
     companion object {
 
         var isAdmin = false
+        var isAdminOrDebug = isAdmin || BuildConfig.DEBUG
         var showWeather = true
         private const val SYNC_WAIT = (1000 * 60 * 60 * 12).toLong()
         lateinit var mxInfo: MxInfo

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.common.LoggingHelper.setMessage
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.ops.ImportHelper.getDistance
@@ -17,7 +17,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 internal class OpRecalcDistanceOperation : AbstractOpRecalcDistanceOperation() {
-    private val genauigkeit = if (isAdmin) 150 else 350
+    private val genauigkeit = if (isAdminOrDebug) 150 else 350
     private val sdf = SimpleDateFormat("hh:mm:ss")
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         return try {
@@ -44,12 +44,12 @@ internal class OpRecalcDistanceOperation : AbstractOpRecalcDistanceOperation() {
                                 3
                             ) / genauigkeit).toFloat().roundToInt()
                         ) {
-                            if (isAdmin) {
+                            if (isAdminOrDebug) {
                                 setMessage(wann + " passt id:" + cursor.getLong(0) + " dist:" + meter + "m")
                             }
                             break // nichts zu machen
                         } else {
-                            if (isAdmin) {
+                            if (isAdminOrDebug) {
                                 setMessage(wann + " ungleich id:" + cursor.getLong(0) + " dist:" + meter + "m")
                             }
                         }
@@ -63,7 +63,7 @@ internal class OpRecalcDistanceOperation : AbstractOpRecalcDistanceOperation() {
             }
             cursor.close()
             val estimatedTime = System.currentTimeMillis() - starttime
-            if (!first && isAdmin) {
+            if (!first && isAdminOrDebug) {
                 wann = sdf.format(Date(System.currentTimeMillis()))
                 setMessage(wann + " " + last + estimatedTime + " msec dist:" + meter + "m")
             }
@@ -71,8 +71,8 @@ internal class OpRecalcDistanceOperation : AbstractOpRecalcDistanceOperation() {
             OperationResult.ok(bundle)
         } catch (e: Exception) {
             Timber.e(e)
-            if (isAdmin) {
-                Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+            if (isAdminOrDebug) {
+                Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             OperationResult.error(e)
         }

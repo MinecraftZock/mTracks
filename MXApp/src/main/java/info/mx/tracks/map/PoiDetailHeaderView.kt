@@ -19,7 +19,7 @@ import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper.getFormatDistance
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.DistanceHelper.checkDistance4View
@@ -164,7 +164,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         }
         viewRating.rating = poiRecord.rating.toFloat()
         viewName.text =
-            (if (isAdmin && poiRecord.approved == -1L) "--" else "") + poiRecord.trackname
+            (if (isAdminOrDebug && poiRecord.approved == -1L) "--" else "") + poiRecord.trackname
         viewMo.setDayLayout(poiRecord.openmondays == 1L)
         viewTu.setDayLayout(poiRecord.opentuesdays == 1L)
         viewWe.setDayLayout(poiRecord.openwednesday == 1L)
