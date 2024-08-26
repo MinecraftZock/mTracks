@@ -61,7 +61,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     override fun onCreate() {
         isDebug = BuildConfig.DEBUG
-        isAdmin = isDebug
+//        isAdmin = isDebug
         showWeather = BuildConfig.SHOW_WEATHER
 
         // for 15 minutes disable admin
