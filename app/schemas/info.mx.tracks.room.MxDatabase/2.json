@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "61463736952320e807d32724193df83d",
+    "identityHash": "020ae90f2b11e777a2cfbc6d7d5e327c",
     "entities": [
       {
         "tableName": "CapturedLatLng",
@@ -74,7 +74,7 @@
       },
       {
         "tableName": "Comment",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `rating` INTEGER NOT NULL, `username` TEXT NOT NULL, `note` TEXT NOT NULL, `country` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `rating` INTEGER NOT NULL, `username` TEXT NOT NULL, `note` TEXT NOT NULL, `country` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -128,7 +128,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -196,7 +196,7 @@
       },
       {
         "tableName": "Event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackRestId` INTEGER NOT NULL, `seriesRestId` INTEGER NOT NULL, `eventDate` INTEGER NOT NULL, `comment` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackRestId` INTEGER NOT NULL, `seriesRestId` INTEGER NOT NULL, `eventDate` INTEGER NOT NULL, `comment` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackRestId",
@@ -244,7 +244,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -306,7 +306,7 @@
       },
       {
         "tableName": "Network",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tracks` INTEGER NOT NULL, `reason` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tracks` INTEGER NOT NULL, `reason` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "tracks",
@@ -324,7 +324,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -350,7 +350,7 @@
       },
       {
         "tableName": "Picture",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `localfile` TEXT NOT NULL, `localthumb` TEXT NOT NULL, `username` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `localfile` TEXT NOT NULL, `localthumb` TEXT NOT NULL, `username` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `approved` INTEGER NOT NULL, `androidid` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -398,7 +398,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -434,7 +434,7 @@
       },
       {
         "tableName": "Route",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `content` TEXT NOT NULL, `logitude` REAL NOT NULL, `langitude` REAL NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `content` TEXT NOT NULL, `logitude` REAL NOT NULL, `langitude` REAL NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -464,7 +464,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -500,7 +500,7 @@
       },
       {
         "tableName": "Series",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `seriesUrl` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `seriesUrl` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "name",
@@ -518,7 +518,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -544,7 +544,7 @@
       },
       {
         "tableName": "Track",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackname",
@@ -904,7 +904,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -940,7 +940,7 @@
       },
       {
         "tableName": "TrackStage",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `updated` INTEGER NOT NULL, `insLongitude` REAL NOT NULL, `insLatitude` REAL NOT NULL, `insDistance` INTEGER NOT NULL, `trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `updated` INTEGER NOT NULL, `insLongitude` REAL NOT NULL, `insLatitude` REAL NOT NULL, `insDistance` INTEGER NOT NULL, `trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -1330,7 +1330,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -1375,7 +1375,7 @@
       },
       {
         "tableName": "Weather",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `dt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `type` TEXT NOT NULL, `content` TEXT NOT NULL, `dt` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -1405,7 +1405,7 @@
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "restId",
@@ -1443,7 +1443,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61463736952320e807d32724193df83d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '020ae90f2b11e777a2cfbc6d7d5e327c')"
     ]
   }
 }
