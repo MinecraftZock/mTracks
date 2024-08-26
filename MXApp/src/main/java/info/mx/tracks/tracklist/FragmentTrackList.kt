@@ -441,7 +441,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                         binding.txtNoDisplays.text = binding.txtNoDisplays.text.toString() + "\n" + getString(R.string.go_to_filter)
                     }
                 }
-                Timber.i("onLoadFinished Tracks:${cursor.count} loader:${loader.id}")
+                Timber.i("onLoadFinished Tracks count:${cursor.count} loaderId:${loader.id}")
             }
 
             LOADER_PROGRESS -> {
