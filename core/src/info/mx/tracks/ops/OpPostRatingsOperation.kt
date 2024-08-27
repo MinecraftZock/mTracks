@@ -6,7 +6,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import info.hannes.commonlib.NetworkHelper.isOnline
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.MxCoreApplication.Companion.mxInfo
 import info.mx.tracks.common.getAndroidId
 import info.mx.tracks.rest.PostRatingsRequest
@@ -45,8 +45,8 @@ internal class OpPostRatingsOperation : AbstractOpPostRatingsOperation() {
             OperationResult.ok(bundle)
         } catch (e: Exception) {
             Timber.e(e)
-            if (isAdmin) {
-                Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+            if (isAdminOrDebug) {
+                Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             OperationResult.error(e)
         }

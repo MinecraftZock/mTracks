@@ -30,6 +30,7 @@ import info.hannes.commonlib.TrackingApplication
 import info.mx.comlib.retrofit.service.model.TrackR
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.MxCoreApplication
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.common.LoggingHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
@@ -249,64 +250,70 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         val opName = "Pictures"
         val maxCreated = SQuery.newQuery().firstInt(Pictures.CONTENT_URI, "max(" + Pictures.CHANGED + ")")
 
-        val picturesResponse = dataManagerApp.getPictures(maxCreated.toLong())
+        try {
+            val picturesResponse = dataManagerApp.getPictures(maxCreated.toLong())
 
-        picturesResponse.checkResponseCodeOk()
+            picturesResponse.checkResponseCodeOk()
 
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (pictureR in picturesResponse.body()!!) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Pictures.REST_ID, Op.EQ, pictureR.id!!)
-                .firstInt(Pictures.CONTENT_URI, Pictures._ID)
-            if (restId == 0) { // neuanlage
-                zlrInserted++
-                val builderTrack = Pictures.newBuilder()
-
-                builderTrack.setRestId(pictureR.id!!.toLong())
-                builderTrack.setChanged(pictureR.changed!!.toLong())
-                builderTrack.setApproved(pictureR.approved!!.toLong())
-                builderTrack.setComment(pictureR.comment)
-                builderTrack.setDeleted(pictureR.deleted!!.toLong())
-                builderTrack.setTrackRestId(pictureR.trackId!!.toLong())
-                builderTrack.setUsername(pictureR.username)
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+            LoggingHelper.setMessage("$DOWNLOAD $opName")
+            var zlrUpdated = 0
+            var zlrInserted = 0
+            val opsTracks = ArrayList<ContentProviderOperation>()
+            for (pictureR in picturesResponse.body()!!) {
+                if (context.isAborted) {
+                    return
                 }
-            } else {
-                val recordTrack = PicturesRecord.get(restId.toLong())
-                deleteFile(recordTrack!!.localfile)
-                deleteFile(recordTrack.localthumb)
-                recordTrack.localfile = ""
-                recordTrack.localthumb = ""
 
-                recordTrack.restId = pictureR.id!!.toLong()
-                recordTrack.changed = pictureR.changed!!.toLong()
-                recordTrack.approved = pictureR.approved!!.toLong()
-                recordTrack.comment = pictureR.comment
-                recordTrack.deleted = pictureR.deleted!!.toLong()
-                recordTrack.trackRestId = pictureR.trackId!!.toLong()
-                recordTrack.username = pictureR.username
-                recordTrack.save(updateProvider)
+                zlrUpdated++
+                val restId = SQuery.newQuery()
+                    .expr(Pictures.REST_ID, Op.EQ, pictureR.id!!)
+                    .firstInt(Pictures.CONTENT_URI, Pictures._ID)
+                if (restId == 0) { // neuanlage
+                    zlrInserted++
+                    val builderTrack = Pictures.newBuilder()
+
+                    builderTrack.setRestId(pictureR.id!!.toLong())
+                    builderTrack.setChanged(pictureR.changed!!.toLong())
+                    builderTrack.setApproved(pictureR.approved!!.toLong())
+                    builderTrack.setComment(pictureR.comment)
+                    builderTrack.setDeleted(pictureR.deleted!!.toLong())
+                    builderTrack.setTrackRestId(pictureR.trackId!!.toLong())
+                    builderTrack.setUsername(pictureR.username)
+
+                    opsTracks.add(builderTrack.toInsertOperationBuilder().build())
+
+                    // bulk insert
+                    if (zlrUpdated > BLOCK_SIZE) {
+                        zlrUpdated = doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                    }
+                } else {
+                    val recordTrack = PicturesRecord.get(restId.toLong())
+                    deleteFile(recordTrack!!.localfile)
+                    deleteFile(recordTrack.localthumb)
+                    recordTrack.localfile = ""
+                    recordTrack.localthumb = ""
+
+                    recordTrack.restId = pictureR.id!!.toLong()
+                    recordTrack.changed = pictureR.changed!!.toLong()
+                    recordTrack.approved = pictureR.approved!!.toLong()
+                    recordTrack.comment = pictureR.comment
+                    recordTrack.deleted = pictureR.deleted!!.toLong()
+                    recordTrack.trackRestId = pictureR.trackId!!.toLong()
+                    recordTrack.username = pictureR.username
+                    recordTrack.save(updateProvider)
+                }
+            }
+            // clean up
+            if (zlrInserted > 0) {
+                doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+            }
+            LoggingHelper.setMessage("") // dies SysncPictures wird auch vom pushImages aufgerufen
+            Timber.i("$opName gesamt ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
+        } catch (e: Exception) {
+            if (isAdminOrDebug) {
+                Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
-        }
-        LoggingHelper.setMessage("") // dies SysncPictures wird auch vom pushImages aufgerufen
-        Timber.i("$opName gesamt ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
     }
 
     private fun doPushNetworkErrorsAtOnce(webClient: MxInfo) {
@@ -1000,13 +1007,13 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
         val ratingsResponse = dataManagerApp.getRatings(maxCreated / 1000)
 
-        ratingsResponse?.checkResponseCodeOk()
+        ratingsResponse.checkResponseCodeOk()
 
         LoggingHelper.setMessage("$DOWNLOAD $opName")
         var zlrUpdated = 0
         var zlrInserted = 0
         val contentValuesRatingsList = ArrayList<ContentValues>()
-        for (trackREST in ratingsResponse?.body()!!) {
+        for (trackREST in ratingsResponse.body()!!) {
 
             if (context.isAborted) {
                 return

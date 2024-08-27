@@ -10,7 +10,7 @@ import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import info.hannes.commonlib.NetworkHelper.isOnline
 import info.hannes.commonlib.TrackingApplication.Companion.isDebug
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.GetWeatherDailyRequest
 import info.mx.tracks.rest.GetWeatherDailyResult
@@ -121,14 +121,14 @@ internal class OpGetWeatherOperation : AbstractOpGetWeatherOperation() {
                     )
                 }
             } catch (e: ServiceException) {
-                if (isAdmin) {
-                    Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+                if (isAdminOrDebug) {
+                    Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
                 }
                 return OperationResult.error(e)
             } catch (e: Exception) {
                 Timber.e(e)
-                if (isAdmin) {
-                    Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+                if (isAdminOrDebug) {
+                    Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
                 }
                 return OperationResult.error(e)
             }

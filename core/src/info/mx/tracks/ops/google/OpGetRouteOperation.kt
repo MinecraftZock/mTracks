@@ -4,7 +4,6 @@ import android.location.Location
 import info.hannes.commonlib.NetworkHelper.isOnline
 import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.mx.tracks.ops.ImportHelper.getDistance
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import android.os.Bundle
@@ -19,6 +18,7 @@ import info.mx.tracks.rest.google.Routes
 import com.robotoworks.mechanoid.net.ServiceException
 import android.widget.Toast
 import com.google.gson.Gson
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import timber.log.Timber
 import java.lang.Exception
 
@@ -67,15 +67,15 @@ internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
                     }
                 }
             } catch (e: ServiceException) {
-                if (isAdmin) {
-                    Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+                if (isAdminOrDebug) {
+                    Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
                 }
                 Timber.e(e)
                 return OperationResult.error(e)
             } catch (e: Exception) {
                 Timber.e(e)
-                if (isAdmin) {
-                    Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+                if (isAdminOrDebug) {
+                    Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
                 }
                 return OperationResult.error(e)
             }

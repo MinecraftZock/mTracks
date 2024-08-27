@@ -11,7 +11,7 @@ import com.robotoworks.mechanoid.net.ServiceException
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import info.hannes.commonlib.NetworkHelper.isOnline
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.MxCoreApplication.Companion.mxInfo
 import info.mx.tracks.MxCoreApplication.Companion.showWeather
 import info.mx.tracks.common.SecHelper
@@ -90,8 +90,8 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
                 )
                 .delete(MxInfoDBContract.Weather.CONTENT_URI)
         } catch (e: ServiceException) {
-            if (isAdmin) {
-                Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+            if (isAdminOrDebug) {
+                Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             val track = trackRec!!.trackname
             Timber.w("OpWeatherCachedOperation/ServiceException '$track' " + Log.getStackTraceString(e))
@@ -99,8 +99,8 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
         } catch (je: JsonSyntaxException) {
             return OperationResult.ok(bundle)
         } catch (e: Exception) {
-            if (isAdmin) {
-                Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
+            if (isAdminOrDebug) {
+                Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             val track = if (trackRec != null) trackRec.trackname else trackRec?.restId.toString() + ""
             Timber.w("OpWeatherCachedOperation/Exception '$track' " + Log.getStackTraceString(e))
