@@ -10,10 +10,8 @@ import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.action.ViewActions.clearText
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.screenshot.captureToBitmap
@@ -113,6 +111,29 @@ class ActivityTrackListTest : BaseSyncTest() {
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ff"))
         Thread.sleep(WAIT_EDIT)
         onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ff")
+    }
+
+
+    @Test
+    fun tab() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        LocationServices.getFusedLocationProviderClient(context).setMockMode(true)
+        val location = Location(LocationManager.GPS_PROVIDER)
+        location.latitude = 42.125
+        location.longitude = 55.123
+
+        LocationServices.getFusedLocationProviderClient(context).setMockLocation(location)
+
+        // This is the first time settings activity with always changed version number
+        Espresso.pressBack()
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
+
+        onView(withId(R.id.view_pager)).perform(swipeRight())
+        Thread.sleep(200)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-star")
+        onView(withId(R.id.view_pager)).perform(swipeRight())
+        Thread.sleep(200)
+        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-distance")
     }
 
     companion object {
