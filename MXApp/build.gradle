@@ -309,22 +309,6 @@ tasks.register("tagNewVersion") {
     }
 }
 
-tasks.register('enableMock') {
-    doLast {
-//        def adb = "$System.env.ANDROID_HOME/platform-tools/adb"
-//        def adbExe = "${android.getAdbExe().toString()}"
-        def command = 'adb shell appops set 10190 android:mock_location allow'
-        println "enableMock run='" + command + "'"
-        def adbOutput = command.execute([], project.rootDir).text.trim()
-        println "enableMock output=" + adbOutput
-    }
-}
-
-//https://stackoverflow.com/a/36343828/1079990
-gradle.projectsEvaluated {
-    connectedPaidDebugAndroidTest.dependsOn enableMock
-}
-
 play {
     serviceAccountCredentials = file("../signing/Surveilance-playstore.json")
     track = 'alpha'
