@@ -458,7 +458,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         val fragmentTrackDetailTab = FragmentTrackDetailTab()
         fragmentTrackDetailTab.arguments = arguments
 
-        // Replace in the fragment_container_map view with this fragment,
+        // Replace in the fragment_conatstainer_map view with this fragment,
         // add the transaction to the back stack so the user can navigate back
         val transaction = requireFragmentManager().beginTransaction()
         transaction.replace(R.id.fragment_container_map, fragmentTrackDetailTab, FragmentTrackDetailTab.TAG)
@@ -1072,7 +1072,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     private fun hideKeyBoard() {
-        if (searchView != null) {
+        searchView?.let {
             val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             imm.hideSoftInputFromWindow(searchView!!.windowToken, 0)
@@ -1147,20 +1147,26 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
+    // just for testing
+    fun openDetail(bundle: Bundle?) {
+        val trackID = bundle?.getLong(FragmentUpDown.RECORD_ID_LOCAL, -1)
+        trackID?.let { openTrackInSlider(it) }
+    }
+
     companion object {
 
-        private val SEARCH_TEXT = "search_text"
-        private val MIN_TEXT_SEARCH_LENGTH = 2
-        private val INTERSTITIAL_WAIT_MS: Long = 90000
-        private val TOLERANCE = 60
-        private val TRACK_CLIENT_ID = "TRACK_CLIENT_ID"
-        private val CURR_ZOOM = "CURR_ZOOM"
-        private val ACTIVITY_FILTER = 0
-        private val LOADER_TRACKS = 0
-        private val LOADER_STAGE = 1
-        private val LOADER_ROUTE = 2
-        private val LOADER_PROGRESS = 3
+        private const val SEARCH_TEXT = "search_text"
+        private const val MIN_TEXT_SEARCH_LENGTH = 2
+        private const val INTERSTITIAL_WAIT_MS: Long = 90000
+        private const val TOLERANCE = 60
+        private const val TRACK_CLIENT_ID = "TRACK_CLIENT_ID"
+        private const val CURR_ZOOM = "CURR_ZOOM"
+        private const val ACTIVITY_FILTER = 0
+        private const val LOADER_TRACKS = 0
+        private const val LOADER_STAGE = 1
+        private const val LOADER_ROUTE = 2
+        private const val LOADER_PROGRESS = 3
         private val CLUSTER_SIZES = doubleArrayOf(180.0, 160.0, 144.0, 120.0, 96.0)
-        private val CLUSTER_SIZE_NR = 4
+        private const val CLUSTER_SIZE_NR = 4
     }
 }
