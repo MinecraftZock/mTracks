@@ -16,11 +16,14 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.gms.location.LocationServices
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.tracklist.ActivityTrackList
+import info.mx.tracks.uiautomator.executeShellCommandBlocking
 import org.hamcrest.Matchers
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,6 +39,14 @@ class ActivityTrackListTest : BaseSyncTest() {
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+
+    @Before
+    fun grantPermission() {
+        getInstrumentation()
+            .uiAutomation
+            .executeShellCommandBlocking("appops set ${BuildConfig.APPLICATION_ID} android:mock_location allow")
+        mockLocation()
+    }
 
     @Test
     fun showTrackListTest() {
