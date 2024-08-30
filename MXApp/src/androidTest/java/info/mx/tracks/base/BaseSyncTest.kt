@@ -9,6 +9,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import info.mx.tracks.ops.CountingIdlingResourceSingleton
+import info.mx.tracks.ops.google.RecalculateIdlingResource
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -26,11 +27,13 @@ abstract class BaseSyncTest {
         IdlingPolicies.setIdlingResourceTimeout(4, TimeUnit.MINUTES)
         IdlingPolicies.setMasterPolicyTimeout(2, TimeUnit.MINUTES);
         IdlingRegistry.getInstance().register(CountingIdlingResourceSingleton.countingIdlingResource)
+        IdlingRegistry.getInstance().register(RecalculateIdlingResource.recalculateIdlingResource)
     }
 
     @After
     fun unregisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(CountingIdlingResourceSingleton.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.recalculateIdlingResource)
     }
 
     protected fun mockLocation() {
