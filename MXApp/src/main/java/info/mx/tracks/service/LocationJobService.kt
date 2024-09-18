@@ -123,7 +123,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
     private fun setUpLocationClientIfNeeded(): Boolean {
         var extra = "Job started " + permissionHelper.hasLocationPermission()
         if (permissionHelper.hasLocationPermission()) {
-            Timber.i("has permission")
+            Timber.d("It has location permission")
             if (googleApiClient == null) {
                 googleApiClient = GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)

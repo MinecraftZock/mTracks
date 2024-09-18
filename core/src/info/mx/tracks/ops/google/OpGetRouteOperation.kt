@@ -39,6 +39,7 @@ internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
                 locCalcTo.longitude = args.lon
                 if (routeRec != null) {
                     distance = getDistance(locCalcTo, routeRec.latitude, routeRec.longitude)
+                    Timber.d("New distance $distance trackClientId=${args.trackClientId}")
                 }
                 val trackRecord = TracksRecord.get(args.trackClientId)
                 if (trackRecord != null && distance >= DISTANCE_TO_KEEP_ROUTE) {
@@ -49,6 +50,7 @@ internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
                                 SecHelper.entcryptXtude(trackRecord.longitude)
                     )
                     request.setSensorParam("false")
+                    Timber.d("get new route for trackClientId=${args.trackClientId}")
                     val response = routeClient.getRoute(request)
                     val routeString = response.readAsText()
                     val routes = gson.fromJson(routeString, Routes::class.java)
