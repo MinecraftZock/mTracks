@@ -37,15 +37,6 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         val emptyView = view.findViewById<TextView>(R.id.txt_no_entry)
         val listRatings = view.findViewById<ListView>(R.id.listEntries)
         listRatings.emptyView = emptyView
-        listRatings.isLongClickable = true
-        listRatings.onItemLongClickListener = OnItemLongClickListener { _: AdapterView<*>?, _: View?, _: Int, id: Long ->
-            Timber.d("()")
-            SQuery.newQuery()
-                .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRestID)
-                .expr(Events2series._ID, SQuery.Op.EQ, id)
-                .delete(Events2series.CONTENT_URI)
-            true
-        }
         adapter = SimpleCursorAdapter(
             requireActivity(),
             R.layout.item_event,
@@ -82,6 +73,9 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         tracksRestID = SQuery.newQuery()
             .expr(Tracks._ID, SQuery.Op.EQ, trackId)
             .firstLong(Tracks.CONTENT_URI, Tracks.REST_ID)
+
+        (adapter.viewBinder as EventsViewBinder).tracksRestID = tracksRestID
+
         return SQuery.newQuery()
             .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRestID)
             .expr(Events2series.APPROVED, SQuery.Op.NEQ, -11)
