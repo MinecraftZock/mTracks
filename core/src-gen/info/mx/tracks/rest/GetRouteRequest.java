@@ -9,7 +9,9 @@ public class GetRouteRequest extends ServiceRequest {
 
     private static final String PATH = "/maps/api/directions/json";
 
+    private String keyParam;
     private String originParam;
+    private boolean keyParamSet;
     private boolean originParamSet;
     private String destinationParam;
     private boolean destinationParamSet;
@@ -20,6 +22,16 @@ public class GetRouteRequest extends ServiceRequest {
         this.originParam = value;
         this.originParamSet = true;
         return this;
+    }
+
+    public GetRouteRequest setKeyParam(String value) {
+        this.keyParam = value;
+        this.keyParamSet = true;
+        return this;
+    }
+
+    public boolean isKeyParamSet() {
+        return keyParamSet;
     }
 
     public boolean isOriginParamSet() {
@@ -55,6 +67,9 @@ public class GetRouteRequest extends ServiceRequest {
 
         if (originParamSet) {
             uriBuilder.appendQueryParameter("origin", originParam);
+        }
+        if (keyParamSet) {
+            uriBuilder.appendQueryParameter("key", keyParam);
         }
         if (destinationParamSet) {
             uriBuilder.appendQueryParameter("destination", destinationParam);
