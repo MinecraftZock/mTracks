@@ -17,12 +17,13 @@ import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.sqlite.MxInfoDBContract.Events2series
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import timber.log.Timber
 
 class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     private val projectionEvents = arrayOf(Events2series.EVENT_DATE, Events2series.COMMENT, Events2series.SERIESNAME)
     private val toEvents = intArrayOf(R.id.textDatum, R.id.textKommentar, R.id.textSerie)
-    private var mAdapter: SimpleCursorAdapter? = null
-    private var tracksRest_ID: Long = 0
+    private lateinit var adapter: SimpleCursorAdapter
+    private var tracksRestID: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,15 +38,15 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         val listRatings = view.findViewById<ListView>(R.id.listEntries)
         listRatings.emptyView = emptyView
         listRatings.isLongClickable = true
-        listRatings.onItemLongClickListener =
-            OnItemLongClickListener { _: AdapterView<*>?, _: View?, _: Int, id: Long ->
-                SQuery.newQuery()
-                    .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRest_ID)
-                    .expr(Events2series._ID, SQuery.Op.EQ, id)
-                    .delete(Events2series.CONTENT_URI)
-                true
-            }
-        mAdapter = SimpleCursorAdapter(
+        listRatings.onItemLongClickListener = OnItemLongClickListener { _: AdapterView<*>?, _: View?, _: Int, id: Long ->
+            Timber.d("()")
+            SQuery.newQuery()
+                .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRestID)
+                .expr(Events2series._ID, SQuery.Op.EQ, id)
+                .delete(Events2series.CONTENT_URI)
+            true
+        }
+        adapter = SimpleCursorAdapter(
             requireActivity(),
             R.layout.item_event,
             null,
@@ -53,8 +54,8 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
             toEvents,
             0
         )
-        mAdapter!!.viewBinder = EventsViewBinder()
-        listRatings.adapter = mAdapter
+        adapter.viewBinder = EventsViewBinder()
+        listRatings.adapter = adapter
         loaderManager.initLoader(LOADER_EVENTS, arguments, this)
         return view
     }
@@ -78,11 +79,11 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, bundle: Bundle?): Loader<Cursor> {
         val trackId = bundle!!.getLong(RECORD_ID_LOCAL)
-        tracksRest_ID = SQuery.newQuery()
+        tracksRestID = SQuery.newQuery()
             .expr(Tracks._ID, SQuery.Op.EQ, trackId)
             .firstLong(Tracks.CONTENT_URI, Tracks.REST_ID)
         return SQuery.newQuery()
-            .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRest_ID)
+            .expr(Events2series.TRACK_REST_ID, SQuery.Op.EQ, tracksRestID)
             .expr(Events2series.APPROVED, SQuery.Op.NEQ, -11)
             .createSupportLoader(
                 Events2series.CONTENT_URI,
@@ -92,11 +93,11 @@ class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-        mAdapter!!.swapCursor(data)
+        adapter.swapCursor(data)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        mAdapter!!.swapCursor(null)
+        adapter.swapCursor(null)
     }
 
     override fun fillMask(localId: Long) {
