@@ -19,6 +19,7 @@ import com.robotoworks.mechanoid.net.ServiceException
 import android.widget.Toast
 import com.google.gson.Gson
 import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
+import info.mx.tracks.R
 import timber.log.Timber
 import java.lang.Exception
 
@@ -44,6 +45,7 @@ internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
                 val trackRecord = TracksRecord.get(args.trackClientId)
                 if (trackRecord != null && distance >= DISTANCE_TO_KEEP_ROUTE) {
                     val request = GetRouteRequest()
+                    request.setKeyParam(context.applicationContext.getString(R.string.GOOGLE_MAP_API_KEY))
                     request.setOriginParam(args.lat.toString() + "," + args.lon)
                     request.setDestinationParam(
                         SecHelper.entcryptXtude(trackRecord.latitude).toString() + "," +
