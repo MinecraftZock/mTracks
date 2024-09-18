@@ -60,9 +60,9 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     }
 
     @SuppressLint("MissingSuperCall")
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent?.let { openDetail(it) }
+        intent.let { openDetail(it) }
     }
 
     override fun onResume() {
@@ -173,7 +173,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         return super.onOptionsItemSelected(item)
     }
 
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java", ReplaceWith("keep it like it is"))
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         //skip onBackPressed logic and close Activity
@@ -181,7 +181,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     }
 
     override fun onImageItemClick(position: Int, imageRestId: Long) {
-        //TODO was eigentlich ?
+        //TODO what ?
     }
 
     fun showMessage(text: String, length: Int) {
