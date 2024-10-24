@@ -62,7 +62,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent.let { openDetail(it) }
+        openDetail(intent)
     }
 
     override fun onResume() {

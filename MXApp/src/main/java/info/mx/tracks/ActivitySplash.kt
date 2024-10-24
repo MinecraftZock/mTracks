@@ -7,9 +7,9 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Window
 import android.widget.ImageView
-import android.widget.TextView
 import info.hannes.commonlib.TrackingApplication
 import info.hannes.commonlib.getPackageInfoCompat
+import info.mx.tracks.databinding.ActivitySplashBinding
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.tracklist.ActivityTrackList
@@ -27,18 +27,19 @@ class ActivitySplash : ActivityBase() {
     private val splashActive = true
     private val paused = false
 
+    private lateinit var binding: ActivitySplashBinding
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
 
-        val version = findViewById<TextView>(R.id.view_version)
         val versionName: String
         try {
             versionName = packageManager.getPackageInfoCompat(packageName, 0).versionName
-            version.text = versionName + (BuildConfig.FLAVOR + " " +
+            binding.viewVersion.text = versionName + (BuildConfig.FLAVOR + " " +
                     (if (TrackingApplication.isDebug) " Debug" else "") + if (MxCoreApplication.isAdmin) " Admin" else "")
         } catch (ignored: NameNotFoundException) {
         }

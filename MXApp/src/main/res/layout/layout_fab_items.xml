@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:fab="http://schemas.android.com/apk/res-auto"
        xmlns:tools="http://schemas.android.com/tools"
-       tools:showIn="@layout/layout_fab">
+       tools:showIn="@layout/layout_fab_right">
 
 
     <com.github.clans.fab.FloatingActionButton

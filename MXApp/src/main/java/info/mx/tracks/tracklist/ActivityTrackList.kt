@@ -32,7 +32,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
     /*
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
      */
-    private var mTwoPane: Boolean = false
+    private var twoPane: Boolean = false
 
     private val detailTagFragment: FragmentTrackDetailTab by lazy { supportFragmentManager.findFragmentByTag(FragmentTrackDetailTab.TAG) as FragmentTrackDetailTab }
 
@@ -45,7 +45,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         if (findViewById<View>(R.id.track_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts (res/values-large and
             // res/values-sw600dp). If this view is present, then the activity should be in two-pane mode.
-            mTwoPane = true
+            twoPane = true
         }
     }
 
@@ -137,7 +137,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
      * Callback method from [FragmentTrackList.Callbacks] indicating that the item with the given ID was selected.
      */
     override fun onItemSelected(id: Long) {
-        if (mTwoPane) {
+        if (twoPane) {
             binding.fabSingle.visibility = View.GONE
             binding.fabLayout.menuFab.visibility = View.VISIBLE
             // In two-pane mode, show the detail view in this activity by adding or replacing the detail fragment using a fragment transaction.
@@ -170,7 +170,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
     override fun onTabPageSelected(id: Long) {
         // In single-pane mode, simply start the detail activity for the selected item ID.
         // -> do nothing
-        if (mTwoPane) {
+        if (twoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a fragment transaction.
             val fragment = FragmentEmpty()

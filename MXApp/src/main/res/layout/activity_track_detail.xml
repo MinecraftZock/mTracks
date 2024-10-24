@@ -32,7 +32,7 @@
             android:id="@+id/contentDetail"
             layout="@layout/content_activity_track_detail"/>
 
-        <include layout="@layout/layout_fab"/>
+        <include layout="@layout/layout_fab_right"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
