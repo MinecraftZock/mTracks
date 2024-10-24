@@ -23,7 +23,9 @@
     fab:menu_backgroundColor="@color/fab_sub_background"
     tools:showIn="@layout/activity_track_detail">
 
-    <include layout="@layout/layout_fab_items"/>
+    <include
+        android:id="@+id/fab_layout"
+        layout="@layout/layout_fab_items"/>
 
 </com.github.clans.fab.FloatingActionMenu>
 
