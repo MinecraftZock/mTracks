@@ -29,7 +29,7 @@ println "Gradle uses Java ${Jvm.current()}"
 
 ext {
     defaultCompileSdkVersion = 34
-    defaultMinSdkVersion = 21
+    defaultMinSdkVersion = 23
     defaultTargetSdkVersion = 34
     koin_version = "4.0.0"
     gsonVersion = "2.11.0"
