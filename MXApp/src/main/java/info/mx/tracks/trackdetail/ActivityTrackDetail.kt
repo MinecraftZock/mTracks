@@ -21,6 +21,7 @@ import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.common.parcelableArrayListExtra
 import info.mx.tracks.common.parcelableExtra
+import info.mx.tracks.databinding.ActivityTrackDetailBinding
 import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
 import info.mx.tracks.sqlite.TracksRecord
@@ -30,6 +31,7 @@ import java.util.*
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
 
     var detailFragmentTab: FragmentTrackDetailTab? = null
+    private lateinit var binding: ActivityTrackDetailBinding
 
     //    FragmentManager.getFragments can only be called from within the same library group (groupId=com.android.support) less... (⌘F1)
     //    This inspection looks at Android API calls that have been annotated with various support annotations (such as RequiresPermission or
@@ -37,7 +39,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_track_detail)
+        binding = ActivityTrackDetailBinding.inflate(layoutInflater)
 
         // Get intent, action and MIME type
         openDetail(intent)
@@ -209,21 +211,21 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
             val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder
-                    .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
-                    .setView(if (uris.size == 1) listView else gridView)
-                    .setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        for (uri in uris) {
-                            val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
-                            Ops.execute(intentM)
-                            if (clip) {
-                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val data = ClipData.newPlainText("", "")
-                                clipboard.setPrimaryClip(data)
-                            }
+                .setTitle(String.format(context.getString(R.string.import_image), track2Share.trackname))
+                .setView(if (uris.size == 1) listView else gridView)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    for (uri in uris) {
+                        val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
+                        Ops.execute(intentM)
+                        if (clip) {
+                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val data = ClipData.newPlainText("", "")
+                            clipboard.setPrimaryClip(data)
                         }
                     }
+                }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.window!!.setLayout(AdapterImageUrisAdapter.getDesiredScreenWidth(), AdapterImageUrisAdapter.getDesiredScreenHeight())
             alertDialog.show()
