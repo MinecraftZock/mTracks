@@ -18,12 +18,12 @@ abstract class TrackingApplication : Application() {
     private var tracker: Tracker? = null
 
     /**
-     * The siteID you specified for this application in Piwik.
+     * The siteID you specified for this application in matomo.
      */
     abstract val siteId: Int
 
     /**
-     * The URL of your remote Piwik server.
+     * The URL of your remote matomo server.
      */
     abstract val trackerUrl: String
 
@@ -90,7 +90,7 @@ abstract class TrackingApplication : Application() {
             var version = ""
             try {
                 val pInfo = context.packageManager.getPackageInfoCompat(context.packageName, 0)
-                version = pInfo.versionName
+                version = pInfo.versionName.toString()
             } catch (ignored: NameNotFoundException) {
             }
 

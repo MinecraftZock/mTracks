@@ -38,7 +38,7 @@ class ActivitySplash : ActivityBase() {
 
         val versionName: String
         try {
-            versionName = packageManager.getPackageInfoCompat(packageName, 0).versionName
+            versionName = packageManager.getPackageInfoCompat(packageName, 0).versionName.toString()
             binding.viewVersion.text = versionName + (BuildConfig.FLAVOR + " " +
                     (if (TrackingApplication.isDebug) " Debug" else "") + if (MxCoreApplication.isAdmin) " Admin" else "")
         } catch (ignored: NameNotFoundException) {
