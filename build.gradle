@@ -28,9 +28,9 @@ plugins {
 println "Gradle uses Java ${Jvm.current()}"
 
 ext {
-    defaultCompileSdkVersion = 34
+    defaultCompileSdkVersion = 35
     defaultMinSdkVersion = 23
-    defaultTargetSdkVersion = 34
+    defaultTargetSdkVersion = 35
     koin_version = "4.0.0"
     gsonVersion = "2.11.0"
     retrofitVersion = "2.11.0"
