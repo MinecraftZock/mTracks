@@ -110,7 +110,8 @@ jobs:
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
           cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
-          bootTimeout: 180 # 840 seconds = 12 minutes
+          bootTimeout: 60 # 840 seconds = 12 minutes
+          portNumber: 5556
       - name: Archive screenshots ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
