@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.Ops
+import info.mx.comlib.retrofit.service.data.Data
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
@@ -27,7 +28,9 @@ import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TracksgesRecord
+import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
 import info.mx.tracks.util.ZoomOutPageTransformer
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -36,6 +39,8 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
     private lateinit var adapterFragmentsTab: AdapterFragmentsTab
     private var adapterImages: ImageCursorAdapter? = null
     private var oldPictureCount = 0
+
+    private val trackDetailViewModel: TrackDetailViewModel by viewModel()
 
     private val fragmentTrackDetail: FragmentTrackDetail?
         get() {
@@ -85,9 +90,18 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
             view.findViewById<View>(R.id.tr_gen_layoutTrackname).visibility = View.GONE
         }
 
+        val localId = requireArguments().getLong(RECORD_ID_LOCAL)
         val trackRec = SQuery.newQuery()
-            .expr(MxInfoDBContract.Tracksges._ID, SQuery.Op.EQ, requireArguments().getLong(RECORD_ID_LOCAL))
+            .expr(MxInfoDBContract.Tracksges._ID, SQuery.Op.EQ, localId)
             .selectFirst<TracksgesRecord>(MxInfoDBContract.Tracksges.CONTENT_URI)
+
+        trackDetailViewModel.getTrackById(localId).observe(viewLifecycleOwner) { track ->
+            Timber.d("localId=$localId $track")
+            track?.let {
+                fillNextPrevId(it.id)
+            }
+        }
+
         if (trackRec != null) {
             fillNextPrevId(trackRec.id)
         }
