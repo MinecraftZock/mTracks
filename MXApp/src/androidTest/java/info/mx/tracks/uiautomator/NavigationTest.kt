@@ -26,13 +26,13 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
+import info.mx.tracks.base.BaseMapSyncTest
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestName
 import org.junit.runner.RunWith
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -43,12 +43,9 @@ import java.util.concurrent.TimeoutException
  * https://www.guru99.com/uiautomatorviewer-tutorial.html
  */
 @RunWith(AndroidJUnit4::class)
-class NavigationTest {
+class NavigationTest: BaseMapSyncTest() {
 
     private lateinit var device: UiDevice
-
-    @get:Rule
-    var nameRule = TestName()
 
     /**
      * Create launcher Intent Use PackageManager to get the launcher package name
