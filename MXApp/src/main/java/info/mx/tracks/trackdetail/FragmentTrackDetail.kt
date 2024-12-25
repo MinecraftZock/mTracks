@@ -660,7 +660,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         val manager = requireContext().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val isoSim = manager.simCountryIso
         binding.trLayoutCoordinates.visibility =
-            if (MxCoreApplication.isAdmin || isoSim.toUpperCase(Locale.ROOT) == "CH") LinearLayout.VISIBLE else LinearLayout.GONE
+            if (MxCoreApplication.isAdmin || isoSim.uppercase(Locale.ROOT) == "CH") LinearLayout.VISIBLE else LinearLayout.GONE
         binding.trDetailCoordinates.text = (SecHelper.entcryptXtude(trackRec.latitude).toString() + " " + SecHelper.entcryptXtude(trackRec.longitude))
 
         binding.trDetailLicense.text = trackRec.licence
