@@ -9,7 +9,8 @@ import info.mx.tracks.R
 
 class AdapterFragmentsTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(
     context,
-    fm
+    fm,
+    arguments
 ) {
     override fun addAdditionalTabs(tabs: MutableList<TabFragmentInfo>) {
         if (!MxApplication.isGoogleTests) {

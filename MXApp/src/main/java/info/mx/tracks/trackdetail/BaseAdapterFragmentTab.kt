@@ -1,6 +1,7 @@
 package info.mx.tracks.trackdetail
 
 import android.content.Context
+import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ImageSpan
@@ -12,15 +13,23 @@ import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.trackdetail.comment.FragmentComment
 import info.mx.tracks.trackdetail.event.FragmentEvent
+import timber.log.Timber
 import java.util.Locale
 
 abstract class BaseAdapterFragmentTab internal constructor(
     private val context: Context,
-    fm: FragmentManager
-) :
-    FragmentPagerAdapter(fm) {
+    fm: FragmentManager,
+    private val fragmentArguments: Bundle
+) : FragmentPagerAdapter(fm) {
     private val tabInfoList: List<TabFragmentInfo>
     private val fragments: MutableList<FragmentUpDown> = arrayListOf()
+
+    init {
+        tabInfoList = tabsInfo
+        tabInfoList.forEach {
+            fragments.add(getFragment(it.fragmentClass)!!)
+        }
+    }
 
     private val tabsInfo: List<TabFragmentInfo>
         get() {
@@ -53,8 +62,17 @@ abstract class BaseAdapterFragmentTab internal constructor(
 
     abstract fun addAdditionalTabs(tabs: MutableList<TabFragmentInfo>)
 
-    init {
-        tabInfoList = tabsInfo
+    private fun <T : FragmentUpDown?> getFragment(fragmentClass: Class<T>): T? {
+        var fragmentUpDown: T? = null
+        try {
+            fragmentUpDown = fragmentClass.newInstance()
+            fragmentUpDown!!.arguments = fragmentArguments
+        } catch (e: InstantiationException) {
+            Timber.e(e)
+        } catch (e: IllegalAccessException) {
+            Timber.e(e)
+        }
+        return fragmentUpDown
     }
 
     override fun getItem(position: Int): Fragment {
@@ -63,12 +81,9 @@ abstract class BaseAdapterFragmentTab internal constructor(
 
     override fun getPageTitle(position: Int): CharSequence? {
         val title = "  " + context.getString(tabInfoList[position].captionRes)
-        val sb =
-            SpannableStringBuilder(title.uppercase(Locale.getDefault())) // space added before text for convenience
-
-        val myDrawable = ContextCompat.getDrawable(
-            context, tabInfoList[position].iconRes
-        )
+        // space added before text for convenience
+        val sb = SpannableStringBuilder(title.uppercase(Locale.getDefault()))
+        val myDrawable = ContextCompat.getDrawable(context, tabInfoList[position].iconRes)
         if (myDrawable != null) {
             myDrawable.setBounds(
                 0,
