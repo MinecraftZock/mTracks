@@ -28,27 +28,29 @@ class MapClusterOptionsProvider(resources: Resources) : ClusterOptionsProvider {
         paint.textSize = resources.getDimension(R.dimen.mapcluster_text_size)
     }
 
-    override fun getClusterOptions(markers: List<Marker>): ClusterOptions {
-        val markersCount = markers.size
-        val cachedIcon = cache[markersCount]
-        if (cachedIcon != null) {
-            return clusterOptions.icon(cachedIcon)
-        }
-        var base: Bitmap?
-        var i = 0
-        do {
-            base = baseBitmaps[i]
-        } while (markersCount >= forCounts[i++])
-        val bitmap = base!!.copy(Bitmap.Config.ARGB_8888, true)
-        val text = markersCount.toString()
-        paint.getTextBounds(text, 0, text.length, bounds)
-        val x = bitmap.width / 2.0f
-        val y = (bitmap.height - bounds.height()) / 2.0f - bounds.top
-        val canvas = Canvas(bitmap)
-        canvas.drawText(text, x, y, paint)
-        val icon = BitmapDescriptorFactory.fromBitmap(bitmap)
-        cache.put(markersCount, icon)
-        return clusterOptions.icon(icon)
+    override fun getClusterOptions(markers: List<Marker?>?): ClusterOptions? {
+        markers?.let {
+            val markersCount = markers.size
+            val cachedIcon = cache[markersCount]
+            if (cachedIcon != null) {
+                return clusterOptions.icon(cachedIcon)
+            }
+            var base: Bitmap?
+            var i = 0
+            do {
+                base = baseBitmaps[i]
+            } while (markersCount >= forCounts[i++])
+            val bitmap = base!!.copy(Bitmap.Config.ARGB_8888, true)
+            val text = markersCount.toString()
+            paint.getTextBounds(text, 0, text.length, bounds)
+            val x = bitmap.width / 2.0f
+            val y = (bitmap.height - bounds.height()) / 2.0f - bounds.top
+            val canvas = Canvas(bitmap)
+            canvas.drawText(text, x, y, paint)
+            val icon = BitmapDescriptorFactory.fromBitmap(bitmap)
+            cache.put(markersCount, icon)
+            return clusterOptions.icon(icon)
+        } ?: return null
     }
 
     companion object {
