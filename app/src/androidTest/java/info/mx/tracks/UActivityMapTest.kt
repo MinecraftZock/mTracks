@@ -1,10 +1,11 @@
 package info.mx.tracks
 
+import android.graphics.Bitmap
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import info.mx.tracks.base.BaseSyncTest
@@ -36,7 +37,8 @@ class UActivityMapTest : BaseSyncTest() {
     @Test
     fun smokeTestSimplyStart() {
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open") })
     }
 
 }
