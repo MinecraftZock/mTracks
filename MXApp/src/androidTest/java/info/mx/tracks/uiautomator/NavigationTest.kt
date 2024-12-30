@@ -10,6 +10,7 @@ import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -26,9 +27,11 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
+import info.mx.tracks.map.MapIdlingResource
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -87,6 +90,13 @@ class NavigationTest {
 
         // Wait for the app to appear
         device.wait(Until.hasObject(By.pkg(MX_PACKAGE).depth(0)), LAUNCH_TIMEOUT.toLong())
+
+        IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
+    }
+
+    @After
+    fun cleanUp() {
+        IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
 
     @Test

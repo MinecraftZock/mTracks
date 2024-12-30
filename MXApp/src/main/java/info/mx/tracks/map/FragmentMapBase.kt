@@ -32,9 +32,14 @@ abstract class FragmentMapBase : FragmentBase() {
 
     private fun setUpMapIfNeeded() {
         if (map == null) {
+            MapIdlingResource.increment(1)
             mapFragment?.getExtendedMapAsync { googleMap ->
                 map = googleMap
                 setUpMap()
+                MapIdlingResource.decrement()
+//                setOnMapLoadedCallback { TODO android-map-extension miss thiis
+//                    MapIdlingResource.decrement()
+//                }
             }
         }
     }
