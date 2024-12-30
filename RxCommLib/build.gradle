@@ -1,6 +1,6 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "com.android.library"
+    id "kotlin-android"
 }
 
 // TODO redundant code, same like MxApp
@@ -14,9 +14,9 @@ def backendKey = "BACKEND_PROD_URL"
 def backendUrl = keystoreProperties.getProperty(backendKey) ? keystoreProperties.getProperty(backendKey) : "http://backend.org"
 
 dependencies {
-    implementation project(':commonLib')
+    implementation project(":commonLib")
     implementation "androidx.appcompat:appcompat:1.7.0"
-    api project(path: ':RxCommData')
+    api project(path: ":RxCommData")
     api "com.google.code.gson:gson:${gsonVersion}"
 
     api "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
@@ -24,7 +24,7 @@ dependencies {
 
     api "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     api("com.squareup.retrofit2:converter-gson:${retrofitVersion}") {  // contains gson 2.8.2
-        exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: "com.google.code.gson", module: "gson"
     }
     api "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
     api "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
@@ -36,12 +36,12 @@ dependencies {
 }
 
 android {
-    namespace 'info.mx.rxcommlibrary'
+    namespace "info.mx.rxcommlibrary"
     defaultConfig {
         minSdkVersion defaultMinSdkVersion
         compileSdk defaultCompileSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        consumerProguardFiles 'proguard-RxCommLib.pro'
+        consumerProguardFiles "proguard-RxCommLib.pro"
 
         // TODO rework it
         buildConfigField "String", backendKey, "\"" + backendUrl.toString() + "\""
@@ -52,13 +52,13 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = "17"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-RxCommLib.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-RxCommLib.pro"
         }
     }
     lint {

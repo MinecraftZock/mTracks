@@ -1,10 +1,10 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "com.android.library"
+    id "kotlin-android"
 }
 
 android {
-    namespace 'info.hannes.commonlib'
+    namespace "info.hannes.commonlib"
     defaultConfig {
         minSdkVersion defaultMinSdkVersion
         compileSdk defaultCompileSdkVersion
@@ -12,22 +12,22 @@ android {
     }
     lint {
         abortOnError false
-        disable 'ObsoleteLintCustomCheck'
+        disable "ObsoleteLintCustomCheck"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = "17"
     }
 }
 
 dependencies {
     implementation "com.google.android.material:material:1.12.0"
 
-    api('com.github.matomo-org:matomo-sdk-android:4.3') {
-        exclude group: 'com.jakewharton.timber', module: 'timber'
+    api("com.github.matomo-org:matomo-sdk-android:4.3") {
+        exclude group: "com.jakewharton.timber", module: "timber"
     }
     implementation "androidx.core:core-ktx:1.13.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

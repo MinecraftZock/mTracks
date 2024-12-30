@@ -1,0 +1,5 @@
+include(":RxCommLib")
+include(":RxCommData")
+include(":commonLib")
+//include(":access")
+include(":MXApp")
