@@ -2,6 +2,7 @@ package info.mx.tracks
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
 import android.location.Location
 import android.location.LocationManager
 import androidx.test.core.app.ApplicationProvider
@@ -9,12 +10,10 @@ import android.widget.ListView
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -50,35 +49,40 @@ class ActivityTrackListTest : BaseSyncTest() {
 
         // This is the first time settings activity with always changed version number
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init") })
 
         Espresso.onData(Matchers.anything())
             .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
             .atPosition(10)
-            .perform(ViewActions.scrollTo())
+            .perform(scrollTo())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-10")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-10") })
 
         Espresso.onData(Matchers.anything())
             .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
             .atPosition(20)
-            .perform(ViewActions.scrollTo())
+            .perform(scrollTo())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-20")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-20") })
 
         Espresso.onData(Matchers.anything())
             .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
             .atPosition(30)
-            .perform(ViewActions.scrollTo())
+            .perform(scrollTo())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-30")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-30") })
 
         Espresso.onData(Matchers.anything())
             .inAdapterView(ViewMatchers.isAssignableFrom(ListView::class.java))
             .atPosition(40)
-            .perform(ViewActions.scrollTo())
+            .perform(scrollTo())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-40")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-scroll-40") })
     }
 
     @Test
@@ -89,28 +93,36 @@ class ActivityTrackListTest : BaseSyncTest() {
 
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("aa"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-aa")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-aa") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("de"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-de")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-de") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ee"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ee")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ee") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ck"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ck")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ck") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("sch"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-sch")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-sch") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("oo"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-oo")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-oo") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("tz"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-tz")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-tz") })
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ff"))
         Thread.sleep(WAIT_EDIT)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ff")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ff") })
     }
 
 
@@ -126,14 +138,17 @@ class ActivityTrackListTest : BaseSyncTest() {
 
         // This is the first time settings activity with always changed version number
         Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init") })
 
         onView(withId(R.id.view_pager)).perform(swipeRight())
         Thread.sleep(200)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-star")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-star") })
         onView(withId(R.id.view_pager)).perform(swipeRight())
         Thread.sleep(200)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-distance")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-distance") })
     }
 
     companion object {
