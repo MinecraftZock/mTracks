@@ -20,7 +20,7 @@ abstract class FragmentMapBase : FragmentBase() {
 
         if (mapFragment == null) {
             Timber.d("using getFragmentManager")
-            mapFragment = fragmentManager?.findFragmentById(R.id.frag_map) as SupportMapFragment?
+            mapFragment = parentFragmentManager.findFragmentById(R.id.frag_map) as SupportMapFragment?
         }
 
     }

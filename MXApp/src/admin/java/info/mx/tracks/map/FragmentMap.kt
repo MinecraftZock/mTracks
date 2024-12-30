@@ -21,7 +21,7 @@ class FragmentMap : BaseFragmentMap() {
 
         // Replace in the fragment_container_map view with this fragment,
         // add the transaction to the back stack so the user can navigate back
-        val transaction = requireFragmentManager().beginTransaction()
+        val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container_map, fragmentStage)
             .addToBackStack(null)
             .commit()
