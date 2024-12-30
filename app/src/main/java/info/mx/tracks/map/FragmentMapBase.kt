@@ -3,6 +3,7 @@ package info.mx.tracks.map
 import android.os.Bundle
 import android.view.View
 import com.androidmapsextensions.GoogleMap
+import com.androidmapsextensions.OnMapReadyCallback
 import com.androidmapsextensions.SupportMapFragment
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
@@ -34,12 +35,14 @@ abstract class FragmentMapBase : FragmentBase() {
         if (map == null) {
             MapIdlingResource.increment()
 //            MapIdlingResource.increment()
-            mapFragment?.getExtendedMapAsync { googleMap ->
-                map = googleMap
-                MapIdlingResource.decrement()
-                setUpMap()
-//                map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
-            }
+            mapFragment?.getExtendedMapAsync(object : OnMapReadyCallback {
+                override fun onMapReady(googleMap: GoogleMap) {
+                    map = googleMap
+                    MapIdlingResource.decrement()
+                    setUpMap()
+                    // map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
+                }
+            })
         }
     }
 
