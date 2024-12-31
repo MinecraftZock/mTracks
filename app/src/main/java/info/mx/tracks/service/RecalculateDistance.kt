@@ -143,6 +143,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
     }
 
     private fun isEurope(location: Location): Boolean {
+        Timber.d("isEurope=${MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)} longitude=${location.longitude}")
         return MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)
     }
 
