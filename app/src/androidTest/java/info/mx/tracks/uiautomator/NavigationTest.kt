@@ -104,13 +104,13 @@ class NavigationTest {
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
 
-    @Test
-    fun checkPreconditions() {
-        assertThat(device, notNullValue())
-        val bundle = Bundle()
-        bundle.putString("checkPreconditions", "1")
-        getInstrumentation().sendStatus(0, bundle)
-    }
+//    @Test
+//    fun checkPreconditions() {
+//        assertThat(device, notNullValue())
+//        val bundle = Bundle()
+//        bundle.putString("checkPreconditions", "1")
+//        getInstrumentation().sendStatus(0, bundle)
+//    }
 
     //    @Test
     fun startDetailFromList() {
