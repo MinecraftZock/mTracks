@@ -7,14 +7,15 @@ import info.mx.tracks.MxApplication
 
 import info.mx.tracks.R
 
-class AdapterFragmentsTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(context, fm, arguments) {
-
-    override fun getTabsInfo(): List<TabFragmentInfo> {
-        val tabs = super.getTabsInfo()
+class AdapterFragmentsTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(
+    context,
+    fm,
+    arguments
+) {
+    override fun addAdditionalTabs(tabs: MutableList<TabFragmentInfo>) {
         if (!MxApplication.isGoogleTests) {
             tabs.add(TabFragmentInfo(FragmentStage::class.java, R.string.stage, R.drawable.actionbar_checkbox_question))
             tabs.add(TabFragmentInfo(FragmentChanges::class.java, R.string.archiv, R.drawable.actionbar_checkbox_question))
         }
-        return tabs
     }
 }
