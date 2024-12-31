@@ -24,9 +24,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-RxCommLib.pro"
         }
     }
-    lint {
-        abortOnError false
-    }
 }
 
 dependencies {
