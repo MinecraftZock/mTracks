@@ -36,8 +36,7 @@ abstract class FragmentMapBase : FragmentBase() {
             mapFragment?.getExtendedMapAsync { googleMap ->
                 map = googleMap
                 setUpMap()
-                MapIdlingResource.decrement()
-//                map!!.setOnMapLoadedCallback { MapIdlingResource.decrement("FragmentMapBase->OnMapLoadedCallback") }
+                map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
             }
         }
     }
