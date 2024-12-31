@@ -21,7 +21,7 @@ pushd signing
 # to encrypt
 #openssl aes-256-cbc -a -salt -k "$CRYPT_PASS" -in ./signing/release.keystore -out ./signing/release.keystore.enc
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ~/.android/debug.keystore -out ./signing/debug.keystore.enc
-#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./MXApp/google-services.json -out ./MXApp/google-services.json.enc
+#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./app/google-services.json -out ./app/google-services.json.enc
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/Surveilance-playstore.json -out ./signing/Surveilance-playstore.json.enc
 #openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/keystore.properties -out ./signing/keystore.properties.enc
 
@@ -39,7 +39,7 @@ openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in debug.keystore.enc -out debu
 find . -name "*.keystore" | xargs ls -la
 
 echo google-services.json
-openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in ../MXApp/google-services.json.enc -out ../MXApp/google-services.json
+openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in ../app/google-services.json.enc -out ../app/google-services.json
 echo Surveilance-playstore.json
 openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in Surveilance-playstore.json.enc -out Surveilance-playstore.json
 echo keystore.properties
