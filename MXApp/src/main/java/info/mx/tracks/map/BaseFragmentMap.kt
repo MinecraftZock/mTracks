@@ -19,9 +19,13 @@ import androidx.core.content.ContextCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
-import com.androidmapsextensions.*
+import com.androidmapsextensions.ClusteringSettings
+import com.androidmapsextensions.GoogleMap
 import com.androidmapsextensions.GoogleMap.OnCameraChangeListener
 import com.androidmapsextensions.GoogleMap.OnMarkerClickListener
+import com.androidmapsextensions.Marker
+import com.androidmapsextensions.Polyline
+import com.androidmapsextensions.PolylineOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
@@ -38,6 +42,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.sothree.slidinguppanel.PanelSlideListener
 import com.sothree.slidinguppanel.PanelState
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
@@ -103,6 +108,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private var viewFilterActive: ImageView? = null
     private var isKeyboardActive = false
     private var inPlaceSearch = false
+
     @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
 
@@ -410,17 +416,19 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
-        map!!.setOnMapLoadedCallback {
-            if (searchView != null) {
-                searchView!!.visibility = View.VISIBLE
-            }
-            if (isAdded) {
-                loaderManager.initLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-                if (interestLatLng != null) {
-                    zoomToInterestLocation()
+        map!!.setOnMapLoadedCallback(object : com.androidmapsextensions.GoogleMap.OnMapLoadedCallback {
+            override fun onMapLoaded() {
+                if (searchView != null) {
+                    searchView!!.visibility = View.VISIBLE
+                }
+                if (isAdded) {
+                    loaderManager.initLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                    if (interestLatLng != null) {
+                        zoomToInterestLocation()
+                    }
                 }
             }
-        }
+        })
 
         updateClustering(true)
     }

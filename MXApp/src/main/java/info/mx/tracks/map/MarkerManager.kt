@@ -66,7 +66,7 @@ fun MxPlace.getMarkerOption(): MarkerOptions {
     return MarkerOptions()
         .data(this)
         .clusterGroup(ClusterGroup.NOT_CLUSTERED)
-        .position(this.latLng)
+        .position(this.latLng!!)
         .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_poi_normal))
 }
 
