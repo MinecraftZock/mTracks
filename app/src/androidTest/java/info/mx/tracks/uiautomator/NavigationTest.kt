@@ -24,7 +24,11 @@ import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.uiautomator.*
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObjectNotFoundException
+import androidx.test.uiautomator.UiSelector
+import androidx.test.uiautomator.Until
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.map.MapIdlingResource
@@ -40,6 +44,7 @@ import org.junit.runner.RunWith
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+
 
 /**
  * https://developer.android.com/training/testing/ui-testing/uiautomator-testing#java
@@ -187,10 +192,7 @@ class NavigationTest {
 
     private fun allowPermissionsIfNeeded() {
         if (Build.VERSION.SDK_INT >= 23) {
-            val allowPermissions = device.findObject(
-                UiSelector().className("android.widget.Button")
-                    .resourceId("com.android.packageinstaller:id/permission_allow_button")
-            )
+            val allowPermissions = device.findObject(UiSelector().text("While using the app"))
             if (allowPermissions.exists()) {
                 try {
                     allowPermissions.click()
