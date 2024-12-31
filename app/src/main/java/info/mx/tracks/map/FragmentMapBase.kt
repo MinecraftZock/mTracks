@@ -37,9 +37,7 @@ abstract class FragmentMapBase : FragmentBase() {
                 map = googleMap
                 setUpMap()
                 MapIdlingResource.decrement()
-//                setOnMapLoadedCallback { TODO android-map-extension miss thiis
-//                    MapIdlingResource.decrement()
-//                }
+//                map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
             }
         }
     }
