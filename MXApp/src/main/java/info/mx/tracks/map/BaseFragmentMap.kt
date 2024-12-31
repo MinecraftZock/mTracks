@@ -561,7 +561,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        if (Objects.requireNonNull(permissionHelper).hasLocationPermission()) {
+        if (permissionHelper.hasLocationPermission()) {
             if (context != null) {
                 LocationServices.getFusedLocationProviderClient(requireContext())
                     .requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())

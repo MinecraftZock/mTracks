@@ -28,7 +28,6 @@ import info.mx.tracks.sqlite.TrackstageRecord
 import info.mx.tracks.stage.StageViewBinder
 import org.koin.android.ext.android.inject
 import retrofit2.Response
-import java.util.*
 
 class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     private var adapterStage: SimpleCursorAdapter? = null
@@ -64,7 +63,7 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateContextMenu(menu: ContextMenu, view: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, view, menuInfo)
-        Objects.requireNonNull(requireActivity()).menuInflater.inflate(
+        requireActivity().menuInflater.inflate(
             R.menu.context_trackstage_del,
             menu
         )
