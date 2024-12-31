@@ -289,8 +289,10 @@ tasks.register("newVersion") {
     dependsOn "tagNewVersion"
 }
 
-tasks["clean"].doLast {
-    generateGitChangelog()
+tasks.named("clean") {
+    doLast {
+        generateGitChangelog()
+    }
 }
 
 tasks.register("tagNewVersion") {
