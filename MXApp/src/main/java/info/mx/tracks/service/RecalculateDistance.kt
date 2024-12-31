@@ -143,7 +143,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
     }
 
     private fun isEurope(location: Location): Boolean {
-        return location.longitude > -31 && location.longitude < 65
+        return MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)
     }
 
     private fun updateNotification4Admin(meter: Int, payLoad: String) {
