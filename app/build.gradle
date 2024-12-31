@@ -98,9 +98,13 @@ android {
         debug {
             if (System.getenv("CI") == "true") { // Github action
                 signingConfig signingConfigs.debugCI
+                println("I run on Github and use for 'debug' the DEBUG signing")
                 buildConfigField "boolean", RUN_CI, "true"
-            } else
+            } else {
+                signingConfig signingConfigs.release
+                println("I run local and use for 'debug' the RELEASE signing")
                 buildConfigField "boolean", RUN_CI, "false"
+            }
 
             //applicationIdSuffix ".debug"
             versionNameSuffix ".debug"
@@ -109,6 +113,7 @@ android {
             buildConfigField "int", pushServerSleep, "1000"
         }
         release {
+            println("I use for 'release' the RELEASE signing")
             signingConfig signingConfigs.release
             minifyEnabled false
             //define whether log output gets logged into log file
