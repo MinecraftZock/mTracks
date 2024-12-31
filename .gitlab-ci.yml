@@ -41,22 +41,22 @@ BuildMaster:
   only:
     - master
   script:
-    - ./gradlew clean :MXApp:assembleRelease
+    - ./gradlew clean :app:assembleRelease
   artifacts:
     name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
     when: always
     expire_in: 2 days
     paths:
-      - MXApp/build/outputs/apk/
+      - app/build/outputs/apk/
       - $(find . -name *.aab 2>/dev/null)
-      - MXApp/build/outputs/mapping
+      - app/build/outputs/mapping
       - RxCommJson/build/reports
       - core/build/reports
       - commonLib/build/reports
       - RxCommLib/build/reports/
-      - MXApp/build/reports
+      - app/build/reports
       - $(find . -name lint-results.html)
-      - MXApp/build/reports/androidTests/connected
+      - app/build/reports/androidTests/connected
 
 BuildPaid:
   stage: build
@@ -64,22 +64,22 @@ BuildPaid:
   only:
     - merge_requests
   script:
-    - ./gradlew clean :MXApp:assemblePaidDebug
+    - ./gradlew clean :app:assemblePaidDebug
   artifacts:
     name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
     when: always
     expire_in: 2 days
     paths:
-      - MXApp/build/outputs/apk/
+      - app/build/outputs/apk/
       - $(find . -name *.aab 2>/dev/null)
-      - MXApp/build/outputs/mapping
+      - app/build/outputs/mapping
       - RxCommJson/build/reports
       - core/build/reports
       - commonLib/build/reports
       - RxCommLib/build/reports/
-      - MXApp/build/reports
+      - app/build/reports
       - $(find . -name lint-results.html)
-      - MXApp/build/reports/androidTests/connected
+      - app/build/reports/androidTests/connected
 
 BuildAdmin:
   stage: fastFail
@@ -87,7 +87,7 @@ BuildAdmin:
   only:
     - merge_requests
   script:
-    - ./gradlew clean :MXApp:assembleAdminDebug
+    - ./gradlew clean :app:assembleAdminDebug
   artifacts:
     name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
     when: always
@@ -102,7 +102,7 @@ BuildFree:
   only:
     - merge_requests
   script:
-    - ./gradlew clean :MXApp:assembleFreeDebug
+    - ./gradlew clean :app:assembleFreeDebug
 
 #job test :
 #   stage: test
@@ -122,16 +122,16 @@ BuildFree:
     paths:
       - $(find . -name default.txt 2>/dev/null)
       - $(find . -name gitlog.json 2>/dev/null)
-      - MXApp/build/outputs/apk/
+      - app/build/outputs/apk/
       - $(find . -name *.aab 2>/dev/null)
-      - MXApp/build/outputs/mapping
+      - app/build/outputs/mapping
       - RxCommJson/build/reports
       - core/build/reports
       - commonLib/build/reports
       - RxCommLib/build/reports/
-      - MXApp/build/reports
+      - app/build/reports
       - $(find . -name lint-results.html)
-      - MXApp/build/reports/androidTests/connected
+      - app/build/reports/androidTests/connected
 
 PublishPaid:
   stage: publish
@@ -139,7 +139,7 @@ PublishPaid:
   dependencies:
     - BuildPaid
   script:
-    - ./gradlew clean :MXApp:publishPaidReleaseBundle -Dorg.gradle.project.track=alpha
+    - ./gradlew clean :app:publishPaidReleaseBundle -Dorg.gradle.project.track=alpha
   only:
     - tags
 
@@ -149,7 +149,7 @@ PublishFree:
   dependencies:
     - BuildFree
   script:
-    - ./gradlew clean :MXApp:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
+    - ./gradlew clean :app:publishFreeReleaseBundle -Dorg.gradle.project.track=alpha
   only:
     - tags
 
@@ -159,7 +159,7 @@ PublishAdmin:
   dependencies:
     - BuildAdmin
   script:
-    - ./gradlew clean :MXApp:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
+    - ./gradlew clean :app:publishAdminReleaseBundle -Dorg.gradle.project.track=alpha
   only:
     - tags
 

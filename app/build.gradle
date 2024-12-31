@@ -263,11 +263,11 @@ def generateGitChangelog() {
             .style(Style.Info).println(" GENERATED")
     println ""
 
-    def processMkDirAdmin = "mkdir -p MXApp/src/admin/res/raw".execute()
+    def processMkDirAdmin = "mkdir -p app/src/admin/res/raw".execute()
     processMkDirAdmin.waitForProcessOutput(System.out, System.err)
-    def processMkDirPaid = "mkdir -p MXApp/src/paid/res/raw".execute()
+    def processMkDirPaid = "mkdir -p app/src/paid/res/raw".execute()
     processMkDirPaid.waitForProcessOutput(System.out, System.err)
-    def processMkDirFree = "mkdir -p MXApp/src/free/res/raw".execute()
+    def processMkDirFree = "mkdir -p app/src/free/res/raw".execute()
     processMkDirFree.waitForProcessOutput(System.out, System.err)
 
     def procGenerateAdmin = "./scripts/generateLog.sh".execute()
