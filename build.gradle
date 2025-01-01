@@ -23,6 +23,7 @@ buildscript {
 plugins {
     // ./gradlew dependencyUpdates -Drevision=release
     id "com.github.ben-manes.versions" version "0.51.0"
+    id "com.google.devtools.ksp" version "2.1.0-1.0.29" apply false
 }
 
 println "Gradle uses Java ${Jvm.current()}"
