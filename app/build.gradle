@@ -30,9 +30,9 @@ def pushServerSleep = "PUSH_SERVER_SLEEP"
 def unixTime = "UNIX_TIME_CREATED"
 
 android {
-    namespace "info.mx.tracks"
+    namespace = "info.mx.tracks"
     defaultConfig {
-        compileSdk defaultCompileSdkVersion
+        compileSdk = defaultCompileSdkVersion
         targetSdkVersion defaultTargetSdkVersion
 
         versionCode getGitCommitCount()
@@ -45,7 +45,7 @@ android {
         buildConfigField "String", httpLoggingLevel, "\"NONE\""  //NONE, BASIC, HEADERS, BODY
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
         buildConfigField "long", unixTime, getUnixCreateTime()
-        multiDexEnabled true
+        multiDexEnabled = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments useTestStorageService: "true"
@@ -97,11 +97,11 @@ android {
     buildTypes {
         debug {
             if (System.getenv("CI") == "true") { // Github action
-                signingConfig signingConfigs.debugCI
+                signingConfig = signingConfigs.debugCI
                 println("I run on Github and use for 'debug' the DEBUG signing")
                 buildConfigField "boolean", RUN_CI, "true"
             } else {
-                signingConfig signingConfigs.release
+                signingConfig = signingConfigs.release
                 println("I run local and use for 'debug' the RELEASE signing")
                 buildConfigField "boolean", RUN_CI, "false"
             }
@@ -114,7 +114,7 @@ android {
         }
         release {
             println("I use for 'release' the RELEASE signing")
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
             minifyEnabled false
             //define whether log output gets logged into log file
             buildConfigField "boolean", RUN_CI, "false"
@@ -154,11 +154,11 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
-        buildConfig true
+        viewBinding = true
+        buildConfig = true
     }
     lint {
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
         disable "MissingTranslation", "UnusedResources", "InvalidPackage", "Range"
     }
     // https://stackoverflow.com/a/67635863/1079990
