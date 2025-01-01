@@ -6,7 +6,7 @@ import timber.log.Timber
 
 object MapIdlingResource {
 
-    private const val RESOURCE = "PICTURE"
+    private const val RESOURCE = "map-load"
     private var count = 0
 
     val countingIdlingResource = CountingIdlingResource(RESOURCE)
@@ -14,7 +14,7 @@ object MapIdlingResource {
     fun increment(countComplete: Int) {
         countingIdlingResource.increment()
         this.count++
-        Timber.d("() count=${this.count} count=$countComplete")
+        Timber.d("() count=${this.count} countComplete=$countComplete")
         countingIdlingResource.dumpStateToLogs()
     }
 
