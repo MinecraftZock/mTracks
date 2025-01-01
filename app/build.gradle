@@ -6,7 +6,7 @@ plugins {
     id "com.android.application"
     id "com.github.triplet.play"
     id "kotlin-android"
-    id "kotlin-kapt"
+    id "com.google.devtools.ksp"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
 }
@@ -212,7 +212,7 @@ dependencies {
     implementation "androidx.vectordrawable:vectordrawable-animated:1.2.0"
 
     implementation "androidx.room:room-runtime:$room"
-    kapt "androidx.room:room-compiler:$room"
+    ksp "androidx.room:room-compiler:$room"
     implementation "androidx.room:room-rxjava2:$room"
     implementation "androidx.room:room-testing:$room"
 
