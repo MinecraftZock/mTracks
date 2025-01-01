@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14 ]
+        os: [ macos-15 ]
         java_version: [ 17 ]
     steps:
       - name: Checkout
