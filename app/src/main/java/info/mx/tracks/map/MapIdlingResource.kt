@@ -14,7 +14,7 @@ object MapIdlingResource {
     fun increment(countComplete: Int) {
         countingIdlingResource.increment()
         this.count++
-        Timber.d("() count=${this.count} countComplete=$countComplete")
+        Timber.d("count=${this.count} countComplete=$countComplete")
         countingIdlingResource.dumpStateToLogs()
     }
 
@@ -22,8 +22,9 @@ object MapIdlingResource {
         if (!countingIdlingResource.isIdleNow) {
             count--
             countingIdlingResource.decrement()
-            Timber.d("() $count ${!countingIdlingResource.isIdleNow}")
-        }
+            Timber.d("count=$count ${!countingIdlingResource.isIdleNow}")
+        } else
+            Timber.d("count=$count ${!countingIdlingResource.isIdleNow}")
         countingIdlingResource.dumpStateToLogs()
     }
 }
