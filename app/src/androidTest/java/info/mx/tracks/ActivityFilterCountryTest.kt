@@ -1,16 +1,17 @@
 package info.mx.tracks
 
 import android.Manifest
+import android.graphics.Bitmap
 import android.widget.ListView
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.screenshot.captureToBitmap
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -41,15 +42,18 @@ class ActivityFilterCountryTest : BaseSyncTest() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2") })
         onView(withId(android.R.id.list)).perform(swipeDown())
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-3") })
         onData(anything())
             .inAdapterView(isAssignableFrom(ListView::class.java))
             .atPosition(3)
             .perform(click())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-4") })
 
         onView(withId(android.R.id.list)).perform(swipeDown())
         onView(withId(android.R.id.list)).perform(swipeDown())
@@ -61,7 +65,8 @@ class ActivityFilterCountryTest : BaseSyncTest() {
             .atPosition(42)
             .perform(click())
         Thread.sleep(1000)
-        onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-5")
+        onView(isRoot())
+            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-5") })
     }
 
 }
