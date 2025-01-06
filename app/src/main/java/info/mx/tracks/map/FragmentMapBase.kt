@@ -33,8 +33,10 @@ abstract class FragmentMapBase : FragmentBase() {
     private fun setUpMapIfNeeded() {
         if (map == null) {
             MapIdlingResource.increment()
+            MapIdlingResource.increment()
             mapFragment?.getExtendedMapAsync { googleMap ->
                 map = googleMap
+                MapIdlingResource.decrement()
                 setUpMap()
                 map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
             }
