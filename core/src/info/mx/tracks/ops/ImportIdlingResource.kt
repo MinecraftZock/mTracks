@@ -3,7 +3,7 @@ package info.mx.tracks.ops
 import androidx.test.espresso.idling.CountingIdlingResource
 
 
-object CountingIdlingResourceSingleton {
+object ImportIdlingResource {
 
     private const val RESOURCE = "IMPORT"
 

@@ -65,7 +65,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         requestLastLocation()
 
         val webClient = MxCoreApplication.mxInfo
-        CountingIdlingResourceSingleton.increment()
+        ImportIdlingResource.increment()
 
         try {
             val trackCount = SQuery.newQuery().count(Tracks.CONTENT_URI)
@@ -115,7 +115,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             LoggingHelper.setMessage("")
             val bundle = Bundle()
             bundle.putString(COUNTRY_RESULT, countryResult)
-            CountingIdlingResourceSingleton.decrement()
+            ImportIdlingResource.decrement()
             return OperationResult.ok(bundle)
         } catch (e: ServiceException) {
             Timber.e(e)
@@ -124,7 +124,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 LoggingHelper.setMessage(e.message)
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
-            CountingIdlingResourceSingleton.decrement()
+            ImportIdlingResource.decrement()
             return OperationResult.error(e)
         } catch (e: Exception) {
             Timber.e(e)
@@ -134,7 +134,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             LoggingHelper.setMessage("")
-            CountingIdlingResourceSingleton.decrement()
+            ImportIdlingResource.decrement()
             return OperationResult.error(e)
         }
 
