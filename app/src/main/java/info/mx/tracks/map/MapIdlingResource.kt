@@ -6,25 +6,24 @@ import timber.log.Timber
 
 object MapIdlingResource {
 
-    private const val RESOURCE = "map-load"
+    private const val RESOURCE = "MAP-LOAD"
     private var count = 0
 
     val countingIdlingResource = CountingIdlingResource(RESOURCE)
 
-    fun increment(countComplete: Int) {
+    fun increment() {
         countingIdlingResource.increment()
-        this.count++
-        Timber.d("count=${this.count} countComplete=$countComplete")
+        count++
+        Timber.d("count=$count")
         countingIdlingResource.dumpStateToLogs()
     }
 
-    fun decrement() {
+    fun decrement(tag: String) {
+        Timber.d("count=$count isIdleNow=${countingIdlingResource.isIdleNow} tag=$tag")
         if (!countingIdlingResource.isIdleNow) {
             count--
             countingIdlingResource.decrement()
-            Timber.d("count=$count ${!countingIdlingResource.isIdleNow}")
-        } else
-            Timber.d("count=$count ${!countingIdlingResource.isIdleNow}")
+        }
         countingIdlingResource.dumpStateToLogs()
     }
 }
