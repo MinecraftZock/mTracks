@@ -12,14 +12,16 @@ object MapIdlingResource {
     val countingIdlingResource = CountingIdlingResource(RESOURCE)
 
     fun increment() {
+        val stack = Thread.currentThread().stackTrace
         countingIdlingResource.increment()
         count++
-        Timber.d("count=$count")
+        Timber.d("count=$count ${stack[3]}")
         countingIdlingResource.dumpStateToLogs()
     }
 
-    fun decrement(tag: String) {
-        Timber.d("count=$count isIdleNow=${countingIdlingResource.isIdleNow} tag=$tag")
+    fun decrement() {
+        val stack = Thread.currentThread().stackTrace
+        Timber.d("count=$count isIdleNow=${countingIdlingResource.isIdleNow} ${stack[3]}")
         if (!countingIdlingResource.isIdleNow) {
             count--
             countingIdlingResource.decrement()
