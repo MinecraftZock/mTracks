@@ -17,6 +17,7 @@ import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
+import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
@@ -46,6 +47,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
     @SuppressLint("CheckResult")
     fun recalculateTracks(location: Location, source: String) {
+        RecalculateIdlingResource.increment()
         mxDatabase.capturedLatLngDao().lastNonIgnoredLocation
             .subscribe(
                 { (_, lat, lon) ->
@@ -118,6 +120,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         Timber.d("time  : %s", (System.currentTimeMillis() - start) / 1000.0)
 
+        RecalculateIdlingResource.decrement()
         val sendNewDistance = Intent(DISTANCE_NEW)
         context.sendBroadcast(sendNewDistance)
     }
