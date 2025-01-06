@@ -22,6 +22,7 @@ import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.ops.RecalculateIdlingResource
+import info.mx.tracks.map.MapIdlingResource
 import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.junit.After
@@ -51,6 +52,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         registerIdlingResource()
         IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
     }
 
     @After
@@ -58,6 +60,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
         unregisterIdlingResource()
         IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
 
     @Test
