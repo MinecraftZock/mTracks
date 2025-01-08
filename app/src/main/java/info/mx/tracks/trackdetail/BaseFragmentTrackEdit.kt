@@ -676,11 +676,9 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     protected open fun doAfterMapLoaded() {}
     private fun addMarker(latlng: LatLng) {
-        if (marker != null) {
-            marker!!.remove()
-        }
-        if (map != null) {
-            marker = map!!.addMarker(
+        marker?.remove()
+        map?.let {
+            marker = it.addMarker(
                 MarkerOptions()
                     .position(latlng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_new_track))
@@ -692,7 +690,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 MxPreferences.getInstance().edit().putMarkerShowLongClickText(clickZlr + 1).commit()
                 marker?.showInfoWindow()
             }
-            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+            it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
         }
     }
 
