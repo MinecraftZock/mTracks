@@ -673,7 +673,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             if (requireActivity().intent.extras != null && requireActivity().intent.extras!!.containsKey(FragmentUpDown.RECORD_ID_LOCAL)) {
                 id = requireActivity().intent.extras!!.getLong(FragmentUpDown.RECORD_ID_LOCAL)
             }
-            fillMask(id)
+//            fillMask(id)
 
             // Workaround, to require results
             mapFragment.setListener(object : FragmentMapScroll.OnTouchListener {
@@ -691,6 +691,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     }
 
     private fun addMarker(latlng: LatLng) {
+        MapIdlingResource.increment()
         marker?.remove()
         map?.let {
             marker = it.addMarker(
@@ -705,7 +706,13 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 MxPreferences.instance.edit().putMarkerShowLongClickText(clickZlr + 1).commit()
                 marker?.showInfoWindow()
             }
-            it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+            it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f), object: com.androidmapsextensions.GoogleMap.CancelableCallback {
+                override fun onCancel() = Unit
+
+                override fun onFinish() {
+                    MapIdlingResource.decrement()
+                }
+            })
         }
     }
 
