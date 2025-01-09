@@ -39,7 +39,6 @@ android {
         minSdkVersion defaultMinSdkVersion
         versionName getVersion()
 
-        resValue "string", "GOOGLE_MAP_API_KEY", mapKey.toString()
         resValue "string", backendKey, backendUrl.toString()
         buildConfigField "Boolean", SHOW_WEATHER, "true"
         buildConfigField "String", httpLoggingLevel, "\"NONE\""  //NONE, BASIC, HEADERS, BODY
@@ -100,10 +99,12 @@ android {
                 signingConfig = signingConfigs.debugCI
                 println("I run on Github and use for 'debug' the DEBUG signing")
                 buildConfigField "boolean", RUN_CI, "true"
+                resValue "string", "GOOGLE_MAP_API_KEY", "dummy"
             } else {
                 signingConfig = signingConfigs.release
                 println("I run local and use for 'debug' the RELEASE signing")
                 buildConfigField "boolean", RUN_CI, "false"
+                resValue "string", "GOOGLE_MAP_API_KEY", mapKey.toString()
             }
 
             //applicationIdSuffix ".debug"
@@ -122,6 +123,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg", "proguard_admin.cfg", "proguard_admin_mechanoid.cfg", "../core/proguard_core.txt", "proguard-RxCommAdminLib"
             testProguardFiles getDefaultProguardFile("proguard-android.txt"), "$projectDir/proguard.cfg", "$projectDir/proguard_admin.cfg", "$projectDir/proguard_admin_mechanoid.cfg", "$projectDir/proguard-test-rules.pro", "$projectDir/proguard-RxCommAdminLib"
             buildConfigField "int", pushServerSleep, "1500"
+            resValue "string", "GOOGLE_MAP_API_KEY", mapKey.toString()
         }
     }
 
