@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
 class ActivityMapExtension : ActivityDrawerBase() {
     private var fabPadding: Int = 0
     private var displayHeight: Int = 0
-    private var fabMenu: FloatingActionMenu? = null
+    private var menuFab: FloatingActionMenu? = null
     private lateinit var toolbar: Toolbar
     private var scalar4Slide: Float = 0.toFloat()
 
@@ -42,30 +42,30 @@ class ActivityMapExtension : ActivityDrawerBase() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        fabMenu = findViewById(R.id.menuFab)
-        fabMenu?.setClosedOnTouchOutside(true)
-        fabMenu?.visibility = View.GONE
-        fabMenu?.setOnMenuToggleListener { opened ->
+        menuFab = findViewById(R.id.menuFab)
+        menuFab?.setClosedOnTouchOutside(true)
+        menuFab?.visibility = View.GONE
+        menuFab?.setOnMenuToggleListener { opened ->
             if (opened) {
-                fabMenu?.alpha = 1f
+                menuFab?.alpha = 1f
             }
         }
 
         findViewById<View>(R.id.fabNewTrack).visibility = View.GONE
         findViewById<View>(R.id.fabNewTrack).setOnClickListener {
-            fabMenu?.close(false)
+            menuFab?.close(false)
             mapFragment?.addNewTrack()
         }
         findViewById<View>(R.id.fabEvent).setOnClickListener {
-            fabMenu?.close(false)
+            menuFab?.close(false)
             detailFragment?.addEvent()
         }
         findViewById<View>(R.id.fabPictures).setOnClickListener {
-            fabMenu?.close(false)
+            menuFab?.close(false)
             detailFragment?.doPicturePick()
         }
         findViewById<View>(R.id.fabComment).setOnClickListener {
-            fabMenu?.close(false)
+            menuFab?.close(false)
             detailFragment?.addRating()
         }
 
@@ -96,20 +96,20 @@ class ActivityMapExtension : ActivityDrawerBase() {
         when (panelState) {
             PanelState.EXPANDED -> Unit
             PanelState.COLLAPSED -> {
-                fabMenu?.visibility = View.VISIBLE
-                fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, headerHeight + fabPadding)
+                menuFab?.visibility = View.VISIBLE
+                menuFab?.setPadding(fabPadding, fabPadding, fabPadding, headerHeight + fabPadding)
             }
 
-            PanelState.ANCHORED -> fabMenu?.visibility = View.VISIBLE
+            PanelState.ANCHORED -> menuFab?.visibility = View.VISIBLE
             PanelState.HIDDEN -> {
-                fabMenu?.visibility = View.GONE
-                fabMenu?.setPadding(fabPadding, fabPadding, fabPadding, fabPadding)
+                menuFab?.visibility = View.GONE
+                menuFab?.setPadding(fabPadding, fabPadding, fabPadding, fabPadding)
             }
 
             PanelState.DRAGGING -> {
-                fabMenu?.close(false)
-                fabMenu?.alpha = 1 - position
-                fabMenu?.setPadding(
+                menuFab?.close(false)
+                menuFab?.alpha = 1 - position
+                menuFab?.setPadding(
                     fabPadding, fabPadding, fabPadding,
                     Math.round((displayHeight - toolbar.height - headerHeight).toFloat() * position * scalar4Slide) + headerHeight + fabPadding
                 )
