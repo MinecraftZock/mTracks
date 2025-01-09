@@ -674,7 +674,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    protected open fun doAfterMapLoaded() {}
+    protected open fun doAfterMapLoaded() = Unit
+
     private fun addMarker(latlng: LatLng) {
         marker?.remove()
         map?.let {
