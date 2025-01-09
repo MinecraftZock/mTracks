@@ -221,12 +221,11 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             if (recordTrack == null || recordTrack!!.id != newId) {
                 recordTrack = TracksRecord.get(newId)
             }
-            if (recordTrack != null) {
+            recordTrack?.let {
                 addMarker(
                     LatLng(
-                        SecHelper.entcryptXtude(
-                            recordTrack!!.latitude
-                        ), SecHelper.entcryptXtude(recordTrack!!.longitude)
+                        SecHelper.entcryptXtude(it.latitude),
+                        SecHelper.entcryptXtude(it.longitude)
                     )
                 )
             }
@@ -706,12 +705,9 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         googleApiClient!!.connect()
     }
 
-    override fun onMarkerClick(marker: Marker): Boolean {
-        return false
-    }
-
-    override fun onMarkerDrag(marker: Marker) {}
-    override fun onMarkerDragEnd(marker: Marker) {}
+    override fun onMarkerClick(marker: Marker) = false
+    override fun onMarkerDrag(marker: Marker) = Unit
+    override fun onMarkerDragEnd(marker: Marker) = Unit
     override fun onMarkerDragStart(marker: Marker) {
         if (activity != null) {
             val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -723,7 +719,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    override fun onConnectionFailed(result: ConnectionResult) {}
+    override fun onConnectionFailed(result: ConnectionResult) = Unit
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
