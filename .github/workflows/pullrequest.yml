@@ -110,6 +110,7 @@ jobs:
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
           cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
+          disableAnimations: true
           bootTimeout: 180 # 840 seconds = 12 minutes
       - name: Archive screenshots ${{ matrix.emulatorApi }}
         if: ${{ always() }}
