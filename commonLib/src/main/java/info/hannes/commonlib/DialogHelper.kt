@@ -3,7 +3,6 @@ package info.hannes.commonlib
 import android.app.AlertDialog
 import android.content.Context
 
-@Suppress("DEPRECATION")
 object DialogHelper {
 
     interface Callable {
