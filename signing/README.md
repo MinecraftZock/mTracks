@@ -1,4 +1,4 @@
-# Create App-Signatur certificat
+# Create App-Signature certificate
 
 to generate `encrypted_private_key` please run
 
