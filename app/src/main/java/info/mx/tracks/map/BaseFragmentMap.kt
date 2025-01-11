@@ -199,13 +199,13 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 val placeAdapter = searchList!!.adapter as AdapterPlaceAutocomplete
                 val markerPlace = placeAdapter.getMarker(position)
                 searchItemClick = true
-                slidingDrawer!!.panelState = PanelState.COLLAPSED
+                slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
                 onMarkerSelect(markerPlace, map!!.maxZoomLevel - 7)
             } else {
                 val marker = map?.getTrackMarker(id)
                 if (marker != null) {
                     searchItemClick = true
-                    slidingDrawer!!.panelState = PanelState.COLLAPSED
+                    slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
                     onMarkerSelect(marker, map!!.maxZoomLevel - 7)
                 }
             }
@@ -334,13 +334,13 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private fun setSliderVisibility(visible: Int) {
         val open = slidingDrawer!!.panelState == PanelState.EXPANDED || slidingDrawer!!.panelState == PanelState.ANCHORED
         if (visible != View.VISIBLE && open) {
-            slidingDrawer!!.panelState = PanelState.COLLAPSED
+            slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
         } else if (visible == View.VISIBLE && slidingDrawer!!.panelState == PanelState.HIDDEN) {
-            slidingDrawer!!.panelState = PanelState.COLLAPSED
+            slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
         } else if (visible == View.VISIBLE && slidingDrawer!!.panelState != PanelState.COLLAPSED) {
-            slidingDrawer!!.panelState = PanelState.ANCHORED
+            slidingDrawer!!.setPanelState(PanelState.ANCHORED)
         } else if (visible == View.GONE) {
-            slidingDrawer!!.panelState = PanelState.HIDDEN
+            slidingDrawer!!.setPanelState(PanelState.HIDDEN)
             loaderManager.destroyLoader(LOADER_ROUTE)
             currId = 0
         }
@@ -678,7 +678,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     savePos = map!!.cameraPosition
                 }
                 Timber.d("hasFocus :true animateSave:$savePos")
-                slidingDrawer!!.panelState = PanelState.HIDDEN
+                slidingDrawer!!.setPanelState(PanelState.HIDDEN)
                 setSearchListVisibility(View.VISIBLE)
                 map?.removeAllPlacesMarker()
             } else {
@@ -878,7 +878,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         val handler = Handler(Looper.getMainLooper()) { msg ->
                             if (msg.what == what) {
                                 val marker = map?.getTrackMarker(currId)
-                                slidingDrawer!!.panelState = PanelState.COLLAPSED
+                                slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
                                 marker?.let {
                                     onMarkerSelect(it, currZoom)
                                 }
@@ -1118,21 +1118,21 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         Timber.d("setHeaderPanelHeight:%s", height)
         //to calibrate the collapsed height
         if (slidingDrawer!!.panelState == PanelState.COLLAPSED || slidingDrawer!!.panelState == PanelState.HIDDEN) {
-            slidingDrawer!!.panelState = PanelState.COLLAPSED
+            slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
         }
     }
 
     override fun onHeaderClicked(view: View, currentPoi: TracksGesSumRecord?) {
         if (slidingDrawer!!.panelState == PanelState.COLLAPSED) {
-            slidingDrawer!!.panelState = PanelState.ANCHORED
+            slidingDrawer!!.setPanelState(PanelState.ANCHORED)
             if (currentPoi != null) {
                 val poiLatLng = LatLng(SecHelper.entcryptXtude(currentPoi.latitude), SecHelper.entcryptXtude(currentPoi.longitude))
                 zoomToLocation(poiLatLng)
             }
         } else if (slidingDrawer!!.panelState == PanelState.ANCHORED) {
-            slidingDrawer!!.panelState = PanelState.COLLAPSED
+            slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
         } else if (slidingDrawer!!.panelState == PanelState.EXPANDED) {
-            slidingDrawer!!.panelState = PanelState.COLLAPSED
+            slidingDrawer!!.setPanelState(PanelState.COLLAPSED)
         }
     }
 
