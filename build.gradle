@@ -58,11 +58,11 @@ allprojects {
     }
 
     // show detailed warnings in gradle output
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             force("com.google.auto.value:auto-value-annotations:1.11.0")
         }
