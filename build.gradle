@@ -34,13 +34,7 @@ ext {
     defaultTargetSdkVersion = 35
     koin_version = "4.0.1"
     gsonVersion = "2.11.0"
-    retrofitVersion = "2.11.0"
-    rxAndroidVersion = "2.1.1"
-    rxJavaVersion = "2.2.21"
     defaultPlayLibVersion = "21.3.0"
-    uiautomatorVersion = "2.3.0"
-    extJUnitVersion = "1.1.5"
-    espresso_core = "3.5.1"
     room = "2.6.1"
 }
 
