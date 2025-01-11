@@ -7,7 +7,7 @@ def pushServerSleep = "PUSH_SERVER_SLEEP"
 
 android {
     defaultConfig {
-        minSdkVersion defaultMinSdkVersion
+        minSdk defaultMinSdkVersion
         compileSdk defaultCompileSdkVersion
         targetSdkVersion defaultTargetSdkVersion
         consumerProguardFiles "proguard-core.txt"
@@ -58,9 +58,7 @@ dependencies {
     implementation "net.lingala.zip4j:zip4j:2.11.5"
     api "com.google.android.gms:play-services-maps:19.0.0"
     api "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
-    implementation "com.google.android.libraries.places:places:3.3.0"
-    implementation "com.android.volley:volley:1.2.1"
-    api "com.google.maps.android:android-maps-utils:3.8.2"
+    implementation "com.google.android.libraries.places:places:4.1.0"
 
     // Koin main features for Android
     implementation "io.insert-koin:koin-android:$koin_version"

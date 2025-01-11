@@ -36,7 +36,7 @@ android {
         targetSdkVersion defaultTargetSdkVersion
 
         versionCode getGitCommitCount()
-        minSdkVersion defaultMinSdkVersion
+        minSdk defaultMinSdkVersion
         versionName getVersion()
 
         resValue "string", backendKey, backendUrl.toString()
@@ -234,7 +234,7 @@ dependencies {
     implementation "com.google.maps.android:android-maps-utils:3.9.0"
 
     // UiAutomator Testing (maybe obsolete)
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomatorVersion"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:2.3.0"
     androidTestImplementation "org.hamcrest:hamcrest-integration:1.3"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
