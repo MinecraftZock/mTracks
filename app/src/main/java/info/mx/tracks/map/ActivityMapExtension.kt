@@ -125,6 +125,14 @@ class ActivityMapExtension : ActivityDrawerBase() {
         } else if (cl.isFirstRun && !MxCoreApplication.isEmulator) {
             cl.fullLogDialog.show()
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mapFragment?.onFragmentBackPressed()!!) {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {

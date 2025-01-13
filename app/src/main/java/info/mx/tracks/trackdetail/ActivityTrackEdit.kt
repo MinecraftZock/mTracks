@@ -66,6 +66,24 @@ class ActivityTrackEdit : ActivityBase() {
         }
 
         openEdit()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (fragmentTrackEdit != null && fragmentTrackEdit!!.mask2Record(false)) {
+                    var txt = getString(R.string.ask_unsaved_changes)
+                    if (fragmentTrackEdit!!.hasDefaultLatLon()) {
+                        txt = """
+                    (${getString(R.string.default_latlon)})
+                    
+                    $txt
+                    """.trimIndent()
+                    }
+                    doAskYesNo(this@ActivityTrackEdit, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
+                } else {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private fun openEdit() {

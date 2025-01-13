@@ -106,6 +106,12 @@ class ActivitySetting : ActivityBase() {
         })
 
         hideKeyboard()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                prefs.edit().putUsername(binding.containerSetting.settingUsername.editableText.toString()).commit()
+            }
+        })
     }
 
     private fun hideKeyboard() {

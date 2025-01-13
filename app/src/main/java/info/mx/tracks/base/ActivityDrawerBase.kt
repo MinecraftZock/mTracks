@@ -46,6 +46,19 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
 
     private val appNavigationMenu: AppNavigationMenu by inject()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawers()
+                } else {
+                    showBackDialog()
+                }
+            }
+        })
+    }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         initToolbar()
