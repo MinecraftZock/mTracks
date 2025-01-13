@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.GridView
 import android.widget.ListView
+import androidx.activity.OnBackPressedCallback
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
 import com.robotoworks.mechanoid.ops.Ops
@@ -57,6 +58,12 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 
     @SuppressLint("MissingSuperCall")
@@ -171,12 +178,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             detailFragmentTab?.moveDown()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @Deprecated("Deprecated in Java", ReplaceWith("keep it like it is"))
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        finish()
     }
 
     override fun onImageItemClick(position: Int, imageRestId: Long) {
