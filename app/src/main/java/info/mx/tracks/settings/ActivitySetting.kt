@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.TrackingApplication.Companion.getVersionName
 import info.mx.tracks.ActivityBase
@@ -71,6 +72,12 @@ class ActivitySetting : ActivityBase() {
         }
         (findViewById<View>(R.id.setting_version) as TextView).text = getVersionName(this)
         hideKeyboard()
+
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                prefs.edit().putUsername(binding.containerSetting.settingUsername.editableText.toString()).commit()
+            }
+        })
     }
 
     private fun hideKeyboard() {
@@ -83,8 +90,4 @@ class ActivitySetting : ActivityBase() {
         trackEvent("Setting", "Improve:" + prefs.agreeTrackSurveillance)
     }
 
-    override fun onBackPressed() {
-        prefs.edit().putUsername(binding.containerSetting.settingUsername.editableText.toString()).commit()
-        super.onBackPressed()
-    }
 }
