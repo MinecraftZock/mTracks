@@ -176,7 +176,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     @Deprecated("Deprecated in Java", ReplaceWith("keep it like it is"))
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        //skip onBackPressed logic and close Activity
         finish()
     }
 

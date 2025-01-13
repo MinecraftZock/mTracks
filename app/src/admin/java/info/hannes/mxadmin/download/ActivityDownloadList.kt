@@ -33,7 +33,6 @@ class ActivityDownloadList : ActivityRx(), FragmentDownloadList.Callbacks {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            // onBackPressed()
             this@ActivityDownloadList.finish()
         }
 

@@ -136,11 +136,9 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
-            //            return;
         } else {
             showBackDialog()
         }
-        //        super.onBackPressed();
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

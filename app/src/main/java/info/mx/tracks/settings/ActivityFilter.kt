@@ -45,7 +45,6 @@ class ActivityFilter : ActivityBase() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
-            //onBackPressed()
             finish()
         }
         prefs = MxPreferences.getInstance()

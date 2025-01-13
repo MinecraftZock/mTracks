@@ -37,7 +37,6 @@ class ActivityFilterCountry : ActivityRx() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { v: View? ->
-            //onBackPressed()
             finish()
         }
     }

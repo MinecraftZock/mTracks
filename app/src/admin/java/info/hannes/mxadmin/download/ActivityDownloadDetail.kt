@@ -23,7 +23,6 @@ class ActivityDownloadDetail : ActivityRx() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            //onBackPressed()
             finish()
         }
 

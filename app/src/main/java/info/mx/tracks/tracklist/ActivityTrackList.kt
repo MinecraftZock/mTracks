@@ -158,14 +158,6 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
             startActivity(detailIntent)
         }
     }
-//
-//    override fun onBackPressed() {
-//        val backPressed = fragmentTrackListTab.fragmentTrackList!!.onBackPressed()
-//
-//        if (backPressed) {
-//            super.onBackPressed()
-//        }
-//    }
 
     override fun onTabPageSelected(id: Long) {
         // In single-pane mode, simply start the detail activity for the selected item ID.

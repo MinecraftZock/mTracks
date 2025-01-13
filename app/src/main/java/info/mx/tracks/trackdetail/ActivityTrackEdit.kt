@@ -19,7 +19,6 @@ class ActivityTrackEdit : ActivityBase() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            //onBackPressed()
             finish()
         }
         openEdit()

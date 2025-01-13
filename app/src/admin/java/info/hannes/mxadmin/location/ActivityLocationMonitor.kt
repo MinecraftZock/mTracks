@@ -30,7 +30,6 @@ class ActivityLocationMonitor : ActivityAdminBase() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            // onBackPressed()
             finish()
         }
 
