@@ -330,19 +330,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         }
     }
 
-    fun onBackPressed(): Boolean {
-        var backPressed = true
-        if (searchView != null && !searchView!!.isIconified) {
-            if (searchAutoComplete != null) {
-                searchAutoComplete!!.setText("")
-            }
-            searchView!!.isIconified = true
-            backPressed = false
-            setFilter2Fragment("")
-        }
-        return backPressed
-    }
-
     protected fun setFilter2Fragment(filterString: String) {
         if (curFilter == null) {
             curFilter = ""
