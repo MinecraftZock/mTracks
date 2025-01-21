@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
@@ -84,12 +85,14 @@ class ActivityMapExtension : ActivityDrawerBase() {
         } else if (cl.isFirstRun && !MxCoreApplication.isEmulator) {
             cl.fullLogDialog.show()
         }
-    }
 
-    override fun onBackPressed() {
-        if (mapFragment?.onBackPressed()!!) {
-            super.onBackPressed()
-        }
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mapFragment?.onBackPressed()!!) {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {
