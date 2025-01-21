@@ -63,6 +63,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04 ]
+        flavor: [ "paid" ]
         api: [ 34 ]
         abi: [ x86_64 ]
         tag: [ 'google_apis' ]
@@ -105,49 +106,49 @@ jobs:
         uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
         with:
           cmd: |
-            ./gradlew :app:connectedPaidDebugAndroidTest --continue
+            ./gradlew :app:connected${{ matrix.flavor }}DebugAndroidTest --continue
           api: ${{ matrix.api }}
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
           cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
           disableAnimations: true
           bootTimeout: 180 # 840 seconds = 12 minutes
-      - name: Archive screenshots ${{ matrix.emulatorApi }}
+      - name: Archive screenshots ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
-            app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-      - name: Archive Espresso results ${{ matrix.emulatorApi }}
+            app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected
+      - name: Archive Espresso results ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
             app/build/outputs/androidTest-results/connected
-      - name: Compare screenshots ${{ matrix.emulatorApi }}
+      - name: Compare screenshots ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         env:
           CLASSIC_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           emulatorApi: ${{ matrix.emulatorApi }}
         run: |
-          ls -la app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-          cp app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
+          ls -la app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected
+          cp app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
           echo ${{ env.resourceRunID }}
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           ./screenShotScript/screenShotCompare.sh ${{ env.resourceRunID }}
-      - name: Archive screenshots diffs ${{ matrix.emulatorApi }}
+      - name: Archive screenshots diffs ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: MXPro-diffs-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
+          name: MXPro-diffs-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
             screenshotDiffs
       - name: cleanup
         run: ./signing/cleanup.sh
-      - name: Show git status ${{ matrix.emulatorApi }}
+      - name: Show git status ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         run: |
           git add screenshotsToCompare${{ matrix.emulatorApi }}
