@@ -199,7 +199,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
     // crash
-    def work_version = "2.10.0"
+    def work_version = "2.10.1"
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
