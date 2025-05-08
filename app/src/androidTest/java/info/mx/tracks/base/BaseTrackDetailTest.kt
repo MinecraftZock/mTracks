@@ -46,16 +46,16 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
 
     @Before
     fun pictureIdlingBefore() {
-        registerIdlingResource()
-        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
+        //registerIdlingResource()
+        //IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
     }
 
     @After
     fun pictureIdlingBeforeAfter() {
-        unregisterIdlingResource()
-        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
+        //unregisterIdlingResource()
+        //IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
