@@ -416,7 +416,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
-        map!!.setOnMapLoadedCallback(object : com.androidmapsextensions.GoogleMap.OnMapLoadedCallback {
+        map!!.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
             override fun onMapLoaded() {
                 if (searchView != null) {
                     searchView!!.visibility = View.VISIBLE
