@@ -35,6 +35,8 @@ class ActivitySplash : ActivityBase() {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val versionName: String
         try {
