@@ -36,8 +36,8 @@ android {
         targetSdkVersion defaultTargetSdkVersion
 
         versionCode getGitCommitCount()
-        minSdk defaultMinSdkVersion
-        versionName getVersion()
+        minSdk = defaultMinSdkVersion
+        versionName = getVersion()
 
         resValue "string", backendKey, backendUrl.toString()
         buildConfigField "Boolean", SHOW_WEATHER, "true"
