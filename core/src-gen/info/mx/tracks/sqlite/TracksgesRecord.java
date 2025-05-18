@@ -109,7 +109,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
     	Tracksges.AREATYPE,
     	Tracksges.SCHWIERIGKEIT,
     	Tracksges.INDOOR,
-    	Tracksges.RATING
+    	Tracksges.PICTURECOUNT,
+    	Tracksges.EVENTCOUNT
     };
     
     public interface Indices {
@@ -170,7 +171,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
     	int AREATYPE = 54;
     	int SCHWIERIGKEIT = 55;
     	int INDOOR = 56;
-    	int RATING = 57;
+    	int PICTURECOUNT = 57;
+    	int EVENTCOUNT = 58;
     }
     
     private String mTrackname;
@@ -285,8 +287,10 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
     private boolean mSchwierigkeitDirty;
     private long mIndoor;
     private boolean mIndoorDirty;
-    private String mRating;
-    private boolean mRatingDirty;
+    private String mPicturecount;
+    private boolean mPicturecountDirty;
+    private String mEventcount;
+    private boolean mEventcountDirty;
     
     @Override
     protected String[] _getProjection() {
@@ -741,13 +745,21 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
     public long getIndoor() {
     	return mIndoor;
     }
-    public void setRating(String rating) {
-    	mRating = rating;
-    	mRatingDirty = true;
+    public void setPicturecount(String picturecount) {
+    	mPicturecount = picturecount;
+    	mPicturecountDirty = true;
     }
     
-    public String getRating() {
-    	return mRating;
+    public String getPicturecount() {
+    	return mPicturecount;
+    }
+    public void setEventcount(String eventcount) {
+    	mEventcount = eventcount;
+    	mEventcountDirty = true;
+    }
+    
+    public String getEventcount() {
+    	return mEventcount;
     }
     
     public TracksgesRecord() {
@@ -815,9 +827,10 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		mAreatype = in.readString();
 		mSchwierigkeit = in.readLong();
 		mIndoor = in.readLong();
-		mRating = in.readString();
+		mPicturecount = in.readString();
+		mEventcount = in.readString();
 		
-		boolean[] dirtyFlags = new boolean[57];
+		boolean[] dirtyFlags = new boolean[58];
 		in.readBooleanArray(dirtyFlags);
 		mTracknameDirty = dirtyFlags[0];
 		mApprovedDirty = dirtyFlags[1];
@@ -875,7 +888,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		mAreatypeDirty = dirtyFlags[53];
 		mSchwierigkeitDirty = dirtyFlags[54];
 		mIndoorDirty = dirtyFlags[55];
-		mRatingDirty = dirtyFlags[56];
+		mPicturecountDirty = dirtyFlags[56];
+		mEventcountDirty = dirtyFlags[57];
 	}
 	
 	@Override
@@ -942,7 +956,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		dest.writeString(mAreatype);
 		dest.writeLong(mSchwierigkeit);
 		dest.writeLong(mIndoor);
-		dest.writeString(mRating);
+		dest.writeString(mPicturecount);
+		dest.writeString(mEventcount);
 		dest.writeBooleanArray(new boolean[] {
 			mTracknameDirty,
 			mApprovedDirty,
@@ -1000,7 +1015,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 			mAreatypeDirty,
 			mSchwierigkeitDirty,
 			mIndoorDirty,
-			mRatingDirty
+			mPicturecountDirty,
+			mEventcountDirty
 		});
 	}
 	
@@ -1176,8 +1192,11 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		if(mIndoorDirty) {
 			builder.setIndoor(mIndoor);
 		}
-		if(mRatingDirty) {
-			builder.setRating(mRating);
+		if(mPicturecountDirty) {
+			builder.setPicturecount(mPicturecount);
+		}
+		if(mEventcountDirty) {
+			builder.setEventcount(mEventcount);
 		}
 		
 		return builder;
@@ -1241,7 +1260,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		mAreatypeDirty = dirty;
 		mSchwierigkeitDirty = dirty;
 		mIndoorDirty = dirty;
-		mRatingDirty = dirty;
+		mPicturecountDirty = dirty;
+		mEventcountDirty = dirty;
 	}
 
 	@Override
@@ -1303,7 +1323,8 @@ public class TracksgesRecord extends ActiveRecord implements Parcelable {
 		setAreatype(c.getString(Indices.AREATYPE));
 		setSchwierigkeit(c.getLong(Indices.SCHWIERIGKEIT));
 		setIndoor(c.getLong(Indices.INDOOR));
-		setRating(c.getString(Indices.RATING));
+		setPicturecount(c.getString(Indices.PICTURECOUNT));
+		setEventcount(c.getString(Indices.EVENTCOUNT));
 	}
 	
 	public static TracksgesRecord fromCursor(Cursor c) {

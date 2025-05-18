@@ -13,15 +13,20 @@ import androidx.core.content.ContextCompat
 import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.R
+import info.mx.tracks.base.FragmentRx
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.sqlite.TracksGesSumRecord
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
-class AdapterTracksSort(private val context: Context) : BaseAdapter() {
+class AdapterTracksSort(private val context: Context, private val fragmentRx: FragmentRx, private val mxDatabase: MxDatabase) : BaseAdapter() {
     private var tracksDistance: List<TracksDistance>? = null
     private var tracksCached: Array<TracksGesSumRecord?>
     private val shortWeekdays: Array<String> = DateHelper.shortWeekdays
@@ -103,7 +108,7 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
                 tr_calendar
             )
         } else {
-            val viewHolder = convertView.tag as ViewHolderTracksDist
+            val viewHolder = convertViewGiven?.tag as ViewHolderTracksDist
             tr_name = viewHolder.tr_name
             tr_distance = viewHolder.tr_distance
             tr_ratingBar = viewHolder.tr_ratingBar
@@ -150,7 +155,14 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
             val country = track.country.lowercase(Locale.getDefault()) + "2x"
             val id = context.resources.getIdentifier(country, "drawable", context.packageName)
             tr_country.setImageResource(id)
-            tr_ratingBar.rating = track.rating.toFloat()
+            fragmentRx.addDisposable(
+                mxDatabase.commentDao().avgByTrackId(track.restId)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ rating: Float? ->
+                        tr_ratingBar.rating = rating!!
+                    }) { Timber.e("Subscribing to registerRx failed") }
+            )
             tr_mo.setDayLayout(track.openmondays == 1L)
             tr_tu.setDayLayout(track.opentuesdays == 1L)
             tr_we.setDayLayout(track.openwednesday == 1L)

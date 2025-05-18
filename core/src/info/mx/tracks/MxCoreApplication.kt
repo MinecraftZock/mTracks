@@ -15,7 +15,6 @@ import info.hannes.commonlib.utils.ExternalStorage
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.tracks.koin.CoreKoinContext
 import info.mx.tracks.koin.coreModule
-import info.mx.tracks.ops.AbstractOpPostRatingsOperation
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.MxInfo
@@ -106,8 +105,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun doSync(updateProvider: Boolean, force: Boolean, flavor: String) {
             if (MxPreferences.getInstance().lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
-                val intentM = AbstractOpPostRatingsOperation.newIntent()
-                Ops.execute(intentM)
 
                 val intent = AbstractOpSyncFromServerOperation.newIntent(updateProvider, flavor)
                 Ops.execute(intent)
@@ -147,7 +144,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
                 file.delete()
             }
             SQuery.newQuery().delete(Pictures.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Ratings.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Favorits.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Tracks.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Events.CONTENT_URI)
