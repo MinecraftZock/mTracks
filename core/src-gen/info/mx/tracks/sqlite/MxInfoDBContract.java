@@ -44,16 +44,6 @@ public class MxInfoDBContract  {
 		String SHOW = "show";
 	}
 	
-	interface EventsColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String TRACK_REST_ID = "track_restId";
-		String SERIES_REST_ID = "series_restId";
-		String COMMENT = "comment";
-		String APPROVED = "approved";
-		String EVENT_DATE = "eventDate";
-	}
-	
 	interface FavoritsColumns {
 		String TRACK_REST_ID = "track_restId";
 	}
@@ -61,14 +51,6 @@ public class MxInfoDBContract  {
 	interface ImportstatusColumns {
 		String MSG = "msg";
 		String CREATED = "created";
-	}
-	
-	interface MessageColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String ANDROIDID = "androidid";
-		String READ = "read";
-		String MSG = "msg";
 	}
 	
 	interface NetworkColumns {
@@ -97,19 +79,6 @@ public class MxInfoDBContract  {
 		String LOCALTHUMB = "localthumb";
 	}
 	
-	interface RatingsColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String TRACK_REST_ID = "track_restId";
-		String RATING = "rating";
-		String USERNAME = "username";
-		String NOTE = "note";
-		String COUNTRY = "country";
-		String DELETED = "deleted";
-		String APPROVED = "approved";
-		String ANDROIDID = "androidid";
-	}
-	
 	interface RouteColumns {
 		String TRACK_CLIENT_ID = "trackClientId";
 		String LONGITUDE = "Longitude";
@@ -117,14 +86,7 @@ public class MxInfoDBContract  {
 		String CONTENT = "content";
 		String CREATED = "created";
 	}
-	
-	interface SeriesColumns {
-		String REST_ID = "restId";
-		String CHANGED = "changed";
-		String NAME = "name";
-		String SERIES_URL = "seriesUrl";
-	}
-	
+
 	interface TracksColumns {
 		String REST_ID = "restId";
 		String CHANGED = "changed";
@@ -288,11 +250,6 @@ public class MxInfoDBContract  {
 		String TRACK_REST_ID = "track_restId";
 		String PICTURECOUNT = "picturecount";
 	}
-	interface RatingsumColumns {
-		String TRACK_REST_ID = "track_restId";
-		String RATINGCOUNT = "ratingcount";
-		String RATINGAVG = "ratingavg";
-	}
 	interface TracksGesSumColumns {
 		String TRACKNAME = "trackname";
 		String APPROVED = "Approved";
@@ -350,7 +307,6 @@ public class MxInfoDBContract  {
 		String AREATYPE = "areatype";
 		String SCHWIERIGKEIT = "schwierigkeit";
 		String INDOOR = "indoor";
-		String RATING = "rating";
 		String PICTURECOUNT = "picturecount";
 		String EVENTCOUNT = "eventcount";
 	}
@@ -411,7 +367,8 @@ public class MxInfoDBContract  {
 		String AREATYPE = "areatype";
 		String SCHWIERIGKEIT = "schwierigkeit";
 		String INDOOR = "indoor";
-		String RATING = "rating";
+		String PICTURECOUNT = "picturecount";
+		String EVENTCOUNT = "eventcount";
 	}
 	interface UserActivityColumns {
 		String ANDROIDID = "androidid";
@@ -490,99 +447,7 @@ public class MxInfoDBContract  {
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
 	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Events.</p>
-	 */
-	public static class Events implements EventsColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("events").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Events rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.events";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Events row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.events";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Events, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/events/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Events.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Events.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Events</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Events.</p>
-		 *
-		 * <p>Use {@link Events#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Events.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Events.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Events.CHANGED, value);
-				return this;
-			}
-			public Builder setTrackRestId(long value) {
-				mValues.put(Events.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setSeriesRestId(long value) {
-				mValues.put(Events.SERIES_REST_ID, value);
-				return this;
-			}
-			public Builder setComment(String value) {
-				mValues.put(Events.COMMENT, value);
-				return this;
-			}
-			public Builder setApproved(long value) {
-				mValues.put(Events.APPROVED, value);
-				return this;
-			}
-			public Builder setEventDate(long value) {
-				mValues.put(Events.EVENT_DATE, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			viewUris.add(Events2series.CONTENT_URI);
-			viewUris.add(Eventsum.CONTENT_URI);
-			viewUris.add(TracksGesSum.CONTENT_URI);
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
+
 	/**
 	 * <p>Column definitions and helper methods to work with the Favorits.</p>
 	 */
@@ -719,162 +584,6 @@ public class MxInfoDBContract  {
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
 	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Message.</p>
-	 */
-	public static class Message implements MessageColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("message").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Message rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.message";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Message row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.message";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Message, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/message/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Message.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Message.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Message</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Message.</p>
-		 *
-		 * <p>Use {@link Message#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Message.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Message.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Message.CHANGED, value);
-				return this;
-			}
-			public Builder setAndroidid(String value) {
-				mValues.put(Message.ANDROIDID, value);
-				return this;
-			}
-			public Builder setRead(long value) {
-				mValues.put(Message.READ, value);
-				return this;
-			}
-			public Builder setMsg(String value) {
-				mValues.put(Message.MSG, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Network.</p>
-	 */
-	public static class Network implements NetworkColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("network").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Network rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.network";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Network row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.network";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Network, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/network/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Network.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Network.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Network</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Network.</p>
-		 *
-		 * <p>Use {@link Network#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Network.CONTENT_URI);
-			}
-			
-			public Builder setReason(String value) {
-				mValues.put(Network.REASON, value);
-				return this;
-			}
-			public Builder setTracks(long value) {
-				mValues.put(Network.TRACKS, value);
-				return this;
-			}
-			public Builder setCreated(long value) {
-				mValues.put(Network.CREATED, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
 
 	/**
 	 * <p>Column definitions and helper methods to work with the Pictures.</p>
@@ -972,110 +681,6 @@ public class MxInfoDBContract  {
 	
 			viewUris.add(Picturesum.CONTENT_URI);
 			viewUris.add(TracksGesSum.CONTENT_URI);
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Ratings.</p>
-	 */
-	public static class Ratings implements RatingsColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("ratings").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Ratings rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.ratings";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Ratings row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.ratings";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Ratings, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/ratings/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Ratings.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Ratings.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Ratings</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Ratings.</p>
-		 *
-		 * <p>Use {@link Ratings#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Ratings.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Ratings.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Ratings.CHANGED, value);
-				return this;
-			}
-			public Builder setTrackRestId(long value) {
-				mValues.put(Ratings.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setRating(long value) {
-				mValues.put(Ratings.RATING, value);
-				return this;
-			}
-			public Builder setUsername(String value) {
-				mValues.put(Ratings.USERNAME, value);
-				return this;
-			}
-			public Builder setNote(String value) {
-				mValues.put(Ratings.NOTE, value);
-				return this;
-			}
-			public Builder setCountry(String value) {
-				mValues.put(Ratings.COUNTRY, value);
-				return this;
-			}
-			public Builder setDeleted(long value) {
-				mValues.put(Ratings.DELETED, value);
-				return this;
-			}
-			public Builder setApproved(long value) {
-				mValues.put(Ratings.APPROVED, value);
-				return this;
-			}
-			public Builder setAndroidid(String value) {
-				mValues.put(Ratings.ANDROIDID, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			viewUris.add(Ratingsum.CONTENT_URI);
-			viewUris.add(TracksGesSum.CONTENT_URI);
 			viewUris.add(Tracksges.CONTENT_URI);
 			
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
@@ -1163,85 +768,7 @@ public class MxInfoDBContract  {
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
 	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Series.</p>
-	 */
-	public static class Series implements SeriesColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("series").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Series rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.series";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Series row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.series";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Series, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/series/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Series.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Series.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Series</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Series.</p>
-		 *
-		 * <p>Use {@link Series#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Series.CONTENT_URI);
-			}
-			
-			public Builder setRestId(long value) {
-				mValues.put(Series.REST_ID, value);
-				return this;
-			}
-			public Builder setChanged(long value) {
-				mValues.put(Series.CHANGED, value);
-				return this;
-			}
-			public Builder setName(String value) {
-				mValues.put(Series.NAME, value);
-				return this;
-			}
-			public Builder setSeriesUrl(String value) {
-				mValues.put(Series.SERIES_URL, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			viewUris.add(Events2series.CONTENT_URI);
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
+
 	/**
 	 * <p>Column definitions and helper methods to work with the Tracks.</p>
 	 */
@@ -2094,162 +1621,7 @@ public class MxInfoDBContract  {
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
 	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Events2series.</p>
-	 */
-	public static class Events2series implements Events2seriesColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("events2series").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Events2series rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.events2series";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Events2series row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.events2series";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Events2series, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/events2series/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Events2series.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Events2series.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Events2series</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Events2series.</p>
-		 *
-		 * <p>Use {@link Events2series#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Events2series.CONTENT_URI);
-			}
-			
-			public Builder setTrackRestId(long value) {
-				mValues.put(Events2series.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setSeriesRestId(long value) {
-				mValues.put(Events2series.SERIES_REST_ID, value);
-				return this;
-			}
-			public Builder setComment(String value) {
-				mValues.put(Events2series.COMMENT, value);
-				return this;
-			}
-			public Builder setApproved(long value) {
-				mValues.put(Events2series.APPROVED, value);
-				return this;
-			}
-			public Builder setEventDate(long value) {
-				mValues.put(Events2series.EVENT_DATE, value);
-				return this;
-			}
-			public Builder setSeriesname(String value) {
-				mValues.put(Events2series.SERIESNAME, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Eventsum.</p>
-	 */
-	public static class Eventsum implements EventsumColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("eventsum").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Eventsum rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.eventsum";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Eventsum row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.eventsum";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Eventsum, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/eventsum/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Eventsum.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Eventsum.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Eventsum</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Eventsum.</p>
-		 *
-		 * <p>Use {@link Eventsum#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Eventsum.CONTENT_URI);
-			}
-			
-			public Builder setTrackRestId(long value) {
-				mValues.put(Eventsum.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setEventcount(long value) {
-				mValues.put(Eventsum.EVENTCOUNT, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
+
 	/**
 	 * <p>Column definitions and helper methods to work with the Picturesum.</p>
 	 */
@@ -2307,80 +1679,6 @@ public class MxInfoDBContract  {
 			}
 			public Builder setPicturecount(long value) {
 				mValues.put(Picturesum.PICTURECOUNT, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
-	/**
-	 * <p>Column definitions and helper methods to work with the Ratingsum.</p>
-	 */
-	public static class Ratingsum implements RatingsumColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("ratingsum").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many Ratingsum rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxinfodb.ratingsum";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single Ratingsum row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxinfodb.ratingsum";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in Ratingsum, 
-		 * eg:- content://info.mx.tracks.sqlite.mxinfodb/ratingsum/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(Ratingsum.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(Ratingsum.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for Ratingsum</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for Ratingsum.</p>
-		 *
-		 * <p>Use {@link Ratingsum#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), Ratingsum.CONTENT_URI);
-			}
-			
-			public Builder setTrackRestId(long value) {
-				mValues.put(Ratingsum.TRACK_REST_ID, value);
-				return this;
-			}
-			public Builder setRatingcount(long value) {
-				mValues.put(Ratingsum.RATINGCOUNT, value);
-				return this;
-			}
-			public Builder setRatingavg(double value) {
-				mValues.put(Ratingsum.RATINGAVG, value);
 				return this;
 			}
 		}
@@ -2667,10 +1965,6 @@ public class MxInfoDBContract  {
 			}
 			public Builder setIndoor(long value) {
 				mValues.put(TracksGesSum.INDOOR, value);
-				return this;
-			}
-			public Builder setRating(String value) {
-				mValues.put(TracksGesSum.RATING, value);
 				return this;
 			}
 			public Builder setPicturecount(String value) {
@@ -2967,8 +2261,12 @@ public class MxInfoDBContract  {
 				mValues.put(Tracksges.INDOOR, value);
 				return this;
 			}
-			public Builder setRating(String value) {
-				mValues.put(Tracksges.RATING, value);
+			public Builder setPicturecount(String value) {
+				mValues.put(Tracksges.PICTURECOUNT, value);
+				return this;
+			}
+			public Builder setEventcount(String value) {
+				mValues.put(Tracksges.EVENTCOUNT, value);
 				return this;
 			}
 		}
@@ -3065,24 +2363,16 @@ public class MxInfoDBContract  {
 		Map<Uri, Set<Uri>> map = new HashMap<Uri, Set<Uri>>();
 		
 		map.put(Country.CONTENT_URI, Country.VIEW_URIS);
-		map.put(Events.CONTENT_URI, Events.VIEW_URIS);
 		map.put(Favorits.CONTENT_URI, Favorits.VIEW_URIS);
 		map.put(Importstatus.CONTENT_URI, Importstatus.VIEW_URIS);
-		map.put(Message.CONTENT_URI, Message.VIEW_URIS);
-		map.put(Network.CONTENT_URI, Network.VIEW_URIS);
 		map.put(Pictures.CONTENT_URI, Pictures.VIEW_URIS);
-		map.put(Ratings.CONTENT_URI, Ratings.VIEW_URIS);
 		map.put(Route.CONTENT_URI, Route.VIEW_URIS);
-		map.put(Series.CONTENT_URI, Series.VIEW_URIS);
 		map.put(Tracks.CONTENT_URI, Tracks.VIEW_URIS);
 		map.put(Trackstage.CONTENT_URI, Trackstage.VIEW_URIS);
 		map.put(Weather.CONTENT_URI, Weather.VIEW_URIS);
 		map.put(Countrycount.CONTENT_URI, Countrycount.VIEW_URIS);
 		map.put(Countrysum.CONTENT_URI, Countrysum.VIEW_URIS);
-		map.put(Events2series.CONTENT_URI, Events2series.VIEW_URIS);
-		map.put(Eventsum.CONTENT_URI, Eventsum.VIEW_URIS);
 		map.put(Picturesum.CONTENT_URI, Picturesum.VIEW_URIS);
-		map.put(Ratingsum.CONTENT_URI, Ratingsum.VIEW_URIS);
 		map.put(TracksGesSum.CONTENT_URI, TracksGesSum.VIEW_URIS);
 		map.put(Tracksges.CONTENT_URI, Tracksges.VIEW_URIS);
 		map.put(UserActivity.CONTENT_URI, UserActivity.VIEW_URIS);
@@ -3098,15 +2388,10 @@ public class MxInfoDBContract  {
 	 */						
 	public static void deleteAll() {
 		Country.delete();
-		Events.delete();
 		Favorits.delete();
 		Importstatus.delete();
-		Message.delete();
-		Network.delete();
 		Pictures.delete();
-		Ratings.delete();
 		Route.delete();
-		Series.delete();
 		Tracks.delete();
 		Trackstage.delete();
 		Weather.delete();

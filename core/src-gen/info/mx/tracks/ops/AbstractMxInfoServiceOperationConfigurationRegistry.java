@@ -23,7 +23,6 @@ public abstract class AbstractMxInfoServiceOperationConfigurationRegistry extend
 		registerOperationConfiguration(OpRecalcDistanceOperation.ACTION_OP_RECALC_DISTANCE, new OpRecalcDistanceOperation.Configuration());
 		registerOperationConfiguration(OpSyncFromServerOperation.ACTION_OP_SYNC_FROM_SERVER, new OpSyncFromServerOperation.Configuration());
 		registerOperationConfiguration(OpPostTrackAppovedOperation.ACTION_OP_POST_TRACK_APPOVED, new OpPostTrackAppovedOperation.Configuration());
-		registerOperationConfiguration(OpPostRatingsOperation.ACTION_OP_POST_RATINGS, new OpPostRatingsOperation.Configuration());
 		registerOperationConfiguration(OpPostImagesOperation.ACTION_OP_POST_IMAGES, new OpPostImagesOperation.Configuration());
 		registerOperationConfiguration(OpResetLocalImagesOperation.ACTION_OP_RESET_LOCAL_IMAGES, new OpResetLocalImagesOperation.Configuration());
 		registerOperationConfiguration(OpPushSharedImageOperation.ACTION_OP_PUSH_SHARED_IMAGE, new OpPushSharedImageOperation.Configuration());
