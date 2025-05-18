@@ -20,7 +20,6 @@ import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.DiskReceiver
 import info.mx.tracks.R
 import info.mx.tracks.databinding.ActivityImageSlideBinding
-import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
 import info.mx.tracks.sqlite.TracksRecord
