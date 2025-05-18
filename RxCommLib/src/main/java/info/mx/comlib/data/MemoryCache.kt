@@ -3,6 +3,7 @@ package info.mx.comlib.data
 import io.reactivex.Observable
 import java.util.*
 
+@Suppress("UNCHECKED_CAST")
 class MemoryCache {
     private val memory = HashMap<String, MemoryItem<*>>()
     fun put(key: String, value: Any?, validationPeriod: Long) {
