@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,12 +19,9 @@ public class GeoCode implements Serializable, Parcelable {
     @SerializedName("status")
     @Expose
     private String status;
-    public final static Creator<GeoCode> CREATOR = new Creator<GeoCode>() {
+    public final static Creator<GeoCode> CREATOR = new Creator<>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public GeoCode createFromParcel(Parcel in) {
             return new GeoCode(in);
         }
@@ -33,6 +31,7 @@ public class GeoCode implements Serializable, Parcelable {
         }
 
     };
+    @Serial
     private final static long serialVersionUID = 3171710963124198211L;
 
     protected GeoCode(Parcel in) {
@@ -46,10 +45,6 @@ public class GeoCode implements Serializable, Parcelable {
     public GeoCode() {
     }
 
-    /**
-     * @param results
-     * @param status
-     */
     public GeoCode(List<Result> results, String status) {
         super();
         this.results = results;
