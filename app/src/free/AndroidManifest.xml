@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:sharedUserId="android.tool.maker">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="info.mx.tracks.MxApplication"
         android:allowBackup="true"
@@ -29,8 +32,5 @@
             android:resource="@xml/ad_services_config" />
 
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
