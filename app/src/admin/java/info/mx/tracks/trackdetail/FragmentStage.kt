@@ -142,10 +142,12 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_track_detail, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.menu_detail_globus).isVisible = false
         menu.findItem(R.id.menu_detail_radar).isVisible = false
@@ -160,6 +162,7 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var res = super.onOptionsItemSelected(item)
         if (item.itemId == R.id.menu_track_edit) {
