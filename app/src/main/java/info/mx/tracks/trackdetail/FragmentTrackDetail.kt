@@ -28,6 +28,7 @@ import android.view.ContextMenu.ContextMenuInfo
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.core.widget.TextViewCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -71,7 +72,7 @@ import java.io.IOException
 import java.util.*
 
 
-class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener,
+class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, MenuProvider, LoaderManager.LoaderCallbacks<Cursor>, LocationListener,
     ConnectionCallbacks, OnConnectionFailedListener {
 
     private var adapterWeather: WeatherCursorAdapter? = null
@@ -200,8 +201,6 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         if (requireArguments().containsKey(IN_SLIDER) && requireArguments().getBoolean(IN_SLIDER)) {
             binding.trLayoutDistance.visibility = View.GONE
         }
-
-        setHasOptionsMenu(true)
 
         return view
     }
@@ -726,34 +725,14 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_track_detail, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_fragment_track_detail, menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        if (requireArguments().containsKey(IN_SLIDER) && requireArguments().getBoolean(IN_SLIDER)) {
-            menu.findItem(R.id.menu_detail_globus).isVisible = false
-            menu.findItem(R.id.menu_detail_radar).isVisible = false
-            menu.findItem(R.id.menu_event_add).isVisible = false
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        var res = true
 
-            menu.findItem(R.id.menu_detail_radar)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_detail_globus).setShowAsActionFlags(
-                MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
-            )
-            menu.findItem(R.id.menu_track_edit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_navigation).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-        } else {
-            menu.findItem(R.id.menu_detail_globus).isVisible = true
-        }
-        menu.findItem(R.id.menu_navigation).isVisible = permissionHelper.hasLocationPermission()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
-
-        when (item.itemId) {
+        when (menuItem.itemId) {
             R.id.menu_track_edit -> {
                 openEdit(recordLocalId)
                 res = true
@@ -791,11 +770,31 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             }
 
             R.id.menu_favorite -> {
-                toggleFavorite(item)
+                toggleFavorite(menuItem)
                 res = true
             }
         }
         return res
+    }
+
+    override fun onPrepareMenu(menu: Menu) {
+        if (requireArguments().containsKey(IN_SLIDER) && requireArguments().getBoolean(IN_SLIDER)) {
+            menu.findItem(R.id.menu_detail_globus).isVisible = false
+            menu.findItem(R.id.menu_detail_radar).isVisible = false
+            menu.findItem(R.id.menu_event_add).isVisible = false
+
+            menu.findItem(R.id.menu_detail_radar)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            menu.findItem(R.id.menu_detail_globus).setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+            )
+            menu.findItem(R.id.menu_track_edit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            menu.findItem(R.id.menu_navigation).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            menu.findItem(R.id.menu_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+        } else {
+            menu.findItem(R.id.menu_detail_globus).isVisible = true
+        }
+        menu.findItem(R.id.menu_navigation).isVisible = permissionHelper.hasLocationPermission()
     }
 
     fun addEvent() {
