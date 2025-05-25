@@ -246,21 +246,6 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.6.1" //    GrantPermissionRule
 }
 
-tasks.register("disableAnimation") {
-    doLast {
-        // no blinking cursor in EditView
-        def command = "adb shell settings put secure show_ime_with_hard_keyboard 0"
-        println "disableAnimation '" + command + "'"
-        def adbOutput = command.execute([], project.rootDir).text.trim()
-        println "enableMock output=" + adbOutput
-    }
-}
-
-//https://stackoverflow.com/a/36343828/1079990
-gradle.projectsEvaluated {
-    connectedPaidDebugAndroidTest.dependsOn disableAnimation
-}
-
 def generateGitChangelog() {
     def out = services.get(StyledTextOutputFactory).create("")
     out.style(Style.Normal).text("generateGitChangelog for admin, paid and free ")
