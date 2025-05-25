@@ -9,10 +9,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.GridView
 import android.widget.ListView
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
 import com.robotoworks.mechanoid.ops.Ops
@@ -27,7 +30,7 @@ import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
 import java.util.*
 
-class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
+class ActivityTrackDetail : ActivityDrawerBase(), MenuProvider, ImageCursorAdapter.OnImageListItemClick {
 
     var detailFragmentTab: FragmentTrackDetailTab? = null
 
@@ -57,6 +60,8 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
+
+        addMenuProvider(this, this, Lifecycle.State.RESUMED)
     }
 
     @SuppressLint("MissingSuperCall")
@@ -158,19 +163,18 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         transaction.commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.activity_base_edit, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val i = item.itemId
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        val i = menuItem.itemId
         if (i == R.id.menu_prev) {
             detailFragmentTab?.moveUp()
         } else if (i == R.id.menu_next) {
             detailFragmentTab?.moveDown()
         }
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(menuItem)
     }
 
     @Deprecated("Deprecated in Java", ReplaceWith("keep it like it is"))
