@@ -13,7 +13,7 @@ import info.mx.tracks.room.MxDatabase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class AdapterLocationMonitor(private val context: Context) : BaseAdapter(), KoinComponent {
 
