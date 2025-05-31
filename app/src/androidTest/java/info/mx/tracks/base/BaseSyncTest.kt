@@ -89,7 +89,11 @@ abstract class BaseSyncTest<T : AppCompatActivity> {
 
         Tasks.await(locationClient.setMockLocation(munichLocation()), 10, TimeUnit.SECONDS)
         prepareMunichCountryFilter()
+        firstTimeImport()
+        additionBeforeAction()
     }
+
+    open fun additionBeforeAction() = Unit
 
     @After
     fun unregisterIdlingResource() {
