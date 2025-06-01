@@ -110,6 +110,7 @@ public class QueryHelper {
         if (prefs.getSoilView() > -1) {
             query.expr(Tracksges.SOILTYPE, Op.EQ, prefs.getSoilView());
         }
+        Timber.d("prefs.getOnlyOpen()=%s", prefs.getOnlyOpen());
         if (prefs.getOnlyOpen()) {
             query.expr(Tracksges.TRACKSTATUS, Op.NEQ, "C");
         }

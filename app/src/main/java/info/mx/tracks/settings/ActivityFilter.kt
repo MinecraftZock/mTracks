@@ -26,6 +26,7 @@ import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.tracks.sqlite.CountryRecord
 import info.mx.tracks.sqlite.MxInfoDBContract.Country
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import timber.log.Timber
 
 class ActivityFilter : ActivityBase() {
 
@@ -258,6 +259,7 @@ class ActivityFilter : ActivityBase() {
         binding.include.tvFilterSa.setDayLayout(prefs.searchOpenSa)
         binding.include.tvFilterSo.setDayLayout(prefs.searchOpenSo)
         binding.include.filterOnlyOpen.isChecked = prefs.onlyOpen
+        Timber.d("prefs.onlyOpen=${prefs.onlyOpen}")
         binding.include.filterOnlyApproved.isChecked = prefs.onlyApproved
         binding.include.filterShowmx.isChecked = prefs.showMx
         binding.include.filterShowquad.isChecked = prefs.showQuad
