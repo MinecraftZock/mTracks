@@ -74,14 +74,6 @@ public class MxInfoDBContract {
         String CREATED = "created";
     }
 
-    interface NotesColumns {
-        String REST_ID = "restId";
-        String CHANGED = "changed";
-        String TRACK_REST_ID = "track_restId";
-        String COUNTRY = "country";
-        String NOTE = "note";
-    }
-
     interface PicturesColumns {
         String REST_ID = "restId";
         String CHANGED = "changed";
@@ -1654,6 +1646,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Trackstage.</p>
          *
          * <p>Use {@link Trackstage#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
@@ -2267,6 +2260,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Events2series.</p>
          *
          * <p>Use {@link Events2series#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
@@ -2360,6 +2354,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Eventsum.</p>
          *
          * <p>Use {@link Eventsum#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
@@ -2506,6 +2501,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Ratingsum.</p>
          *
          * <p>Use {@link Ratingsum#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
@@ -2584,6 +2580,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for TracksGesSum.</p>
          *
          * <p>Use {@link TracksGesSum#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
@@ -2942,6 +2939,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Tracksges.</p>
          *
          * <p>Use {@link Tracksges#newBuilder()} to create new builder</p>
+         * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
             private Builder() {
