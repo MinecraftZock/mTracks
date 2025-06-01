@@ -11,7 +11,12 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
@@ -56,7 +61,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
@@ -166,8 +171,14 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             adapterTracksSort = AdapterTracksSort(requireActivity())
             binding.listOverview.adapter = adapterTracksSort
         } else {
-            adapter =
-                SimpleCursorAdapter(requireActivity(), R.layout.item_track, null, ViewBinderTracks.projectionGesSum, ViewBinderTracks.toGesSum, 0)
+            adapter = SimpleCursorAdapter(
+                requireActivity(),
+                R.layout.item_track,
+                null,
+                ViewBinderTracks.projectionGesSum,
+                ViewBinderTracks.toGesSum,
+                0
+            )
             binding.listOverview.adapter = adapter
             viewBinder = ViewBinderTracks(requireActivity(), null, true)
             adapter!!.viewBinder = viewBinder
@@ -483,11 +494,12 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             loaderManager.initLoader(LOADER_PROGRESS, arguments, this)
         } else {
             //sort by distance
-            addDisposable(mxMemDatabase
-                .tracksDistanceDao().all
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe { tracks -> adapterTracksSort!!.updateTracks(tracks) })
+            addDisposable(
+                mxMemDatabase
+                    .tracksDistanceDao().all
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe { tracks -> adapterTracksSort!!.updateTracks(tracks) })
         }
     }
 
@@ -554,9 +566,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
                 .addOnSuccessListener(requireActivity()) { last ->
                     if (last != null) {
-                        if (viewBinder != null) {
-                            viewBinder!!.setMyLocation(last)
-                        }
+                        viewBinder?.setMyLocation(last)
                     }
                 }
         }
