@@ -46,6 +46,7 @@ import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.common.ImportStatusMessage
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.common.StageHelperExtension
@@ -54,6 +55,7 @@ import info.mx.tracks.map.MapButtonsOverlay.MapOverlayButtonsListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailHeaderListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailStyle
 import info.mx.tracks.map.cluster.MapClusterOptionsProvider
+import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.google.Routes
 import info.mx.tracks.room.MxDatabase
@@ -226,6 +228,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        OpSyncFromServerOperation.importStatusMessage.removeObservers(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -261,6 +264,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
         } else if (prefs.mapLatitude != 0f) {
             interestLatLng = LatLng(prefs.mapLatitude.toDouble(), prefs.mapLongitude.toDouble())
+        }
+
+        lyProgress!!.visibility = View.GONE
+        OpSyncFromServerOperation.importStatusMessage.observe(viewLifecycleOwner) { msg ->
+            onImportStatusMessage(msg)
         }
 
         locationCallback = object : LocationCallback() {
@@ -346,6 +354,15 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
+    private fun onImportStatusMessage(importStatusMessage: ImportStatusMessage) {
+        if (importStatusMessage.message.isNotBlank()) {
+            lyProgress!!.visibility = View.VISIBLE
+        } else {
+            lyProgress!!.visibility = View.GONE
+        }
+        tvProgress!!.text = importStatusMessage.message
+    }
+
     override fun setUpMap() {
         if (MxCoreApplication.isAdmin) {
             drawSurveillancePolyline()
@@ -416,7 +433,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
-        map!!.setOnMapLoadedCallback(object : com.androidmapsextensions.GoogleMap.OnMapLoadedCallback {
+        map!!.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
             override fun onMapLoaded() {
                 if (searchView != null) {
                     searchView!!.visibility = View.VISIBLE
@@ -511,8 +528,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     override fun onResume() {
         super.onResume()
 
-        loaderManager.initLoader(LOADER_PROGRESS, arguments, this)
-
         MxCoreApplication.doSync(false, false, BuildConfig.FLAVOR)
 
         setUpLocationClientIfNeeded()
@@ -549,7 +564,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         if (googleApiClient!!.isConnected) {
             LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(locationCallback!!)
         }
-        loaderManager.destroyLoader(LOADER_PROGRESS)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -833,8 +847,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             LOADER_ROUTE -> SQuery.newQuery()
                 .expr(Route.TRACK_CLIENT_ID, SQuery.Op.EQ, bundle!!.getLong(TRACK_CLIENT_ID))
                 .createSupportLoader(Route.CONTENT_URI, null, Route.CREATED)
-
-            LOADER_PROGRESS -> SQuery.newQuery().createSupportLoader(Importstatus.CONTENT_URI, null, Importstatus.CREATED + " desc")
             else -> throw RuntimeException("bad")
         }
     }
@@ -932,20 +944,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 }
             }
 
-            LOADER_PROGRESS -> {
-                cursor.moveToFirst()
-                if (cursor.count > 0 && cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != null &&
-                    cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != ""
-                ) {
-                    lyProgress!!.visibility = View.VISIBLE
-                    val txt = cursor.getString(cursor.getColumnIndex(Importstatus.MSG))
-                    tvProgress!!.text = txt
-                } else {
-                    lyProgress!!.visibility = View.GONE
-                    tvProgress!!.text = ""
-                    Timber.i("loader hide")
-                }
-            }
         }
     }
 
@@ -962,7 +960,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 polylineRoute!!.remove()
             }
 
-            LOADER_PROGRESS -> lyProgress!!.visibility = View.GONE
         }
     }
 
@@ -1167,7 +1164,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         private const val LOADER_TRACKS = 0
         private const val LOADER_STAGE = 1
         private const val LOADER_ROUTE = 2
-        private const val LOADER_PROGRESS = 3
         private val CLUSTER_SIZES = doubleArrayOf(180.0, 160.0, 144.0, 120.0, 96.0)
         private const val CLUSTER_SIZE_NR = 4
     }

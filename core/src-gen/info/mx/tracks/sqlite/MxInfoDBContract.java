@@ -60,11 +60,6 @@ public class MxInfoDBContract {
         String TRACK_REST_ID = "track_restId";
     }
 
-    interface ImportstatusColumns {
-        String MSG = "msg";
-        String CREATED = "created";
-    }
-
     interface MessageColumns {
         String REST_ID = "restId";
         String CHANGED = "changed";
@@ -658,79 +653,6 @@ public class MxInfoDBContract {
 
             public Builder setTrackRestId(long value) {
                 mValues.put(Favorits.TRACK_REST_ID, value);
-                return this;
-            }
-        }
-
-        static final Set<Uri> VIEW_URIS;
-
-        static {
-            HashSet<Uri> viewUris = new HashSet<>();
-
-
-            VIEW_URIS = Collections.unmodifiableSet(viewUris);
-        }
-    }
-
-    /**
-     * <p>Column definitions and helper methods to work with the Importstatus.</p>
-     */
-    public static class Importstatus implements ImportstatusColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("importstatus").build();
-
-        /**
-         * <p>The content type for a cursor that contains many Importstatus rows.</p>
-         */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.importstatus";
-
-        /**
-         * <p>The content type for a cursor that contains a single Importstatus row.</p>
-         */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.importstatus";
-
-        /**
-         * <p>Builds a Uri with appended id for a row in Importstatus,
-         * eg:- content://info.mx.tracks.sqlite.mxinfodb/importstatus/123.</p>
-         */
-        public static Uri buildUriWithId(long id) {
-            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
-        public static int delete() {
-            return Mechanoid.getContentResolver().delete(Importstatus.CONTENT_URI, null, null);
-        }
-
-        public static int delete(String where, String[] selectionArgs) {
-            return Mechanoid.getContentResolver().delete(Importstatus.CONTENT_URI, where, selectionArgs);
-        }
-
-        /**
-         * <p>Create a new Builder for Importstatus</p>
-         */
-        public static Builder newBuilder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Build and execute insert or update statements for Importstatus.</p>
-         *
-         * <p>Use {@link Importstatus#newBuilder()} to create new builder</p>
-         */
-        public static class Builder extends AbstractValuesBuilder {
-            private Builder() {
-                super(Mechanoid.getApplicationContext(), Importstatus.CONTENT_URI);
-            }
-
-            public Builder setMsg(String value) {
-                mValues.put(Importstatus.MSG, value);
-                return this;
-            }
-
-            public Builder setCreated(long value) {
-                mValues.put(Importstatus.CREATED, value);
                 return this;
             }
         }
@@ -3409,7 +3331,6 @@ public class MxInfoDBContract {
         map.put(Country.CONTENT_URI, Country.VIEW_URIS);
         map.put(Events.CONTENT_URI, Events.VIEW_URIS);
         map.put(Favorits.CONTENT_URI, Favorits.VIEW_URIS);
-        map.put(Importstatus.CONTENT_URI, Importstatus.VIEW_URIS);
         map.put(Message.CONTENT_URI, Message.VIEW_URIS);
         map.put(Network.CONTENT_URI, Network.VIEW_URIS);
         map.put(Pictures.CONTENT_URI, Pictures.VIEW_URIS);
@@ -3443,7 +3364,6 @@ public class MxInfoDBContract {
         Country.delete();
         Events.delete();
         Favorits.delete();
-        Importstatus.delete();
         Message.delete();
         Network.delete();
         Pictures.delete();

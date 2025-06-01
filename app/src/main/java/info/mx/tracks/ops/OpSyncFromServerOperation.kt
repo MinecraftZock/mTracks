@@ -15,6 +15,7 @@ import android.provider.Settings.Secure
 import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,6 +34,7 @@ import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.common.LoggingHelper
 import info.mx.tracks.common.SecHelper
+import info.mx.tracks.common.ImportStatusMessage
 import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.*
@@ -121,7 +123,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             Timber.e(e)
             LoggingHelper.setMessage("")
             if (MxCoreApplication.isAdmin) {
-                LoggingHelper.setMessage(e.message)
+                LoggingHelper.setMessage(e.message.toString())
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             ImportIdlingResource.decrement()
@@ -130,7 +132,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             Timber.e(e)
             LoggingHelper.setMessage("")
             if (MxCoreApplication.isAdmin) {
-                LoggingHelper.setMessage(e.message)
+                LoggingHelper.setMessage(e.message.toString())
                 Toast.makeText(context.applicationContext, e.message, Toast.LENGTH_LONG).show()
             }
             LoggingHelper.setMessage("")
@@ -1269,6 +1271,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     companion object {
+        var importStatusMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
+        var importStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
 
         private const val IMPORT_REC = "Import"
         private const val DOWNLOAD = "Download/Import"

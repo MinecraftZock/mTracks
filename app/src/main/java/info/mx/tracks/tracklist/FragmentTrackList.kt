@@ -41,10 +41,12 @@ import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.common.ImportStatusMessage
 import info.mx.tracks.common.OverScrollListView
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.databinding.ScreenListWithProgressbarBinding
+import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
@@ -108,6 +110,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
 
         // ImportProgress issue
         binding.lyImportProgress.visibility = View.GONE
+        OpSyncFromServerOperation.importStatusMessage.observe(viewLifecycleOwner) { msg ->
+            onImportStatusMessage(msg)
+        }
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -129,6 +134,16 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        OpSyncFromServerOperation.importStatusMessage.removeObservers(this)
+    }
+
+    private fun onImportStatusMessage(importStatusMessage: ImportStatusMessage) {
+        if (importStatusMessage.message.isNotBlank()) {
+            binding.lyImportProgress.visibility = View.VISIBLE
+        } else {
+            binding.lyImportProgress.visibility = View.GONE
+        }
+        binding.containerProgress.textProgress.text = importStatusMessage.message
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -407,8 +422,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                 }
                 return query.createSupportLoader(TracksGesSum.CONTENT_URI, null, order)
             }
-//            LOADER_PROGRESS
-            else -> return SQuery.newQuery().createSupportLoader(Importstatus.CONTENT_URI, null, Importstatus.CREATED + " desc")
+
+            else -> throw Exception("Importstatus removed")
         }
     }
 
@@ -435,23 +450,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                 }
                 Timber.i("onLoadFinished Tracks count:${cursor.count} loaderId:${loader.id}")
             }
-
-            LOADER_PROGRESS -> {
-                cursor.moveToFirst()
-                if (cursor.count > 0 && cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != null &&
-                    cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != ""
-                ) {
-                    binding.lyImportProgress.visibility = View.VISIBLE
-                    // showImportElements(400);
-                    val txt = cursor.getString(cursor.getColumnIndex(Importstatus.MSG))
-                    binding.containerProgress.textProgress.text = txt
-                } else {
-                    binding.lyImportProgress.visibility = View.GONE
-                    //                    hideImportElements(400);
-                    binding.containerProgress.textProgress.text = ""
-                    Timber.i("loader hide")
-                }
-            }
         }
     }
 
@@ -460,8 +458,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             LOADER_TRACKS -> if (sortOrder != TracksGesSum.DISTANCE2LOCATION) {
                 adapter!!.swapCursor(null)
             }
-
-            LOADER_PROGRESS -> binding.lyImportProgress.visibility = View.GONE
         }
     }
 
@@ -485,7 +481,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
 
         if (adapterTracksSort == null) {
             loaderManager.restartLoader(LOADER_TRACKS, this.arguments, this)
-            loaderManager.initLoader(LOADER_PROGRESS, arguments, this)
         } else {
             //sort by distance
             addDisposable(
@@ -500,9 +495,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onPause() {
         if (adapterTracksSort == null) {
             loaderManager.destroyLoader(LOADER_TRACKS)
-            loaderManager.destroyLoader(LOADER_PROGRESS)
-            //} else {
-            //    //sort by distance
         }
 
         super.onPause()
@@ -591,7 +583,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     companion object {
         const val IS_FAVORITE = Tracks.TRACKNAME
         private const val LOADER_TRACKS = 0
-        private const val LOADER_PROGRESS = 1
         private const val FILTER = "FILTER"
         internal const val ONLY_FOREIGN = "only_foreign"
         private const val STATE_ACTIVATED_POSITION = "activated_position"

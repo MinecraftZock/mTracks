@@ -154,7 +154,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
             SQuery.newQuery().delete(MxInfoDBContract.Country.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Series.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Weather.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Importstatus.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Trackstage.CONTENT_URI)
         }
 

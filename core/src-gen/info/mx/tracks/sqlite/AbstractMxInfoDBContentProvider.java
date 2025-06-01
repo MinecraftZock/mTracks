@@ -34,8 +34,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
     public static final int SERIES_ID = 15;
     public static final int EVENTS = 16;
     public static final int EVENTS_ID = 17;
-    public static final int IMPORTSTATUS = 18;
-    public static final int IMPORTSTATUS_ID = 19;
     public static final int WEATHER = 20;
     public static final int WEATHER_ID = 21;
     public static final int MESSAGE = 22;
@@ -88,8 +86,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         matcher.addURI(authority, "series/#", SERIES_ID);
         matcher.addURI(authority, "events", EVENTS);
         matcher.addURI(authority, "events/#", EVENTS_ID);
-        matcher.addURI(authority, "importstatus", IMPORTSTATUS);
-        matcher.addURI(authority, "importstatus/#", IMPORTSTATUS_ID);
         matcher.addURI(authority, "weather", WEATHER);
         matcher.addURI(authority, "weather/#", WEATHER_ID);
         matcher.addURI(authority, "message", MESSAGE);
@@ -141,8 +137,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         contentTypes[SERIES_ID] = MxInfoDBContract.Series.ITEM_CONTENT_TYPE;
         contentTypes[EVENTS] = MxInfoDBContract.Events.CONTENT_TYPE;
         contentTypes[EVENTS_ID] = MxInfoDBContract.Events.ITEM_CONTENT_TYPE;
-        contentTypes[IMPORTSTATUS] = MxInfoDBContract.Importstatus.CONTENT_TYPE;
-        contentTypes[IMPORTSTATUS_ID] = MxInfoDBContract.Importstatus.ITEM_CONTENT_TYPE;
         contentTypes[WEATHER] = MxInfoDBContract.Weather.CONTENT_TYPE;
         contentTypes[WEATHER_ID] = MxInfoDBContract.Weather.ITEM_CONTENT_TYPE;
         contentTypes[MESSAGE] = MxInfoDBContract.Message.CONTENT_TYPE;
@@ -218,10 +212,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createEventsActions();
             case EVENTS_ID:
                 return createEventsByIdActions();
-            case IMPORTSTATUS:
-                return createImportstatusActions();
-            case IMPORTSTATUS_ID:
-                return createImportstatusByIdActions();
             case WEATHER:
                 return createWeatherActions();
             case WEATHER_ID:
@@ -341,14 +331,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
 
     protected ContentProviderActions createEventsActions() {
         return new DefaultContentProviderActions(Sources.EVENTS, false, EventsRecord.getFactory());
-    }
-
-    protected ContentProviderActions createImportstatusByIdActions() {
-        return new DefaultContentProviderActions(Sources.IMPORTSTATUS, true, ImportstatusRecord.getFactory());
-    }
-
-    protected ContentProviderActions createImportstatusActions() {
-        return new DefaultContentProviderActions(Sources.IMPORTSTATUS, false, ImportstatusRecord.getFactory());
     }
 
     protected ContentProviderActions createWeatherByIdActions() {

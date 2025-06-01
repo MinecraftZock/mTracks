@@ -28,11 +28,12 @@ import info.hannes.mechadmin_gen.sqlite.DownLoadSiteRecord
 import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract
 import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.TrackstageBrother
 import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.Videos
-import info.hannes.mechadmin_gen.sqlite.MxCalContract.ImportstatusCal
 import info.hannes.mechadmin_gen.sqlite.MxCalContract.QuellFile
 import info.hannes.mechadmin_gen.sqlite.QuellFileRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresUBase
 import info.mx.tracks.R
+import info.mx.tracks.common.ImportStatusMessage
+import info.mx.tracks.ops.OpSyncFromServerOperation
 import timber.log.Timber
 
 /**
@@ -128,9 +129,9 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
 
         // ImportProgress issue
         tvProgress = rootView.findViewById(R.id.textProgress)
-        tvProgress?.setText("")
+        tvProgress?.text = ""
         lyProgress = rootView.findViewById(R.id.lyImportProgress)
-        lyProgress?.setVisibility(View.GONE)
+        lyProgress?.visibility = View.GONE
         return rootView
     }
 
@@ -295,8 +296,26 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loaderManager.initLoader(LOADER_QUELL_FILE, this.arguments, this)
-        loaderManager.initLoader(LOADER_PROGRESS, arguments, this)
         loaderManager.initLoader(LOADER_BROTHER_TRACKS, arguments, this)
+
+        lyProgress!!.visibility = View.GONE
+        OpSyncFromServerOperation.importStatusCalMessage.observe(viewLifecycleOwner) { msg ->
+            onImportStatusMessage(msg)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        OpSyncFromServerOperation.importStatusCalMessage.removeObservers(this)
+    }
+
+    private fun onImportStatusMessage(importStatusMessage: ImportStatusMessage) {
+        if (importStatusMessage.message.isNotBlank()) {
+            lyProgress!!.visibility = View.VISIBLE
+        } else {
+            lyProgress!!.visibility = View.GONE
+        }
+        tvProgress!!.text = importStatusMessage.message
     }
 
     override fun onCreateLoader(loader: Int, bundle: Bundle?): Loader<Cursor> {
@@ -312,10 +331,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
                     QuellFile.CREATEDATE + " desc"
                 )
             }
-            LOADER_PROGRESS -> SQuery.newQuery()
-                .createSupportLoader(ImportstatusCal.CONTENT_URI, null, ImportstatusCal.CREATED)
-            else -> SQuery.newQuery()
-                .createSupportLoader(ImportstatusCal.CONTENT_URI, null, ImportstatusCal.CREATED)
+            else -> throw RuntimeException("ImportstatusCal removed")
         }
     }
 
@@ -325,22 +341,6 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
                 adapterSteps!!.notifyDataSetChanged()
             }
             LOADER_QUELL_FILE -> adapter!!.swapCursor(cursor)
-            LOADER_PROGRESS -> {
-                cursor.moveToFirst()
-                if (cursor.count > 0 && cursor.getString(
-                        cursor.getColumnIndexOrThrow(
-                            ImportstatusCal.MSG
-                        )
-                    ) != ""
-                ) {
-                    lyProgress!!.visibility = View.VISIBLE
-                    tvProgress!!.text =
-                        cursor.getString(cursor.getColumnIndexOrThrow(ImportstatusCal.MSG))
-                } else {
-                    lyProgress!!.visibility = View.GONE
-                    tvProgress!!.text = ""
-                }
-            }
         }
     }
 
@@ -350,7 +350,6 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
                 adapter!!.swapCursor(null)
                 lyProgress!!.visibility = View.GONE
             }
-            LOADER_PROGRESS -> lyProgress!!.visibility = View.GONE
         }
     }
 
@@ -394,7 +393,6 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
     companion object {
         const val ARG_ITEM_ID = "item_id"
         private const val LOADER_QUELL_FILE = 0
-        private const val LOADER_PROGRESS = 1
         private const val LOADER_BROTHER_TRACKS = 2
         private const val OP_GET_RIDER = "OP_GET_RIDER"
     }
