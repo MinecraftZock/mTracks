@@ -32,8 +32,9 @@ import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxApplication
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
+import info.mx.tracks.common.ImportStatusMessage
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
-import info.mx.tracks.sqlite.MxInfoDBContract.Importstatus
+import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
 import info.mx.tracks.sqlite.MxInfoDBOpenHelper
 import info.mx.tracks.util.NetworkUtils
@@ -99,7 +100,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         tvProgress!!.text = ""
         lyProgress = view.findViewById(R.id.lyImportProgress)
         lyProgress!!.visibility = View.GONE
-        loaderManager.initLoader(LOADER_PROGRESS, arguments, this)
         return view
     }
 
@@ -117,6 +117,10 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         mAdapter!!.viewBinder = ViewBinderDownloadSite()
         this.setHasOptionsMenu(true)
 
+        lyProgress!!.visibility = View.GONE
+        OpSyncFromServerOperation.importStatusMessage.observe(viewLifecycleOwner) { msg ->
+            onImportStatusMessage(msg)
+        }
         loaderManager.initLoader(LOADER_SITE, this.arguments, this)
         LoggingHelperAdmin.setMessage("")
 
@@ -159,6 +163,15 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     }
 
+    private fun onImportStatusMessage(importStatusMessage: ImportStatusMessage) {
+        if (importStatusMessage.message.isNotBlank()) {
+            lyProgress!!.visibility = View.VISIBLE
+        } else {
+            lyProgress!!.visibility = View.GONE
+        }
+        tvProgress!!.text = importStatusMessage.message
+    }
+
     private fun updateBackendInfo() {
         dataManagerAdmin.backendInfo.subscribe(object : BaseObserver<VersionInfo>(requireContext()) {
             @SuppressLint("SetTextI18n")
@@ -176,6 +189,11 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         check(context is Callbacks) { "Activity must implement fragment's callbacks." }
 
         mCallbacks = context
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        OpSyncFromServerOperation.importStatusMessage.removeObservers(this)
     }
 
     override fun onDetach() {
@@ -262,29 +280,14 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 val query = SQuery.newQuery() // .expr(DownLoadSite., Op.EQ, arg);
                 return query.createSupportLoader(MxCalContract.DownLoadSite.CONTENT_URI, null, MxCalContract.DownLoadSite.CREATEDATE + " desc")
             }
-//            LOADER_PROGRESS
-            else -> return SQuery.newQuery().createSupportLoader(Importstatus.CONTENT_URI, null, Importstatus.CREATED + " desc")
+
+            else -> throw Exception("Importstatus removed")
         }
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor) {
         when (loader.id) {
             LOADER_SITE -> mAdapter!!.swapCursor(cursor)
-            LOADER_PROGRESS -> {
-                cursor.moveToFirst()
-                if (cursor.count > 0 && cursor.getString(cursor.getColumnIndex(Importstatus.MSG)) != null && cursor
-                        .getString(cursor.getColumnIndex(Importstatus.MSG)) != ""
-                ) {
-                    lyProgress!!.visibility = View.VISIBLE
-                    val txt = cursor.getString(cursor.getColumnIndex(Importstatus.MSG))
-                    Timber.i("loader %s", txt)
-                    tvProgress!!.text = txt
-                } else {
-                    lyProgress!!.visibility = View.GONE
-                    tvProgress!!.text = ""
-                    Timber.i("loader %s", "hide")
-                }
-            }
         }
     }
 
@@ -294,8 +297,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 mAdapter!!.swapCursor(null)
                 lyProgress!!.visibility = View.GONE
             }
-
-            LOADER_PROGRESS -> lyProgress!!.visibility = View.GONE
         }
     }
 
@@ -303,7 +304,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         private const val STATE_ACTIVATED_POSITION = "activated_position"
         private const val LOADER_SITE = 0
-        private const val LOADER_PROGRESS = 1
         private const val SEND_MAIL = 34
 
         private val emptyCallbacks: Callbacks = object : Callbacks {
