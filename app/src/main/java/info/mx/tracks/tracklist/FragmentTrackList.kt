@@ -73,7 +73,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     private var activatedPosition = ListView.INVALID_POSITION
 
     // If non-null, this is the current filter the user has provided.
-    private var curFilter: String? = null
+    private var curFilter: String = ""
 
     private var isFav: Boolean = false
     private var diskReceiver: DiskReceiver? = null
@@ -140,11 +140,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FILTER)) {
-            curFilter = savedInstanceState.getString(FILTER)
+            curFilter = savedInstanceState.getString(FILTER)!!
             if (searchView != null) {
-                if (searchAutoComplete != null) {
-                    searchAutoComplete!!.setText(curFilter)
-                }
+                searchAutoComplete?.setText(curFilter)
                 searchView!!.isIconified = false
                 Timber.d("searchView %s", curFilter)
             }
@@ -290,7 +288,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
         }
 
-        if (searchView != null && curFilter != null && curFilter != "") {
+        if (searchView != null && curFilter.isNotBlank()) {
             if (searchAutoComplete != null) {
                 searchAutoComplete!!.setText(curFilter)
             }
@@ -331,10 +329,10 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
             searchView!!.setIconifiedByDefault(true)
             searchView!!.setOnQueryTextListener(queryTextListener)
-            if (curFilter != null && curFilter != "") {
+            if (curFilter.isNotBlank()) {
                 if (searchAutoComplete != null) {
                     searchItem.expandActionView()
-                    //                    searchView.setIconified(false);
+                    // searchView.setIconified(false);
                     searchAutoComplete!!.setText(curFilter)
                 }
             }
@@ -342,13 +340,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     protected fun setFilter2Fragment(filterString: String) {
-        if (curFilter == null) {
-            curFilter = ""
-        }
-
         if (curFilter != filterString && isAdded) {
             curFilter = filterString
-            if (curFilter != null && curFilter != "") {
+            if (curFilter.isNotBlank()) {
                 searchView!!.isIconified = false
             }
             loaderManager.restartLoader(LOADER_TRACKS, this@FragmentTrackList.arguments, this@FragmentTrackList)
