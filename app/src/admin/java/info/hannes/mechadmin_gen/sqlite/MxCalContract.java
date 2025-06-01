@@ -600,76 +600,6 @@ public class MxCalContract  {
 			VIEW_URIS = Collections.unmodifiableSet(viewUris);
 		}
 	}
-	/**
-	 * <p>Column definitions and helper methods to work with the ImportstatusCal.</p>
-	 */
-	public static class ImportstatusCal implements ImportstatusCalColumns, BaseColumns {
-	    public static final Uri CONTENT_URI = 
-				BASE_CONTENT_URI.buildUpon().appendPath("importstatusCal").build();
-	
-		/**
-		 * <p>The content type for a cursor that contains many ImportstatusCal rows.</p>
-		 */
-	    public static final String CONTENT_TYPE =
-	            "vnd.android.cursor.dir/vnd.mxcal.importstatusCal";
-	
-		/**
-		 * <p>The content type for a cursor that contains a single ImportstatusCal row.</p>
-		 */
-		public static final String ITEM_CONTENT_TYPE =
-			"vnd.android.cursor.item/vnd.mxcal.importstatusCal";
-	
-		/**
-		 * <p>Builds a Uri with appended id for a row in ImportstatusCal, 
-		 * eg:- content://info.hannes.mechadmin.sqlite.mxcal/importstatuscal/123.</p>
-		 */
-	    public static Uri buildUriWithId(long id) {
-	        return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-	    }
-		public static int delete() {
-			return Mechanoid.getContentResolver().delete(ImportstatusCal.CONTENT_URI, null, null);
-		}
-		
-		public static int delete(String where, String[] selectionArgs) {
-			return Mechanoid.getContentResolver().delete(ImportstatusCal.CONTENT_URI, where, selectionArgs);
-		}
-		
-		/**
-		 * <p>Create a new Builder for ImportstatusCal</p>
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-		
-		/**
-		 * <p>Build and execute insert or update statements for ImportstatusCal.</p>
-		 *
-		 * <p>Use {@link ImportstatusCal#newBuilder()} to create new builder</p>
-		 */
-		public static class Builder extends AbstractValuesBuilder {
-			private Builder() {
-				super(Mechanoid.getApplicationContext(), ImportstatusCal.CONTENT_URI);
-			}
-			
-			public Builder setMsg(String value) {
-				mValues.put(ImportstatusCal.MSG, value);
-				return this;
-			}
-			public Builder setCreated(long value) {
-				mValues.put(ImportstatusCal.CREATED, value);
-				return this;
-			}
-		}
-		
-		static final Set<Uri> VIEW_URIS;
-		
-		static {
-			HashSet<Uri> viewUris =  new HashSet<Uri>();
-	
-			
-			VIEW_URIS = Collections.unmodifiableSet(viewUris);
-		}
-	}
 
 	/**
 	 * <p>Column definitions and helper methods to work with the QuellFileSmall.</p>
@@ -766,7 +696,6 @@ public class MxCalContract  {
 		map.put(MxSeriesTrack.CONTENT_URI, MxSeriesTrack.VIEW_URIS);
 		map.put(MxTrack.CONTENT_URI, MxTrack.VIEW_URIS);
 		map.put(QuellFile.CONTENT_URI, QuellFile.VIEW_URIS);
-		map.put(ImportstatusCal.CONTENT_URI, ImportstatusCal.VIEW_URIS);
 		map.put(QuellFileSmall.CONTENT_URI, QuellFileSmall.VIEW_URIS);
 		
 		REFERENCING_VIEWS = Collections.unmodifiableMap(map);
@@ -784,6 +713,5 @@ public class MxCalContract  {
 		MxSeriesTrack.delete();
 		MxTrack.delete();
 		QuellFile.delete();
-		ImportstatusCal.delete();
 	}
 }

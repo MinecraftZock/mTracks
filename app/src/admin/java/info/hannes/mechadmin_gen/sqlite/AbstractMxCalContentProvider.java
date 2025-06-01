@@ -28,8 +28,6 @@ public abstract class AbstractMxCalContentProvider extends MechanoidContentProvi
 	protected static final int MX_TRACK_ID = 7;
 	protected static final int QUELL_FILE = 8;
 	protected static final int QUELL_FILE_ID = 9;
-	protected static final int IMPORTSTATUS_CAL = 10;
-	protected static final int IMPORTSTATUS_CAL_ID = 11;
 
 	protected static final int QUELL_FILE_SMALL = 12;
 	protected static final int QUELL_FILE_SMALL_ID = 13;
@@ -53,8 +51,6 @@ public abstract class AbstractMxCalContentProvider extends MechanoidContentProvi
 		matcher.addURI(authority, "MxTrack/#", MX_TRACK_ID);
 		matcher.addURI(authority, "QuellFile", QUELL_FILE);
 		matcher.addURI(authority, "QuellFile/#", QUELL_FILE_ID);
-		matcher.addURI(authority, "importstatusCal", IMPORTSTATUS_CAL);
-		matcher.addURI(authority, "importstatusCal/#", IMPORTSTATUS_CAL_ID);
 		matcher.addURI(authority, "QuellFileSmall", QUELL_FILE_SMALL);
 		matcher.addURI(authority, "QuellFileSmall/#", QUELL_FILE_SMALL_ID);
 
@@ -76,8 +72,6 @@ public abstract class AbstractMxCalContentProvider extends MechanoidContentProvi
 		contentTypes[MX_TRACK_ID] = MxCalContract.MxTrack.ITEM_CONTENT_TYPE;
 		contentTypes[QUELL_FILE] = MxCalContract.QuellFile.CONTENT_TYPE;
 		contentTypes[QUELL_FILE_ID] = MxCalContract.QuellFile.ITEM_CONTENT_TYPE;
-		contentTypes[IMPORTSTATUS_CAL] = MxCalContract.ImportstatusCal.CONTENT_TYPE;
-		contentTypes[IMPORTSTATUS_CAL_ID] = MxCalContract.ImportstatusCal.ITEM_CONTENT_TYPE;
 		contentTypes[QUELL_FILE_SMALL] = MxCalContract.QuellFileSmall.CONTENT_TYPE;
 		contentTypes[QUELL_FILE_SMALL_ID] = MxCalContract.QuellFileSmall.ITEM_CONTENT_TYPE;
 
@@ -117,10 +111,6 @@ public abstract class AbstractMxCalContentProvider extends MechanoidContentProvi
 				return createQuellFileActions();
 			case QUELL_FILE_ID:
 				return createQuellFileByIdActions();
-			case IMPORTSTATUS_CAL:
-				return createImportstatusCalActions();
-			case IMPORTSTATUS_CAL_ID:
-				return createImportstatusCalByIdActions();
 			case QUELL_FILE_SMALL:
 				return createQuellFileSmallActions();
 			case QUELL_FILE_SMALL_ID:
@@ -168,14 +158,6 @@ public abstract class AbstractMxCalContentProvider extends MechanoidContentProvi
 
     protected ContentProviderActions createQuellFileActions() {
     	return new DefaultContentProviderActions(Sources.QUELL_FILE, false, QuellFileRecord.getFactory());
-    }
-
-    protected ContentProviderActions createImportstatusCalByIdActions() {
-    	return new DefaultContentProviderActions(Sources.IMPORTSTATUS_CAL, true, ImportstatusCalRecord.getFactory());
-    }
-
-    protected ContentProviderActions createImportstatusCalActions() {
-    	return new DefaultContentProviderActions(Sources.IMPORTSTATUS_CAL, false, ImportstatusCalRecord.getFactory());
     }
 
     protected ContentProviderActions createQuellFileSmallByIdActions() {

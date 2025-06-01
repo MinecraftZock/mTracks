@@ -1272,6 +1272,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     companion object {
         var importStatusMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
+        var importStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
 
         private const val IMPORT_REC = "Import"
         private const val DOWNLOAD = "Download/Import"

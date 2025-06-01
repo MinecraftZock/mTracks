@@ -178,15 +178,15 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
             LoggingHelperAdmin.setMessage("")
         } catch (e: NullPointerException) {
             Timber.e(e)
-            LoggingHelperAdmin.setMessage(e.message)
+            LoggingHelperAdmin.setMessage(e.message.toString())
             return OperationResult.error(e)
         } catch (e: IllegalStateException) {
             Timber.e(e)
-            LoggingHelperAdmin.setMessage(e.message)
+            LoggingHelperAdmin.setMessage(e.message.toString())
             return OperationResult.error(e)
         } catch (e1: Exception) {
             Timber.e(e1)
-            LoggingHelperAdmin.setMessage(e1.message)
+            LoggingHelperAdmin.setMessage(e1.message.toString())
         }
         return OperationResult.ok(bundle)
     }
