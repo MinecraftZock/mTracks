@@ -52,7 +52,7 @@ android {
 dependencies {
     //implementation project(path: ":access")
     api fileTree(dir: "libs", include: ["*.aar"])
-    api "com.github.hannesa2:mechanoid:4.3"
+    api "com.github.hannesa2:mechanoid:4.5"
     api project(path: ":RxCommLib")
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "net.lingala.zip4j:zip4j:2.11.5"
