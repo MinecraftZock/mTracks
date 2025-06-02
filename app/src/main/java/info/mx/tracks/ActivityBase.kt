@@ -2,7 +2,6 @@ package info.mx.tracks
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import com.robotoworks.mechanoid.ops.OperationServiceListener
 import com.robotoworks.mechanoid.ops.Ops
@@ -14,6 +13,7 @@ import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import org.koin.android.ext.android.inject
+import androidx.core.net.toUri
 
 abstract class ActivityBase : ActivityRx() {
 
@@ -74,9 +74,9 @@ abstract class ActivityBase : ActivityRx() {
             .setCancelable(true)
             .setNegativeButton(R.string.jump_google_play_store) { _, _ ->
                 try {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPROPackageName")))
+                    startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$appPROPackageName".toUri()))
                 } catch (anfe: android.content.ActivityNotFoundException) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$appPROPackageName")))
+                    startActivity(Intent(Intent.ACTION_VIEW, "http://play.google.com/store/apps/details?id=$appPROPackageName".toUri()))
                 }
             }
             .setPositiveButton(android.R.string.ok, null)
