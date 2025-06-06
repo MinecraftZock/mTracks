@@ -229,7 +229,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
     implementation "com.google.android.libraries.places:places:4.3.1"
     implementation "com.android.volley:volley:1.2.1" // maybe no more needed
-    implementation "com.google.maps.android:android-maps-utils:3.13.0"
+    implementation "com.google.maps.android:android-maps-utils:3.14.0"
 
     // UiAutomator Testing (maybe obsolete)
     androidTestImplementation "androidx.test.uiautomator:uiautomator:2.3.0"
