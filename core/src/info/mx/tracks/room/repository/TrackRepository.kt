@@ -3,6 +3,8 @@ package info.mx.tracks.room.repository
 import info.mx.tracks.room.MxCoreDatabase
 import info.mx.tracks.room.entity.Track
 import info.mx.tracks.room.entity.Picture
+import info.mx.tracks.room.entity.Favorit
+import info.mx.tracks.room.entity.Country
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.io.File
@@ -11,6 +13,8 @@ class TrackRepository(private val database: MxCoreDatabase) {
     
     private val trackDao = database.trackDao()
     private val pictureDao = database.pictureDao()
+    private val favoritDao = database.favoritDao()
+    private val countryDao = database.countryDao()
     
     fun getAllTracks(): Flow<List<Track>> = trackDao.getAllTracks()
     
@@ -54,6 +58,38 @@ class TrackRepository(private val database: MxCoreDatabase) {
     
     suspend fun deletePictureById(id: Long) = pictureDao.deletePictureById(id)
     
+    // Favorit operations
+    fun getAllFavorits(): Flow<List<Favorit>> = favoritDao.getAllFavorits()
+    
+    suspend fun getFavoritById(id: Long): Favorit? = favoritDao.getFavoritById(id)
+    
+    suspend fun getFavoritByTrackRestId(trackRestId: Long): Favorit? = favoritDao.getFavoritByTrackRestId(trackRestId)
+    
+    fun getFavoriteTrackIds(): Flow<List<Long>> = favoritDao.getFavoriteTrackIds()
+    
+    suspend fun insertFavorit(favorit: Favorit): Long = favoritDao.insertFavorit(favorit)
+    
+    suspend fun deleteFavorit(favorit: Favorit) = favoritDao.deleteFavorit(favorit)
+    
+    suspend fun deleteFavoritByTrackRestId(trackRestId: Long) = favoritDao.deleteFavoritByTrackRestId(trackRestId)
+    
+    // Country operations
+    fun getAllCountries(): Flow<List<Country>> = countryDao.getAllCountries()
+    
+    suspend fun getCountryById(id: Long): Country? = countryDao.getCountryById(id)
+    
+    suspend fun getCountryByCode(countryCode: String): Country? = countryDao.getCountryByCode(countryCode)
+    
+    fun getVisibleCountries(): Flow<List<Country>> = countryDao.getVisibleCountries()
+    
+    suspend fun insertCountry(country: Country): Long = countryDao.insertCountry(country)
+    
+    suspend fun insertCountries(countries: List<Country>) = countryDao.insertCountries(countries)
+    
+    suspend fun updateCountryVisibility(id: Long, show: Long) = countryDao.updateCountryVisibility(id, show)
+    
+    suspend fun updateCountryVisibilityByCode(countryCode: String, show: Long) = countryDao.updateCountryVisibilityByCode(countryCode, show)
+    
     suspend fun clearAllData() {
         // Delete local files first
         val pictures = pictureDao.getAllPictures()
@@ -83,6 +119,8 @@ class TrackRepository(private val database: MxCoreDatabase) {
         // Clear all database tables
         pictureDao.deleteAllPictures()
         trackDao.deleteAllTracks()
+        favoritDao.deleteAllFavorits()
+        countryDao.deleteAllCountries()
         // TODO: Add other DAOs when they are implemented
     }
 }

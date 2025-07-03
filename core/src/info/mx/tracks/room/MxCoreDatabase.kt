@@ -8,14 +8,20 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import android.content.Context
 import info.mx.tracks.room.dao.TrackDao
 import info.mx.tracks.room.dao.PictureDao
+import info.mx.tracks.room.dao.FavoritDao
+import info.mx.tracks.room.dao.CountryDao
 import info.mx.tracks.room.entity.Track
 import info.mx.tracks.room.entity.Picture
+import info.mx.tracks.room.entity.Favorit
+import info.mx.tracks.room.entity.Country
 
 @Database(
     entities = [
         CapturedLatLng::class,
         Track::class,
-        Picture::class
+        Picture::class,
+        Favorit::class,
+        Country::class
     ],
     version = 2,
     exportSchema = true
@@ -25,6 +31,8 @@ abstract class MxCoreDatabase : RoomDatabase() {
     abstract fun capturedLatLngDao(): CapturedLatLngDao
     abstract fun trackDao(): TrackDao
     abstract fun pictureDao(): PictureDao
+    abstract fun favoritDao(): FavoritDao
+    abstract fun countryDao(): CountryDao
     
     companion object {
         const val DATABASE_NAME = "mx_core.db"
@@ -132,6 +140,23 @@ abstract class MxCoreDatabase : RoomDatabase() {
                         deleted INTEGER NOT NULL DEFAULT 0,
                         localfile TEXT,
                         localthumb TEXT
+                    )
+                """)
+                
+                // Create favorits table
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS favorits (
+                        _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        trackRestId INTEGER NOT NULL
+                    )
+                """)
+                
+                // Create country table
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS country (
+                        _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        country TEXT NOT NULL,
+                        show INTEGER NOT NULL DEFAULT 0
                     )
                 """)
             }
