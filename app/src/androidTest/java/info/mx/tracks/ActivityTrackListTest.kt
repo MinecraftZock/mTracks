@@ -18,7 +18,7 @@ import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.gms.location.LocationServices
-import info.mx.tracks.base.BaseSyncTest
+import info.mx.tracks.base.BaseRoomTest
 import info.mx.tracks.tracklist.ActivityTrackList
 import org.hamcrest.Matchers
 import org.junit.Rule
@@ -27,7 +27,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTrackListTest : BaseSyncTest() {
+class ActivityTrackListTest : BaseRoomTest() {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<ActivityTrackList>()
