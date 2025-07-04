@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 val backendKey = "BACKEND_PROD_URL"
-val backendUrl = keystoreProperties.getProperty(backendKey).ifEmpty { "http://backend.org" }!!
+val backendUrl: String = keystoreProperties.getProperty(backendKey).ifEmpty { "http://backend.org" }
 
 android {
     namespace = "info.mx.rxcommlibrary"
