@@ -28,7 +28,7 @@ import org.junit.Rule
 import org.junit.Test
 
 
-abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pressBack: Boolean) : BaseSyncTest() {
+abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pressBack: Boolean) : BaseRoomTest() {
 
     private val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityTrackDetail::class.java).apply {
         putExtra(FragmentUpDown.CONTENT_URI, "content://info.mx.tracks.sqlite.mxinfodb/tracksGesSum")
