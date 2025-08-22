@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "info.mx.rxcommdata"
     defaultConfig {
-        compileSdk =  35
+        compileSdk =  36
         minSdk = 23
         consumerProguardFiles.addAll(
             listOf(
