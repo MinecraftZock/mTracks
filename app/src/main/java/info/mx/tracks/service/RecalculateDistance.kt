@@ -17,6 +17,7 @@ import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
+import info.mx.tracks.ops.google.RecalculateIdlingResource
 import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.CapturedLatLng
@@ -297,6 +298,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         fun calculateDistanceOnTracks(mxMemDatabase: MxMemDatabase, location: Location?): List<TracksDistance> {
             val records = ArrayList<TracksDistance>()
+            RecalculateIdlingResource.increment(1, 1)
             mxMemDatabase.beginTransaction()
             try {
                 mxMemDatabase.tracksDistanceDao().deleteAll()
@@ -324,6 +326,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                 mxMemDatabase.setTransactionSuccessful()
             } finally {
                 mxMemDatabase.endTransaction()
+                RecalculateIdlingResource.decrement()
             }
             return records
         }
