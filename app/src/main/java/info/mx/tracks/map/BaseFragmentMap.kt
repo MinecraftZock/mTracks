@@ -1152,6 +1152,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
+    // just for testing
+    fun openDetail(bundle: Bundle?) {
+        val trackID = bundle?.getLong(FragmentUpDown.RECORD_ID_LOCAL, -1)
+        trackID?.let { openTrackInSlider(it) }
+    }
+
     companion object {
 
         private const val SEARCH_TEXT = "search_text"
