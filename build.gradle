@@ -32,7 +32,7 @@ ext {
     defaultCompileSdkVersion = 36
     defaultMinSdkVersion = 23
     defaultTargetSdkVersion = 36
-    koin_version = "4.1.0"
+    koin_version = "4.1.1"
     gsonVersion = "2.13.1"
     defaultPlayLibVersion = "21.3.0"
     room = "2.7.2"
