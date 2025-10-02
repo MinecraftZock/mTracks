@@ -178,8 +178,12 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 17
-      #      - name: Run tests
-      #        run: ./gradlew test
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: Run tests
+        run: ./gradlew test
       - name: gradle check
         run: ./gradlew lintDebug # ktlintCheck
       - name: Archive Lint report
@@ -189,4 +193,5 @@ jobs:
           name: MX-Lint-report-${{ needs.env-job.outputs.modified-branch-name }}
           path: ./**/build/reports/lint-results*.html
       - name: cleanup
+        if: ${{ always() }}
         run: ./signing/cleanup.sh
