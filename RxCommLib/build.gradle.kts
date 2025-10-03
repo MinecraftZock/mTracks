@@ -67,7 +67,7 @@ dependencies {
     api("io.reactivex.rxjava2:rxandroid:2.1.1")
     api("io.reactivex.rxjava2:rxjava:2.2.21")
 
-    val retrofitVersion = "2.11.0"
+    val retrofitVersion = "3.0.0"
     api("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     api("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
     api("com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}")
