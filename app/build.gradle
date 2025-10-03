@@ -308,7 +308,7 @@ tasks.register("tagNewVersion") {
     doLast {
         def out = services.get(StyledTextOutputFactory).create("")
         out.style(Style.Normal).text("Build new tag ")
-                .style(Style.SuccessHeader).text(getTag())
+                .style(Style.SuccessHeader).text(getDate())
                 .style(Style.Info).println(" GENERATED")
         println ""
 
@@ -337,29 +337,29 @@ static def getUnixCreateTime() {
     return process.text.toString().trim()
 }
 
-static def getTag() {
+static def getDate() {
     def process = "date +%y-%m".execute()
     def version = process.text.toString().trim()
     return version + "." + getGitCommitCount()
 }
 
 static def getVersion() {
-    return getTag() + "-" + getLatestGitHash()
+    return getDate() + "-" + getLatestGitHash()
 }
 
 static void newTag() {
-    println "Add new tag"
+    println "Create new tag"
     def processLastCommitMessage = "git log -1 --pretty=%B".execute()
     def message = processLastCommitMessage.text.toString().trim()
-    println "new message -> " + message
-    def tagCommand = "git tag -a " + getTag() + " -m \"" + message + "\""
-    println "command=" + tagCommand
+    println "last commit message -> " + message
+    def tagCommand = "git tag -a " + getDate() + " -m \"" + message + "\""
+    println "git command=" + tagCommand
 
     def sOut = new StringBuilder(), sErr = new StringBuilder()
     def process = ["bash", "-c", tagCommand, "-m", message].execute()
     process.consumeProcessOutput(sOut, sErr)
     process.waitForOrKill(1000)
-    println "out> $sOut err> $sErr"
+    println "out: $sOut err: $sErr"
 }
 
 static void pushTag() {
@@ -367,5 +367,5 @@ static void pushTag() {
     def process = "git push --tags".execute()
     process.consumeProcessOutput(sOut, sErr)
     process.waitForOrKill(2000)
-    println "out> $sOut err> $sErr"
+    println "pushTag: $sOut error: $sErr"
 }
