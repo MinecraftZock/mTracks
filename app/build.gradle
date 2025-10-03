@@ -32,11 +32,11 @@ def unixTime = "UNIX_TIME_CREATED"
 android {
     namespace = "info.mx.tracks"
     defaultConfig {
-        compileSdk = defaultCompileSdkVersion
-        targetSdkVersion defaultTargetSdkVersion
+        compileSdk = 36
+        targetSdkVersion 36
 
         versionCode getGitCommitCount()
-        minSdk = defaultMinSdkVersion
+        minSdk = 23
         versionName = getVersion()
 
         resValue "string", backendKey, backendUrl.toString()
@@ -180,11 +180,11 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics:20.0.1"
 
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:3.6.1"
     freeImplementation "com.google.android.gms:play-services-ads:24.5.0"
 
     // Koin main features for Android
+    def koin_version = "4.1.1"
     implementation "io.insert-koin:koin-android:$koin_version"
 
     // Java Compatibility
@@ -211,9 +211,10 @@ dependencies {
     implementation "androidx.browser:browser:1.9.0"
     implementation "androidx.vectordrawable:vectordrawable-animated:1.2.0"
 
+    def room = "2.7.2"
     implementation "androidx.room:room-runtime:$room"
     ksp "androidx.room:room-compiler:$room"
-    implementation "androidx.room:room-rxjava2:$room"
+    implementation "androidx.room:room-rxjava2:2.8.1"
     implementation "androidx.room:room-testing:$room"
 
     implementation "com.github.AppDevNext:ChangeLog:3.7.1"
@@ -222,11 +223,11 @@ dependencies {
     // core
     implementation "com.github.hannesa2:mechanoid:4.5"
     implementation project(path: ":RxCommLib")
-    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.google.code.gson:gson:2.13.2"
     implementation "net.lingala.zip4j:zip4j:2.11.5"
     implementation "com.github.hannesa2:android-emulator-detector:1.5"
     implementation "com.google.android.gms:play-services-maps:19.2.0"
-    implementation "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
+    implementation "com.google.android.gms:play-services-location:21.3.0"
     implementation "com.google.android.libraries.places:places:4.4.1"
     implementation "com.android.volley:volley:1.2.1" // maybe no more needed
     implementation "com.google.maps.android:android-maps-utils:3.14.0"

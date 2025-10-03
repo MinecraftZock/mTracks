@@ -7,9 +7,9 @@ def pushServerSleep = "PUSH_SERVER_SLEEP"
 
 android {
     defaultConfig {
-        minSdk defaultMinSdkVersion
-        compileSdk defaultCompileSdkVersion
-        targetSdkVersion defaultTargetSdkVersion
+        minSdk = 23
+        compileSdk = 36
+        targetSdkVersion 36
         consumerProguardFiles "proguard-core.txt"
     }
     compileOptions {
@@ -54,14 +54,14 @@ dependencies {
     api fileTree(dir: "libs", include: ["*.aar"])
     api "com.github.hannesa2:mechanoid:4.5"
     api project(path: ":RxCommLib")
-    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.google.code.gson:gson:2.13.2"
     implementation "net.lingala.zip4j:zip4j:2.11.5"
     api "com.google.android.gms:play-services-maps:19.0.0"
-    api "com.google.android.gms:play-services-location:${defaultPlayLibVersion}"
+    api "com.google.android.gms:play-services-location:21.3.0"
     implementation "com.google.android.libraries.places:places:4.1.0"
 
     // Koin main features for Android
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android:4.1.1"
 
     api "androidx.legacy:legacy-support-v4:1.6.1"
     api "androidx.appcompat:appcompat:1.7.0"
