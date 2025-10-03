@@ -61,12 +61,6 @@ allprojects {
     tasks.withType(JavaCompile).configureEach {
         options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
     }
-
-    configurations.configureEach {
-        resolutionStrategy {
-            force("com.google.auto.value:auto-value-annotations:1.11.0")
-        }
-    }
 }
 
 tasks.register('clean', Delete) {
