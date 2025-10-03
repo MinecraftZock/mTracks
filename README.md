@@ -1,8 +1,3 @@
-MX Tracks
-=========
-
-Android App for motocross tracks
-
 Testing
 -------
 
