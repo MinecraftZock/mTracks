@@ -164,7 +164,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "../core/libs", include: ["*.aar"])
+    implementation fileTree(dir: "./libs", include: ["*.aar"])
     //implementation project(path: ":access")
     implementation project(":commonLib")
 
