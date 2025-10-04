@@ -276,7 +276,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
 
-    "androidTestImplementation"("androidx.test.ext:junit-ktx:1.2.1")
+    "androidTestImplementation"("androidx.test.ext:junit-ktx:1.3.0")
     androidTestUtil("androidx.test.services:test-services:1.6.0")
     "androidTestImplementation"("androidx.test.espresso:espresso-core:3.6.1")
     "androidTestImplementation"("androidx.test.espresso:espresso-intents:3.6.1")
