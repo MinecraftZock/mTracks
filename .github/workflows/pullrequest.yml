@@ -103,23 +103,18 @@ jobs:
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Run instrumentation tests
-        uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
-        with:
-          cmd: |
-            ./gradlew :app:connectedPaidDebugAndroidTest --continue
-          api: ${{ matrix.api }}
-          tag: ${{ matrix.tag }}
-          abi: ${{ matrix.abi }}
-          cmdOptions: -noaudio -no-boot-anim -no-window -metrics-collection
-          disableAnimations: true
-          bootTimeout: 180 # 840 seconds = 12 minutes
+        run: |
+          ./gradlew nexusOneApi30PaidDebugAndroidTest --continue
+      - name: List screenshots
+        if: ${{ always() }}
+        run: find ./app/build/outputs/managed_device_android_test_additional_output -name "*.png"
       - name: Archive screenshots ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.emulatorApi }}
           path: |
-            app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
+            app/build/outputs/managed_device_android_test_additional_output
       - name: Archive Espresso results ${{ matrix.emulatorApi }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -133,8 +128,8 @@ jobs:
           CLASSIC_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           emulatorApi: ${{ matrix.emulatorApi }}
         run: |
-          ls -la app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
-          cp app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
+          ls -la ./app/build/outputs/managed_device_android_test_additional_output/debug/flavors/paid/nexusOneApi30
+          cp ./app/build/outputs/managed_device_android_test_additional_output/debug/flavors/paid/nexusOneApi30/* screenshotsToCompare${{ matrix.emulatorApi }}
           echo ${{ env.resourceRunID }}
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
