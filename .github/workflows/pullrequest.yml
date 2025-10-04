@@ -33,8 +33,9 @@ jobs:
         os: [ macos-15 ]
         java_version: [ 17 ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v5
         with:
@@ -163,8 +164,9 @@ jobs:
       matrix:
         os: [ ubuntu-22.04 ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
@@ -199,8 +201,9 @@ jobs:
         os: [ macOS-14 ]
         java_version: [ 17 ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:

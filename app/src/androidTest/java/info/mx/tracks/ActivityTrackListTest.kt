@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.location.Location
 import android.location.LocationManager
-import androidx.test.core.app.ApplicationProvider
 import android.widget.ListView
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
