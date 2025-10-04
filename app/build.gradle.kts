@@ -347,7 +347,7 @@ tasks.register("tagNewVersion") {
     description = "Before we test, then a tag is crated"
 
     doLast {
-        newTag()
+        addNewTag()
         pushTag()
     }
 }
@@ -357,15 +357,19 @@ play {
     track = "alpha"
 }
 
-fun newTag() {
+fun addNewTag() {
     val tag = getDate(onlyMonth = true) + ".${getGitCommitCount() + 2109}"
     println("Create new tag '$tag'")
     println("last commit message -> '${getLatestCommitText()}'")
     val tagCommand = "git tag -a $tag -m \"${getLatestCommitText()}\""
     println("git command=$tagCommand")
-    tagCommand.runCommand()
+    val tagResult = tagCommand.runCommand()
+    if (tagResult.isNotBlank())
+        println("addNewTag output=$tagResult")
 }
 
 fun pushTag() {
-    "git push --tags".runCommand()
+    val tagResult = "git push --tags".runCommand()
+    if (tagResult.isNotBlank())
+        println("push output=$tagResult")
 }
