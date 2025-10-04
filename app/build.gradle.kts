@@ -217,7 +217,7 @@ dependencies {
     implementation("com.github.hannesa2:FloatingActionButton:2.4.0")
 
     implementation("com.google.firebase:firebase-core:21.1.1")
-    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
     implementation("com.google.firebase:firebase-analytics:22.5.0") // (Recommended) Add Analytics
     implementation("com.google.firebase:firebase-crashlytics:20.0.1")
 
