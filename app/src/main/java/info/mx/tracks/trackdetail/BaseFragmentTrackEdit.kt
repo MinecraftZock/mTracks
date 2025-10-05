@@ -50,6 +50,7 @@ import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.databinding.FragmentTrackEditBinding
+import info.mx.tracks.map.MapIdlingResource
 import info.mx.tracks.ops.AbstractOpGetLatLngOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
 import timber.log.Timber
@@ -642,6 +643,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             mapFragment = parentFragmentManager.findFragmentById(R.id.map_edit) as FragmentMapScroll?
         }
         if (map == null && mapFragment != null) {
+            MapIdlingResource.increment()
             mapFragment.getMapAsync(OnMapReadyCallback { googleMap: GoogleMap ->
                 map = googleMap
                 map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -654,7 +656,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 map!!.setOnMarkerDragListener(this@BaseFragmentTrackEdit)
                 map!!.setOnMarkerClickListener(this@BaseFragmentTrackEdit)
                 map!!.setOnMapLoadedCallback { doAfterMapLoaded() }
-                fillMask(id)
                 setUpLocationClientIfNeeded()
             })
             id = 0
@@ -673,7 +674,10 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    protected open fun doAfterMapLoaded() = Unit
+    protected open fun doAfterMapLoaded() {
+        fillMask(id)
+        MapIdlingResource.decrement()
+    }
 
     private fun addMarker(latlng: LatLng) {
         marker?.remove()
