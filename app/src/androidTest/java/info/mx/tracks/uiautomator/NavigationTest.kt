@@ -32,15 +32,14 @@ import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
+import info.mx.tracks.base.BaseMapSyncTest
 import info.mx.tracks.map.MapIdlingResource
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestName
 import org.junit.runner.RunWith
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -52,12 +51,9 @@ import java.util.concurrent.TimeoutException
  * https://www.guru99.com/uiautomatorviewer-tutorial.html
  */
 @RunWith(AndroidJUnit4::class)
-class NavigationTest {
+class NavigationTest: BaseMapSyncTest() {
 
     private lateinit var device: UiDevice
-
-    @get:Rule
-    var nameRule = TestName()
 
     /**
      * Create launcher Intent Use PackageManager to get the launcher package name
@@ -167,7 +163,7 @@ class NavigationTest {
         if (menuMap.exists()) {
             try {
                 menuMap.click()
-            } catch (exception: UiObjectNotFoundException) {
+            } catch (_: UiObjectNotFoundException) {
                 Log.e("Menu not exist", "design_menu_item_text")
             }
         }
@@ -223,7 +219,7 @@ class NavigationTest {
         if (okButton.exists()) {
             try {
                 okButton.click()
-            } catch (ignored: UiObjectNotFoundException) {
+            } catch (_: UiObjectNotFoundException) {
             }
 
         }
