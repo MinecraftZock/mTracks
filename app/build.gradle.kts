@@ -53,6 +53,8 @@ android {
         minSdk = 23
         versionName = getVersionText()
 
+        println("versionName=${getVersionText()} versionCode=$versionCode")
+
         resValue("string", backendKey, backendUrl)
         buildConfigField("Boolean", SHOW_WEATHER, "true")
         buildConfigField("String", httpLoggingLevel, "\"NONE\"")  //NONE, BASIC, HEADERS, BODY
