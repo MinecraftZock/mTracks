@@ -49,7 +49,7 @@ android {
         compileSdk = 36
         targetSdkVersion(36)
 
-        versionCode = getGitCommitCount()
+        versionCode = getGitCommitCount(580)
         minSdk = 23
         versionName = getVersionText()
 
