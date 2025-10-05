@@ -420,20 +420,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Country.</p>
      */
     public static class Country implements CountryColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("country").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("country").build();
 
         /**
          * <p>The content type for a cursor that contains many Country rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.country";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.country";
 
         /**
          * <p>The content type for a cursor that contains a single Country row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.country";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.country";
 
         /**
          * <p>Builds a Uri with appended id for a row in Country,
@@ -494,20 +491,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Events.</p>
      */
     public static class Events implements EventsColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("events").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("events").build();
 
         /**
          * <p>The content type for a cursor that contains many Events rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.events";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.events";
 
         /**
          * <p>The content type for a cursor that contains a single Events row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.events";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.events";
 
         /**
          * <p>Builds a Uri with appended id for a row in Events,
@@ -595,20 +589,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Favorits.</p>
      */
     public static class Favorits implements FavoritsColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("favorits").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("favorits").build();
 
         /**
          * <p>The content type for a cursor that contains many Favorits rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.favorits";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.favorits";
 
         /**
          * <p>The content type for a cursor that contains a single Favorits row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.favorits";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.favorits";
 
         /**
          * <p>Builds a Uri with appended id for a row in Favorits,
@@ -663,20 +654,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Message.</p>
      */
     public static class Message implements MessageColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("message").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("message").build();
 
         /**
          * <p>The content type for a cursor that contains many Message rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.message";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.message";
 
         /**
          * <p>The content type for a cursor that contains a single Message row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.message";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.message";
 
         /**
          * <p>Builds a Uri with appended id for a row in Message,
@@ -751,20 +739,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Network.</p>
      */
     public static class Network implements NetworkColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("network").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("network").build();
 
         /**
          * <p>The content type for a cursor that contains many Network rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.network";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.network";
 
         /**
          * <p>The content type for a cursor that contains a single Network row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.network";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.network";
 
         /**
          * <p>Builds a Uri with appended id for a row in Network,
@@ -829,20 +814,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Pictures.</p>
      */
     public static class Pictures implements PicturesColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("pictures").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("pictures").build();
 
         /**
          * <p>The content type for a cursor that contains many Pictures rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.pictures";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.pictures";
 
         /**
          * <p>The content type for a cursor that contains a single Pictures row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.pictures";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.pictures";
 
         /**
          * <p>Builds a Uri with appended id for a row in Pictures,
@@ -939,20 +921,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Ratings.</p>
      */
     public static class Ratings implements RatingsColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("ratings").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("ratings").build();
 
         /**
          * <p>The content type for a cursor that contains many Ratings rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.ratings";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.ratings";
 
         /**
          * <p>The content type for a cursor that contains a single Ratings row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.ratings";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.ratings";
 
         /**
          * <p>Builds a Uri with appended id for a row in Ratings,
@@ -1055,20 +1034,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Route.</p>
      */
     public static class Route implements RouteColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("route").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("route").build();
 
         /**
          * <p>The content type for a cursor that contains many Route rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.route";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.route";
 
         /**
          * <p>The content type for a cursor that contains a single Route row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.route";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.route";
 
         /**
          * <p>Builds a Uri with appended id for a row in Route,
@@ -1143,20 +1119,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Series.</p>
      */
     public static class Series implements SeriesColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("series").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("series").build();
 
         /**
          * <p>The content type for a cursor that contains many Series rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.series";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.series";
 
         /**
          * <p>The content type for a cursor that contains a single Series row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.series";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.series";
 
         /**
          * <p>Builds a Uri with appended id for a row in Series,
@@ -1227,20 +1200,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Tracks.</p>
      */
     public static class Tracks implements TracksColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("tracks").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("tracks").build();
 
         /**
          * <p>The content type for a cursor that contains many Tracks rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.tracks";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.tracks";
 
         /**
          * <p>The content type for a cursor that contains a single Tracks row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.tracks";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.tracks";
 
         /**
          * <p>Builds a Uri with appended id for a row in Tracks,
@@ -1604,20 +1574,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Trackstage.</p>
      */
     public static class Trackstage implements TrackstageColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("trackstage").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("trackstage").build();
 
         /**
          * <p>The content type for a cursor that contains many Trackstage rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.trackstage";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.trackstage";
 
         /**
          * <p>The content type for a cursor that contains a single Trackstage row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.trackstage";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.trackstage";
 
         /**
          * <p>Builds a Uri with appended id for a row in Trackstage,
@@ -1646,6 +1613,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Trackstage.</p>
          *
          * <p>Use {@link Trackstage#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -1974,20 +1942,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Weather.</p>
      */
     public static class Weather implements WeatherColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("weather").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("weather").build();
 
         /**
          * <p>The content type for a cursor that contains many Weather rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.weather";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.weather";
 
         /**
          * <p>The content type for a cursor that contains a single Weather row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.weather";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.weather";
 
         /**
          * <p>Builds a Uri with appended id for a row in Weather,
@@ -2067,20 +2032,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Countrycount.</p>
      */
     public static class Countrycount implements CountrycountColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("countrycount").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("countrycount").build();
 
         /**
          * <p>The content type for a cursor that contains many Countrycount rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.countrycount";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.countrycount";
 
         /**
          * <p>The content type for a cursor that contains a single Countrycount row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.countrycount";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.countrycount";
 
         /**
          * <p>Builds a Uri with appended id for a row in Countrycount,
@@ -2145,20 +2107,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Countrysum.</p>
      */
     public static class Countrysum implements CountrysumColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("countrysum").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("countrysum").build();
 
         /**
          * <p>The content type for a cursor that contains many Countrysum rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.countrysum";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.countrysum";
 
         /**
          * <p>The content type for a cursor that contains a single Countrysum row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.countrysum";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.countrysum";
 
         /**
          * <p>Builds a Uri with appended id for a row in Countrysum,
@@ -2218,20 +2177,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Events2series.</p>
      */
     public static class Events2series implements Events2seriesColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("events2series").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("events2series").build();
 
         /**
          * <p>The content type for a cursor that contains many Events2series rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.events2series";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.events2series";
 
         /**
          * <p>The content type for a cursor that contains a single Events2series row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.events2series";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.events2series";
 
         /**
          * <p>Builds a Uri with appended id for a row in Events2series,
@@ -2260,6 +2216,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Events2series.</p>
          *
          * <p>Use {@link Events2series#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -2312,20 +2269,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Eventsum.</p>
      */
     public static class Eventsum implements EventsumColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("eventsum").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("eventsum").build();
 
         /**
          * <p>The content type for a cursor that contains many Eventsum rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.eventsum";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.eventsum";
 
         /**
          * <p>The content type for a cursor that contains a single Eventsum row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.eventsum";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.eventsum";
 
         /**
          * <p>Builds a Uri with appended id for a row in Eventsum,
@@ -2354,6 +2308,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Eventsum.</p>
          *
          * <p>Use {@link Eventsum#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -2386,20 +2341,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Picturesum.</p>
      */
     public static class Picturesum implements PicturesumColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("picturesum").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("picturesum").build();
 
         /**
          * <p>The content type for a cursor that contains many Picturesum rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.picturesum";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.picturesum";
 
         /**
          * <p>The content type for a cursor that contains a single Picturesum row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.picturesum";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.picturesum";
 
         /**
          * <p>Builds a Uri with appended id for a row in Picturesum,
@@ -2459,20 +2411,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Ratingsum.</p>
      */
     public static class Ratingsum implements RatingsumColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("ratingsum").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("ratingsum").build();
 
         /**
          * <p>The content type for a cursor that contains many Ratingsum rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.ratingsum";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.ratingsum";
 
         /**
          * <p>The content type for a cursor that contains a single Ratingsum row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.ratingsum";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.ratingsum";
 
         /**
          * <p>Builds a Uri with appended id for a row in Ratingsum,
@@ -2501,6 +2450,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Ratingsum.</p>
          *
          * <p>Use {@link Ratingsum#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -2538,20 +2488,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the TracksGesSum.</p>
      */
     public static class TracksGesSum implements TracksGesSumColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("tracksGesSum").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("tracksGesSum").build();
 
         /**
          * <p>The content type for a cursor that contains many TracksGesSum rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.tracksGesSum";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.tracksGesSum";
 
         /**
          * <p>The content type for a cursor that contains a single TracksGesSum row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.tracksGesSum";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.tracksGesSum";
 
         /**
          * <p>Builds a Uri with appended id for a row in TracksGesSum,
@@ -2580,6 +2527,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for TracksGesSum.</p>
          *
          * <p>Use {@link TracksGesSum#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -2897,20 +2845,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the Tracksges.</p>
      */
     public static class Tracksges implements TracksgesColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("tracksges").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("tracksges").build();
 
         /**
          * <p>The content type for a cursor that contains many Tracksges rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.tracksges";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.tracksges";
 
         /**
          * <p>The content type for a cursor that contains a single Tracksges row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.tracksges";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.tracksges";
 
         /**
          * <p>Builds a Uri with appended id for a row in Tracksges,
@@ -2939,6 +2884,7 @@ public class MxInfoDBContract {
          * <p>Build and execute insert or update statements for Tracksges.</p>
          *
          * <p>Use {@link Tracksges#newBuilder()} to create new builder</p>
+         *
          * @noinspection UnusedReturnValue, UnusedReturnValue
          */
         public static class Builder extends AbstractValuesBuilder {
@@ -3246,20 +3192,17 @@ public class MxInfoDBContract {
      * <p>Column definitions and helper methods to work with the UserActivity.</p>
      */
     public static class UserActivity implements UserActivityColumns, BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath("userActivity").build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("userActivity").build();
 
         /**
          * <p>The content type for a cursor that contains many UserActivity rows.</p>
          */
-        public static final String CONTENT_TYPE =
-                "vnd.android.cursor.dir/vnd.mxinfodb.userActivity";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.userActivity";
 
         /**
          * <p>The content type for a cursor that contains a single UserActivity row.</p>
          */
-        public static final String ITEM_CONTENT_TYPE =
-                "vnd.android.cursor.item/vnd.mxinfodb.userActivity";
+        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.userActivity";
 
         /**
          * <p>Builds a Uri with appended id for a row in UserActivity,
