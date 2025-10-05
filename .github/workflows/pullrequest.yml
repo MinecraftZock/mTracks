@@ -49,7 +49,7 @@ jobs:
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Build project
-        run: ./gradlew assembleDebug
+        run: git describe && ./gradlew assembleDebug
       - name: cleanup
         run: ./signing/cleanup.sh
   TestPro:
