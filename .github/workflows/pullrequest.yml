@@ -37,6 +37,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          fetch-tags: true
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v5
         with:
@@ -86,6 +87,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          fetch-tags: true
       - name: show envs
         run: |
           echo BRANCH_NAME=${{ needs.env-job.outputs.modified-branch-name }}
@@ -169,6 +171,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          fetch-tags: true
       - name: show envs
         run: |
           echo ${{ needs.env-job.outputs.modified-branch-name }}
@@ -207,6 +210,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          fetch-tags: true
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v4
         with:
