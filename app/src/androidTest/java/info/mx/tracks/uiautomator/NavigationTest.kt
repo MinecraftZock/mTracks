@@ -167,7 +167,7 @@ class NavigationTest {
         if (menuMap.exists()) {
             try {
                 menuMap.click()
-            } catch (exception: UiObjectNotFoundException) {
+            } catch (_: UiObjectNotFoundException) {
                 Log.e("Menu not exist", "design_menu_item_text")
             }
         }
@@ -223,7 +223,7 @@ class NavigationTest {
         if (okButton.exists()) {
             try {
                 okButton.click()
-            } catch (ignored: UiObjectNotFoundException) {
+            } catch (_: UiObjectNotFoundException) {
             }
 
         }
