@@ -19,6 +19,7 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
+val versionOffset = 2109
 val keystorePropertiesFile = rootProject.file("signing/keystore.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
@@ -49,7 +50,7 @@ android {
         compileSdk = 36
         targetSdkVersion(36)
 
-        versionCode = getGitCommitCount(580)
+        versionCode = getGitCommitCount(versionOffset)
         minSdk = 23
         versionName = getVersionText()
 
@@ -360,7 +361,7 @@ play {
 }
 
 fun addNewTag() {
-    val tag = getDate(onlyMonth = true) + ".${getGitCommitCount() + 2109}"
+    val tag = getDate(onlyMonth = true) + ".${getGitCommitCount() + versionOffset}"
     println("Create new tag '$tag'")
     println("last commit message -> '${getLatestCommitText()}'")
     val tagCommand = "git tag -a $tag -m \"${getLatestCommitText()}\""
