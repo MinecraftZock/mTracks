@@ -270,7 +270,6 @@ dependencies {
     implementation("com.google.android.libraries.places:places:4.4.1")
     implementation("com.google.maps.android:android-maps-utils:3.19.0")
 
-    // TODO UiAutomator Testing (maybe obsolete)
     "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.3.0")
     "androidTestImplementation"("org.hamcrest:hamcrest-integration:1.3")
 
