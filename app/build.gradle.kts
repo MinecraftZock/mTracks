@@ -271,8 +271,6 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1") // TODO maybe no more needed
     implementation("com.google.maps.android:android-maps-utils:3.19.0")
 
-    // TODO UiAutomator Testing (maybe obsolete)
-    "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.3.0")
     "androidTestImplementation"("org.hamcrest:hamcrest-integration:1.3")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20")
