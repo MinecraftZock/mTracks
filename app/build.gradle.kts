@@ -306,7 +306,7 @@ fun generateGitChangelog() {
     val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
         .create("an-output")
     out.style(Style.Normal).text("generateGitChangelog for admin, paid and free ")
-        .style(Style.SuccessHeader).text(getVersion())
+        .style(Style.SuccessHeader).text(getVersionText())
         .style(Style.Info).println(" GENERATED")
     println("")
 
@@ -362,17 +362,32 @@ play {
 
 fun addNewTag() {
     val tag = getDate(onlyMonth = true) + ".${getGitCommitCount() + versionOffset}"
-    println("Create new tag '$tag'")
-    println("last commit message -> '${getLatestCommitText()}'")
+    val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
+        .create("an-output")
+    out.style(Style.Normal).text("Create new tag ")
+        .style(Style.SuccessHeader).text(tag)
+    out.style(Style.Normal).text("\nlast commit message -> ")
+        .style(Style.SuccessHeader).text(getLatestCommitText())
+        .style(Style.Info).println(" ")
     val tagCommand = "git tag -a $tag -m \"${getLatestCommitText()}\""
-    println("git command=$tagCommand")
+    println(tagCommand)
     val tagResult = tagCommand.runCommand()
     if (tagResult.isNotBlank())
         println("addNewTag output=$tagResult")
+    else
+        println("addNewTag done")
 }
 
 fun pushTag() {
-    val tagResult = "git push --tags".runCommand()
+    val command = "git push --tags"
+    val tagResult = command.runCommand()
+    val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
+        .create("an-output")
     if (tagResult.isNotBlank())
         println("push output=$tagResult")
+    else {
+        out.style(Style.Normal).text("$command ")
+            .style(Style.Info).println(" SUCCESSFULLY PUSHED")
+    }
+    println("")
 }
