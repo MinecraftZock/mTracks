@@ -47,6 +47,7 @@ import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.databinding.ScreenListWithProgressbarBinding
 import info.mx.tracks.ops.OpSyncFromServerOperation
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
@@ -92,6 +93,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    private val mxDatabase: MxDatabase by inject()
 
     internal interface Callbacks {
         fun onItemSelected(id: Long)
@@ -181,7 +184,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             override fun onOverScroll(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) = Unit
         })
         if (sortOrder == TracksGesSum.DISTANCE2LOCATION) {
-            adapterTracksSort = AdapterTracksSort(requireActivity())
+            adapterTracksSort = AdapterTracksSort(requireContext(), this, mxDatabase)
             binding.listOverview.adapter = adapterTracksSort
         } else {
             adapter = SimpleCursorAdapter(
@@ -411,7 +414,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
                 }
                 val order = bundle.getString(FragmentUpDown.ORDER)!!.lowercase(Locale.getDefault())
                 Timber.i("onCreateLoader $order $curFilter")
-                isFav = order == TracksGesSum.RATING.lowercase(Locale.getDefault())
+                isFav = order == IS_FAVORITE
                 val isStage = order == TracksGesSum.APPROVED.lowercase(Locale.getDefault())
                 val isOnlyForeign = bundle.getBoolean(ONLY_FOREIGN, false)
                 var query = SQuery.newQuery()
