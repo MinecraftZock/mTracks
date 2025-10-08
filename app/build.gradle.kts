@@ -70,11 +70,6 @@ android {
             ),
         )
 
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-            arg("room.incremental", "true")
-        }
-
         sourceSets {
             getByName("androidTest") {
                 assets.srcDirs(files("$projectDir/schemas"))
@@ -83,6 +78,11 @@ android {
 //        sourceSets {
 //            androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
 //        }
+    }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
     }
 
     signingConfigs {
