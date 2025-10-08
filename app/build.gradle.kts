@@ -130,7 +130,7 @@ android {
                 resValue("string", "GOOGLE_MAP_API_KEY", "dummy")
             } else {
                 signingConfig = signingConfigs.getByName("release")
-                println("I run local and use for 'debug' the RELEASE signing")
+                println("I use for 'debug' the RELEASE signing. Reason is to run it locally")
                 buildConfigField("boolean", RUN_CI, "false")
                 resValue("string", "GOOGLE_MAP_API_KEY", mapKey.toString())
             }
