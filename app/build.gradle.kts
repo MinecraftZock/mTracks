@@ -48,13 +48,13 @@ android {
     namespace = "info.mx.tracks"
     defaultConfig {
         compileSdk = 36
-        targetSdkVersion(36)
+        targetSdk { version = release(36) }
 
         versionCode = getGitCommitCount(versionOffset)
         minSdk = 23
         versionName = getVersionText()
 
-        println("versionName=${getVersionText()} versionCode=$versionCode")
+        println("versionName=${versionName} versionCode=$versionCode")
 
         resValue("string", backendKey, backendUrl)
         buildConfigField("Boolean", SHOW_WEATHER, "true")
