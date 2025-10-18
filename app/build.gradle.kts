@@ -1,10 +1,12 @@
 import info.git.versionHelper.getGitCommitCount
 import info.git.versionHelper.getLatestCommitText
 import info.git.versionHelper.getLatestGitHash
+import info.git.versionHelper.getTagGroupedGitlog
 import info.git.versionHelper.getVersionText
 import info.shell.getDate
 import info.shell.getUnixCreateTime
 import info.shell.runCommand
+import org.gradle.internal.extensions.stdlib.toDefaultLowerCase
 import org.gradle.internal.logging.text.StyledTextOutput.Style
 import org.gradle.kotlin.dsl.support.serviceOf
 import java.io.FileInputStream
@@ -300,28 +302,6 @@ tasks.whenTaskAdded {
     }
 }
 
-fun generateGitChangelog() {
-    val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
-        .create("an-output")
-    out.style(Style.Normal).text("generateGitChangelog for admin, paid and free ")
-        .style(Style.SuccessHeader).text(getVersionText())
-        .style(Style.Info).println(" GENERATED")
-    println("")
-
-    val processMkDirAdmin = "mkdir -p app/src/admin/res/raw".runCommand()
-    if (processMkDirAdmin.isNotEmpty())
-        println("processMkDirAdmin=$processMkDirAdmin")
-    val processMkDirPaid = "mkdir -p app/src/paid/res/raw".runCommand()
-    if (processMkDirPaid.isNotEmpty())
-        println("processMkDirPaid=$processMkDirPaid")
-    val processMkDirFree = "mkdir -p app/src/free/res/raw".runCommand()
-    if (processMkDirFree.isNotEmpty())
-        println("processMkDirFree=$processMkDirFree")
-    val procGenerateAdmin = "./scripts/generateLog.sh".runCommand()
-    if (procGenerateAdmin.isNotEmpty())
-        println("procGenerateAdmin=$procGenerateAdmin")
-}
-
 tasks.register("newVersion") {
     if (gradle.startParameter.taskNames.contains("staticAnalysis")) {
         println("Running static analysis: disabling release builds!")
@@ -339,7 +319,10 @@ tasks.register("newVersion") {
 
 tasks.named("clean") {
     doLast {
-        generateGitChangelog()
+        getTagGroupedGitlog(
+            //filter = "PROD-",
+            filename = "app/src/admin/res/raw/gitlog.json"
+        )
     }
 }
 
@@ -388,4 +371,24 @@ fun pushTag() {
             .style(Style.Info).println(" SUCCESSFULLY PUSHED")
     }
     println("")
+}
+
+tasks.configureEach {
+    if (name.startsWith("generate") &&
+        name.endsWith("ResValues") &&
+        !name.contains("AndroidTest")
+    ) {
+        val flavorName = name.removePrefix("generate").removeSuffix("ResValues")
+            .removeSuffix("Debug").removeSuffix("Release")
+        val generateChangelogTask = "changelog${flavorName}"
+        println("Configuring task: $this $flavorName $generateChangelogTask")
+        doLast {
+            val filterFlavor = if (flavorName.toDefaultLowerCase() == "admin") null else "PROD-"
+            println("$name getTagGroupedGitlog on do Last $flavorName filter=$filterFlavor")
+            getTagGroupedGitlog(
+                filter = filterFlavor,
+                filename = "app/src/${flavorName.toDefaultLowerCase()}/res/raw/gitlog.json"
+            )
+        }
+    }
 }

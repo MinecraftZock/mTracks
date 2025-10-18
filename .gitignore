@@ -21,7 +21,9 @@ project.properties
 adblogcat.emulator*.log
 release
 
+# Changelogs
 gitlog.json
+
 default.txt
 
 google-services.json
