@@ -149,7 +149,7 @@ android {
             buildConfigField("boolean", RUN_CI, "false")
             buildConfigField("boolean", "FILE_LOGGING", "false")
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard.cfg",
                 "proguard_admin.cfg",
                 "proguard_admin_mechanoid.cfg",
@@ -157,7 +157,7 @@ android {
                 "proguard-RxCommAdminLib"
             )
             testProguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "$projectDir/proguard.cfg",
                 "$projectDir/proguard_admin.cfg",
                 "$projectDir/proguard_admin_mechanoid.cfg",
