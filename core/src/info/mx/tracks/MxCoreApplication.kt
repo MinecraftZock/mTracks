@@ -9,8 +9,6 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.net.ServiceClient
 import com.robotoworks.mechanoid.ops.Ops
-import info.hannes.commonlib.TrackingApplication
-import info.hannes.commonlib.TrackingApplication.Companion.appTracker
 import info.hannes.commonlib.utils.ExternalStorage
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.tracks.koin.CoreKoinContext
@@ -40,7 +38,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
         Mechanoid.init(this)
         CommLibPrefs.init(this)
 
-        TrackingApplication.applicationScope.launch(Dispatchers.Default) {
+        applicationScope.launch(Dispatchers.Default) {
             createApiClient()
             checkToRepairOrSync()
         }

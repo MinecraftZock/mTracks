@@ -384,7 +384,7 @@ tasks.configureEach {
         println("Configuring task: $this $flavorName $generateChangelogTask")
         doLast {
             val filterFlavor = if (flavorName.toDefaultLowerCase() == "admin") null else "PROD-"
-            println("$name getTagGroupedGitlog on do Last $flavorName filter=$filterFlavor")
+            println("$name getTagGroupedGitlog on doLast $flavorName filter=$filterFlavor")
             getTagGroupedGitlog(
                 filter = filterFlavor,
                 filename = "app/src/${flavorName.toDefaultLowerCase()}/res/raw/gitlog.json"
