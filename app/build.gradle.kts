@@ -230,13 +230,13 @@ dependencies {
     implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
     "freeImplementation"("com.google.android.gms:play-services-ads:24.5.0")
 
-    val koin_version = "4.1.1"
-    implementation("io.insert-koin:koin-android:$koin_version")
+    val koinVersion = "4.1.1"
+    implementation("io.insert-koin:koin-android:$koinVersion")
 
-    implementation("io.insert-koin:koin-android-compat:$koin_version")
-    implementation("io.insert-koin:koin-androidx-workmanager:$koin_version")
-    implementation("io.insert-koin:koin-androidx-navigation:$koin_version")
-    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
+    implementation("io.insert-koin:koin-android-compat:$koinVersion")
+    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
+    implementation("io.insert-koin:koin-androidx-navigation:$koinVersion")
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
     val work_version = "2.10.5"
     implementation("androidx.work:work-runtime:$work_version")
@@ -255,7 +255,7 @@ dependencies {
     val room = "2.8.2"
     implementation("androidx.room:room-runtime:$room")
     ksp("androidx.room:room-compiler:$room")
-    implementation("androidx.room:room-rxjava2:2.8.1")
+    implementation("androidx.room:room-rxjava2:$room")
     implementation("androidx.room:room-testing:$room")
 
     implementation("com.github.AppDevNext:ChangeLog:3.7.1")
