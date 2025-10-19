@@ -228,7 +228,7 @@ dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
-    "freeImplementation"("com.google.android.gms:play-services-ads:24.5.0")
+    "freeImplementation"("com.google.android.gms:play-services-ads:24.7.0")
 
     val koin_version = "4.1.1"
     implementation("io.insert-koin:koin-android:$koin_version")
