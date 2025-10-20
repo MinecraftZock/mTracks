@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
+import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentEmpty
@@ -83,7 +84,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityTrackList.javaClass.simpleName).apply()
 
         val changeLog = ChangeLog(this)
-        if (changeLog.isFirstRunEver) {
+        if (changeLog.isFirstRunEver && !MxCoreApplication.isEmulator) {
             val settingIntent = Intent(this, ActivitySetting::class.java)
             startActivity(settingIntent)
         } else if (changeLog.isFirstRun) {

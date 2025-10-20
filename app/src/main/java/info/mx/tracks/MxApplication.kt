@@ -56,6 +56,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
         }
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         isDebug = BuildConfig.DEBUG
 //        isAdmin = isDebug
@@ -74,7 +75,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
         RxJavaPlugins.setErrorHandler { throwable -> Timber.e(throwable) }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS), Context.RECEIVER_NOT_EXPORTED)
+            registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS), RECEIVER_NOT_EXPORTED)
         } else
             registerReceiver(broadcastReceiver, IntentFilter(OpSyncFromServerOperation.RECALC_TRACKS))
 
@@ -126,7 +127,6 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     @SuppressLint("HardwareIds")
     final override fun setLogging2File(base: Context?) {
-        @Suppress("ConstantConditionIf")
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugFormatTree())
         } else {
@@ -171,7 +171,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
                 var isTest: Boolean = try {
                     Class.forName("android.support.test.espresso.Espresso")
                     true
-                } catch (e: ClassNotFoundException) {
+                } catch (_: ClassNotFoundException) {
                     false
                 }
 
@@ -179,7 +179,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
                     isTest = try {
                         Class.forName("androidx.test.espresso.Espresso")
                         true
-                    } catch (e: ClassNotFoundException) {
+                    } catch (_: ClassNotFoundException) {
                         false
                     }
                 }
