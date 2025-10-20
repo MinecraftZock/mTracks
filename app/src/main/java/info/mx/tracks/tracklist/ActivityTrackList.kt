@@ -82,12 +82,12 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         this.setPhoneHasNoOptionsBtn()
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityTrackList.javaClass.simpleName).apply()
 
-        val cl = ChangeLog(this)
-        if (cl.isFirstRunEver) {
+        val changeLog = ChangeLog(this)
+        if (changeLog.isFirstRunEver) {
             val settingIntent = Intent(this, ActivitySetting::class.java)
             startActivity(settingIntent)
-        } else if (cl.isFirstRun) {
-            cl.fullLogDialog.show()
+        } else if (changeLog.isFirstRun) {
+            changeLog.fullLogDialog.show()
         }
     }
 

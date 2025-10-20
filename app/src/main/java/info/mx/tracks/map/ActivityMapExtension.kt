@@ -87,7 +87,7 @@ class ActivityMapExtension : ActivityDrawerBase() {
     }
 
     override fun onBackPressed() {
-        if (mapFragment?.onBackPressed()!!) {
+        if (mapFragment?.onFragmentBackPressed()!!) {
             super.onBackPressed()
         }
     }
