@@ -8,12 +8,9 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.Build
 import android.provider.Settings
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.multidex.MultiDex
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import info.hannes.commonlib.TrackingApplication.Companion.applicationScope
-import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
 import info.mx.tracks.koin.appModule
@@ -143,9 +140,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
     override suspend fun checkToRepairOrSync() {
         applicationScope.async {
             if (MxPreferences.getInstance().repairDB) {
-                if (MxInfoDBOpenHelper.getDatabase() != null) {
-                    MxInfoDBOpenHelper.getDatabase().close()
-                }
+                MxInfoDBOpenHelper.getDatabase()?.close()
                 val db = File(MxInfoDBOpenHelper.getDir(applicationContext))
 
                 db.delete()

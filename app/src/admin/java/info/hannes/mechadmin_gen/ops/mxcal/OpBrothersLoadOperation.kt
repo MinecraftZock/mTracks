@@ -19,7 +19,14 @@ import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
 import info.mx.tracks.sqlite.TracksRecord
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
 import java.nio.charset.Charset
 
 internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), CoreKoinComponent {
@@ -76,10 +83,7 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                 }
                 var trackDB: TracksRecord? = null
                 if (trackBrother.attributes?.city != trackBrother.attributes?.title) {
-                    Timber.d(
-                        "Namenunterschied. City:" + trackBrother.attributes?.city +
-                                " Title:" + trackBrother.attributes?.title
-                    )
+                    Timber.d("Namenunterschied. City:${trackBrother.attributes?.city} Title:${trackBrother.attributes?.title}")
                 }
                 calcDistance2TracksCrypt(
                     trackBrother.lat, trackBrother.lon, false, countryKz, context

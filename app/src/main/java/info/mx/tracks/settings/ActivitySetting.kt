@@ -39,8 +39,7 @@ class ActivitySetting : ActivityBase() {
         }
         val layoutChangeLog = findViewById<LinearLayout>(R.id.layoutChangeLog)
         layoutChangeLog.setOnClickListener {
-            val cl = ChangeLog(this@ActivitySetting)
-            cl.fullLogDialog.show()
+            ChangeLog(this@ActivitySetting).fullLogDialog.show()
         }
         val chkSurveillance = findViewById<CheckBox>(R.id.setting_surveillance)
         chkSurveillance.isChecked = prefs.agreeTrackSurveillance
