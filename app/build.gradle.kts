@@ -258,7 +258,7 @@ dependencies {
     implementation("androidx.room:room-rxjava2:$room")
     implementation("androidx.room:room-testing:$room")
 
-    implementation("com.github.AppDevNext:ChangeLog:3.7.1")
+    implementation("com.github.AppDevNext:ChangeLog:3.8")
     implementation("com.github.AppDevNext.Logcat:LogcatCrashlyticLib:3.4")
 
     // core
