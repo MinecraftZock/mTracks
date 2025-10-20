@@ -311,8 +311,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    fun onBackPressed(): Boolean {
-        Timber.d("onBackPressed()")
+    fun onFragmentBackPressed(): Boolean {
+        Timber.d("onFragmentBackPressed()")
         if (searchView != null && !searchView!!.isIconified && activity != null) {
             if (slidingDrawer!!.panelState != PanelState.HIDDEN) {
                 if (isKeyboardActive) {
