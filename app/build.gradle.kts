@@ -321,7 +321,8 @@ tasks.named("clean") {
     doLast {
         getTagGroupedGitlog(
             //filter = "PROD-",
-            filename = "app/src/admin/res/raw/gitlog.json"
+            filename = "app/src/admin/res/raw/gitlog.json",
+            logger = this.logger
         )
     }
 }
@@ -387,6 +388,7 @@ tasks.configureEach {
             println("$name getTagGroupedGitlog on doLast $flavorName filter=$filterFlavor")
             getTagGroupedGitlog(
                 filter = filterFlavor,
+                logger = this.logger,
                 filename = "app/src/${flavorName.toDefaultLowerCase()}/res/raw/gitlog.json"
             )
         }
