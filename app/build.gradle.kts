@@ -252,7 +252,7 @@ dependencies {
     implementation("androidx.browser:browser:1.9.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.2.0")
 
-    val room = "2.8.2"
+    val room = "2.8.3"
     implementation("androidx.room:room-runtime:$room")
     ksp("androidx.room:room-compiler:$room")
     implementation("androidx.room:room-rxjava2:$room")
