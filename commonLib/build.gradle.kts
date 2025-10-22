@@ -27,5 +27,5 @@ dependencies {
 
     api("com.github.matomo-org:matomo-sdk-android:4.3")
     implementation("androidx.core:core-ktx:1.15.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20")
 }
