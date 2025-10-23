@@ -227,7 +227,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics:20.0.1")
 
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
+    implementation("androidx.test.espresso:espresso-idling-resource:3.7.0")
     "freeImplementation"("com.google.android.gms:play-services-ads:24.7.0")
 
     val koinVersion = "4.1.1"
@@ -281,8 +281,8 @@ dependencies {
 
     "androidTestImplementation"("androidx.test.ext:junit-ktx:1.2.1")
     androidTestUtil("androidx.test.services:test-services:1.6.0")
-    "androidTestImplementation"("androidx.test.espresso:espresso-core:3.6.1")
-    "androidTestImplementation"("androidx.test.espresso:espresso-intents:3.6.1")
+    "androidTestImplementation"("androidx.test.espresso:espresso-core:3.7.0")
+    "androidTestImplementation"("androidx.test.espresso:espresso-intents:3.7.0")
     "androidTestImplementation"("androidx.test:rules:1.6.1") //    GrantPermissionRule
 }
 
