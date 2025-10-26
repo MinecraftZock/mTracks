@@ -3,6 +3,7 @@ import info.git.versionHelper.getLatestCommitText
 import info.git.versionHelper.getLatestGitHash
 import info.git.versionHelper.getTagGroupedGitlog
 import info.git.versionHelper.getVersionText
+import info.git.versionHelper.println
 import info.shell.getDate
 import info.shell.getUnixCreateTime
 import info.shell.runCommand
@@ -56,7 +57,7 @@ android {
         minSdk = 23
         versionName = getVersionText()
 
-        println("versionName=${versionName} versionCode=$versionCode")
+        println { "versionName=${versionName.green.bold} versionCode=${versionCode.green.bold}" }
 
         resValue("string", backendKey, backendUrl)
         buildConfigField("Boolean", SHOW_WEATHER, "true")
