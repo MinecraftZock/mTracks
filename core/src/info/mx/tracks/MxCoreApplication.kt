@@ -16,7 +16,7 @@ import info.mx.tracks.koin.coreModule
 import info.mx.tracks.ops.AbstractOpPostRatingsOperation
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.rest.MxInfo
+import info.mx.tracks.room.DatabaseManager
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
@@ -35,7 +35,8 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         setLogging2File(this)
 
-        Mechanoid.init(this)
+        // Initialize Room databases instead of mechanoid
+        DatabaseManager.getCoreDatabase(this)
         CommLibPrefs.init(this)
 
         applicationScope.launch(Dispatchers.Default) {
@@ -128,31 +129,10 @@ abstract class MxCoreApplication : MxAccessApplication() {
             }
         }
 
-        fun clearDB() {
-            // cache
-            val recThumbs = SQuery.newQuery().expr(Pictures.LOCALTHUMB, Op.NEQ, "")
-                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
-            for (rec in recThumbs) {
-                val file = File(rec.localthumb)
-                Timber.d("Delete thumb %s", rec.localthumb)
-                file.delete()
-            }
-            val recLocal = SQuery.newQuery().expr(Pictures.LOCALFILE, Op.NEQ, "")
-                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
-            for (rec in recLocal) {
-                val file = File(rec.localfile)
-                Timber.d("Delete local %s", rec.localfile)
-                file.delete()
-            }
-            SQuery.newQuery().delete(Pictures.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Ratings.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Favorits.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Tracks.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Events.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Country.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Series.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Weather.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Trackstage.CONTENT_URI)
+        suspend fun clearDB(context: Context) {
+            val trackRepository = DatabaseManager.getTrackRepository(context)
+            trackRepository.clearAllData()
+            // TODO: Clear other data when DAOs are implemented
         }
 
         @Suppress("UNUSED_ANONYMOUS_PARAMETER")
