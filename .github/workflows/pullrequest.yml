@@ -135,6 +135,8 @@ jobs:
         env:
           CLASSIC_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           emulatorApi: ${{ matrix.emulatorApi }}
+          SCREENSHOT_USER: ${{ secrets.SCREENSHOT_USER }}
+          SCREENSHOT_PASSWORD: ${{ secrets.SCREENSHOT_PASSWORD }}
         run: |
           ls -la app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
           cp app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
