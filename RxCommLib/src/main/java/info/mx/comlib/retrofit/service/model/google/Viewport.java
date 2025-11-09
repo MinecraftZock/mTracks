@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+@SuppressWarnings("JavadocDeclaration")
 public class Viewport implements Serializable, Parcelable {
 
     @SerializedName("northeast")
@@ -17,12 +18,8 @@ public class Viewport implements Serializable, Parcelable {
     @SerializedName("southwest")
     @Expose
     private Southwest_ southwest;
-    public final static Creator<Viewport> CREATOR = new Creator<Viewport>() {
+    public final static Creator<Viewport> CREATOR = new Creator<>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Viewport createFromParcel(Parcel in) {
             return new Viewport(in);
         }

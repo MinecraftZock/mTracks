@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+@SuppressWarnings("JavadocDeclaration")
 public class Southwest_ implements Serializable, Parcelable {
 
     @SerializedName("lat")
@@ -17,12 +18,8 @@ public class Southwest_ implements Serializable, Parcelable {
     @SerializedName("lng")
     @Expose
     private Double lng;
-    public final static Creator<Southwest_> CREATOR = new Creator<Southwest_>() {
+    public final static Creator<Southwest_> CREATOR = new Creator<>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Southwest_ createFromParcel(Parcel in) {
             return new Southwest_(in);
         }

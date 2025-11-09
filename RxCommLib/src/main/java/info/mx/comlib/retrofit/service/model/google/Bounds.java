@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+@SuppressWarnings("JavadocDeclaration")
 public class Bounds implements Serializable, Parcelable {
 
     @SerializedName("northeast")
@@ -17,12 +18,8 @@ public class Bounds implements Serializable, Parcelable {
     @SerializedName("southwest")
     @Expose
     private Southwest southwest;
-    public final static Creator<Bounds> CREATOR = new Creator<Bounds>() {
+    public final static Creator<Bounds> CREATOR = new Creator<>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Bounds createFromParcel(Parcel in) {
             return new Bounds(in);
         }

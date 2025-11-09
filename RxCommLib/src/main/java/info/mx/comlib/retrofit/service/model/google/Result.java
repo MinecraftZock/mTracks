@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("JavadocDeclaration")
 public class Result implements Serializable, Parcelable {
 
     @SerializedName("address_components")
@@ -29,10 +30,6 @@ public class Result implements Serializable, Parcelable {
     private List<String> types = null;
     public final static Creator<Result> CREATOR = new Creator<Result>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Result createFromParcel(Parcel in) {
             return new Result(in);
         }

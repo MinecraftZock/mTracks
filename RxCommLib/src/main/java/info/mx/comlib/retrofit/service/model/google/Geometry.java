@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+@SuppressWarnings("JavadocDeclaration")
 public class Geometry implements Serializable, Parcelable {
 
     @SerializedName("bounds")
@@ -23,12 +24,8 @@ public class Geometry implements Serializable, Parcelable {
     @SerializedName("viewport")
     @Expose
     private Viewport viewport;
-    public final static Creator<Geometry> CREATOR = new Creator<Geometry>() {
+    public final static Creator<Geometry> CREATOR = new Creator<>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Geometry createFromParcel(Parcel in) {
             return new Geometry(in);
         }
