@@ -353,9 +353,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         for (record in tracks) {
             val coder = Geocoder(context)
             try {
-                val adresses = coder.getFromLocation(SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
-                if (adresses != null && adresses.isNotEmpty()) {
-                    val country = adresses[0].countryCode
+                val addresses = coder.getFromLocation(SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
+                if (addresses != null && addresses.isNotEmpty()) {
+                    val country = addresses[0].countryCode
                     Timber.d("${record.trackname}  country:$country")
                     val stage = TrackstageRecord()
                     stage.trackRestId = record.restId
