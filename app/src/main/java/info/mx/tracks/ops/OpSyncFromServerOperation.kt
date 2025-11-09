@@ -341,7 +341,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             } else {
                 Timber.w("Network result code:%s", resultTrack.responseCode)
             }
-        } catch (ignored: ServiceException) {
+        } catch (_: ServiceException) {
         }
 
     }
@@ -354,7 +354,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val coder = Geocoder(context)
             try {
                 val adresses = coder.getFromLocation(SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
-                if (adresses != null && adresses.size > 0) {
+                if (adresses != null && adresses.isNotEmpty()) {
                     val country = adresses[0].countryCode
                     Timber.d("${record.trackname}  country:$country")
                     val stage = TrackstageRecord()
@@ -1266,7 +1266,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 LocationServices.getFusedLocationProviderClient(operationContext.applicationContext).lastLocation
                     .addOnSuccessListener { last -> lastKnown = last }
             }
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
     }
 

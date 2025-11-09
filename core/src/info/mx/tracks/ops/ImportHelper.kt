@@ -15,7 +15,7 @@ object ImportHelper {
         val coder = Geocoder(context)
         try {
             val addresses = coder.getFromLocation(latitude, longitude, 1)
-            if (addresses != null && addresses.size > 0) {
+            if (addresses != null && addresses.isNotEmpty()) {
                 val address = addresses[0]
                 countryKZ = address.countryCode
             }
@@ -33,7 +33,7 @@ object ImportHelper {
         try {
             val response = call.execute()
             if (response.code() == 200) {
-                if (response.body() != null && response.body()!!.results != null && response.body()!!.results.size > 0 &&
+                if (response.body() != null && response.body()!!.results != null && response.body()!!.results.isNotEmpty() &&
                         response.body()!!.results[0].geometry != null &&
                         response.body()!!.results[0].geometry.location != null) {
                     val location = response.body()!!.results[0].geometry.location

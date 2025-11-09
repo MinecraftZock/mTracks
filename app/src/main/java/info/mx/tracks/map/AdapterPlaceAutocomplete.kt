@@ -160,7 +160,7 @@ class AdapterPlaceAutocomplete(
             }
             resultMarkerList = arrayOfNulls(resultPredictionList.size)
             detailRequest = BooleanArray(resultPredictionList.size).toTypedArray()
-            if (resultPredictionList.size > 0) {
+            if (resultPredictionList.isNotEmpty()) {
                 notifyDataSetChanged()
             } else {
                 // The API did not return any results, invalidate the data set.

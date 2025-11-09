@@ -77,7 +77,7 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                 val addresses = geoCoder.getFromLocation(trackBrother.lat, trackBrother.lon, 1)
                 var countryKz = ""
                 addresses?.let {
-                    if (it.size > 0) {
+                    if (it.isNotEmpty()) {
                         countryKz = it[0].countryCode
                     }
                 }

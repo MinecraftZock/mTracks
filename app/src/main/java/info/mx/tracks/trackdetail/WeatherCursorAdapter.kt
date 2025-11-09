@@ -60,7 +60,7 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
             } else {
                 viewHolder.textTemp.text = ""
             }
-            if (timeDay.weather != null && timeDay.weather.size > 0) {
+            if (timeDay.weather != null && timeDay.weather.isNotEmpty()) {
                 viewHolder.textText.text = timeDay.weather[0].description
             } else {
                 viewHolder.textText.text = ""
@@ -82,7 +82,7 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
             } else {
                 viewHolder.textTemp.text = ""
             }
-            if (timeHour.weather != null && timeHour.weather.size > 0) {
+            if (timeHour.weather != null && timeHour.weather.isNotEmpty()) {
                 viewHolder.textTemp.text = timeHour.weather[0].description
             } else {
                 viewHolder.textTemp.text = ""
@@ -146,13 +146,13 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
         icon = icon.replace("ddd".toRegex(), "d").replace("nnn".toRegex(), "n").replace("dd".toRegex(), "d").replace("nn".toRegex(), "n")
         try {
             resId = context.resources.getIdentifier("weather_$id", "drawable", context.packageName)
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
         try {
             if (resId == 0) {
                 resId = context.resources.getIdentifier("weather_$icon", "drawable", context.packageName)
             }
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
         if (resId == 0) {
             resId = R.drawable.weather_nad
