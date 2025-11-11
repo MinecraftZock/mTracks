@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
+import info.hannes.commonlib.utils.ExternalStorage
 import info.hannes.mechadmin.LoggingHelperAdmin
 import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.*
 import info.hannes.mechadmin_gen.sqlite.PictureStageRecord
@@ -14,7 +15,6 @@ import info.mx.comlib.retrofit.CommApiClient
 import info.mx.comlib.retrofit.service.model.InsertResponse
 import info.mx.comlib.util.RetroFileHelper
 import info.mx.tracks.MxAccessApplication.Companion.aadhresUBase
-import info.mx.tracks.MxCoreApplication.Companion.getExtFilesDir
 import info.mx.tracks.MxCoreApplication.Companion.mxInfo
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.rest.PostTrackstageIDRequest
@@ -387,6 +387,17 @@ internal class OpBrothersPushOperation : AbstractOpBrothersPushOperation(), Koin
                     video.save(false)
                 }
             }
+        }
+
+        fun getExtFilesDir(any: Boolean): String {
+            val externalLocations = ExternalStorage.allStorageLocations
+            // final File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
+            val externalSdCard = externalLocations[ExternalStorage.EXTERNAL_SD_CARD]
+            var pathSD = if (externalSdCard == null) "" else externalSdCard.absolutePath
+            if (pathSD == "" && any) {
+                pathSD = ExternalStorage.sdCardPath
+            }
+            return pathSD
         }
     }
 }
