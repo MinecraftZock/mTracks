@@ -6,10 +6,8 @@ import android.os.Build
 import android.text.Spanned
 import com.robotoworks.mechanoid.Mechanoid
 import com.robotoworks.mechanoid.db.SQuery
-import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.net.ServiceClient
 import com.robotoworks.mechanoid.ops.Ops
-import info.hannes.commonlib.utils.ExternalStorage
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.tracks.koin.CoreKoinContext
 import info.mx.tracks.koin.coreModule
@@ -18,7 +16,6 @@ import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.MxInfo
 import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -88,17 +85,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
             return path
         }
 
-        fun getExtFilesDir(any: Boolean): String {
-            val externalLocations = ExternalStorage.allStorageLocations
-            // final File sdCard = externalLocations.get(ExternalStorage.SD_CARD);
-            val externalSdCard = externalLocations[ExternalStorage.EXTERNAL_SD_CARD]
-            var pathSD = if (externalSdCard == null) "" else externalSdCard.absolutePath
-            if (pathSD == "" && any) {
-                pathSD = ExternalStorage.sdCardPath
-            }
-            return pathSD
-        }
-
         val isProduction: Boolean
             get() = mxServerUrl!!.contains(".info")
 
@@ -130,21 +116,21 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun clearDB() {
             // cache
-            val recThumbs = SQuery.newQuery().expr(Pictures.LOCALTHUMB, Op.NEQ, "")
-                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
+            val recThumbs = SQuery.newQuery().expr(MxInfoDBContract.Pictures.LOCALTHUMB, SQuery.Op.NEQ, "")
+                .select<PicturesRecord>(MxInfoDBContract.Pictures.CONTENT_URI, MxInfoDBContract.Pictures._ID)
             for (rec in recThumbs) {
                 val file = File(rec.localthumb)
                 Timber.d("Delete thumb %s", rec.localthumb)
                 file.delete()
             }
-            val recLocal = SQuery.newQuery().expr(Pictures.LOCALFILE, Op.NEQ, "")
-                .select<PicturesRecord>(Pictures.CONTENT_URI, Pictures._ID)
+            val recLocal = SQuery.newQuery().expr(MxInfoDBContract.Pictures.LOCALFILE, SQuery.Op.NEQ, "")
+                .select<PicturesRecord>(MxInfoDBContract.Pictures.CONTENT_URI, MxInfoDBContract.Pictures._ID)
             for (rec in recLocal) {
                 val file = File(rec.localfile)
                 Timber.d("Delete local %s", rec.localfile)
                 file.delete()
             }
-            SQuery.newQuery().delete(Pictures.CONTENT_URI)
+            SQuery.newQuery().delete(MxInfoDBContract.Pictures.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Ratings.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Favorits.CONTENT_URI)
             SQuery.newQuery().delete(MxInfoDBContract.Tracks.CONTENT_URI)
@@ -161,7 +147,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
             alertDialogBuilder.setMessage(text)
                 .setCancelable(true)
                 .setTitle(title)
-                .setPositiveButton(android.R.string.ok) { dialog, id ->
+                .setPositiveButton(android.R.string.ok) { _, _ ->
                     // MainActivity.this.finish();
                 }
             val alertDialog = alertDialogBuilder.create()
