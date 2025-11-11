@@ -114,33 +114,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
             }
         }
 
-        fun clearDB() {
-            // cache
-            val recThumbs = SQuery.newQuery().expr(MxInfoDBContract.Pictures.LOCALTHUMB, SQuery.Op.NEQ, "")
-                .select<PicturesRecord>(MxInfoDBContract.Pictures.CONTENT_URI, MxInfoDBContract.Pictures._ID)
-            for (rec in recThumbs) {
-                val file = File(rec.localthumb)
-                Timber.d("Delete thumb %s", rec.localthumb)
-                file.delete()
-            }
-            val recLocal = SQuery.newQuery().expr(MxInfoDBContract.Pictures.LOCALFILE, SQuery.Op.NEQ, "")
-                .select<PicturesRecord>(MxInfoDBContract.Pictures.CONTENT_URI, MxInfoDBContract.Pictures._ID)
-            for (rec in recLocal) {
-                val file = File(rec.localfile)
-                Timber.d("Delete local %s", rec.localfile)
-                file.delete()
-            }
-            SQuery.newQuery().delete(MxInfoDBContract.Pictures.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Ratings.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Favorits.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Tracks.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Events.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Country.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Series.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Weather.CONTENT_URI)
-            SQuery.newQuery().delete(MxInfoDBContract.Trackstage.CONTENT_URI)
-        }
-
         @Suppress("UNUSED_ANONYMOUS_PARAMETER")
         fun showDlgHtml(context: Context, title: Spanned, text: Spanned) {
             val alertDialogBuilder = AlertDialog.Builder(context)

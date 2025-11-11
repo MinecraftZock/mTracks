@@ -1,7 +1,6 @@
 package info.mx.tracks.service
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -89,7 +88,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                 }
             }
         } else {
-            updateNotification4Admin(distance.toFloat().roundToInt(), ACTION_IGNORED)
+            updateNotification4Admin(distance.toFloat().roundToInt())
             capturedLatLng.action = ACTION_IGNORED
             extra = " min distance"
         }
@@ -150,12 +149,12 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         return MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)
     }
 
-    private fun updateNotification4Admin(meter: Int, payLoad: String) {
+    private fun updateNotification4Admin(meter: Int) {
         if (!MxCoreApplication.isAdmin) {
             return
         }
-        val text = "distance:$meter $payLoad"
-        val longText = "distance:$meter $payLoad\nmuch more text #1"
+        val text = "distance:$meter"
+        val longText = "distance:$meter\nmuch more text #1"
 
         val intent = Intent(context, ActivityMapExtension::class.java)
         intent.action = Intent.ACTION_MAIN
@@ -167,7 +166,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         val editPendingIntent = PendingIntent.getActivity(context, 3211, intent, LocationJobService.pendingIntentFlags)
         val showPendingIntent = PendingIntent.getActivity(context, 3212, intent, LocationJobService.pendingIntentFlags)
 
-        Timber.w("send pendingintent updateNotification4Admin1 ${LocationJobService.pendingIntentFlags}")
+        Timber.w("send updateNotification4Admin1 ${LocationJobService.pendingIntentFlags}")
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -190,7 +189,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             )
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(longText))
-            .setPriority(Notification.PRIORITY_MIN)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(pendingIntent)
             .setAutoCancel(false)
             .addAction(
@@ -203,7 +202,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         notificationManager.notify(NOTIFICATION_ID_ADMIN, notification.build())
     }
 
-    private fun updateNotification(meter: Int, track_id: Long): String {
+    private fun updateNotification(meter: Int, trackId: Long): String {
         val extra: String
         if (meter > DISTANCE_MIN_TO_NOTIFY) {
             extra = meter.toString() + "m > " + DISTANCE_MIN_TO_NOTIFY
@@ -212,7 +211,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         val text = context.getString(R.string.notification_small)
         val longText = context.getString(R.string.notification_big)
-        val trackRecord = TracksRecord.get(track_id)
+        val trackRecord = TracksRecord.get(trackId)
         val dateStr =
             DateHelper.getTimeStrFromMinutesDay(
                 ((trackRecord!!.lastAsked + WAIT_TO_ASK - System.currentTimeMillis()) / 1000 / 60).toFloat().roundToInt()
@@ -233,7 +232,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         intentShow.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val extras = Bundle()
         extras.putString(FragmentUpDown.CONTENT_URI, Tracksges.CONTENT_URI.toString())
-        extras.putLong(FragmentUpDown.RECORD_ID_LOCAL, track_id)
+        extras.putLong(FragmentUpDown.RECORD_ID_LOCAL, trackId)
         intentShow.putExtras(extras)
         intentShow.putExtra(EDIT, false)
         val editIntent = Intent(intentShow)
@@ -242,7 +241,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         val editPendingIntent = PendingIntent.getActivity(context, 3211, editIntent, LocationJobService.pendingIntentFlags)
         val showPendingIntent = PendingIntent.getActivity(context, 3212, intentShow, LocationJobService.pendingIntentFlags)
 
-        Timber.w("send pendingintent updateNotification ${LocationJobService.pendingIntentFlags}")
+        Timber.w("send updateNotification ${LocationJobService.pendingIntentFlags}")
 
         val builder = NotificationCompat.Builder(context, LOCATION_CHANNEL_ID)
 
@@ -262,7 +261,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             .setContentTitle(trackRecord.trackname)
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(longText))
-            .setPriority(Notification.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .addAction(
@@ -290,15 +289,14 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         private val DISTANCE_MIN_TO_NOTIFY = (if (MxCoreApplication.isAdmin) 19500 else 1500).toFloat()
         private val WAIT_TO_ASK = (3600 * 1000 * if (MxCoreApplication.isAdmin) 1 else 24 * 4 * 30).toLong() //1 hour / 4 month
 
-        private val NOTIFICATION_ID = 16241
+        private const val NOTIFICATION_ID = 16241
         const val NOTIFICATION_ID_ADMIN = 16242
         const val DISTANCE_NEW = "distanceNew"
         const val EDIT = "edit"
 
         fun calculateDistanceOnTracks(mxMemDatabase: MxMemDatabase, location: Location?): List<TracksDistance> {
             val records = ArrayList<TracksDistance>()
-            mxMemDatabase.beginTransaction()
-            try {
+            mxMemDatabase.runInTransaction {
                 mxMemDatabase.tracksDistanceDao().deleteAll()
                 val projection = arrayOf(Tracksges._ID, Tracksges.LATITUDE, Tracksges.LONGITUDE)
                 val query = QueryHelper.buildTracksFilter(SQuery.newQuery(), AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
@@ -321,9 +319,6 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                     records.add(tracksDistance)
                 }
                 mxMemDatabase.tracksDistanceDao().insertAll(*records.toTypedArray())
-                mxMemDatabase.setTransactionSuccessful()
-            } finally {
-                mxMemDatabase.endTransaction()
             }
             return records
         }

@@ -299,14 +299,14 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
         loaderManager.initLoader(LOADER_BROTHER_TRACKS, arguments, this)
 
         lyProgress!!.visibility = View.GONE
-        OpSyncFromServerOperation.importStatusCalMessage.observe(viewLifecycleOwner) { msg ->
+        OpSyncFromServerOperation.adminImportStatusCalMessage.observe(viewLifecycleOwner) { msg ->
             onImportStatusMessage(msg)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        OpSyncFromServerOperation.importStatusCalMessage.removeObservers(this)
+        OpSyncFromServerOperation.adminImportStatusCalMessage.removeObservers(this)
     }
 
     private fun onImportStatusMessage(importStatusMessage: ImportStatusMessage) {

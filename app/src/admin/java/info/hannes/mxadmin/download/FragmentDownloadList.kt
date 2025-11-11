@@ -152,7 +152,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     lifecycleScope.launch {
                         MxCoreApplication.createApiClient()
                     }
-                    MxCoreApplication.clearDB()
                     MxCoreApplication.doSync(false, true, BuildConfig.FLAVOR)
                 }
             }

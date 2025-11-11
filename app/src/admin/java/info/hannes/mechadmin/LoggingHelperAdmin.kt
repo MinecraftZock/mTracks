@@ -7,6 +7,6 @@ object LoggingHelperAdmin {
     @JvmStatic
     fun setMessage(msg: String) {
         val message = ImportStatusMessage(message = msg)
-        OpSyncFromServerOperation.importStatusCalMessage.postValue(message)
+        OpSyncFromServerOperation.adminImportStatusCalMessage.postValue(message)
     }
 }
