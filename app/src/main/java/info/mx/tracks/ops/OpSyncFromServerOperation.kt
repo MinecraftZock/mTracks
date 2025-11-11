@@ -828,7 +828,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                         .firstInt(Tracks.CONTENT_URI, Tracks._ID)
                 }
 
-                if (restId == 0) { // neuanlage
+                if (restId == 0) { // new record
                     zlrInsertedReturn++
                     if (trackREST.approved == -1 && !oneDeclinedAtLeast) {
                         // wenn der einzige übertragene ein abgelehnter ist, muss man ihn importieren, damit man in keine endlosschleife kommt
@@ -1272,7 +1272,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     companion object {
         var importStatusMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
-        var importStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
+        var adminImportStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
 
         private const val IMPORT_REC = "Import"
         private const val DOWNLOAD = "Download/Import"

@@ -1,7 +1,6 @@
 package info.mx.tracks.service
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -220,7 +219,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
             )
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(longText))
-            .setPriority(Notification.PRIORITY_MIN)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(pendingIntent)
             .setAutoCancel(false)
             .addAction(
