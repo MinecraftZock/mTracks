@@ -76,7 +76,7 @@ dependencies {
     api("com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}")
     api("com.squareup.retrofit2:converter-scalars:${retrofitVersion}")
 
-    api("com.squareup.okhttp3:logging-interceptor:5.2.0")
+    api("com.squareup.okhttp3:logging-interceptor:5.3.0")
     api("commons-io:commons-io:2.20.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20")
