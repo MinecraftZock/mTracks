@@ -54,7 +54,7 @@ android {
         targetSdk { version = release(36) }
 
         versionCode = getGitCommitCount(versionOffset)
-        minSdk = 23
+        minSdk = 24
         versionName = getVersionText()
 
         println { "versionName=${versionName.green.bold} versionCode=${versionCode.green.bold}" }
