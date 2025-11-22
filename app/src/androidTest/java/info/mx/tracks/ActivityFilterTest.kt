@@ -32,6 +32,8 @@ class ActivityFilterTest : BaseSyncTest() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        Espresso.pressBack()
+
+        Thread.sleep(1000)
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-2") })
     }

@@ -243,6 +243,7 @@ dependencies {
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
     implementation("androidx.multidex:multidex:2.0.1")
 
     "adminImplementation"("org.jsoup:jsoup:1.21.2")
