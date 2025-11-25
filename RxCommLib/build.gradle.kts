@@ -22,7 +22,7 @@ else
 android {
     namespace = "info.mx.rxcommlibrary"
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         compileSdk = 36
         consumerProguardFiles.addAll(
             listOf(

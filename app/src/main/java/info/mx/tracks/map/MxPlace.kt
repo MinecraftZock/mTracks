@@ -38,11 +38,11 @@ class MxPlace : Parcelable {
 
     constructor(place: Place) {
         id = place.id
-        address = place.address
-        name = place.name
-        latLng = place.latLng
+        address = place.formattedAddress
+        name = place.displayName
+        latLng = place.location
         websiteUri = place.websiteUri
-        phoneNumber = place.phoneNumber
+        phoneNumber = place.internationalPhoneNumber
         photoMeta = place.photoMetadatas
         if (place.rating != null) {
             rating = (place.rating!! * 10).toFloat()
@@ -96,17 +96,17 @@ class MxPlace : Parcelable {
         latLng = source.readParcelable(LatLng::class.java.classLoader)
         try {
             websiteUri = Uri.parse(source.readString())
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
         try {
             phoneNumber = source.readString()
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
         try {
             rating = source.readFloat()
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
     }

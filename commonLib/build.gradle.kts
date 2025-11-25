@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "info.hannes.commonlib"
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         compileSdk = 36
     }
     lint {
