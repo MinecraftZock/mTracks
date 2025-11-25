@@ -33,7 +33,7 @@ jobs:
         os: [ macos-15 ]
         java_version: [ 17 ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0
@@ -83,7 +83,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y exiftool imagemagick xdg-utils libimage-exiftool-perl zsh jq xorg
       #          brew install exiftool imagemagick
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0
@@ -168,7 +168,7 @@ jobs:
       matrix:
         os: [ ubuntu-22.04 ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0
@@ -207,7 +207,7 @@ jobs:
         os: [ macOS-14 ]
         java_version: [ 17 ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0
