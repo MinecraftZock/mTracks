@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -46,6 +47,18 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
 
     private val appNavigationMenu: AppNavigationMenu by inject()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawers()
+                } else {
+                    showBackDialog()
+                }
+            }
+        })
+    }
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         initToolbar()
@@ -126,19 +139,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
             drawerLayout.closeDrawers()
         }
         super.onPause()
-    }
-
-    /**
-     * To prevent user to accidentally leave the app with the back button.
-     */
-    @Deprecated("Deprecated in Java")
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers()
-        } else {
-            showBackDialog()
-        }
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

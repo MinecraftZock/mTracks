@@ -2,6 +2,7 @@ package info.mx.tracks.trackdetail
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import info.hannes.commonlib.DialogHelper
 import info.hannes.commonlib.DialogHelper.doAskYesNo
@@ -22,6 +23,24 @@ class ActivityTrackEdit : ActivityBase() {
             finish()
         }
         openEdit()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (fragmentTrackEdit != null && fragmentTrackEdit!!.mask2Record(false)) {
+                    var txt = getString(R.string.ask_unsaved_changes)
+                    if (fragmentTrackEdit!!.hasDefaultLatLon()) {
+                        txt = """
+                    (${getString(R.string.default_latlon)})
+                    
+                    $txt
+                    """.trimIndent()
+                    }
+                    doAskYesNo(this@ActivityTrackEdit, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
+                } else {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private fun openEdit() {
@@ -50,22 +69,6 @@ class ActivityTrackEdit : ActivityBase() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (fragmentTrackEdit != null && fragmentTrackEdit!!.mask2Record(false)) {
-            var txt = getString(R.string.ask_unsaved_changes)
-            if (fragmentTrackEdit!!.hasDefaultLatLon()) {
-                txt = """
-                    (${getString(R.string.default_latlon)})
-                    
-                    $txt
-                    """.trimIndent()
-            }
-            doAskYesNo(this, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
-        } else {
-            super.onBackPressed()
-        }
     }
 
     private inner class SaveStage : DialogHelper.Callable {
