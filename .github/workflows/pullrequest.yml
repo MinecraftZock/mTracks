@@ -141,7 +141,6 @@ jobs:
           ls -la app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected
           cp app/build/outputs/connected_android_test_additional_output/paidDebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}
           echo ${{ env.resourceRunID }}
-          ./screenShotScript/prepareTerminal.sh
           ./screenShotScript/screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs ${{ matrix.emulatorApi }}
         if: ${{ always() }}
