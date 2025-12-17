@@ -33,8 +33,8 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.PlaceTypes
 import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -143,7 +143,7 @@ class AdapterPlaceAutocomplete(
             .setLocationBias(bounds)
             //.setLocationRestriction(bounds)
             //.setCountry("au")
-            .setTypeFilter(TypeFilter.ADDRESS)
+            .setTypesFilter(listOf(PlaceTypes.ADDRESS))
             .setSessionToken(token)
             .setQuery(search)
             .build()
@@ -173,10 +173,10 @@ class AdapterPlaceAutocomplete(
 
         val placeFields = mutableListOf(
             Place.Field.ID,
-            Place.Field.ADDRESS,
-            Place.Field.PHONE_NUMBER,
+            Place.Field.FORMATTED_ADDRESS,
+            Place.Field.INTERNATIONAL_PHONE_NUMBER,
             Place.Field.WEBSITE_URI,
-            Place.Field.LAT_LNG,
+            Place.Field.LOCATION,
             Place.Field.PHOTO_METADATAS,
             Place.Field.RATING
         )
