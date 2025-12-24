@@ -75,6 +75,8 @@ class ActivityMapExtension : ActivityDrawerBase() {
         display.getSize(size)
         displayHeight = size.y
 
+        openDetail(intent)
+
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityMapExtension.javaClass.simpleName).apply()
 
         val cl = ChangeLog(this)
@@ -84,6 +86,11 @@ class ActivityMapExtension : ActivityDrawerBase() {
         } else if (cl.isFirstRun && !MxCoreApplication.isEmulator) {
             cl.fullLogDialog.show()
         }
+    }
+
+    private fun openDetail(intent: Intent) {
+        val bundle = getBundlePrepared(intent)
+        mapFragment!!.openDetail(bundle)
     }
 
     override fun onBackPressed() {
