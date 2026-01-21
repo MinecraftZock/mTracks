@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-15 ]
+        os: [ ubuntu-22.04 ]
         java_version: [ 17 ]
     steps:
       - uses: actions/checkout@v6
@@ -204,7 +204,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macOS-14 ]
+        os: [ ubuntu-22.04 ]
         java_version: [ 17 ]
     steps:
       - uses: actions/checkout@v6
