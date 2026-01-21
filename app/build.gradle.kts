@@ -9,6 +9,7 @@ import info.shell.getUnixCreateTime
 import info.shell.runCommand
 import org.gradle.internal.extensions.stdlib.toDefaultLowerCase
 import org.gradle.internal.logging.text.StyledTextOutput.Style
+import org.gradle.internal.logging.text.StyledTextOutputFactory
 import org.gradle.kotlin.dsl.support.serviceOf
 import java.io.FileInputStream
 import java.util.Properties
@@ -30,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 // TODO redundant code, same like RxCommLib
-val mapKey = if (keystoreProperties.containsKey("mapKey"))
+val mapKey: String? = if (keystoreProperties.containsKey("mapKey"))
     keystoreProperties.getProperty("mapKey")
 else
     "dummy"
@@ -345,7 +346,7 @@ play {
 
 fun addNewTag() {
     val tag = getDate(onlyMonth = true) + ".${getGitCommitCount() + versionOffset}"
-    val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
+    val out = project.serviceOf<StyledTextOutputFactory>()
         .create("an-output")
     out.style(Style.Normal).text("Create new tag ")
         .style(Style.SuccessHeader).text(tag)
@@ -364,7 +365,7 @@ fun addNewTag() {
 fun pushTag() {
     val command = "git push --tags"
     val tagResult = command.runCommand()
-    val out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>()
+    val out = project.serviceOf<StyledTextOutputFactory>()
         .create("an-output")
     if (tagResult.isNotBlank())
         println("push output=$tagResult")
