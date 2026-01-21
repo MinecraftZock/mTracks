@@ -3,6 +3,7 @@ package info.mx.tracks.trackdetail
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -29,6 +30,27 @@ class ActivityTrackEdit : ActivityBase() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        // Setup back press handling using OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (fragmentTrackEdit != null && fragmentTrackEdit!!.mask2Record(false)) {
+                    var txt = getString(R.string.ask_unsaved_changes)
+                    if (fragmentTrackEdit!!.hasDefaultLatLon()) {
+                        txt = """
+                            (${getString(R.string.default_latlon)})
+                            
+                            $txt
+                            """.trimIndent()
+                    }
+                    doAskYesNo(this@ActivityTrackEdit, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+
 
         // Apply window insets to AppBarLayout to avoid overlap with status bar
         val appBarLayout = findViewById<View>(R.id.app_bar_layout)
@@ -74,21 +96,6 @@ class ActivityTrackEdit : ActivityBase() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if (fragmentTrackEdit != null && fragmentTrackEdit!!.mask2Record(false)) {
-            var txt = getString(R.string.ask_unsaved_changes)
-            if (fragmentTrackEdit!!.hasDefaultLatLon()) {
-                txt = """
-                    (${getString(R.string.default_latlon)})
-                    
-                    $txt
-                    """.trimIndent()
-            }
-            doAskYesNo(this, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
-        } else {
-            super.onBackPressed()
-        }
-    }
 
     private inner class SaveStage : DialogHelper.Callable {
         override fun execute(param: Long) {

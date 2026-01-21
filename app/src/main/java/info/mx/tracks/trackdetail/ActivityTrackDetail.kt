@@ -13,7 +13,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.GridView
 import android.widget.ListView
-import androidx.appcompat.widget.Toolbar
+import androidx.activity.OnBackPressedCallback
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -29,8 +30,6 @@ import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
 import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
-import java.util.*
-import androidx.core.net.toUri
 
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
 
@@ -78,6 +77,13 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
+
+        // Setup back press handling using OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 
     @SuppressLint("MissingSuperCall")
@@ -194,11 +200,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         return super.onOptionsItemSelected(item)
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("keep it like it is"))
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        finish()
-    }
 
     override fun onImageItemClick(position: Int, imageRestId: Long) {
         //TODO what ?
@@ -212,7 +213,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
     companion object {
 
         fun askImportDlg(context: Context, uris: ArrayList<Uri>, track2Share: TracksRecord?, clip: Boolean) {
-            if (uris.size == 0 || track2Share == null) {
+            if (uris.isEmpty() || track2Share == null) {
                 return
             }
 
