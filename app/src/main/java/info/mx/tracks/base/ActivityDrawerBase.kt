@@ -38,6 +38,7 @@ import info.mx.tracks.tracklist.ActivityTrackList
 import info.mx.tracks.util.EventHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import androidx.core.net.toUri
 
 abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationItemSelectedListener, KoinComponent {
 
@@ -282,6 +283,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
         //        }
         //        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/groups/1435212740065304"));
         val openFacebookIntent: Intent
-            get() = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/pages/MX-Tracks-Info/1492727287710863"))
+            get() = Intent(Intent.ACTION_VIEW, "https://www.facebook.com/pages/MX-Tracks-Info/1492727287710863".toUri())
     }
 }
