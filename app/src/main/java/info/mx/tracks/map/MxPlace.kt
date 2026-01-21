@@ -1,17 +1,21 @@
 package info.mx.tracks.map
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchResolvedPhotoUriRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import info.mx.tracks.util.suspended
 import timber.log.Timber
+import java.net.URL
 import java.util.*
+import androidx.core.net.toUri
 
 class MxPlace : Parcelable {
     private var photoMeta: List<PhotoMetadata>? = null
@@ -59,15 +63,22 @@ class MxPlace : Parcelable {
 
         photoMetadata?.let {
 
-            // Create a FetchPhotoRequest.
-            val photoRequest = FetchPhotoRequest.builder(it)
+            // Create a FetchResolvedPhotoUriRequest.
+            val photoRequest = FetchResolvedPhotoUriRequest.builder(it)
                     .setMaxWidth(width)
                     .setMaxHeight(height)
                     .build()
-            val bitmap = placesClient.fetchPhoto(photoRequest).suspended().bitmap
+            val photoUri = placesClient.fetchResolvedPhotoUri(photoRequest).suspended().uri
 
-            photoList.add(bitmap)
-            photoReadyCallBack!!.onPhotoReceived(photoList)
+            // Download the bitmap from the URI
+            photoUri?.let { uri ->
+                val bitmap = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    BitmapFactory.decodeStream(URL(uri.toString()).openStream())
+                }
+
+                photoList.add(bitmap)
+                photoReadyCallBack!!.onPhotoReceived(photoList)
+            }
         }
     }
 
@@ -93,9 +104,14 @@ class MxPlace : Parcelable {
         id = source.readString()
         address = source.readString()
         name = source.readString()
-        latLng = source.readParcelable(LatLng::class.java.classLoader)
+        latLng = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            source.readParcelable(LatLng::class.java.classLoader, LatLng::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            source.readParcelable(LatLng::class.java.classLoader)
+        }
         try {
-            websiteUri = Uri.parse(source.readString())
+            websiteUri = source.readString()?.toUri()
         } catch (_: Exception) {
         }
 
