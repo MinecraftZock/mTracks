@@ -5,6 +5,9 @@ import android.graphics.Point
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
 import com.sothree.slidinguppanel.PanelState
@@ -35,12 +38,28 @@ class ActivityMapExtension : ActivityDrawerBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val isTablet = resources.getBoolean(R.bool.isTablet)
         scalar4Slide = if (isTablet) 0.85f else 0.78f
         this.setPhoneHasNoOptionsBtn()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Apply window insets to AppBarLayout to avoid overlap with status bar
+        val appBarLayout = findViewById<View>(R.id.app_bar_layout)
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                0,
+                systemBars.top,
+                0,
+                0
+            )
+            insets
+        }
 
         menuFab = findViewById(R.id.menuFab)
         menuFab?.setClosedOnTouchOutside(true)

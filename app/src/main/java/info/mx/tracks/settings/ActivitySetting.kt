@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.TrackingApplication.Companion.getVersionName
 import info.mx.tracks.ActivityBase
@@ -28,11 +31,28 @@ class ActivitySetting : ActivityBase() {
         binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        // Apply window insets to AppBarLayout to avoid overlap with status bar
+        val appBarLayout = findViewById<View>(R.id.app_bar_layout)
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                0,
+                systemBars.top,
+                0,
+                0
+            )
+            insets
+        }
+
         prefs = MxPreferences.getInstance()
         binding.containerSetting.layoutLicense.setOnClickListener {
             startActivity(Intent(this@ActivitySetting, ActivityAcknowledgement::class.java))

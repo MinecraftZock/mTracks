@@ -11,6 +11,9 @@ import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.RatingBar.OnRatingBarChangeListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.mx.tracks.ActivityBase
@@ -43,11 +46,28 @@ class ActivityFilter : ActivityBase() {
         binding = ActivityFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        // Apply window insets to AppBarLayout to avoid overlap with status bar
+        val appBarLayout = findViewById<View>(R.id.app_bar_layout)
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                0,
+                systemBars.top,
+                0,
+                0
+            )
+            insets
+        }
+
         prefs = MxPreferences.getInstance()
         val spinnerAdapter = ArrayAdapterRightAlign.createFromResource(this, R.array.location_list, R.layout.spinner_right)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_item_right)
