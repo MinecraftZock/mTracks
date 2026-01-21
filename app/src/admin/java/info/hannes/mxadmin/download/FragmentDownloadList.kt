@@ -6,8 +6,17 @@ import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.Settings
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -152,7 +161,11 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     lifecycleScope.launch {
                         MxCoreApplication.createApiClient()
                     }
-                    MxCoreApplication.doSync(false, true, BuildConfig.FLAVOR)
+                    MxCoreApplication.doSync(
+                        updateProvider = false,
+                        force = true,
+                        flavor = BuildConfig.FLAVOR
+                    )
                 }
             }
 
