@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.text.Spanned
 import com.robotoworks.mechanoid.Mechanoid
-import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.net.ServiceClient
 import com.robotoworks.mechanoid.ops.Ops
 import info.mx.comlib.prefs.CommLibPrefs
@@ -15,15 +14,12 @@ import info.mx.tracks.ops.AbstractOpPostRatingsOperation
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.MxInfo
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.PicturesRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.koinApplication
 import org.matomo.sdk.extra.TrackHelper
 import timber.log.Timber
-import java.io.File
 
 abstract class MxCoreApplication : MxAccessApplication() {
 
