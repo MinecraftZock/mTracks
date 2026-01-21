@@ -2,7 +2,11 @@ package info.mx.tracks.trackdetail
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import info.hannes.commonlib.DialogHelper
 import info.hannes.commonlib.DialogHelper.doAskYesNo
 import info.mx.tracks.ActivityBase
@@ -15,12 +19,30 @@ class ActivityTrackEdit : ActivityBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track_edit)
+
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        // Apply window insets to AppBarLayout to avoid overlap with status bar
+        val appBarLayout = findViewById<View>(R.id.app_bar_layout)
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                0,
+                systemBars.top,
+                0,
+                0
+            )
+            insets
+        }
+
         openEdit()
     }
 
