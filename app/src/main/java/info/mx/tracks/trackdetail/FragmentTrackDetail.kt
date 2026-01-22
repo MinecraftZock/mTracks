@@ -23,11 +23,21 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.telephony.TelephonyManager
 import android.text.Html
-import android.view.*
+import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.widget.TextViewCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -48,7 +58,11 @@ import info.hannes.commonlib.utils.FileHelper
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
-import info.mx.tracks.common.*
+import info.mx.tracks.common.DistanceHelper
+import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.common.QueryHelper
+import info.mx.tracks.common.SecHelper
+import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.ops.AbstractOpGetWeatherCachedOperation
@@ -57,8 +71,15 @@ import info.mx.tracks.ops.google.AbstractOpGetRouteOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
-import info.mx.tracks.sqlite.*
+import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.tracks.sqlite.FavoritsRecord
 import info.mx.tracks.sqlite.MxInfoDBContract.*
+import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.tracks.sqlite.RouteRecord
+import info.mx.tracks.sqlite.TracksDistanceRecord
+import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.sqlite.TracksgesRecord
+import info.mx.tracks.sqlite.WeatherRecord
 import info.mx.tracks.tasks.ImportTaskCompleteListener
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.util.CommentHelper
@@ -68,7 +89,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 
 class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener,
@@ -117,7 +138,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                             doSelectDlg(requireActivity(), R.string.phone, view.text.toString())
                         } else {
                             val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:" + view.text.toString())
+                            intent.data = ("tel:" + view.text.toString()).toUri()
                             startActivity(intent)
                         }
                     }
@@ -320,10 +341,8 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         if (hasImageCaptureBug()) {
                             val fi = File("/sdcard/tmp")
                             try {
-                                uriMakePhoto = Uri.parse(
-                                    MediaStore.Images.Media
-                                        .insertImage(requireActivity().contentResolver, fi.absolutePath, null, null)
-                                )
+                                uriMakePhoto =
+                                    MediaStore.Images.Media.insertImage(requireActivity().contentResolver, fi.absolutePath, null, null).toUri()
                             } catch (e: FileNotFoundException) {
                                 Timber.e(e)
                             }
@@ -422,7 +441,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         i.putExtra(Intent.EXTRA_EMAIL, arrayOf(contact))
         try {
             startActivity(Intent.createChooser(i, "Send mail..."))
-        } catch (ex: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             showMessage(getString(R.string.no_email_installed), Snackbar.LENGTH_SHORT)
         }
 
@@ -616,7 +635,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             binding.trDetailSoil.text = ""
             try {
                 binding.trDetailSoil.text = soils[trackRec.soiltype.toInt()]
-            } catch (ignored: Exception) {
+            } catch (_: Exception) {
             }
 
         }
@@ -684,7 +703,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     private fun openFaceBook(activity: Activity, facebook: String) {
         try {
             activity.startActivity(getFaceBookIntent(SecHelper.decryptB64(facebook)))
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             showInfo(activity, activity.getString(R.string.wrong_facebook_url))
         }
 
@@ -697,7 +716,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         //        } catch (Exception e) {
         //            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/groups/1435212740065304"));
         //        }
-        return Intent(Intent.ACTION_VIEW, Uri.parse(facebook))
+        return Intent(Intent.ACTION_VIEW, facebook.toUri())
     }
 
     private fun doOpenMap(loc: Location) {
@@ -901,7 +920,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         adapterWeather!!.setTrackClientID(recordWeather.trackClientId)
                     }
                     adapterWeather!!.swapCursor(cursor)
-                } catch (ignored: StaleDataException) {
+                } catch (_: StaleDataException) {
                 }
 
             }
@@ -1107,7 +1126,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 curs.moveToPosition(currPosition + 1)
                 nextLocalId = curs.getLong(0)
             }
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
         curs.close()
@@ -1144,11 +1163,11 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     url = "http://$url"
                 }
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(url)
+                intent.data = url.toUri()
                 if (intent.resolveActivity(activity.packageManager) != null) {
                     try {
                         activity.startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
+                    } catch (_: ActivityNotFoundException) {
                         Timber.e("ActivityNotFoundException ACTION_VIEW not possible for%s", url)
                         if (url.startsWith("http://")) {
                             openWebSite(activity, urls.replace("http://", "https://"))
@@ -1179,7 +1198,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 //                alertChoice.dismiss();
                 if (which == R.string.phone) {
                     val intent = Intent(Intent.ACTION_DIAL)
-                    intent.data = Uri.parse("tel:" + sortItems[item])
+                    intent.data = ("tel:" + sortItems[item]).toUri()
                     activity.startActivity(intent)
                 } else if (which == R.string.website) {
                     var url = sortItems[item]
@@ -1187,7 +1206,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         url = "http://$url"
                     }
                     val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(url)
+                    i.data = url.toUri()
                     activity.startActivity(i)
                 }
             }

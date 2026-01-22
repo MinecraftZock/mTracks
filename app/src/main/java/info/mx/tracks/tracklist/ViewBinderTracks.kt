@@ -174,7 +174,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                     val trackName = track.trackname
                     Timber.e(trackName)
                 }
-            } catch (ignored: Exception) {
+            } catch (_: Exception) {
             }
             Timber.e(e)
         }

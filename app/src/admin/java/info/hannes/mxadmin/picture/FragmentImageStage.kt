@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -71,13 +71,13 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private fun openFaceBook(activity: Activity, facebook: String) {
         try {
             activity.startActivity(getFaceBookIntent(SecHelper.decryptB64(facebook)))
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             showInfo(activity, activity.getString(R.string.wrong_facebook_url))
         }
     }
 
     private fun getFaceBookIntent(facebook: String): Intent {
-        return Intent(Intent.ACTION_VIEW, Uri.parse(facebook))
+        return Intent(Intent.ACTION_VIEW, facebook.toUri())
     }
 
     private fun showInfo(activity: Activity, text: String) {
@@ -90,8 +90,8 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onCreateLoader(loader: Int, bundle: Bundle?): Loader<Cursor> {
 //            LOADER_PICTURE_FULL_SIZE ->
         return SQuery
-                .newQuery().expr(MxAdminDBContract.PictureStage._ID, SQuery.Op.EQ, imageClientId)
-                .createSupportLoader(MxAdminDBContract.PictureStage.CONTENT_URI, null, MxAdminDBContract.PictureStage._ID)
+            .newQuery().expr(MxAdminDBContract.PictureStage._ID, SQuery.Op.EQ, imageClientId)
+            .createSupportLoader(MxAdminDBContract.PictureStage.CONTENT_URI, null, MxAdminDBContract.PictureStage._ID)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor) {
@@ -134,8 +134,8 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         val trackBrother = TrackstageBrotherRecord.get(record.trackId)
         val track = SQuery.newQuery()
-                .expr(MxInfoDBContract.Tracks.REST_ID, SQuery.Op.EQ, trackBrother!!.trackRestId)
-                .selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
+            .expr(MxInfoDBContract.Tracks.REST_ID, SQuery.Op.EQ, trackBrother!!.trackRestId)
+            .selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
         if (track != null) {
             textName!!.text = "[" + track.country + "] " + track.trackname
             textName!!.tag = track.id
@@ -160,6 +160,7 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun openDetail(id: Long, position: Int) {
         val qWfIntent = Intent(activity, ActivityTrackDetail::class.java)
         val bundle = Bundle()

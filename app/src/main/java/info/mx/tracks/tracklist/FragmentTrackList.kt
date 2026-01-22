@@ -97,7 +97,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         fun onItemSelected(id: Long)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ScreenListWithProgressbarBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)

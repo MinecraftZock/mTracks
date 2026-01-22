@@ -146,7 +146,7 @@ class ActivityMapExtension : ActivityDrawerBase() {
                 menuFab?.alpha = 1 - position
                 menuFab?.setPadding(
                     fabPadding, fabPadding, fabPadding,
-                    Math.round((displayHeight - toolbar.height - headerHeight).toFloat() * position * scalar4Slide) + headerHeight + fabPadding
+                    ((displayHeight - toolbar.height - headerHeight).toFloat() * position * scalar4Slide).roundToInt() + headerHeight + fabPadding
                 )
             }
         }
