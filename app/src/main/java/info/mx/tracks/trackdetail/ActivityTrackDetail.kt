@@ -30,6 +30,7 @@ import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
 import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
 import java.util.*
+import androidx.core.net.toUri
 
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
 
@@ -121,7 +122,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             val track2Share = bundle?.getLong(RECORD_ID_LOCAL)?.let { TracksRecord.get(it) }
             if (track2Share != null) {
                 val uris = ArrayList<Uri>()
-                uris.add(Uri.parse(sharedText))
+                uris.add(sharedText.toUri())
                 askImportDlg(this, uris, track2Share, true)
             }
         } else {
@@ -237,7 +238,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
                         val intentM = AbstractOpPushSharedImageOperation.newIntent(track2Share.restId, uri.toString())
                         Ops.execute(intentM)
                         if (clip) {
-                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val data = ClipData.newPlainText("", "")
                             clipboard.setPrimaryClip(data)
                         }
