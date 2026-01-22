@@ -120,10 +120,10 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
     }
 
     @SuppressLint("MissingSuperCall")
-    public override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putLong(TRACK_ID, trackId)
-        savedInstanceState.putLong(IMAGE_ID, imageRestId)
+    public override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(TRACK_ID, trackId)
+        outState.putLong(IMAGE_ID, imageRestId)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
