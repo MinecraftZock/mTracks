@@ -154,7 +154,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
         }
 
         binding.poiDetailAddress.text = mxPlace.address.toString().replace(", ", "\n")
-        binding.poiHImgGalery.visibility = if (mxPlace.photoList.size == 0) View.GONE else View.VISIBLE
+        binding.poiHImgGalery.visibility = if (mxPlace.photoList.isEmpty()) View.GONE else View.VISIBLE
 
         val layoutRecycler = LinearLayoutManager(activity)
         layoutRecycler.orientation = LinearLayoutManager.HORIZONTAL
