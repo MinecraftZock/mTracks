@@ -4,11 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -190,7 +194,7 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
             binding.trDetailSoil.text = ""
             try {
                 binding.trDetailSoil.text = soils[trackRec.soiltype.toInt()]
-            } catch (ignored: Exception) {
+            } catch (_: Exception) {
             }
         }
         if (trackAccess != "D") {
@@ -292,14 +296,11 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
                 if (cursor.count == 1) {
                     val recordStage = TrackstageRecord.fromCursor(cursor)
                     fillMask(recordStage)
-                    val txt: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    val txt: Spanned =
                         Html.fromHtml(
                             cursor.getStageValues(),
                             Html.FROM_HTML_MODE_LEGACY
                         )
-                    } else {
-                        Html.fromHtml(cursor.getStageValues())
-                    }
                     binding.trDetailStage.text = txt
                     val bundle = Bundle()
                     bundle.putLong(TRACK_REST_ID, recordStage.restId)

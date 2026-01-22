@@ -109,7 +109,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-        Timber.d("CountryCount " + data.count)
+        Timber.d("CountryCount ${data.count}")
         adapter.swapCursor(data)
     }
 
