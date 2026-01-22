@@ -279,7 +279,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
     "androidTestImplementation"("androidx.test.ext:junit-ktx:1.2.1")
     androidTestUtil("androidx.test.services:test-services:1.6.0")
