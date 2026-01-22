@@ -200,7 +200,6 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onImageItemClick(position: Int, imageRestId: Long) {
         //TODO what ?
     }

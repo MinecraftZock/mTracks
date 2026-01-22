@@ -96,7 +96,6 @@ class ActivityTrackEdit : ActivityBase() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private inner class SaveStage : DialogHelper.Callable {
         override fun execute(param: Long) {
             fragmentTrackEdit!!.mask2Record(true)

@@ -118,7 +118,6 @@ class ActivityMapExtension : ActivityDrawerBase() {
         }
     }
 
-
     fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {
         when (panelState) {
             PanelState.EXPANDED -> Unit

@@ -139,7 +139,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
         super.onPause()
     }
 
-
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         var result = false
         if (menuItem.itemId == R.id.drawer_tracks) {
