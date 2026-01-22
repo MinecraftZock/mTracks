@@ -13,8 +13,10 @@ import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -60,7 +62,6 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         if (requireArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
@@ -97,7 +98,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView: View
         val importListView: ListView
         if (downLoadType == DownLoadType.MX_BROTHER) {
@@ -135,12 +136,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
         return rootView
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_fragment_download_detail, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
         val i = item.itemId
         if (i == R.id.menu_reset1) {
             val rowsAffected = QuellFile.newBuilder()
@@ -167,7 +163,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
                 item.title = "nur aktuelle"
             }
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     private fun doDownLoadPicturesVideos() {
@@ -295,6 +291,18 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_download_detail, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         loaderManager.initLoader(LOADER_QUELL_FILE, this.arguments, this)
         loaderManager.initLoader(LOADER_BROTHER_TRACKS, arguments, this)
 

@@ -13,7 +13,9 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -44,7 +46,18 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         fillData()
 
         setEmptyText(getString(R.string.empty))
-        setHasOptionsMenu(true)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.activity_filter_country, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         loaderManager.initLoader(0, this.arguments, this)
     }
 
@@ -126,12 +139,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.activity_filter_country, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings_filter_country) {
             val anz: Int
             val query = SQuery.newQuery()
@@ -145,7 +153,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
             Timber.d("update country %s", anz)
             item.icon = getIcon4SetAllCountry(requireActivity())
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

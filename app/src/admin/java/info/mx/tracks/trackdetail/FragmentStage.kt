@@ -8,7 +8,9 @@ import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.ListView
 import android.widget.TextView
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
@@ -56,9 +58,36 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
             recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
         }
         fillMask(recordLocalId)
-        if (!isGoogleTests) loaderManager.initLoader(LOADER_STAGE, arguments, this)
-        setHasOptionsMenu(true)
+        if (!isGoogleTests)
+            loaderManager.initLoader(LOADER_STAGE, arguments, this)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_track_detail, menu)
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                menu.findItem(R.id.menu_detail_globus).isVisible = false
+                menu.findItem(R.id.menu_detail_radar).isVisible = false
+                menu.findItem(R.id.menu_favorite).isVisible = false
+                menu.findItem(R.id.menu_detail_share).isVisible = false
+                menu.findItem(R.id.menu_detail_radar).isVisible = false
+                menu.findItem(R.id.menu_navigation).isVisible = false
+                menu.findItem(R.id.menu_event_add).isVisible = false
+                menu.findItem(R.id.menu_track_edit)
+                    .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, view: View, menuInfo: ContextMenuInfo?) {
@@ -142,29 +171,8 @@ class FragmentStage : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_track_detail, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menu_detail_globus).isVisible = false
-        menu.findItem(R.id.menu_detail_radar).isVisible = false
-        menu.findItem(R.id.menu_favorite).isVisible = false
-        menu.findItem(R.id.menu_detail_share).isVisible = false
-        menu.findItem(R.id.menu_detail_radar).isVisible = false
-        menu.findItem(R.id.menu_navigation).isVisible = false
-        menu.findItem(R.id.menu_event_add).isVisible = false
-        menu.findItem(R.id.menu_track_edit)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-        menu.findItem(R.id.menu_navigation)
-            .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
+        var res = false
         if (item.itemId == R.id.menu_track_edit) {
             openEdit(recordLocalId)
             res = true
