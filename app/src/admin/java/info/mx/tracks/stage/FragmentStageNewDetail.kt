@@ -17,6 +17,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -72,13 +74,27 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
         binding.dayFr.dayName.text = shortWeekdays[6]
         binding.daySa.dayName.text = shortWeekdays[7]
         binding.daySo.dayName.text = shortWeekdays[1]
-        setHasOptionsMenu(true)
         return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_stage_detail, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onResume() {
@@ -227,12 +243,8 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
             if (trackAccess == "D" || trackRec.supercross == 0L) View.GONE else View.VISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_stage_detail, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
+        var res = false
         val id = requireArguments().getLong(FragmentUpDown.RECORD_ID_LOCAL)
         val stage = TrackstageRecord.get(id)
         if (stage != null) {

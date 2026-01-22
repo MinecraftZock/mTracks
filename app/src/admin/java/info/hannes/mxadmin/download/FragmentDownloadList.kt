@@ -17,8 +17,10 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -85,7 +87,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         listview = view.findViewById(R.id.list_overview)
         listview!!.itemsCanFocus = true // useless
-        setHasOptionsMenu(true)
 
         val emptyView = view.findViewById<TextView>(R.id.txt_no_displays)
 
@@ -123,7 +124,17 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         mAdapter = SimpleCursorAdapter(requireActivity(), R.layout.item_site_download, null, projection, to, 0)
         listview!!.adapter = mAdapter
         mAdapter!!.viewBinder = ViewBinderDownloadSite()
-        this.setHasOptionsMenu(true)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_download_list, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         lyProgress!!.visibility = View.GONE
         OpSyncFromServerOperation.importStatusMessage.observe(viewLifecycleOwner) { msg ->
@@ -240,13 +251,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         mActivatedPosition = position
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_fragment_download_list, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
         val i = item.itemId
         if (i == R.id.menu_solit_acceptable_tocheck) {
             val intentM = OpStageSplitOperation.newIntent(BuildConfig.FLAVOR)
@@ -282,7 +287,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             val pictureStageIntent = Intent(activity, ActivityImageMXBrotherStage::class.java)
             startActivity(pictureStageIntent)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onCreateLoader(loader: Int, bundle: Bundle?): Loader<Cursor> {

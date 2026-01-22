@@ -22,8 +22,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.MenuProvider
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.libraries.places.api.Places
@@ -92,13 +94,27 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
             }
         })
 
-        setHasOptionsMenu(true)
         return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_place_detail, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelected(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onResume() {
@@ -178,12 +194,8 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
         binding.poiHImgGalery.visibility = View.VISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_place_detail, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
+    private fun handleMenuItemSelected(item: MenuItem): Boolean {
+        var res = false
 
         if (item.itemId == R.id.menu_place_navigation) {
             doOpenNavigation(mxPlace!!)
