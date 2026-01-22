@@ -28,6 +28,7 @@ import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.*
 import info.mx.tracks.sqlite.MxInfoDBContract.*
+import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.util.*
 
@@ -81,7 +82,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         if (stageRecord.country != null) {
             val countryValue = stageRecord.country.lowercase(Locale.getDefault()) + "2x"
             val countryResId =
-                context.resources.getIdentifier(countryValue, "drawable", context.packageName)
+                context.resources.getDrawableIdentifier(countryValue, context.packageName)
             viewCountry.setImageResource(countryResId)
         }
         viewRating.rating = stageRecord.rating.toFloat()
@@ -159,7 +160,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         if (poiRecord.country != null) {
             val countryValue = poiRecord.country.lowercase(Locale.getDefault()) + "2x"
             val countryResId =
-                context.resources.getIdentifier(countryValue, "drawable", context.packageName)
+                context.resources.getDrawableIdentifier(countryValue, context.packageName)
             viewCountry.setImageResource(countryResId)
         }
         viewRating.rating = poiRecord.rating.toFloat()

@@ -18,6 +18,7 @@ import info.mx.tracks.rest.TimeHour
 import info.mx.tracks.rest.Weather
 import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.WeatherRecord
+import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -145,12 +146,12 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
         val id = weather[0]!!.id.toLong()
         icon = icon.replace("ddd".toRegex(), "d").replace("nnn".toRegex(), "n").replace("dd".toRegex(), "d").replace("nn".toRegex(), "n")
         try {
-            resId = context.resources.getIdentifier("weather_$id", "drawable", context.packageName)
+            resId = context.resources.getDrawableIdentifier("weather_$id", context.packageName)
         } catch (_: Exception) {
         }
         try {
             if (resId == 0) {
-                resId = context.resources.getIdentifier("weather_$icon", "drawable", context.packageName)
+                resId = context.resources.getDrawableIdentifier("weather_$icon", context.packageName)
             }
         } catch (_: Exception) {
         }
