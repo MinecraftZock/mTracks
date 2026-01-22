@@ -47,7 +47,7 @@ class CommentViewBinder(private val context: Context) : androidx.cursoradapter.w
             view.id == R.id.comlst_datum -> {
                 val value = cursor.getLong(columnIndex)
                 (view as TextView).text = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        .format(java.util.Date(value))
+                        .format(Date(value))
                 res = true
             }
         }
