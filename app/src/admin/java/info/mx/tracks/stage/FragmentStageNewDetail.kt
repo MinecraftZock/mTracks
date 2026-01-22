@@ -11,6 +11,8 @@ import android.text.Spanned
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -86,10 +88,10 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
     @SuppressLint("NewApi")
     private fun setDateField(view: TextView, value: Long) {
         if (value == 0L || value == -1L) {
-            view.background = resources.getDrawable(R.drawable.rounded_edges_grey)
-            view.setTextAppearance(requireActivity(), R.style.textAppearanceSmall)
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_edges_grey)
+            TextViewCompat.setTextAppearance(view, R.style.textAppearanceSmall)
         } else {
-            view.background = resources.getDrawable(R.drawable.rounded_edges_blue)
+            view.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_edges_blue)
         }
         view.setTextColor(Color.WHITE)
     }
