@@ -25,6 +25,7 @@ import info.mx.tracks.sqlite.CountryRecord
 import info.mx.tracks.sqlite.CountrycountRecord
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.MxInfoDBContract.Countrycount
+import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.util.Locale
 
@@ -76,9 +77,8 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
             if (view.id == R.id.imFilterCountry) {
                 if (cursor.getString(columnIndex) != null) {
                     val value = cursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
-                    val id = requireActivity().resources.getIdentifier(
+                    val id = requireActivity().resources.getDrawableIdentifier(
                         value,
-                        "drawable",
                         requireActivity().packageName
                     )
                     (view as ImageView).setImageResource(id)

@@ -72,7 +72,7 @@ abstract class TrackingApplication : Application() {
                 version = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     try {
                         pInfo.longVersionCode.toInt()
-                    } catch (e: NoSuchMethodError) {
+                    } catch (_: NoSuchMethodError) {
                         // on Xperia XZ1 Compact I see
                         // java.lang.NoSuchMethodError: No virtual method getLongVersionCode()J in class Landroid/content/pm/PackageInfo
                         pInfo.versionCode
@@ -80,7 +80,7 @@ abstract class TrackingApplication : Application() {
                 } else {
                     pInfo.versionCode
                 }
-            } catch (ignored: NameNotFoundException) {
+            } catch (_: NameNotFoundException) {
             }
 
             return version.toLong()
@@ -91,7 +91,7 @@ abstract class TrackingApplication : Application() {
             try {
                 val pInfo = context.packageManager.getPackageInfoCompat(context.packageName, 0)
                 version = pInfo.versionName.toString()
-            } catch (ignored: NameNotFoundException) {
+            } catch (_: NameNotFoundException) {
             }
 
             return version

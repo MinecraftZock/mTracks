@@ -27,6 +27,7 @@ import info.mx.tracks.sqlite.TracksGesSumRecord
 import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.TracksgesRecord
 import info.mx.tracks.tools.PermissionHelper
+import info.mx.tracks.util.getDrawableIdentifier
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -92,7 +93,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
             } else if (view.id == R.id.tr_country) {
                 if (tracksGesSumCursor.getString(columnIndex) != null) {
                     val value = tracksGesSumCursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
-                    val id = context.resources.getIdentifier(value, "drawable", context.packageName)
+                    val id = context.resources.getDrawableIdentifier(value, context.packageName)
                     (view as ImageView).setImageResource(id)
                 }
                 res = true

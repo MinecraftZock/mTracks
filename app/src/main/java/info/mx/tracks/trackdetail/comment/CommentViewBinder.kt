@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import info.mx.tracks.R
+import info.mx.tracks.util.getDrawableIdentifier
 import java.util.*
 
 class private
@@ -26,7 +27,7 @@ class CommentViewBinder(private val context: Context) : androidx.cursoradapter.w
             }
             view.id == R.id.comlst_country -> {
                 val valueL = cursor.getString(columnIndex).lowercase(Locale.getDefault())
-                val id = context.resources.getIdentifier(valueL, "drawable", context.packageName)
+                val id = context.resources.getDrawableIdentifier(valueL, context.packageName)
                 (view as ImageView).setImageResource(id)
                 res = true
             }

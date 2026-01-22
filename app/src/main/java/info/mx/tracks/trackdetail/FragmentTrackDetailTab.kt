@@ -28,6 +28,7 @@ import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TracksgesRecord
 import info.mx.tracks.util.ZoomOutPageTransformer
+import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -144,7 +145,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
 
         if (trackRec.country != null && activity != null) {
             val idCountryImg = resources
-                .getIdentifier(trackRec.country.lowercase(Locale.getDefault()) + "2x", "drawable", requireActivity().packageName)
+                .getDrawableIdentifier(trackRec.country.lowercase(Locale.getDefault()) + "2x", requireActivity().packageName)
             binding.trGenDetailCountry.setImageResource(idCountryImg)
         }
         binding.trGenDetailName.text = trackRec.trackname

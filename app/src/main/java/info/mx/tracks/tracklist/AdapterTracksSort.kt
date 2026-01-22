@@ -18,6 +18,7 @@ import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.sqlite.TracksGesSumRecord
+import info.mx.tracks.util.getDrawableIdentifier
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -148,7 +149,7 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
             tr_calendar.visibility =
                 if (track.eventcount.toInt() == 0) ImageView.GONE else ImageView.VISIBLE
             val country = track.country.lowercase(Locale.getDefault()) + "2x"
-            val id = context.resources.getIdentifier(country, "drawable", context.packageName)
+            val id = context.resources.getDrawableIdentifier(country, context.packageName)
             tr_country.setImageResource(id)
             tr_ratingBar.rating = track.rating.toFloat()
             tr_mo.setDayLayout(track.openmondays == 1L)
