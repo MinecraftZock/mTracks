@@ -2,6 +2,7 @@ package info.mx.tracks.map
 
 import android.content.Intent
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -90,10 +91,18 @@ class ActivityMapExtension : ActivityDrawerBase() {
         }
 
         fabPadding = resources.getDimension(R.dimen.fab_padding).roundToInt()
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        displayHeight = size.y
+        displayHeight = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = windowManager.currentWindowMetrics
+            val bounds = windowMetrics.bounds
+            bounds.height()
+        } else {
+            @Suppress("DEPRECATION")
+            val display = windowManager.defaultDisplay
+            val size = Point()
+            @Suppress("DEPRECATION")
+            display.getSize(size)
+            size.y
+        }
 
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityMapExtension.javaClass.simpleName).apply()
 
