@@ -64,8 +64,8 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long, private val pr
     fun detailTrack() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
-        if (pressBack)
-            Espresso.pressBack()
+//        if (pressBack)
+//            Espresso.pressBack()
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1") })
 //        onView(withId(android.R.id.button2)).perform(click())

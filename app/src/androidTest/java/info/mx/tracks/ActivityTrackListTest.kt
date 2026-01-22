@@ -48,7 +48,7 @@ class ActivityTrackListTest : BaseSyncTest() {
         LocationServices.getFusedLocationProviderClient(context).setMockLocation(location)
 
         // This is the first time settings activity with always changed version number
-        Espresso.pressBackUnconditionally()
+        // Espresso.pressBackUnconditionally()
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init") })
 
@@ -88,7 +88,7 @@ class ActivityTrackListTest : BaseSyncTest() {
     @Test
     fun searchTest() {
         // This is the first time settings activity with always changed version number
-//        Espresso.pressBackUnconditionally()
+//        // Espresso.pressBackUnconditionally()
         onView(withId(R.id.menu_search)).perform(click())
 
         onView(withId(R.id.search_src_text)).perform(clearText(), typeText("aa"))
@@ -137,7 +137,7 @@ class ActivityTrackListTest : BaseSyncTest() {
         LocationServices.getFusedLocationProviderClient(context).setMockLocation(location)
 
         // This is the first time settings activity with always changed version number
-        Espresso.pressBackUnconditionally()
+        // Espresso.pressBackUnconditionally()
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-init") })
 
