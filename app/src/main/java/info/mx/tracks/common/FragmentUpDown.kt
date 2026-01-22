@@ -1,14 +1,12 @@
 package info.mx.tracks.common
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-
+import androidx.core.net.toUri
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
-
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.prefs.MxPreferences
@@ -51,8 +49,8 @@ abstract class FragmentUpDown : FragmentBase() {
     }
 
     protected open fun fillNextPrevId(localId: Long) {
-        nextLocalId = SQuery.newQuery().expr("_id", Op.GT, localId).firstLong(Uri.parse(contentUri), "_id", "_id asc")
-        prevLocalId = SQuery.newQuery().expr("_id", Op.LT, localId).firstLong(Uri.parse(contentUri), "_id", "_id desc")
+        nextLocalId = SQuery.newQuery().expr("_id", Op.GT, localId).firstLong(contentUri?.toUri(), "_id", "_id asc")
+        prevLocalId = SQuery.newQuery().expr("_id", Op.LT, localId).firstLong(contentUri?.toUri(), "_id", "_id desc")
     }
 
     fun moveUp() {

@@ -39,7 +39,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -652,7 +651,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             mapFragment = parentFragmentManager.findFragmentById(R.id.map_edit) as FragmentMapScroll?
         }
         if (map == null && mapFragment != null) {
-            mapFragment.getMapAsync(OnMapReadyCallback { googleMap: GoogleMap ->
+            mapFragment.getMapAsync { googleMap: GoogleMap ->
                 map = googleMap
                 map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
                 if (permissionHelper.hasLocationPermission()) {
@@ -666,7 +665,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 map!!.setOnMapLoadedCallback { doAfterMapLoaded() }
                 fillMask(id)
                 setUpLocationClientIfNeeded()
-            })
+            }
             id = 0
             if (requireActivity().intent.extras != null && requireActivity().intent.extras!!.containsKey(FragmentUpDown.RECORD_ID_LOCAL)) {
                 id = requireActivity().intent.extras!!.getLong(FragmentUpDown.RECORD_ID_LOCAL)
@@ -782,7 +781,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 }
             val alert = builder.create()
             alert.show()
-        } catch (ignored: NullPointerException) {
+        } catch (_: NullPointerException) {
         }
     }
 

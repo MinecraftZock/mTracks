@@ -197,7 +197,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
 
         Timber.w("send pendingintent updateNotification4Admin2 $pendingIntentFlags")
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
@@ -267,27 +267,19 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
                     // builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
                     // builder.setRequiresDeviceIdle(true); // device should be idle
                     // builder.setRequiresCharging(false); // we don't care if the device is charging or not
-                    val jobScheduler: JobScheduler? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        context.getSystemService(JobScheduler::class.java)
-                    } else {
-                        context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-                    }
+                    val jobScheduler: JobScheduler? = context.getSystemService(JobScheduler::class.java)
                     jobScheduler?.schedule(builder.build())
                 }
             }
         }
 
         fun restartService(context: Context) {
-            val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+            val jobScheduler = context.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
             jobScheduler.cancelAll()
             scheduleJob(context)
         }
 
-        val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
+        const val pendingIntentFlags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     }
 
 }

@@ -7,17 +7,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.net.Uri
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import timber.log.Timber
 import kotlin.math.roundToInt
+import androidx.core.net.toUri
 
 object LocationHelper {
 
-    private const val milesFactor = 1.609344
+    private const val MILES_FACTOR = 1.609344
     private const val RUNDEN_STELLEN = 200
-    private const val yardFactor = 0.9144
+    private const val YARD_FACTOR = 0.9144
     private const val FORMAT_THRESHOLD = 1400
 
     fun getFormatDistance(showKm: Boolean, meterSource: Int): String {
@@ -27,10 +27,10 @@ object LocationHelper {
         if (meter > FORMAT_THRESHOLD) {
             res = if (showKm) (meter / 1000).toFloat().roundToInt().toString() + " km"
             else
-                (meter.toDouble() / milesFactor / 1000.0).roundToInt().toString() + " mi"
+                (meter.toDouble() / MILES_FACTOR / 1000.0).roundToInt().toString() + " mi"
         } else {
             meter = (meter / RUNDEN_STELLEN).toFloat().roundToInt() * RUNDEN_STELLEN
-            res = if (showKm) "$meter m" else (meter * yardFactor).roundToInt().toString() + " yd"
+            res = if (showKm) "$meter m" else (meter * YARD_FACTOR).roundToInt().toString() + " yd"
         }
         return res
     }
@@ -63,15 +63,15 @@ object LocationHelper {
             navi += " ($name)"
         }
         // Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));
-        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(navi))
+        var intent = Intent(Intent.ACTION_VIEW, navi.toUri())
         try {
             if (isDefaultNaviAppSygic(context, intent)) {
                 val type = "drive"
                 val str = "com.sygic.aura://coordinate|" + lastLoc.longitude + "|" + lastLoc.latitude + "|" + type
-                intent = Intent(Intent.ACTION_VIEW, Uri.parse(str))
+                intent = Intent(Intent.ACTION_VIEW, str.toUri())
             }
             context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             Toast.makeText(context, context.getString(R.string.no_navi_available), Toast.LENGTH_SHORT).show()
         }
     }
