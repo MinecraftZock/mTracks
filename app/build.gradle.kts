@@ -272,7 +272,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:19.2.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.google.android.libraries.places:places:5.1.1")
-    implementation("com.google.maps.android:android-maps-utils:3.19.0")
+    implementation("com.google.maps.android:android-maps-utils:3.20.1")
 
     "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.3.0")
     "androidTestImplementation"("org.hamcrest:hamcrest-integration:1.3")
