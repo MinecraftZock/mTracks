@@ -82,7 +82,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
         LocationJobService.scheduleJob(applicationContext)
 
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, getString(R.string.GOOGLE_MAP_API_KEY))
+            Places.initializeWithNewPlacesApiEnabled(applicationContext, getString(R.string.GOOGLE_MAP_API_KEY))
         }
 
         startKoin {
