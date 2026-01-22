@@ -156,8 +156,18 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     private fun toggleMap() {
         // display size
-        val display = requireActivity().windowManager.defaultDisplay
-        val size = getDisplaySize(display)
+        val size = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = requireActivity().windowManager.currentWindowMetrics
+            val bounds = windowMetrics.bounds
+            Point(bounds.width(), bounds.height())
+        } else {
+            @Suppress("DEPRECATION")
+            val display = requireActivity().windowManager.defaultDisplay
+            val point = Point()
+            @Suppress("DEPRECATION")
+            display.getSize(point)
+            point
+        }
         val params = binding.teLayoutMap.layoutParams
         if (binding.teLayoutMap.height == smallRatio) {
             // bigger
@@ -801,10 +811,5 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         private const val fak5 = 100000
         private const val DEFAULT_LAT = 51.16569
         private const val DEFAULT_LON = 10.45153
-        private fun getDisplaySize(display: Display): Point {
-            val point = Point()
-            display.getSize(point)
-            return point
-        }
     }
 }

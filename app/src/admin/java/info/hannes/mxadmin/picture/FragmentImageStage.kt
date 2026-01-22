@@ -7,8 +7,8 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Point
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -116,8 +116,18 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     @SuppressLint("SetTextI18n")
     protected fun setImage(record: PictureStageRecord) {
         currStage = record
-        val display = requireActivity().windowManager.defaultDisplay
-        val size = getDisplaySize(display)
+        val size = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = requireActivity().windowManager.currentWindowMetrics
+            val bounds = windowMetrics.bounds
+            Point(bounds.width(), bounds.height())
+        } else {
+            @Suppress("DEPRECATION")
+            val display = requireActivity().windowManager.defaultDisplay
+            val point = Point()
+            @Suppress("DEPRECATION")
+            display.getSize(point)
+            point
+        }
         val pictureShown = imageView?.let {
             PictureAdminHelper.checkAndSetImage(requireActivity(), record, it, if (size.y > size.x) size.y else size.x)
         }
@@ -179,12 +189,6 @@ class FragmentImageStage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             f.arguments = args
 
             return f
-        }
-
-        private fun getDisplaySize(display: Display): Point {
-            val point = Point()
-            display.getSize(point)
-            return point
         }
     }
 }
