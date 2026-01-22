@@ -26,10 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -68,7 +64,7 @@ import java.util.Locale
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
  */
-class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks, OnConnectionFailedListener {
+class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> {
     private var adapter: SimpleCursorAdapter? = null
     private var adapterTracksSort: AdapterTracksSort? = null
     private var callbacks = sEmptyCallbacks
@@ -81,7 +77,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     private var diskReceiver: DiskReceiver? = null
     private var sortOrder: String? = null
     private var viewBinder: ViewBinderTracks? = null
-    private var googleApiClient: GoogleApiClient? = null
     private var searchView: SearchView? = null
     private var searchAutoComplete: SearchAutoComplete? = null
     private var locationCallback: LocationCallback? = null
@@ -508,15 +503,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     private fun setUpLocationClientIfNeeded() {
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(requireActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build()
-        }
         if (permissionHelper.hasLocationPermission()) {
-            googleApiClient!!.connect()
+            startLocationUpdates()
         } else if (sortOrder == Tracksges.TRACKNAME) { //otherwise it asks to often
             requestPermissions(
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -526,8 +514,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     private fun stopLocationUpdates() {
-        if (googleApiClient!!.isConnected) {
-            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(locationCallback!!)
+        locationCallback?.let {
+            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(it)
         }
     }
 
@@ -537,28 +525,18 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
             if (context != null) {
                 LocationServices.getFusedLocationProviderClient(requireContext())
                     .requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())
+
+                // Get last known location
+                if (isAdded) {
+                    LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
+                        .addOnSuccessListener(requireActivity()) { last ->
+                            if (last != null) {
+                                viewBinder?.setMyLocation(last)
+                            }
+                        }
+                }
             }
         }
-    }
-
-    override fun onConnectionFailed(result: ConnectionResult) {}
-
-    @SuppressLint("MissingPermission")
-    override fun onConnected(connectionHint: Bundle?) {
-        startLocationUpdates()
-
-        if (isAdded) {
-            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
-                .addOnSuccessListener(requireActivity()) { last ->
-                    if (last != null) {
-                        viewBinder?.setMyLocation(last)
-                    }
-                }
-        }
-    }
-
-    override fun onConnectionSuspended(arg0: Int) {
-        // nothing
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

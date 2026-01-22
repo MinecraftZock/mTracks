@@ -42,10 +42,6 @@ import androidx.core.widget.TextViewCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -92,14 +88,12 @@ import java.io.IOException
 import java.util.Locale
 
 
-class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener,
-    ConnectionCallbacks, OnConnectionFailedListener {
+class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>, LoaderManager.LoaderCallbacks<Cursor>, LocationListener {
 
     private var adapterWeather: WeatherCursorAdapter? = null
     private var recordTrack: TracksgesRecord? = null
     private var fileAbsolute: String? = null
     private var recordTrackDist: TracksDistanceRecord? = null
-    private var googleApiClient: GoogleApiClient? = null
     private var currPosition: Int = 0
 
     private var _binding: FragmentTrackDetailBinding? = null
@@ -283,14 +277,11 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             // getLoaderManager().initLoader(LOADER_TRACK, bundle, this);
         }
         setUpLocationClientIfNeeded()
-        googleApiClient!!.connect()
+        startLocationUpdates()
     }
 
     override fun onPause() {
-        if (googleApiClient != null && googleApiClient!!.isConnected) {
-            stopLocationUpdates()
-            googleApiClient!!.disconnect()
-        }
+        stopLocationUpdates()
         super.onPause()
     }
 
@@ -521,12 +512,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             prefs.edit().putFirstTimeUse(false).commit()
         }
 
-        googleApiClient?.let {
-            if (it.isConnected && permissionHelper.hasLocationPermission()) {
-                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, location)
-                }
+        if (permissionHelper.hasLocationPermission()) {
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, location)
             }
         }
         DistanceHelper.checkDistance4View(recordTrack!!, binding.distanceContainer.trDetailDistance, null)
@@ -912,14 +901,12 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 }
                 if (cursor.count == 1) {
                     recordTrack = TracksgesRecord.fromCursor(cursor)
-                    googleApiClient?.let {
-                        if (it.isConnected && permissionHelper.hasLocationPermission()) {
-                            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                                location?.let {
-                                    Ops.execute(AbstractOpGetRouteOperation.newIntent(recordTrack!!.id, location.latitude, location.longitude))
-                                    restartLastLocationDisplay(cursor, location)
-                                }
+                    if (permissionHelper.hasLocationPermission()) {
+                        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                            location?.let {
+                                Ops.execute(AbstractOpGetRouteOperation.newIntent(recordTrack!!.id, location.latitude, location.longitude))
+                                restartLastLocationDisplay(cursor, location)
                             }
                         }
                     }
@@ -1051,55 +1038,32 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     private fun setUpLocationClientIfNeeded() {
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(requireContext().applicationContext)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .addOnConnectionFailedListener(this)
-                .build()
-        }
+        // Setup is no longer needed with FusedLocationProviderClient
+        // Location updates are started directly in onResume
     }
 
-    override fun onConnectionFailed(result: ConnectionResult) {}
-
-    override fun onConnected(connectionHint: Bundle?) {
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
         if (isAdded &&
-            ActivityCompat.checkSelfPermission(requireActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(requireActivity(), permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ) {
-            // if's already requested
-            return
-        }
-        googleApiClient?.let { it ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-            if (it.isConnected) {
-                fusedLocationClient.requestLocationUpdates(LocationJobService.REQUEST_DAY, this, Looper.getMainLooper())
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let { it: Location ->
-                        onLocationChanged(it)
-                    } ?: kotlin.run {
-                        // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
-                    }
-                }
-            } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let { it: Location ->
-                        onLocationChanged(it)
-                    }
+            fusedLocationClient.requestLocationUpdates(LocationJobService.REQUEST_DAY, this, Looper.getMainLooper())
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let { it: Location ->
+                    onLocationChanged(it)
+                } ?: kotlin.run {
+                    // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
                 }
             }
         }
     }
 
     private fun stopLocationUpdates() {
-        googleApiClient?.let {
-            if (it.isConnected) {
-                LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(this)
-            }
+        if (isAdded) {
+            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(this)
         }
     }
-
-    override fun onConnectionSuspended(arg0: Int) {}
 
     override fun fillNextPrevId(localId: Long) {
         var isFav = false
