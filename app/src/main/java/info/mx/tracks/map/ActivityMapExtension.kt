@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -96,6 +97,18 @@ class ActivityMapExtension : ActivityDrawerBase() {
 
         MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityMapExtension.javaClass.simpleName).apply()
 
+        // Setup back press handling using OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mapFragment?.onFragmentBackPressed() == true) {
+                    // If the fragment indicates it's done processing back press, finish the activity
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+                // If the fragment handled the back press (returned false), do nothing
+            }
+        })
+
         val cl = ChangeLog(this)
         if (cl.isFirstRunEver) {
             val settingIntent = Intent(this, ActivitySetting::class.java)
@@ -105,11 +118,6 @@ class ActivityMapExtension : ActivityDrawerBase() {
         }
     }
 
-    override fun onBackPressed() {
-        if (mapFragment?.onFragmentBackPressed()!!) {
-            super.onBackPressed()
-        }
-    }
 
     fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {
         when (panelState) {

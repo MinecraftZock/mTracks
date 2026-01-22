@@ -5,7 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -90,6 +95,16 @@ class ActivitySetting : ActivityBase() {
             prefs.edit().putUnitsKm(isChecked).commit()
         }
         (findViewById<View>(R.id.setting_version) as TextView).text = getVersionName(this)
+
+        // Setup back press handling using OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                prefs.edit().putUsername(binding.containerSetting.settingUsername.editableText.toString()).commit()
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        })
+
         hideKeyboard()
     }
 
@@ -101,10 +116,5 @@ class ActivitySetting : ActivityBase() {
         super.onPause()
         trackEvent("Setting", "Tracking:" + prefs.agreeTracking)
         trackEvent("Setting", "Improve:" + prefs.agreeTrackSurveillance)
-    }
-
-    override fun onBackPressed() {
-        prefs.edit().putUsername(binding.containerSetting.settingUsername.editableText.toString()).commit()
-        super.onBackPressed()
     }
 }
