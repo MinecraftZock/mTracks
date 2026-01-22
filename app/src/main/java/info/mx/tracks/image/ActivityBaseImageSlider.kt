@@ -1,7 +1,6 @@
 package info.mx.tracks.image
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
@@ -139,7 +138,7 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
         val filter = IntentFilter()
         filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            registerReceiver(diskReceiver, filter, RECEIVER_NOT_EXPORTED)
         } else
             registerReceiver(diskReceiver, filter)
         supportLoaderManager.initLoader(LOADER_PICTURE_THUMBS, null, this)

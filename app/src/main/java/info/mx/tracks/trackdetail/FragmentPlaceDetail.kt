@@ -7,14 +7,21 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -60,7 +67,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
                             doSelectDlg(requireActivity(), R.string.phone, view.text.toString())
                         } else {
                             val intent = Intent(Intent.ACTION_DIAL)
-                            intent.data = Uri.parse("tel:" + view.text.toString())
+                            intent.data = "tel:${view.text}".toUri()
                             startActivity(intent)
                         }
                     }
@@ -224,7 +231,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
                     url = "http://$url"
                 }
                 val i = Intent(Intent.ACTION_VIEW)
-                i.data = Uri.parse(url)
+                i.data = url.toUri()
                 activity.startActivity(i)
             }
         }
@@ -246,7 +253,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
             builder.setItems(sortItems) { _, item ->
                 if (kind == R.string.phone) {
                     val intent = Intent(Intent.ACTION_DIAL)
-                    intent.data = Uri.parse("tel:" + sortItems[item])
+                    intent.data = ("tel:" + sortItems[item]).toUri()
                     activity.startActivity(intent)
                 } else if (kind == R.string.website) {
                     var url = sortItems[item]
@@ -254,7 +261,7 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
                         url = "http://$url"
                     }
                     val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(url)
+                    i.data = url.toUri()
                     activity.startActivity(i)
                 }
             }
