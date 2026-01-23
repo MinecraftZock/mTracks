@@ -17,7 +17,7 @@ open class GeoCode : Serializable, Parcelable {
     var status: String? = null
 
     protected constructor(`in`: Parcel) {
-        `in`.readList(this.results!!, (Result::class.java.classLoader))
+        this.results = `in`.createTypedArrayList(Result.CREATOR) as MutableList<Result?>?
         this.status = (`in`.readValue((String::class.java.classLoader)) as String?)
     }
 
