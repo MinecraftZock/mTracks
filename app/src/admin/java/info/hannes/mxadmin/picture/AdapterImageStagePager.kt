@@ -13,12 +13,8 @@ import java.util.*
  */
 class AdapterImageStagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-    private val cachedFragments: MutableMap<Int, FragmentImageStage>
+    private val cachedFragments: MutableMap<Int, FragmentImageStage> = HashMap()
     private var cursor: Cursor? = null
-
-    init {
-        cachedFragments = HashMap()
-    }
 
     override fun getItem(i: Int): Fragment {
         cursor!!.moveToPosition(i)
@@ -30,7 +26,7 @@ class AdapterImageStagePager(fragmentManager: FragmentManager) : FragmentStatePa
         return if (cursor == null) 0 else cursor!!.count
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         cursor!!.move(position)
         return "" + position
     }

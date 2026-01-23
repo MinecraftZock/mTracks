@@ -432,6 +432,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
 
             override fun onMarkerDragEnd(marker: Marker) {
+                @Suppress("SENSELESS_COMPARISON")
                 if (dragTargetId != 0L && marker.getData<Any>() != null && marker.getData<Any>() is TrackstageRecord) {
                     val trackstageRecord = marker.getData<TrackstageRecord>()
                     askForMergeDlg(dragTargetId, trackstageRecord)
@@ -470,8 +471,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         val myAlertDialog = AlertDialog.Builder(requireActivity())
         myAlertDialog.setTitle(R.string.info)
         myAlertDialog.setMessage(trackstageRecord.trackname + " -> " + tracksRecord!!.trackname)
-        myAlertDialog.setPositiveButton(R.string.yes) { dialog, which -> updateTrackstage(targetId, trackstageRecord) }
-        myAlertDialog.setNegativeButton(android.R.string.cancel) { arg0, arg1 ->
+        myAlertDialog.setPositiveButton(R.string.yes) { _, _ -> updateTrackstage(targetId, trackstageRecord) }
+        myAlertDialog.setNegativeButton(android.R.string.cancel) { _, _ ->
             // do something when the Cancel button is clicked
         }
         myAlertDialog.show()
@@ -558,7 +559,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     polylineSurveillance = map!!.addPolyline(
                         PolylineOptions().addAll(decodedPath).width(10f).color(ContextCompat.getColor(requireContext(), R.color.black))
                     )
-                } catch (ignored: NullPointerException) {
+                } catch (_: NullPointerException) {
                 }
             })
     }
@@ -1009,7 +1010,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     private fun zoomIn() {
-        if (map != null && map!!.cameraPosition != null) {
+        if (map != null && map?.cameraPosition != null) {
             if (map!!.cameraPosition.zoom < 20) {
                 //                CameraUpdate newPos = CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target,
                 //                        map.getCameraPosition().zoom + 2)
@@ -1084,7 +1085,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun animateCameraToMarker(marker: Marker, zoomAnimate: Float) {
         var zoom = zoomAnimate
-        if (map != null && map!!.cameraPosition != null) {
+        if (map != null && map?.cameraPosition != null) {
             if (zoom == 0f) {
                 zoom = map!!.cameraPosition.zoom
             }
