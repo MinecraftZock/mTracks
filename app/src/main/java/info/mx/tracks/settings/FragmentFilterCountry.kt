@@ -104,7 +104,7 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
                 res = true
             } else if (view.id == R.id.tvFilterCountryText) {
                 val tv = view as TextView
-                val loc = Locale(cRec.country, cRec.country)
+                val loc = Locale.Builder().setRegion(cRec.country).build()
                 tv.text = loc.displayCountry
                 res = true
             } else if (view.id == R.id.tvFilterCountryAnz) {

@@ -37,7 +37,7 @@ internal open class OpTracksMapLoadOperation : AbstractOpTracksMapLoadOperation(
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult? {
         for (iso in Locale.getISOCountries()) {
-            val l = Locale("", iso)
+            val l = Locale.Builder().setRegion(iso).build()
             countries[l.displayCountry.uppercase(Locale.getDefault())] = iso
         }
         try {
