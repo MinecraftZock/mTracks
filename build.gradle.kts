@@ -12,7 +12,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20")
         classpath("com.google.gms:google-services:4.4.4")
         classpath("com.google.firebase:firebase-crashlytics-gradle:3.0.6")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:13.1.0")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:14.0.1")
     }
 }
 
