@@ -1,4 +1,4 @@
-name: pull request
+name: PullRequest
 
 on:
   push:
@@ -24,37 +24,8 @@ jobs:
           echo "MODIFIED_BRANCH_NAME=${name//\//-}" >> ${GITHUB_OUTPUT}
           cat ${GITHUB_OUTPUT}
 
-  BuildFlavors:
-    name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-22.04 ]
-        java_version: [ 17 ]
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          submodules: true
-          fetch-depth: 0
-          fetch-tags: true
-      - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'adopt'
-          java-version: ${{ matrix.java_version }}
-      - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.9
-      - name: Decrypt keystore
-        run: ./signing/decrypt.sh
-        env:
-          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
-      - name: Build project
-        run: ./gradlew assembleDebug
-      - name: cleanup
-        run: ./signing/cleanup.sh
-  TestPro:
-    name: Test Pro
+  buildTest:
+    name: Test
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -95,18 +66,18 @@ jobs:
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
+          distribution: "adopt"
           java-version: ${{ matrix.java_version }}
       #      - name: prepare
       #        run: brew install exiftool imagemagick
       - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.9
+        uses: hannesa2/action-android/install-sdk@0.1.16.7
       - name: Decrypt keystore
         run: ./signing/decrypt.sh
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Run instrumentation tests
-        uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
+        uses: hannesa2/action-android/emulator-run-cmd@0.1.16.7
         with:
           cmd: |
             ./gradlew :app:connectedPaidDebugAndroidTest --continue
@@ -184,7 +155,7 @@ jobs:
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
+          distribution: "adopt"
           java-version: 17
       #      - name: Run tests
       #        run: ./gradlew test
@@ -215,10 +186,10 @@ jobs:
       - name: Install JDK ${{ matrix.java_version }}
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
+          distribution: "adopt"
           java-version: ${{ matrix.java_version }}
       - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.9
+        uses: hannesa2/action-android/install-sdk@0.1.16.7
       - name: Decrypt keystore
         run: ./signing/decrypt.sh
         env:
@@ -227,5 +198,35 @@ jobs:
         run: ./gradlew assembleRelease
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: cleanup
+        run: ./signing/cleanup.sh
+
+  BuildFlavors:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-22.04 ]
+        java_version: [ 17 ]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Install JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: "adopt"
+          java-version: ${{ matrix.java_version }}
+      - name: Install Android SDK
+        uses: hannesa2/action-android/install-sdk@0.1.16.7
+      - name: Decrypt keystore
+        run: ./signing/decrypt.sh
+        env:
+          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+      - name: Build project
+        run: ./gradlew assembleDebug
       - name: cleanup
         run: ./signing/cleanup.sh
