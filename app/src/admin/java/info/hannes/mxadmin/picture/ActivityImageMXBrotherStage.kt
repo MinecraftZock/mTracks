@@ -5,9 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract
-import info.hannes.mechadmin_gen.sqlite.PictureStageRecord
-import info.hannes.mechadmin_gen.sqlite.TrackstageBrotherRecord
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract
+import info.hannes.mechadminGen.sqlite.PictureStageRecord
+import info.hannes.mechadminGen.sqlite.TrackstageBrotherRecord
 import info.mx.tracks.R
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract

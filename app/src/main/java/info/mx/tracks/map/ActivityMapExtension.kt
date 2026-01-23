@@ -130,12 +130,14 @@ class ActivityMapExtension : ActivityDrawerBase() {
     fun setFabPosition(panelState: PanelState, headerHeight: Int, position: Float) {
         when (panelState) {
             PanelState.EXPANDED -> Unit
+
             PanelState.COLLAPSED -> {
                 menuFab?.visibility = View.VISIBLE
                 menuFab?.setPadding(fabPadding, fabPadding, fabPadding, headerHeight + fabPadding)
             }
 
             PanelState.ANCHORED -> menuFab?.visibility = View.VISIBLE
+
             PanelState.HIDDEN -> {
                 menuFab?.visibility = View.GONE
                 menuFab?.setPadding(fabPadding, fabPadding, fabPadding, fabPadding)

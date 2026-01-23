@@ -6,7 +6,7 @@ import android.widget.ImageView
 
 import java.io.File
 
-import info.hannes.mechadmin_gen.sqlite.PictureStageRecord
+import info.hannes.mechadminGen.sqlite.PictureStageRecord
 import info.mx.tracks.R
 import info.mx.tracks.prefs.MxPreferences
 import timber.log.Timber

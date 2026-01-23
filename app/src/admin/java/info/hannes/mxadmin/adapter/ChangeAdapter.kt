@@ -2,7 +2,6 @@ package info.hannes.mxadmin.adapter
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,8 @@ import org.koin.core.component.inject
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class ChangeAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolderArchive>(), KoinComponent {
     private val listTracksArchive: MutableList<Tracksarchiv> = ArrayList()
@@ -61,19 +61,18 @@ class ChangeAdapter(private val context: Context) : RecyclerView.Adapter<ViewHol
             .selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
         holder.textWhen.text =
             sdf.format(Date(java.lang.Long.valueOf(tracksarchiv.getArchDate()!!) * 1000))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.textLeft.text = Html.fromHtml(getFields(tracksarchiv, track), Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            holder.textLeft.text = Html.fromHtml(getFields(tracksarchiv, track))
-        }
+        holder.textLeft.text = Html.fromHtml(getFields(tracksarchiv, track), Html.FROM_HTML_MODE_LEGACY)
     }
 
     private fun getFields(obj: Any, track: TracksRecord): String {
         val res = StringBuilder()
         val methodsTrack = track.javaClass.declaredMethods
         for (method in obj.javaClass.declaredMethods) {
-            if (method.name.startsWith("get") && method.name != "getId" && !method.name.startsWith("getArch") &&
-                !method.name.startsWith("getChanged") && !method.name.startsWith("getLatitude") &&
+            if (method.name.startsWith("get") &&
+                method.name != "getId" &&
+                !method.name.startsWith("getArch") &&
+                !method.name.startsWith("getChanged") &&
+                !method.name.startsWith("getLatitude") &&
                 !method.name.startsWith("getLongitude")
             ) {
                 try {
@@ -92,26 +91,26 @@ class ChangeAdapter(private val context: Context) : RecyclerView.Adapter<ViewHol
                                     valueOriginal = " ($trackValueS)"
                                     color = Color.WHITE
                                     res.append(getColoredSpanned(method.name + "=" + method.invoke(obj), color))
-                                        .append(getColoredSpanned(valueOriginal.toString(), Color.GRAY))
+                                        .append(getColoredSpanned(valueOriginal, Color.GRAY))
                                         .append("<br>")
                                 }
-                            } else if (methodTrack.invoke(track) != null && methodTrack.invoke(track) == method.invoke(obj) && !method.name.startsWith(
-                                    "getApproved"
-                                )
+                            } else if (methodTrack.invoke(track) != null &&
+                                methodTrack.invoke(track) == method.invoke(obj) &&
+                                !method.name.startsWith("getApproved")
                             ) {
                                 // nothing
                             } else {
                                 valueOriginal = " (" + methodTrack.invoke(track) + ")"
                                 color = Color.WHITE
                                 res.append(getColoredSpanned(method.name + "=" + method.invoke(obj), color))
-                                    .append(getColoredSpanned(valueOriginal.toString(), Color.GRAY))
+                                    .append(getColoredSpanned(valueOriginal, Color.GRAY))
                                     .append("<br>")
                             }
                         }
                     }
-                } catch (e: IllegalAccessException) {
+                } catch (_: IllegalAccessException) {
                     res.append(method.name).append("=IllegalAccess").append("<br>")
-                } catch (e: InvocationTargetException) {
+                } catch (_: InvocationTargetException) {
                     res.append(method.name).append("=InvocationTarget").append("<br>")
                 }
             }

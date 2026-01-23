@@ -15,20 +15,7 @@ import android.content.DialogInterface.BUTTON_POSITIVE
 /**
  * Kicks off common error handling when receiving a throwable from a network request
  */
-class ErrorCommand(private val context: Context) : Command<Throwable>() {
-
-    private var silentException = false
-
-    /**
-     * By default exceptions are displayed as SnackBar notifications.
-     * You can disable this behaviour by calling this method on the command.
-     *
-     * @return the current instance
-     */
-    fun silentException(): ErrorCommand {
-        silentException = true
-        return this
-    }
+open class ErrorCommand(private val context: Context) : Command<Throwable>() {
 
     override fun process(payload: Throwable): Result {
         Timber.e(payload)
@@ -61,7 +48,5 @@ class ErrorCommand(private val context: Context) : Command<Throwable>() {
         }
     }
 
-    protected fun buttonClicked() {
-
-    }
+    protected fun buttonClicked() = Unit
 }

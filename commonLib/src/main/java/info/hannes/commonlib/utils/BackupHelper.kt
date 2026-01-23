@@ -10,7 +10,7 @@ import info.hannes.commonlib.utils.FileHelper.copyFile
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object BackupHelper {
     private const val DATABASE_EXTENSION = ".db"
@@ -51,9 +51,11 @@ object BackupHelper {
 
         // json files
         context.filesDir.listFiles()?.forEach { fileJson ->
-            if (!fileJson.name.startsWith("DATA_") && !fileJson.name.contains("_") && !fileJson.name.endsWith("history") && !fileJson.isDirectory && !fileJson.name.contains(
-                    "."
-                )
+            if (!fileJson.name.startsWith("DATA_") &&
+                !fileJson.name.contains("_") &&
+                !fileJson.name.endsWith("history") &&
+                !fileJson.isDirectory &&
+                !fileJson.name.contains(".")
             ) {
                 val jsonTo = File(shareTempFilesDir + fileJson.name + ".json")
                 copyFile(fileJson, jsonTo)

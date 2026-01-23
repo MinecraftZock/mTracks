@@ -30,6 +30,7 @@ object BitmapHelper {
                     bmpBasis = mergeBitmaps(bmpBasis, bmpClosed)
                     bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bmpBasis)
                 }
+
                 "CS", "CT" -> {
                     var bmpBasis = BitmapFactory.decodeResource(context.resources, iconRes)
                     val bmpClosed =
@@ -56,12 +57,14 @@ object BitmapHelper {
                         BitmapFactory.decodeResource(context.resources, R.drawable.pin_closed)
                     mergeBitmaps(bmpBasis, bmpClosed)
                 }
+
                 "CS", "CT" -> {
                     val bmpBasis = BitmapFactory.decodeResource(context.resources, iconRes)
                     val bmpClosed =
                         BitmapFactory.decodeResource(context.resources, R.drawable.pin_attention)
                     mergeBitmaps(bmpBasis, bmpClosed)
                 }
+
                 else -> BitmapFactory.decodeResource(context.resources, iconRes)
             }
             bitmapMap[iconRes.toString() + trackAccess] = bitmap

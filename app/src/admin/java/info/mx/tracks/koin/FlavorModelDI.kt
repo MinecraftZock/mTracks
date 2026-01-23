@@ -1,3 +1,4 @@
+@file:Suppress("ktlint:standard:filename")
 package info.mx.tracks.koin
 
 import info.hannes.mxadmin.service.DataManagerAdmin

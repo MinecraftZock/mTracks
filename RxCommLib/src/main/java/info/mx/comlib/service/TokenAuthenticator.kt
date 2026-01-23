@@ -11,7 +11,6 @@ import java.io.IOException
 class TokenAuthenticator(var access: AccessToken) : Authenticator {
     @Throws(IOException::class)
     override fun authenticate(route: Route?, response: Response): Request {
-
         //		Intent startLoginIntent = new Intent(context, LoginActivity.class);
         //		startLoginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //		context.startActivity(startLoginIntent);

@@ -8,10 +8,25 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.os.*
-import android.view.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
@@ -62,8 +77,14 @@ import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.settings.ActivityFilter
-import info.mx.tracks.sqlite.*
-import info.mx.tracks.sqlite.MxInfoDBContract.*
+import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.tracks.sqlite.MxInfoDBContract.Route
+import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
+import info.mx.tracks.sqlite.RouteRecord
+import info.mx.tracks.sqlite.TracksGesSumRecord
+import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.sqlite.TrackstageRecord
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackEdit
@@ -75,13 +96,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks,
-    OnConnectionFailedListener, OnMarkerClickListener, OnCameraChangeListener, PoiDetailHeaderListener {
+abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks, OnConnectionFailedListener,
+    OnMarkerClickListener, OnCameraChangeListener, PoiDetailHeaderListener {
     private var srcText = ""
     private var savePos: CameraPosition? = null
 
@@ -373,10 +393,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         map!!.setOnMarkerClickListener(this)
         map!!.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
-
                 val currentScreen = map!!.projection.visibleRegion.latLngBounds
                 for (mapMarker in map!!.markers) {
-                    if (mapMarker.getData<Any>() != null && mapMarker.getData<Any>() is Long) {
+                    if (mapMarker.getData<Any>() is Long) {
                         if (currentScreen.contains(mapMarker.position)) {
                             visibleMarkers.add(mapMarker)
                         }
@@ -385,7 +404,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
 
             override fun onMarkerDrag(marker: Marker) {
-
                 val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
                 val projection = map!!.projection
@@ -398,12 +416,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     val diffX = abs(screenPosition.x - screeAllPosition.x)
                     val diffY = abs(screenPosition.y - screeAllPosition.y)
                     if (diffX < TOLERANCE && diffY < TOLERANCE) {
-
                         if (Build.VERSION.SDK_INT >= 26) {
                             vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
                         } else {
-                            @Suppress("DEPRECATION")
-                            vibrator.vibrate(100)
+                            @Suppress("DEPRECATION") vibrator.vibrate(100)
                         }
 
                         Timber.d("${mapMarker.getData<Any>()}$diffX / $diffY")
@@ -427,8 +443,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             map!!.isMyLocationEnabled = true
         } else {
             requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                PermissionHelper.REQUEST_PERMISSION_LOCATION
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PermissionHelper.REQUEST_PERMISSION_LOCATION
             )
         }
         map!!.uiSettings.isZoomControlsEnabled = true
@@ -486,9 +501,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         // Replace in the fragment_container_map view with this fragment,
         // add the transaction to the back stack so the user can navigate back
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container_map, fragmentTrackDetailTab, FragmentTrackDetailTab.TAG)
-            .addToBackStack(null)
-            .commitAllowingStateLoss()
+        transaction.replace(R.id.fragment_container_map, fragmentTrackDetailTab, FragmentTrackDetailTab.TAG).addToBackStack(null).commitAllowingStateLoss()
 
         //FIXME slidingDrawer.setScrollableView(fragmentTrackDetail.getScrollView())
         currId = id
@@ -511,9 +524,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         // Replace in the fragment_container_map view with this fragment,
         // add the transaction to the back stack so the user can navigate back
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container_map, fragmentPlace)
-            .addToBackStack(null)
-            .commitAllowingStateLoss()
+        transaction.replace(R.id.fragment_container_map, fragmentPlace).addToBackStack(null).commitAllowingStateLoss()
 
         slidingDrawer!!.scrollableView = fragmentPlace.scrollContent
     }
@@ -534,10 +545,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     private fun drawSurveillancePolyline() {
-        addDisposable(mxDatabase.capturedLatLngDao().allNonIgnored
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { capturedLatLngs ->
+        addDisposable(
+            mxDatabase.capturedLatLngDao().allNonIgnored.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe { capturedLatLngs ->
                 if (polylineSurveillance != null) {
                     polylineSurveillance!!.remove()
                 }
@@ -547,9 +556,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         decodedPath.add(LatLng(lat, lon))
                     }
                     polylineSurveillance = map!!.addPolyline(
-                        PolylineOptions().addAll(decodedPath)
-                            .width(10f)
-                            .color(ContextCompat.getColor(requireContext(), R.color.black))
+                        PolylineOptions().addAll(decodedPath).width(10f).color(ContextCompat.getColor(requireContext(), R.color.black))
                     )
                 } catch (ignored: NullPointerException) {
                 }
@@ -585,19 +592,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private fun startLocationUpdates() {
         if (permissionHelper.hasLocationPermission()) {
             if (context != null) {
-                LocationServices.getFusedLocationProviderClient(requireContext())
-                    .requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())
+                LocationServices.getFusedLocationProviderClient(requireContext()).requestLocationUpdates(LocationJobService.REQUEST_DAY, locationCallback!!, Looper.getMainLooper())
             }
         }
     }
 
     private fun setUpLocationClientIfNeeded() {
         if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(requireActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build()
+            googleApiClient = GoogleApiClient.Builder(requireActivity()).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
         }
         googleApiClient!!.connect()
     }
@@ -657,7 +659,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
 
             override fun onQueryTextSubmit(txt: String): Boolean {
-
                 MxCoreApplication.trackEvent("search", txt)
                 val bounds = map!!.projection.visibleRegion.latLngBounds
                 val mAdapter = AdapterPlaceAutocomplete(this@BaseFragmentMap, map!!, bounds, txt)
@@ -787,15 +788,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     @SuppressLint("MissingPermission")
     private fun zoomToMyLocation() {
         if (googleApiClient != null && googleApiClient!!.isConnected && map != null && isAdded) {
-            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
-                .addOnSuccessListener(requireActivity()) { location ->
-                    if (location != null) {
-                        // Move the camera to the user's location if they are off-screen!
-                        val latlong = LatLng(location.latitude, location.longitude)
-                        map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, MxPreferences.getInstance().mapZoom))
-                        Timber.d("animateCameraMy $latlong ${MxPreferences.getInstance().mapZoom}")
-                    }
+            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation.addOnSuccessListener(requireActivity()) { location ->
+                if (location != null) {
+                    // Move the camera to the user's location if they are off-screen!
+                    val latlong = LatLng(location.latitude, location.longitude)
+                    map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, MxPreferences.getInstance().mapZoom))
+                    Timber.d("animateCameraMy $latlong ${MxPreferences.getInstance().mapZoom}")
                 }
+            }
         }
     }
 
@@ -803,12 +803,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     override fun onConnected(connectionHint: Bundle?) {
         startLocationUpdates()
         if (permissionHelper.hasLocationPermission() && isAdded) {
-            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
-                .addOnSuccessListener(requireActivity()) { location ->
-                    if (location != null) {
-                        headerView!!.setLocation(location)
-                    }
+            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation.addOnSuccessListener(requireActivity()) { location ->
+                if (location != null) {
+                    headerView!!.setLocation(location)
                 }
+            }
         }
         if (interestLatLng == null) {
             zoomToMyLocation()
@@ -844,9 +843,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
 
             LOADER_STAGE -> StageHelperExtension.getStageQuery(0, true).createSupportLoader(Trackstage.CONTENT_URI, null, Trackstage.CREATED)
-            LOADER_ROUTE -> SQuery.newQuery()
-                .expr(Route.TRACK_CLIENT_ID, SQuery.Op.EQ, bundle!!.getLong(TRACK_CLIENT_ID))
+            LOADER_ROUTE -> SQuery.newQuery().expr(Route.TRACK_CLIENT_ID, SQuery.Op.EQ, bundle!!.getLong(TRACK_CLIENT_ID))
                 .createSupportLoader(Route.CONTENT_URI, null, Route.CREATED)
+
             else -> throw RuntimeException("bad")
         }
     }
@@ -855,8 +854,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         var query = querySource
         query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
         if (bundle != null && bundle.containsKey(SEARCH_TEXT)) {
-            query =
-                QueryHelper.buildUserTrackSearchFilter(query, bundle.getString(SEARCH_TEXT), false, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
+            query = QueryHelper.buildUserTrackSearchFilter(query, bundle.getString(SEARCH_TEXT), false, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
             searchList!!.adapter = searchAdapter
         } else if (!inPlaceSearch) {
             searchList!!.adapter = null
@@ -930,14 +928,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     routes.routes.forEach {
                         val decodedPath = PolyUtil.decode(it.overviewPolyline.points)
                         polylineRoute = map!!.addPolyline(
-                            PolylineOptions().addAll(decodedPath)
-                                .width(10f)
-                                .color(
-                                    if (count == 0)
-                                        ContextCompat.getColor(requireActivity(), R.color.route_blue)
-                                    else
-                                        ContextCompat.getColor(requireActivity(), R.color.route_grey)
-                                )
+                            PolylineOptions().addAll(decodedPath).width(10f).color(
+                                if (count == 0) ContextCompat.getColor(requireActivity(), R.color.route_blue)
+                                else ContextCompat.getColor(requireActivity(), R.color.route_grey)
+                            )
                         )
                         count++
                     }
@@ -967,11 +961,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onCameraChange(cameraPosition: CameraPosition) {
         if (cameraPosition.target.latitude != 0.0 && cameraPosition.target.longitude != 0.0) {
-            MxPreferences.getInstance().edit()
-                .putMapZoom(cameraPosition.zoom)
-                .putMapLatitude(cameraPosition.target.latitude.toFloat())
-                .putMapLongitude(cameraPosition.target.longitude.toFloat())
-                .commit()
+            MxPreferences.getInstance().edit().putMapZoom(cameraPosition.zoom).putMapLatitude(cameraPosition.target.latitude.toFloat())
+                .putMapLongitude(cameraPosition.target.longitude.toFloat()).commit()
         }
     }
 

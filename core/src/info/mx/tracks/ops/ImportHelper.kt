@@ -33,9 +33,12 @@ object ImportHelper {
         try {
             val response = call.execute()
             if (response.code() == 200) {
-                if (response.body() != null && response.body()!!.results != null && response.body()!!.results.isNotEmpty() &&
-                        response.body()!!.results[0].geometry != null &&
-                        response.body()!!.results[0].geometry.location != null) {
+                if (response.body() != null &&
+                    response.body()!!.results != null &&
+                    response.body()!!.results.isNotEmpty() &&
+                    response.body()!!.results[0].geometry != null &&
+                    response.body()!!.results[0].geometry.location != null
+                ) {
                     val location = response.body()!!.results[0].geometry.location
                     latlng = LatLng(location.lat!!, location.lng!!)
                 }

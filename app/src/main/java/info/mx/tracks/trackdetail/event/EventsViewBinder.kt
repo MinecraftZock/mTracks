@@ -9,10 +9,9 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
 import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.MxInfoDBContract.Events2series
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class EventsViewBinder : SimpleCursorAdapter.ViewBinder {
 
@@ -27,7 +26,7 @@ class EventsViewBinder : SimpleCursorAdapter.ViewBinder {
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 (view as TextView).text = sdf.format(Date(cursor.getLong(columnIndex) * 1000))
                 view.setOnClickListener { Timber.d("click textDatum") }
-                view.setOnLongClickListener(object:AdapterView.OnItemLongClickListener, View.OnLongClickListener {
+                view.setOnLongClickListener(object : AdapterView.OnItemLongClickListener, View.OnLongClickListener {
                     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
                         Timber.w("() id=$id tracksRestID=$tracksRestID")
                         return true
@@ -46,12 +45,14 @@ class EventsViewBinder : SimpleCursorAdapter.ViewBinder {
                 })
                 res = true
             }
+
             R.id.textSerie -> {
                 view.visibility =
                     if (cursor.getString(columnIndex) == null || cursor.getString(columnIndex) == "") View.GONE else View.VISIBLE
                 (view as TextView).text = cursor.getString(columnIndex)
                 res = true
             }
+
             R.id.textKommentar -> {
                 (view as TextView).text = cursor.getString(columnIndex)
                 res = true

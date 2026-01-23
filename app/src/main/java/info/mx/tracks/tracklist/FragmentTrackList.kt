@@ -331,12 +331,12 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
         searchItem!!.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 setFilter2Fragment("")
-                return true  // Return true to collapse action view
+                return true // Return true to collapse action view
             }
 
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 // Do something when expanded
-                return true  // Return true to expand action view
+                return true // Return true to expand action view
             }
         })
 
@@ -378,7 +378,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         if (item.itemId == R.id.menu_add_track) {
             val qWfaddIntent = Intent(activity, ActivityTrackEdit::class.java)
             startActivityForResult(qWfaddIntent, 1)

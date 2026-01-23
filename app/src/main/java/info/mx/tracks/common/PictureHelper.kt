@@ -20,7 +20,6 @@ import kotlin.math.roundToInt
 
 object PictureHelper {
     fun checkAndSetImage(context: Context, record: PicturesRecord, imgView: ImageView, localFilepath: String, wishSize: Int): Boolean {
-
         var filepathLocal = localFilepath
         var res = false
         val thumb = wishSize == context.resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt()

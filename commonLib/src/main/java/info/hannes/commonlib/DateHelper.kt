@@ -1,7 +1,7 @@
 package info.hannes.commonlib
 
 import java.text.DateFormatSymbols
-import java.util.*
+import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -29,8 +29,7 @@ object DateHelper {
         val min = (minutes - hour * 60 - day * 24 * 60).toFloat().roundToInt()
         val prefix = if (day > 0) {
             String.format(Locale.getDefault(), "%d", day) + "d"
-        }
-        else {
+        } else {
             ""
         }
         return prefix + String.format(Locale.getDefault(), "%02d", hour) + ":" +

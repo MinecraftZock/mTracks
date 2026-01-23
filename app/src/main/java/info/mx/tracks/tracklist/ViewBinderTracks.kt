@@ -31,7 +31,7 @@ import info.mx.tracks.util.getDrawableIdentifier
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 import kotlin.math.roundToInt
 
 class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) : SimpleCursorAdapter.ViewBinder, KoinComponent {
@@ -104,10 +104,10 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 res = true
             } else if (view.id == R.id.tr_name) {
                 var valueN = tracksGesSumCursor.getString(columnIndex)
-                if (valueN == null || valueN.trim { it <= ' ' } == "" && BuildConfig.FLAVOR.equals(
-                        "admin",
-                        ignoreCase = true
-                    )) {
+                if (valueN == null ||
+                    valueN.trim { it <= ' ' } == "" &&
+                    BuildConfig.FLAVOR.equals("admin", ignoreCase = true)
+                ) {
                     val viewTrackInf = getViewTrackInfoFromCursor(tracksGesSumCursor, withSum)
                     val track = TracksRecord.get(viewTrackInf.id)
                     if (track != null) {
@@ -116,7 +116,14 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 }
                 (view as TextView).text = valueN
                 res = true
-            } else if (view.id == R.id.tr_mo || view.id == R.id.tr_tu || view.id == R.id.tr_we || view.id == R.id.tr_th || view.id == R.id.tr_fr || view.id == R.id.tr_sa || view.id == R.id.tr_so) {
+            } else if (view.id == R.id.tr_mo ||
+                view.id == R.id.tr_tu ||
+                view.id == R.id.tr_we ||
+                view.id == R.id.tr_th ||
+                view.id == R.id.tr_fr ||
+                view.id == R.id.tr_sa ||
+                view.id == R.id.tr_so
+            ) {
                 val value = tracksGesSumCursor.getInt(columnIndex)
                 view.setDayLayout(value == 1)
                 when (view.id) {

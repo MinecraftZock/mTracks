@@ -16,8 +16,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
 import androidx.core.view.MenuProvider
+import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -131,11 +131,33 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
                 .toInt()
         )
         binding.trLayoutDifficult.visibility = if (trackRec.schwierigkeit == 0L) View.GONE else View.VISIBLE
-        val hideTimes =
-            trackRec.hoursmonday == null && trackRec.hourstuesday == null && trackRec.hourswednesday == null && trackRec.hoursthursday == null && trackRec.hoursfriday == null && trackRec.hourssaturday == null && trackRec.hourssunday == null && trackRec.openmondays == 0L && trackRec.opentuesdays == 0L && trackRec.openwednesday == 0L && trackRec.openthursday == 0L && trackRec.openfriday == 0L && trackRec.opensaturday == 0L && trackRec.opensunday == 0L
+        val hideTimes = trackRec.hoursmonday == null &&
+                trackRec.hourstuesday == null &&
+                trackRec.hourswednesday == null &&
+                trackRec.hoursthursday == null &&
+                trackRec.hoursfriday == null &&
+                trackRec.hourssaturday == null &&
+                trackRec.hourssunday == null &&
+                trackRec.openmondays == 0L &&
+                trackRec.opentuesdays == 0L &&
+                trackRec.openwednesday == 0L &&
+                trackRec.openthursday == 0L &&
+                trackRec.openfriday == 0L &&
+                trackRec.opensaturday == 0L &&
+                trackRec.opensunday == 0L
         binding.trLayoutOpening.visibility = if (hideTimes) View.GONE else View.VISIBLE
         binding.trLayoutInfo.visibility =
-            if (trackRec.mxTrack == 1L || trackRec.quad == 1L || trackRec.a4X4 == 1L || trackRec.enduro == 1L || trackRec.utv == 1L || trackRec.facebook != null && trackRec.facebook != "") View.VISIBLE else View.GONE
+            if (trackRec.mxTrack == 1L ||
+                trackRec.quad == 1L ||
+                trackRec.a4X4 == 1L ||
+                trackRec.enduro == 1L ||
+                trackRec.utv == 1L ||
+                trackRec.facebook != null &&
+                trackRec.facebook != ""
+            )
+                View.VISIBLE
+            else
+                View.GONE
         binding.imgFacebook.visibility =
             if (trackRec.facebook != null && trackRec.facebook != "") View.VISIBLE else View.GONE
         binding.imgMx.visibility = if (trackRec.mxTrack == 1L) View.VISIBLE else View.GONE

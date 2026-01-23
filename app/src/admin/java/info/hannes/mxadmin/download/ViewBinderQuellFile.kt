@@ -5,7 +5,7 @@ import android.view.View
 import info.mx.tracks.R
 import android.widget.TextView
 import androidx.cursoradapter.widget.SimpleCursorAdapter
-import info.hannes.mechadmin_gen.sqlite.QuellFileRecord
+import info.hannes.mechadminGen.sqlite.QuellFileRecord
 import java.text.SimpleDateFormat
 import java.util.*
 

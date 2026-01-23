@@ -14,7 +14,7 @@ import info.mx.tracks.R
 import info.mx.tracks.sqlite.EventsRecord
 import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
-import java.util.*
+import java.util.Calendar
 
 class EventHelper {
     private var datePickerEvent: DatePicker? = null
@@ -54,7 +54,9 @@ class EventHelper {
         }
         val dlg = builder.create()
         val inflater = dlg.layoutInflater
-        @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.dialog_event_edit, null)
+
+        @SuppressLint("InflateParams")
+        val view = inflater.inflate(R.layout.dialog_event_edit, null)
         datePickerEvent = view.findViewById(R.id.datePickerEvent)
         edtComment = view.findViewById(R.id.edtEventComment)
         if (record != null) {

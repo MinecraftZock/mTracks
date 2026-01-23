@@ -48,11 +48,12 @@ class ActivityLocationMonitor : ActivityAdminBase() {
     public override fun onResume() {
         super.onResume()
         // sort by distance
-        addDisposable(mxDatabase.capturedLatLngDao()
-            .all
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { locations -> adapterMonitored!!.setLocations(locations) })
+        addDisposable(
+            mxDatabase.capturedLatLngDao()
+                .all
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { locations -> adapterMonitored!!.setLocations(locations) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,6 +68,7 @@ class ActivityLocationMonitor : ActivityAdminBase() {
                 finish()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

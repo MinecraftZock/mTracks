@@ -21,9 +21,9 @@ import androidx.loader.content.Loader
 import com.google.android.material.snackbar.Snackbar
 import com.ortiz.touchview.TouchImageView
 import com.robotoworks.mechanoid.db.SQuery
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract
-import info.hannes.mechadmin_gen.sqlite.PictureStageRecord
-import info.hannes.mechadmin_gen.sqlite.TrackstageBrotherRecord
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract
+import info.hannes.mechadminGen.sqlite.PictureStageRecord
+import info.hannes.mechadminGen.sqlite.TrackstageBrotherRecord
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.SecHelper

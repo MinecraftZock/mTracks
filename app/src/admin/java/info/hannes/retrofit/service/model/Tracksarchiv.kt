@@ -11,183 +11,243 @@ class Tracksarchiv : Serializable, Parcelable {
     @SerializedName("trackstatus")
     @Expose
     var trackstatus: String? = null
+
     @SerializedName("openwednesday")
     @Expose
     private var openwednesday: Long = 0
+
     @SerializedName("quad")
     @Expose
     var quad: Long = 0
+
     @SerializedName("areatype")
     @Expose
     var areatype: String? = null
+
     @SerializedName("hourssaturday")
     @Expose
     var hourssaturday: String? = null
+
     @SerializedName("tracklength")
     @Expose
     var tracklength: Long = 0
+
     @SerializedName("noiselimit")
     @Expose
     var noiselimit: String? = null
+
     @SerializedName("hourstuesday")
     @Expose
     var hourstuesday: String? = null
+
     @SerializedName("campingrvrvhookup")
     @Expose
     var campingrvrvhookup: Long = 0
+
     @SerializedName("logourl")
     @Expose
     var logourl: String? = null
+
     @SerializedName("singletracks")
     @Expose
     var singletracks: Long = 0
+
     @SerializedName("adress")
     @Expose
     var adress: String? = null
+
     @SerializedName("openfriday")
     @Expose
     private var openfriday: Long = 0
+
     @SerializedName("fees")
     @Expose
     var fees: String? = null
+
     @SerializedName("hourssunday")
     @Expose
     var hourssunday: String? = null
+
     @SerializedName("id")
     @Expose
     private var id: Long? = null
+
     @SerializedName("shower")
     @Expose
     private var shower: Long = 0
+
     @SerializedName("trackname")
     @Expose
     var trackname: String? = null
+
     @SerializedName("camping")
     @Expose
     private var camping: Long = 0
+
     @SerializedName("electricity")
     @Expose
     private var electricity: Long = 0
+
     @SerializedName("mxtrack")
     @Expose
     var mxtrack: Long = 0
+
     @SerializedName("indoor")
     @Expose
     private var indoor: Long = 0
+
     @SerializedName("opensaturday")
     @Expose
     private var opensaturday: Long = 0
+
     @SerializedName("metatext")
     @Expose
     var metatext: String? = null
+
     @SerializedName("workshop")
     @Expose
     var workshop: String? = null
+
     @SerializedName("latitude")
     @Expose
     var latitude: Double? = null
+
     @SerializedName("showroom")
     @Expose
     var showroom: String? = null
+
     @SerializedName("trackaccess")
     @Expose
     var trackaccess: String? = null
+
     @SerializedName("soiltype")
     @Expose
     var soiltype: Long = 0
+
     @SerializedName("hoursfriday")
     @Expose
     var hoursfriday: String? = null
+
     @SerializedName("feescamping")
     @Expose
     var feescamping: String? = null
+
     @SerializedName("validuntil")
     @Expose
     var validuntil: String? = null
+
     @SerializedName("opensunday")
     @Expose
     private var opensunday: Long = 0
+
     @SerializedName("a4x4")
     @Expose
     var a4x4: Long = 0
+
     @SerializedName("enduro")
     @Expose
     var enduro: Long = 0
+
     @SerializedName("hoursthursday")
     @Expose
     var hoursthursday: String? = null
+
     @SerializedName("openmondays")
     @Expose
     private var openmondays: Long = 0
+
     @SerializedName("phone")
     @Expose
     var phone: String? = null
+
     @SerializedName("openthursday")
     @Expose
     private var openthursday: Long = 0
+
     @SerializedName("facebook")
     @Expose
     var facebook: String? = null
+
     @SerializedName("hourswednesday")
     @Expose
     var hourswednesday: String? = null
+
     @SerializedName("licence")
     @Expose
     var licence: String? = null
+
     @SerializedName("brands")
     @Expose
     var brands: String? = null
+
     @SerializedName("supercross")
     @Expose
     var supercross: Long = 0
+
     @SerializedName("approved")
     @Expose
     var approved: Long = 0
+
     @SerializedName("daysopen")
     @Expose
     var daysopen: String? = null
+
     @SerializedName("arch_Id")
     @Expose
     private var archId: Long? = null
+
     @SerializedName("url")
     @Expose
     var url: String? = null
+
     @SerializedName("country")
     @Expose
     var country: String? = null
+
     @SerializedName("notes")
     @Expose
     var notes: String? = null
+
     @SerializedName("changed")
     @Expose
     private var changed: Long? = null
+
     @SerializedName("longitude")
     @Expose
     var longitude: Double? = null
+
     @SerializedName("opentuesdays")
     @Expose
     var opentuesdays: Long = 0
+
     @SerializedName("hoursmonday")
     @Expose
     var hoursmonday: String? = null
+
     @SerializedName("contact")
     @Expose
     var contact: String? = null
+
     @SerializedName("utv")
     @Expose
     var utv: Long = 0
+
     @SerializedName("schwierigkeit")
     @Expose
     var schwierigkeit: Long = 0
+
     @SerializedName("arch_Date")
     @Expose
     private var archDate: Long? = null
+
     @SerializedName("kidstrack")
     @Expose
     var kidstrack: Long = 0
+
     @SerializedName("cleaning")
     @Expose
     private var cleaning: Long? = null
+
     @SerializedName("changeuser")
     @Expose
     var changeuser: String? = null

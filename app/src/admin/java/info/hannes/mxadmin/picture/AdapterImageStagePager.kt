@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract
 import java.util.*
 
 /**

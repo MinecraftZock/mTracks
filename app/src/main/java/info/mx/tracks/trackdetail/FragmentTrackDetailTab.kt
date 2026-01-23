@@ -199,6 +199,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         return when (loader) {
             LOADER_TRACK -> SQuery.newQuery().expr(MxInfoDBContract.Tracksges._ID, SQuery.Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
                 .createSupportLoader(MxInfoDBContract.Tracksges.CONTENT_URI, null, null)
+
             //LOADER_PICTURE_THUMBS,
             else -> {
                 query = QueryHelper.getPictureFilter(bundle!!.getLong(FragmentTrackDetail.TRACK_REST_ID))

@@ -151,7 +151,6 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
     }
 
     private fun fillMask(mxPlace: MxPlace) {
-
         binding.poiLayoutRating.visibility = if (mxPlace.rating < 0) View.GONE else View.VISIBLE
         binding.poiRating.rating = mxPlace.rating
 
@@ -255,7 +254,9 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
             // telephone get an icon
             if (kind == R.string.phone) {
                 val inflater = activity.layoutInflater
-                @SuppressLint("InflateParams") val viewHeader = inflater.inflate(R.layout.dialog_header_image, null)
+
+                @SuppressLint("InflateParams")
+                val viewHeader = inflater.inflate(R.layout.dialog_header_image, null)
                 (viewHeader.findViewById<View>(R.id.dialogheader_button) as ImageView).setImageResource(android.R.drawable.ic_menu_call)
                 (viewHeader.findViewById<View>(R.id.dialogheader_text) as TextView).text = activity.getString(kind)
                 builder.setCustomTitle(viewHeader)

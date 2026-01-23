@@ -1,7 +1,11 @@
 package info.mx.tracks.data
 
 import info.mx.comlib.retrofit.CommApiClient
-import info.mx.comlib.retrofit.service.model.*
+import info.mx.comlib.retrofit.service.model.PictureR
+import info.mx.comlib.retrofit.service.model.RatingR
+import info.mx.comlib.retrofit.service.model.SerieR
+import info.mx.comlib.retrofit.service.model.TrackBody
+import info.mx.comlib.retrofit.service.model.TrackR
 import retrofit2.Response
 import java.io.IOException
 
@@ -11,7 +15,7 @@ import java.io.IOException
  * desired output ready for the UI.
  * It returns observables that emit data models.
  */
-open class DataManagerApp(private val commApiClient: CommApiClient): DataManagerBase() {
+open class DataManagerApp(private val commApiClient: CommApiClient) : DataManagerBase() {
 
     @Throws(IOException::class)
     fun getTracks(

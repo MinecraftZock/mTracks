@@ -1,6 +1,9 @@
 [*]
 max_line_length = 180
 
+ktlint_standard_when-entry-bracing = disabled
+ktlint_standard_backing-property-naming = disabled
+ktlint_standard_blank-line-between-when-conditions = disabled
 ktlint_standard_string-template = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 ktlint_standard = enabled # Disable all rules from the `standard` rule set provided by KtLint

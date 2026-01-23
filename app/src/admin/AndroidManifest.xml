@@ -89,24 +89,24 @@
         </activity>
 
         <service
-            android:name="info.hannes.mechadmin_gen.ops.mxcal.MxCalService"
+            android:name="info.hannes.mechadminGen.ops.mxcal.MxCalService"
             android:foregroundServiceType="dataSync"
             android:exported="false">
         </service>
 
         <service
-            android:name="info.hannes.mechadmin_gen.ops.StageingService"
+            android:name="info.hannes.mechadminGen.ops.StageingService"
             android:foregroundServiceType="dataSync"
             android:exported="false">
         </service>
 
         <provider
-            android:name="info.hannes.mechadmin_gen.sqlite.MxAdminDBContentProvider"
+            android:name="info.hannes.mechadminGen.sqlite.MxAdminDBContentProvider"
             android:authorities="info.hannes.mechadmin.sqlite.mxadmindb"
             android:exported="false"/>
 
         <provider
-            android:name="info.hannes.mechadmin_gen.sqlite.MxCalContentProvider"
+            android:name="info.hannes.mechadminGen.sqlite.MxCalContentProvider"
             android:authorities="info.hannes.mechadmin.sqlite.mxcal"
             android:exported="false"/>
 

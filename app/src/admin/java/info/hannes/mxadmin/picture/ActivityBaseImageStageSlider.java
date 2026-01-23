@@ -14,14 +14,13 @@ import android.view.View;
 import com.robotoworks.mechanoid.db.SQuery;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract;
-import info.hannes.mechadmin_gen.sqlite.PictureStageRecord;
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract;
+import info.hannes.mechadminGen.sqlite.PictureStageRecord;
 import timber.log.Timber;
 import info.mx.tracks.base.ActivityRx;
 import info.mx.tracks.DiskReceiver;

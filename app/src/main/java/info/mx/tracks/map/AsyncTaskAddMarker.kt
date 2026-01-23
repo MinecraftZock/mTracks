@@ -82,7 +82,6 @@ class AsyncTaskAddMarker internal constructor(private val mGMap: GoogleMap, priv
     }
 
     override fun onPostExecute(resultBuilder: LatLngBounds.Builder) {
-
         val milliSec = System.currentTimeMillis() - startTime
         Timber.i("%s ms add marker:", milliSec)
 

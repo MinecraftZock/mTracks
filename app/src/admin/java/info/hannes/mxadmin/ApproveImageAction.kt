@@ -29,7 +29,6 @@ object ApproveImageAction {
 
     @SuppressLint("HardwareIds")
     fun confirmPicture(context: Context, restId: Long, statusCurrent: Int, dataManagerAdmin: DataManagerAdmin) {
-
         val array = arrayOf<CharSequence>("Decline", "Ignore", "Accept", "Rotate", "Track open")
 
         val picturesRecord = SQuery.newQuery()

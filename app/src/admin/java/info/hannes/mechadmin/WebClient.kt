@@ -1,7 +1,7 @@
 package info.hannes.mechadmin
 
-import info.hannes.mechadmin_gen.rest.MxAdmin
-import info.hannes.mechadmin_gen.rest.MxCal
+import info.hannes.mechadminGen.rest.MxAdmin
+import info.hannes.mechadminGen.rest.MxCal
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.common.LoginParam

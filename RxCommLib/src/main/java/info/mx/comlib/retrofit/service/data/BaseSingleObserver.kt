@@ -14,9 +14,7 @@ import io.reactivex.disposables.Disposable
  */
 abstract class BaseSingleObserver<T>(private val context: Context) : SingleObserver<T> {
 
-    override fun onSubscribe(d: Disposable) {
-
-    }
+    override fun onSubscribe(d: Disposable) = Unit
 
     override fun onError(throwable: Throwable) {
         if (BuildConfig.DEBUG) {
@@ -33,7 +31,8 @@ abstract class BaseSingleObserver<T>(private val context: Context) : SingleObser
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.setTitle("Error")
             alertDialog.setMessage(throwable.message)
-            alertDialog.setButton(BUTTON_POSITIVE, context.getString(R.string.close)
+            alertDialog.setButton(
+                BUTTON_POSITIVE, context.getString(R.string.close)
             ) { dialog, _ ->
                 this@BaseSingleObserver.buttonClicked()
                 dialog.dismiss()

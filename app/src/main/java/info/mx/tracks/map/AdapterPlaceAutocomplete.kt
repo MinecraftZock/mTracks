@@ -170,7 +170,6 @@ class AdapterPlaceAutocomplete(
     }
 
     private suspend fun getPlaceMeta(placeId: String, placesClient: PlacesClient): Place {
-
         val placeFields = mutableListOf(
             Place.Field.ID,
             Place.Field.FORMATTED_ADDRESS,

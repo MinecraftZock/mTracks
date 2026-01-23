@@ -3,9 +3,11 @@ package info.mx.tracks.trackdetail.event
 import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Bundle
-import android.view.*
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemLongClickListener
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.app.NavUtils
@@ -17,7 +19,6 @@ import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.sqlite.MxInfoDBContract.Events2series
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import timber.log.Timber
 
 class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     private val projectionEvents = arrayOf(Events2series.EVENT_DATE, Events2series.COMMENT, Events2series.SERIESNAME)

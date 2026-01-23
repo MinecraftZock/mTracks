@@ -60,10 +60,12 @@ class FragmentTrackListTab : FragmentBase() {
                         bundle.putString(FragmentUpDown.ORDER, Tracksges.TRACKNAME)
                         arguments = bundle
                     }
+
                     1 -> FragmentTrackList().apply {
                         bundle.putString(FragmentUpDown.ORDER, Tracksges.RATING)
                         arguments = bundle
                     }
+
                     2 -> if (MxCoreApplication.isAdmin)
                         FragmentTrackList().apply {
                             bundle.putString(FragmentUpDown.ORDER, Tracksges.APPROVED)
@@ -72,11 +74,13 @@ class FragmentTrackListTab : FragmentBase() {
                         }
                     else
                         getDistanceFragment()
+
                     3 -> FragmentTrackList().apply {
                         bundle.putString(FragmentUpDown.ORDER, Tracksges.APPROVED)
                         bundle.putBoolean(FragmentTrackList.ONLY_FOREIGN, true)
                         arguments = bundle
                     }
+
                     else -> getDistanceFragment() // optional distance
                 }
             }
@@ -89,12 +93,16 @@ class FragmentTrackListTab : FragmentBase() {
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.by_name)
+
                 1 -> "" // ""♥" //ContextCompat.getDrawable(requireActivity(), android.R.drawable.star_off)
+
                 2 -> if (MxCoreApplication.isAdmin)
                     "Stage+"
                 else
                     getString(R.string.by_distance)
+
                 3 -> "Stage"
+
                 else -> getString(R.string.by_distance)
             }
 

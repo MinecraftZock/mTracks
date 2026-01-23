@@ -62,7 +62,7 @@ android {
 
         resValue("string", backendKey, backendUrl)
         buildConfigField("Boolean", SHOW_WEATHER, "true")
-        buildConfigField("String", httpLoggingLevel, "\"NONE\"")  //NONE, BASIC, HEADERS, BODY
+        buildConfigField("String", httpLoggingLevel, "\"NONE\"") //NONE, BASIC, HEADERS, BODY
         buildConfigField("String", commitSHA1, "\"" + getLatestGitHash() + "\"")
         buildConfigField("long", unixTime, "${getUnixCreateTime()}L")
         multiDexEnabled = true
@@ -142,7 +142,7 @@ android {
             //applicationIdSuffix ".debug"
             versionNameSuffix = ".debug"
             buildConfigField("boolean", "FILE_LOGGING", "true")
-            buildConfigField("String", httpLoggingLevel, "\"BODY\"")  //NONE, BASIC, HEADERS, BODY
+            buildConfigField("String", httpLoggingLevel, "\"BODY\"") //NONE, BASIC, HEADERS, BODY
             buildConfigField("int", pushServerSleep, "1000")
         }
         release {
