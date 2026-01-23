@@ -21,7 +21,8 @@ import info.mx.tracks.sqlite.WeatherRecord
 import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import kotlin.math.roundToInt
 
 /**

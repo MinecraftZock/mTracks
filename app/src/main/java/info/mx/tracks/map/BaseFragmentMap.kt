@@ -41,10 +41,6 @@ import com.androidmapsextensions.GoogleMap.OnMarkerClickListener
 import com.androidmapsextensions.Marker
 import com.androidmapsextensions.Polyline
 import com.androidmapsextensions.PolylineOptions
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -100,7 +96,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, LoaderManager.LoaderCallbacks<Cursor>, ConnectionCallbacks, OnConnectionFailedListener,
+abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, LoaderManager.LoaderCallbacks<Cursor>,
     OnMarkerClickListener, OnCameraChangeListener, PoiDetailHeaderListener {
     private var srcText = ""
     private var savePos: CameraPosition? = null
@@ -110,7 +106,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     val mxDatabase: MxDatabase by inject()
 
     private var interestLatLng: LatLng? = null
-    private var googleApiClient: GoogleApiClient? = null
     private var prefMapLayerListener: OnSharedPreferenceChangeListener? = null
     private var headerView: PoiDetailHeaderView? = null
     protected var slidingDrawer: SlidingUpPanelLayout? = null
@@ -216,7 +211,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         lyProgress = view.findViewById(R.id.lyImportProgress)
         lyProgress!!.visibility = View.GONE
 
-        searchList!!.setOnItemClickListener { parent, view1, position, id ->
+        searchList!!.setOnItemClickListener { _, _, position, id ->
             if (searchList!!.adapter is AdapterPlaceAutocomplete) {
                 val placeAdapter = searchList!!.adapter as AdapterPlaceAutocomplete
                 val markerPlace = placeAdapter.getMarker(position)
@@ -233,7 +228,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
         }
 
-        viewFilterActive!!.setOnClickListener { v ->
+        viewFilterActive!!.setOnClickListener {
             val toast = Toast.makeText(activity, R.string.filter_is_active, Toast.LENGTH_SHORT)
             toast.setGravity(Gravity.TOP or Gravity.LEFT, 0, 0)
             toast.show()
@@ -264,7 +259,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         binding.mapButtonsOverlay.setListener(this)
         val prefs = MxPreferences.getInstance()
 
-        prefMapLayerListener = OnSharedPreferenceChangeListener { prefsKind, key ->
+        prefMapLayerListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == MxPreferences.Keys.MAP_TYPE) {
                 this@BaseFragmentMap.setMapTypeFromPrefs()
             }
@@ -547,21 +542,26 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun drawSurveillancePolyline() {
         addDisposable(
-            mxDatabase.capturedLatLngDao().allNonIgnored.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe { capturedLatLngs ->
-                if (polylineSurveillance != null) {
-                    polylineSurveillance!!.remove()
-                }
-                try {
-                    val decodedPath = ArrayList<LatLng>()
-                    for ((_, lat, lon) in capturedLatLngs) {
-                        decodedPath.add(LatLng(lat, lon))
+            mxDatabase.capturedLatLngDao().allNonIgnored
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { capturedLatLngs ->
+                    if (polylineSurveillance != null) {
+                        polylineSurveillance!!.remove()
                     }
-                    polylineSurveillance = map!!.addPolyline(
-                        PolylineOptions().addAll(decodedPath).width(10f).color(ContextCompat.getColor(requireContext(), R.color.black))
-                    )
-                } catch (_: NullPointerException) {
-                }
-            })
+                    try {
+                        val decodedPath = ArrayList<LatLng>()
+                        for ((_, lat, lon) in capturedLatLngs) {
+                            decodedPath.add(LatLng(lat, lon))
+                        }
+                        polylineSurveillance = map!!.addPolyline(
+                            PolylineOptions().addAll(decodedPath)
+                                .width(10f)
+                                .color(ContextCompat.getColor(requireContext(), R.color.black))
+                        )
+                    } catch (_: NullPointerException) {
+                    }
+                })
     }
 
     override fun onPause() {
@@ -569,8 +569,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         if (searchAutoComplete != null) {
             searchAutoComplete!!.setText("")
         }
-        if (googleApiClient!!.isConnected) {
-            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(locationCallback!!)
+        locationCallback?.let {
+            LocationServices.getFusedLocationProviderClient(requireContext()).removeLocationUpdates(it)
         }
     }
 
@@ -599,10 +599,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     private fun setUpLocationClientIfNeeded() {
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(requireActivity()).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
-        }
-        googleApiClient!!.connect()
+        // Location client setup is no longer needed with FusedLocationProviderClient
+        // Location updates are handled directly through FusedLocationProviderClient
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -788,7 +786,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     @SuppressLint("MissingPermission")
     private fun zoomToMyLocation() {
-        if (googleApiClient != null && googleApiClient!!.isConnected && map != null && isAdded) {
+        if (map != null && isAdded && permissionHelper.hasLocationPermission()) {
             LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation.addOnSuccessListener(requireActivity()) { location ->
                 if (location != null) {
                     // Move the camera to the user's location if they are off-screen!
@@ -800,22 +798,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onConnected(connectionHint: Bundle?) {
-        startLocationUpdates()
-        if (permissionHelper.hasLocationPermission() && isAdded) {
-            LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation.addOnSuccessListener(requireActivity()) { location ->
-                if (location != null) {
-                    headerView!!.setLocation(location)
-                }
-            }
-        }
-        if (interestLatLng == null) {
-            zoomToMyLocation()
-        }
-    }
-
-    override fun onConnectionFailed(result: ConnectionResult) {}
 
     private fun updateClustering(enabled: Boolean) {
         if (map == null) {
@@ -958,7 +940,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    override fun onConnectionSuspended(arg0: Int) {}
 
     override fun onCameraChange(cameraPosition: CameraPosition) {
         if (cameraPosition.target.latitude != 0.0 && cameraPosition.target.longitude != 0.0) {

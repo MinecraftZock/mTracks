@@ -13,15 +13,8 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Settings
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
+import android.view.*
+import android.widget.*
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -61,7 +54,7 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragListener,
-    GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleMap.OnMarkerClickListener {
 
     protected var recordTrack: TracksRecord? = null
     private var id: Long = 0
@@ -72,7 +65,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     private var getMoviesOperationExecutor: OperationExecutor? = null
 
     protected var stageId: Long? = null
-    private var googleApiClient: GoogleApiClient? = null
     private lateinit var locationCallback: LocationCallback
 
     private var _binding: FragmentTrackEditBinding? = null
@@ -221,10 +213,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     }
 
     private fun stopLocationUpdates() {
-        if (googleApiClient != null && googleApiClient!!.isConnected) {
-            LocationServices.getFusedLocationProviderClient(requireContext())
-                .removeLocationUpdates(locationCallback)
-        }
+        LocationServices.getFusedLocationProviderClient(requireContext())
+            .removeLocationUpdates(locationCallback)
     }
 
     @SuppressLint("DefaultLocale")
@@ -586,7 +576,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                     recordTrack!!.longitude = SecHelper.cryptXtude(stage.longitude)
                 }
                 stage.insDistance = recordTrack!!.distance2location
-                if (googleApiClient!!.isConnected && permissionHelper.hasLocationPermission()) {
+                if (permissionHelper.hasLocationPermission()) {
                     LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
                         .addOnSuccessListener(requireActivity()) { lastKnown: Location? ->
                             if (lastKnown != null) {
@@ -599,7 +589,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 stage.latitude = Math.round(marker!!.position.latitude * fak6).toDouble() / fak6
                 stage.longitude = Math.round(marker!!.position.longitude * fak6).toDouble() / fak6
                 changed = true
-                if (googleApiClient!!.isConnected && permissionHelper.hasLocationPermission()) {
+                if (permissionHelper.hasLocationPermission()) {
                     LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
                         .addOnSuccessListener(requireActivity()) { lastKnown: Location? ->
                             if (lastKnown != null) {
@@ -709,14 +699,9 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     }
 
     private fun setUpLocationClientIfNeeded() {
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(requireActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build()
-        }
-        googleApiClient!!.connect()
+        // No longer need GoogleApiClient setup
+        // Location updates are handled directly through FusedLocationProviderClient
+        initializeLocation()
     }
 
     override fun onMarkerClick(marker: Marker) = false
@@ -733,15 +718,13 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    override fun onConnectionFailed(result: ConnectionResult) = Unit
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getMoviesOperationExecutor = OperationExecutor(OP_GET_LAT_LNG, null, mOpeExCallbacks)
     }
 
     @SuppressLint("MissingPermission")
-    override fun onConnected(connectionHint: Bundle?) {
+    private fun initializeLocation() {
         // only on new track
         if (id < 1 && permissionHelper.hasLocationPermission()) { // new track
             LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
@@ -767,7 +750,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                         askOpenLocationSetting()
                     }
                 }
-            startLocationUpdates()
         }
     }
 
@@ -806,7 +788,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    override fun onConnectionSuspended(arg0: Int) {}
 
     companion object {
         private const val OP_GET_LAT_LNG = "OP_GET_LAT_LNG"

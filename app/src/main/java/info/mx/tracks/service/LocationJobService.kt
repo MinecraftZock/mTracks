@@ -18,8 +18,6 @@ import android.os.Bundle
 import android.os.HandlerThread
 import androidx.core.app.NotificationCompat
 import androidx.work.Configuration
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -45,17 +43,15 @@ import timber.log.Timber
  * adb root
  * adb shell am broadcast -a android.intent.action.BOOT_COMPLETED
  */
-class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, KoinComponent {
+class LocationJobService : JobService(), KoinComponent {
     private var jobParameters: JobParameters? = null
 
     val permissionHelper: PermissionHelper by inject()
 
     val mxDatabase: MxDatabase by inject()
 
-    private var googleApiClient: GoogleApiClient? = null
     private var mLocationCallback: LocationCallback? = null
 
-    private val isConnected = googleApiClient != null && googleApiClient!!.isConnected
 
     private val requestDay = REQUEST_DAY
 
@@ -112,8 +108,8 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
     }
 
     private fun stopLocationUpdates() {
-        if (isConnected) {
-            LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(mLocationCallback!!)
+        mLocationCallback?.let {
+            LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(it)
         }
     }
 
@@ -122,15 +118,8 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
         var extra = "Job started " + permissionHelper.hasLocationPermission()
         if (permissionHelper.hasLocationPermission()) {
             Timber.d("It has location permission")
-            if (googleApiClient == null) {
-                googleApiClient = GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build()
-            }
-            googleApiClient!!.connect()
-            extra += " " + googleApiClient!!.isConnecting + "/" + googleApiClient!!.isConnected
+            startLocationUpdates()
+            extra += " location updates started"
         }
 
         // TODO this is just a debug record
@@ -151,20 +140,6 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
         mxDatabase.capturedLatLngDao().insertAll(debugLatLon)
     }
 
-    override fun onConnected(bundle: Bundle?) {
-        startLocationUpdates()
-    }
-
-    override fun onConnectionSuspended(i: Int) = Unit
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        if (isConnected) {
-            stopLocationUpdates()
-        }
-        updateNotification4Admin(0, "onConnectionFailed")
-        Timber.i("jobFinished onConnectionFailed")
-        jobFinished(jobParameters, false)
-    }
 
     @SuppressLint("CheckResult")
     private fun onNewLocation(location: Location) {
