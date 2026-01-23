@@ -8,6 +8,9 @@ import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.view.Window
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import info.mx.tracks.R
 
@@ -19,14 +22,22 @@ class PreviewImageActivity : Activity(), OnPageChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.preview_image_activity)
         mFullScreenAnchorView = window.decorView
+
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         // to keep our UI controls visibility in line with system bars visibility
-        mFullScreenAnchorView!!.setOnSystemUiVisibilityChangeListener { flags ->
-            val visible = flags and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0
+        mFullScreenAnchorView!!.setOnApplyWindowInsetsListener { _, windowInsets ->
+            val insets = WindowInsetsCompat.toWindowInsetsCompat(windowInsets)
+            // Use isVisible() which is compatible with API 21+
+            val visible = insets.isVisible(WindowInsetsCompat.Type.statusBars()) ||
+                         insets.isVisible(WindowInsetsCompat.Type.navigationBars())
             if (visible) {
                 actionBar?.show()
             } else {
                 actionBar?.hide()
             }
+            windowInsets
         }
         mRequestWaitingForBinder = savedInstanceState?.getBoolean(KEY_WAITING_FOR_BINDER) ?: false
     }
@@ -47,6 +58,7 @@ class PreviewImageActivity : Activity(), OnPageChangeListener {
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun delayedHide(delayMillis: Int) {
         mHideSystemUiHandler.removeMessages(0)
         mHideSystemUiHandler.sendEmptyMessageDelayed(0, delayMillis.toLong())
@@ -123,17 +135,16 @@ class PreviewImageActivity : Activity(), OnPageChangeListener {
 
     @SuppressLint("InlinedApi")
     private fun hideSystemUI(anchorView: View?) {
-        anchorView!!.systemUiVisibility =
-            (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hides NAVIGATION BAR; Android >= 4.0
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN // hides STATUS BAR;     Android >= 4.1
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE // stays interactive;    Android >= 4.4
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE // draw full window;     Android >= 4.1
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // draw full window;     Android >= 4.1
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+        val windowInsetsController = WindowCompat.getInsetsController(window, anchorView!!)
+        windowInsetsController.apply {
+            // Hide both the status bar and navigation bar
+            hide(WindowInsetsCompat.Type.systemBars())
+            // Configure behavior: swipe to temporarily show system bars
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 
     companion object {
-        val TAG: String = PreviewImageActivity::class.java.simpleName
         private const val KEY_WAITING_FOR_BINDER = "WAITING_FOR_BINDER"
         private const val INITIAL_HIDE_DELAY = 0 // immediate hide
     }
