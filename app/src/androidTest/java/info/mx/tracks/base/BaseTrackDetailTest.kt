@@ -20,7 +20,6 @@ import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.MapIdlingResource
 import info.mx.tracks.ops.RecalculateIdlingResource
-import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.junit.After
 import org.junit.Before
@@ -50,7 +49,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     @Before
     fun pictureIdlingBefore() {
         registerIdlingResource()
-        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
+//        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
     }
@@ -58,7 +57,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     @After
     fun pictureIdlingBeforeAfter() {
         unregisterIdlingResource()
-        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
+//        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
