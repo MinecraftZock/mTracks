@@ -18,16 +18,18 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.map.MapIdlingResource
-import info.mx.tracks.ops.google.PictureIdlingResource
+import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.junit.After
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runners.MethodSorters
 
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest() {
 
     private val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityTrackDetail::class.java).apply {
@@ -47,7 +49,7 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     @Before
     fun pictureIdlingBefore() {
         registerIdlingResource()
-        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
+//        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
     }
@@ -55,9 +57,18 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     @After
     fun pictureIdlingBeforeAfter() {
         unregisterIdlingResource()
-        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
+//        IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
+    }
+
+    @Test
+    fun abcDummyToSkipFirstSettings() {
+        // open menu
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
+
+        // map
+        onView(withText("Show on map")).perform(click())
     }
 
     @Test
