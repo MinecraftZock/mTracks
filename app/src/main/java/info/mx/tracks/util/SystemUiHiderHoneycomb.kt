@@ -2,81 +2,65 @@ package info.mx.tracks.util
 
 import android.app.Activity
 import android.view.View
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
- * An API 11+ implementation of [SystemUiHider]. Uses APIs available in
- * Honeycomb and later (specifically [View.setSystemUiVisibility]) to
- * show and hide the system UI.
+ * An API 11+ implementation of [SystemUiHider]. Uses modern WindowInsetsController APIs
+ * to show and hide the system UI.
  *
  * Constructor not intended to be called by clients. Use
  * [SystemUiHider.getInstance] to obtain an instance.
  */
 class SystemUiHiderHoneycomb(activity: Activity, anchorView: View, flags: Int) : SystemUiHiderBase(activity, anchorView, flags) {
 
-    /**
-     * Flags for [View.setSystemUiVisibility] to use when showing the
-     * system UI.
-     */
-    private var mShowFlags: Int = 0
-
-    /**
-     * Flags for [View.setSystemUiVisibility] to use when hiding the
-     * system UI.
-     */
-    private var mHideFlags: Int = 0
-
-    /**
-     * Flags to test against the first parameter in
-     * [View.OnSystemUiVisibilityChangeListener.onSystemUiVisibilityChange]
-     * to determine the system UI visibility state.
-     */
-    private var mTestFlags: Int = 0
+    private val windowInsetsController: WindowInsetsControllerCompat =
+        WindowCompat.getInsetsController(activity.window, anchorView)
 
     /**
      * Whether or not the system UI is currently visible. This is cached from
-     * [View.OnSystemUiVisibilityChangeListener].
+     * window insets callbacks.
      */
     private var mVisible = true
 
-    private val mSystemUiVisibilityChangeListener = View.OnSystemUiVisibilityChangeListener { vis ->
-        // Test against mTestFlags to see if the system UI is visible.
-        if (vis and mTestFlags != 0) {
-
-            // Trigger the registered listener and cache the visibility
-            // state.
-            mOnVisibilityChangeListener.onVisibilityChange(false)
-            mVisible = false
-
-        } else {
-            this.anchorView.systemUiVisibility = mShowFlags
-
-            // Trigger the registered listener and cache the visibility
-            // state.
-            mOnVisibilityChangeListener.onVisibilityChange(true)
-            mVisible = true
-        }
-    }
+    /**
+     * Types of insets to hide based on flags
+     */
+    private var insetsToHide = 0
 
     init {
+        // Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
-        mShowFlags = View.SYSTEM_UI_FLAG_VISIBLE
-        mHideFlags = View.SYSTEM_UI_FLAG_LOW_PROFILE
-        mTestFlags = View.SYSTEM_UI_FLAG_LOW_PROFILE
-
-        if (this.flags and SystemUiHider.FLAG_FULLSCREEN != 0) {
-            // If the client requested fullscreen, add flags relevant to hiding
-            // the status bar. Note that some of these constants are new as of
-            // API 16 (Jelly Bean). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on pre-Jelly Bean devices.
-            mShowFlags = mShowFlags or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            mHideFlags = mHideFlags or (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        // Determine which insets to hide based on flags
+        insetsToHide = if (flags and FLAG_FULLSCREEN != 0) {
+            WindowInsetsCompat.Type.statusBars()
+        } else {
+            0
         }
 
-        if (this.flags and SystemUiHider.FLAG_HIDE_NAVIGATION != 0) {
-            // If the client requested hiding info.mx.tracks.navigation, add relevant flags.
-            mShowFlags = mShowFlags or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            mHideFlags = mHideFlags or (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-            mTestFlags = mTestFlags or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (flags and FLAG_HIDE_NAVIGATION != 0) {
+            insetsToHide = insetsToHide or WindowInsetsCompat.Type.navigationBars()
+        }
+
+        if (insetsToHide == 0) {
+            insetsToHide = WindowInsetsCompat.Type.systemBars()
+        }
+
+        // Set up insets listener to track visibility
+        anchorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+            val insets = WindowInsetsCompat.toWindowInsetsCompat(windowInsets, view)
+            // Use isVisible() which is compatible with API 21+
+            val visible = insets.isVisible(WindowInsetsCompat.Type.statusBars()) ||
+                         insets.isVisible(WindowInsetsCompat.Type.navigationBars())
+
+            if (visible != mVisible) {
+                mVisible = visible
+                mOnVisibilityChangeListener.onVisibilityChange(visible)
+            }
+
+            windowInsets
         }
     }
 
@@ -84,21 +68,25 @@ class SystemUiHiderHoneycomb(activity: Activity, anchorView: View, flags: Int) :
      * {@inheritDoc}
      */
     override fun setup() {
-        anchorView.setOnSystemUiVisibilityChangeListener(mSystemUiVisibilityChangeListener)
+        // Setup is handled in init block with setOnApplyWindowInsetsListener
     }
 
     /**
      * {@inheritDoc}
      */
     override fun hide() {
-        anchorView.systemUiVisibility = mHideFlags
+        windowInsetsController.hide(insetsToHide)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        mVisible = false
     }
 
     /**
      * {@inheritDoc}
      */
     override fun show() {
-        anchorView.systemUiVisibility = mShowFlags
+        windowInsetsController.show(insetsToHide)
+        mVisible = true
     }
 
     /**
