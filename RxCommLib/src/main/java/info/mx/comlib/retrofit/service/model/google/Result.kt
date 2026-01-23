@@ -28,11 +28,11 @@ open class Result : Serializable, Parcelable {
     var types: MutableList<String?>? = null
 
     protected constructor(`in`: Parcel) {
-        `in`.readList(this.addressComponents!!, (AddressComponent::class.java.getClassLoader()))
+        this.addressComponents = `in`.createTypedArrayList(AddressComponent.CREATOR) as MutableList<AddressComponent?>?
         this.formattedAddress = (`in`.readValue((String::class.java.getClassLoader())) as String?)
         this.geometry = (`in`.readValue((Geometry::class.java.getClassLoader())) as Geometry?)
         this.placeId = (`in`.readValue((String::class.java.getClassLoader())) as String?)
-        `in`.readList(this.types!!, (String::class.java.getClassLoader()))
+        this.types = `in`.createStringArrayList() as MutableList<String?>?
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

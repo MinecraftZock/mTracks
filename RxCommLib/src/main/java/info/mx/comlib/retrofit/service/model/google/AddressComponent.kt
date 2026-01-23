@@ -22,7 +22,7 @@ open class AddressComponent : Serializable, Parcelable {
     protected constructor(`in`: Parcel) {
         this.longName = (`in`.readValue((String::class.java.classLoader)) as String?)
         this.shortName = (`in`.readValue((String::class.java.classLoader)) as String?)
-        `in`.readList(this.types!!, (String::class.java.classLoader))
+        this.types = `in`.createStringArrayList() as MutableList<String?>?
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
