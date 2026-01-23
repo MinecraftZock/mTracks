@@ -9,7 +9,6 @@ import android.graphics.Point
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Settings
@@ -45,7 +44,6 @@ import info.mx.tracks.ops.AbstractOpGetLatLngOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
 import info.mx.tracks.ops.OpGetLatLngOperation
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.service.LocationJobService.Companion.REQUEST_DAY
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.TrackstageRecord
@@ -202,14 +200,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         mask2Record(false)
         stopLocationUpdates()
         super.onPause()
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() {
-        if (permissionHelper.hasLocationPermission()) {
-            LocationServices.getFusedLocationProviderClient(requireContext())
-                .requestLocationUpdates(REQUEST_DAY, locationCallback, Looper.getMainLooper())
-        }
     }
 
     private fun stopLocationUpdates() {
