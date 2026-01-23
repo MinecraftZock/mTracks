@@ -264,7 +264,7 @@ dependencies {
     implementation("com.github.AppDevNext.Logcat:LogcatCrashlyticLib:3.4")
 
     // core
-    implementation("com.github.hannesa2:mechanoid:4.5")
+    implementation("com.github.hannesa2:mechanoid:4.6")
     implementation(project(":RxCommLib"))
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("net.lingala.zip4j:zip4j:2.11.5")
