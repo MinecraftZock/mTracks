@@ -44,7 +44,7 @@ object PictureHelper {
             filepathLocal = ""
         }
         if (filepathLocal == "") {
-            Timber.d("download " + record.id + " " + record.restId + " file:" + filepathLocal)
+            Timber.d("download ${record.id} ${record.restId} file:$filepathLocal")
             val intent: Intent = AbstractOpDownLoadImageOperation.newIntent(record.id, size, thumb)
             Ops.execute(intent)
         } else {
@@ -69,7 +69,7 @@ object PictureHelper {
                 if (drawable == null) {
                     Ops.execute(AbstractOpResetLocalImagesOperation.newIntent())
                 }
-                Timber.d("Id:" + record.id + " size:" + size + " h:" + imgView.height + " w:" + imgView.width)
+                Timber.d("Id:${record.id} size:$size h:${imgView.height} w:${imgView.width}")
                 res = true
             }
         }

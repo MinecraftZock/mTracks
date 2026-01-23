@@ -122,7 +122,7 @@ class StageViewBinder(
                                 val intentM: Intent = AbstractOpSyncFromServerOperation.newIntent(true, BuildConfig.FLAVOR)
                                 Ops.execute(intentM)
                             }
-                            ) { e: Throwable? -> Timber.d(e?.message) }
+                            ) { e: Throwable? -> Timber.d(e) }
                     )
                 }
                 res = true

@@ -155,7 +155,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
                     val params = slidingBody!!.layoutParams
                     params.height = panel.height //-height
-                    Timber.d(panel.height.toString() + "-" + heightHeader + "=" + params.height)
+                    Timber.d("${panel.height}-$heightHeader=${params.height}")
                     setFabPosition(PanelState.ANCHORED, 0f)
                 }
 

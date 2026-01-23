@@ -64,11 +64,7 @@ object DistanceHelper {
             }
             cursor.close()
             val seconds = (System.currentTimeMillis() - start) / 1000.0
-            Timber.d(
-                "calcDistanceByCountry " + zlr + "records set distance2current: LOC:" + df.format(
-                    seconds
-                ) + "s"
-            )
+            Timber.d("calcDistanceByCountry ${zlr} records set distance2current: LOC:${df.format(seconds)}s")
 
             // #2 mark content provider to update gui
             if (updateGUI) {
@@ -183,10 +179,9 @@ object DistanceHelper {
                 val track = TracksRecord.get(poiRecord.id)
                 if (track != null) {
                     Timber.d(
-                        "storeDistance2DB " + getFormatDistance(prefs.unitsKm, distanceOld) + " -> " + getFormatDistance(
-                            prefs.unitsKm,
-                            distNew
-                        ) + " " + poiRecord.trackname
+                        "${getFormatDistance(prefs.unitsKm, distanceOld)} -> " + getFormatDistance(
+                            prefs.unitsKm, distNew
+                        ) + " ${poiRecord.trackname}"
                     )
                     track.distance2location = distNew.toLong()
                     track.save(false)

@@ -42,7 +42,7 @@ internal object PictureAdminHelper {
             } else {
                 val drawable = Drawable.createFromPath(filepathLocal)
                 imageView.setImageDrawable(drawable)
-                Timber.d("Id:" + record.id + " size:" + size + " h:" + imageView.height + " w:" + imageView.width)
+                Timber.d("Id:${record.id} size:$size h:${imageView.height} w:${imageView.width}")
                 res = true
             }
         }
