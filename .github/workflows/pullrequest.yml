@@ -160,7 +160,7 @@ jobs:
       #      - name: Run tests
       #        run: ./gradlew test
       - name: gradle check
-        run: ./gradlew lintDebug # ktlintCheck
+        run: ./gradlew lintDebug ktlintCheck
       - name: Archive Lint report
         uses: actions/upload-artifact@v6
         if: ${{ always() }}
