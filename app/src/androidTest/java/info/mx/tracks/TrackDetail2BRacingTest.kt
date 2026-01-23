@@ -6,4 +6,4 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class TrackDetail2BRacingTest : BaseTrackDetailTest(1900L, false)
+class TrackDetail2BRacingTest : BaseTrackDetailTest(1900L)

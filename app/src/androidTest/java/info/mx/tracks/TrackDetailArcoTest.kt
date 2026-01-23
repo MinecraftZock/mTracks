@@ -6,4 +6,4 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class TrackDetailArcoTest : BaseTrackDetailTest(4074L, false)
+class TrackDetailArcoTest : BaseTrackDetailTest(4074L)
