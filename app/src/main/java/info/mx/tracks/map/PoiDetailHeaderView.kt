@@ -26,11 +26,17 @@ import info.mx.tracks.common.DistanceHelper.checkDistance4View
 import info.mx.tracks.common.DistanceHelper.setDistanceString
 import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.*
-import info.mx.tracks.sqlite.MxInfoDBContract.*
+import info.mx.tracks.sqlite.MxInfoDBContract.Route
+import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import info.mx.tracks.sqlite.MxInfoDBContract.TracksGesSum
+import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
+import info.mx.tracks.sqlite.RouteRecord
+import info.mx.tracks.sqlite.TracksGesSumRecord
+import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.sqlite.TrackstageRecord
 import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayout(myContext, attrs) {
     private val viewAddress: TextView
@@ -232,12 +238,14 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
                     bundle!!.getLong(TRACK_ID)
                 )
                     .createSupportLoader(TracksGesSum.CONTENT_URI, null)
+
                 LOADER_STAGE -> SQuery.newQuery().expr(
                     Trackstage._ID,
                     SQuery.Op.EQ,
                     bundle!!.getLong(TRACK_ID)
                 )
                     .createSupportLoader(Trackstage.CONTENT_URI, null)
+
                 LOADER_ROUTE -> SQuery.newQuery()
                     .expr(
                         Route.TRACK_CLIENT_ID,
@@ -249,6 +257,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
                         null,
                         Route.CREATED
                     )
+
                 else -> SQuery.newQuery()
                     .expr(
                         Route.TRACK_CLIENT_ID,
@@ -278,10 +287,12 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
                             LoadingPoi(poiLoaderManager)
                         )
                     }
+
                     LOADER_STAGE -> {
                         val stageRecord = TrackstageRecord.fromCursor(cursor)
                         updateLayout(stageRecord)
                     }
+
                     LOADER_ROUTE -> {
                         Timber.i("onLoadFinished Route:%s", cursor.count)
                         if (cursor.isBeforeFirst) {

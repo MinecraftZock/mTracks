@@ -8,7 +8,8 @@ import android.widget.RatingBar
 import android.widget.TextView
 import info.mx.tracks.R
 import info.mx.tracks.util.getDrawableIdentifier
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class private
 class CommentViewBinder(private val context: Context) : androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder {
@@ -25,12 +26,14 @@ class CommentViewBinder(private val context: Context) : androidx.cursoradapter.w
                 }
                 res = true
             }
+
             view.id == R.id.comlst_country -> {
                 val valueL = cursor.getString(columnIndex).lowercase(Locale.getDefault())
                 val id = context.resources.getDrawableIdentifier(valueL, context.packageName)
                 (view as ImageView).setImageResource(id)
                 res = true
             }
+
             view.id == R.id.comlst_note -> {
                 if (valueS == "") {
                     view.visibility = View.GONE
@@ -40,15 +43,17 @@ class CommentViewBinder(private val context: Context) : androidx.cursoradapter.w
                 }
                 res = true
             }
+
             view.id == R.id.comlst_rating -> {
                 val ratingBar = view as RatingBar
                 ratingBar.rating = cursor.getInt(columnIndex).toFloat()
                 res = true
             }
+
             view.id == R.id.comlst_datum -> {
                 val value = cursor.getLong(columnIndex)
                 (view as TextView).text = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        .format(Date(value))
+                    .format(Date(value))
                 res = true
             }
         }

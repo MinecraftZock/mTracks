@@ -248,7 +248,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
     fun doSyncPictures(context: OperationContext, updateProvider: Boolean) {
-
         val opName = "Pictures"
         val maxCreated = SQuery.newQuery().firstInt(Pictures.CONTENT_URI, "max(" + Pictures.CHANGED + ")")
 
@@ -813,7 +812,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val initial = SQuery.newQuery().count(Tracks.CONTENT_URI) == 0
 
             for (trackREST in tracksResponse) {
-
                 if (operationContext.isAborted) {
                     return 0
                 }
@@ -1016,7 +1014,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         var zlrInserted = 0
         val contentValuesRatingsList = ArrayList<ContentValues>()
         for (trackREST in ratingsResponse.body()!!) {
-
             if (context.isAborted) {
                 return
             }
@@ -1087,7 +1084,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         var zlrInserted = 0
         val opsTracks = ArrayList<ContentProviderOperation>()
         for (serieR in seriesResponse.body()!!) {
-
             if (context.isAborted) {
                 return
             }
@@ -1140,7 +1136,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         var zlrInserted = 0
         val opsTracks = ArrayList<ContentProviderOperation>()
         for (trackREST in resTrack.resTevents) {
-
             if (context.isAborted) {
                 return
             }
@@ -1321,7 +1316,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             was: String,
             @Suppress("SameParameterValue") previousImported: Int
         ): Int {
-
             if (context.isAborted) {
                 return 0
             }

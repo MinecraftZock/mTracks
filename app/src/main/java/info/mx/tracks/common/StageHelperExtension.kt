@@ -146,8 +146,10 @@ fun Cursor.getStringVal(): String {
             this.getColumnName(i) != Trackstage.CREATED &&
             this.getColumnName(i) != Trackstage.APPROVED
         ) {
-            if (this.getString(i) != null && this.getString(i) != "0" && this.getString(i) != "0.0"
-                && this.getString(i) != ""
+            if (this.getString(i) != null &&
+                this.getString(i) != "0" &&
+                this.getString(i) != "0.0" &&
+                this.getString(i) != ""
             ) {
                 val colIndex = trackCur.getColumnIndex(this.getColumnName(i))
                 var colorStrPre = ""

@@ -1,27 +1,26 @@
 package info.mx.tracks.ops.google
 
 import android.location.Location
-import info.hannes.commonlib.NetworkHelper.isOnline
-import info.hannes.commonlib.TrackingApplication.Companion.isDebug
-import info.mx.tracks.ops.ImportHelper.getDistance
-import com.robotoworks.mechanoid.ops.OperationContext
-import com.robotoworks.mechanoid.ops.OperationResult
 import android.os.Bundle
-import info.mx.tracks.rest.Google
-import info.mx.tracks.sqlite.RouteRecord
-import com.robotoworks.mechanoid.db.SQuery
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
-import info.mx.tracks.rest.GetRouteRequest
-import info.mx.tracks.common.SecHelper
-import info.mx.tracks.rest.google.Routes
-import com.robotoworks.mechanoid.net.ServiceException
 import android.widget.Toast
 import com.google.gson.Gson
+import com.robotoworks.mechanoid.db.SQuery
+import com.robotoworks.mechanoid.net.ServiceException
+import com.robotoworks.mechanoid.ops.OperationContext
+import com.robotoworks.mechanoid.ops.OperationResult
+import info.hannes.commonlib.NetworkHelper.isOnline
+import info.hannes.commonlib.TrackingApplication.Companion.isDebug
 import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.R
+import info.mx.tracks.common.SecHelper
+import info.mx.tracks.ops.ImportHelper.getDistance
+import info.mx.tracks.rest.GetRouteRequest
+import info.mx.tracks.rest.Google
+import info.mx.tracks.rest.google.Routes
+import info.mx.tracks.sqlite.MxInfoDBContract
+import info.mx.tracks.sqlite.RouteRecord
+import info.mx.tracks.sqlite.TracksRecord
 import timber.log.Timber
-import java.lang.Exception
 
 internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
@@ -56,7 +55,8 @@ internal class OpGetRouteOperation : AbstractOpGetRouteOperation() {
                     val response = routeClient.getRoute(request)
                     val routeString = response.readAsText()
                     val routes = gson.fromJson(routeString, Routes::class.java)
-                    if (routes != null && routes.status != null &&
+                    if (routes != null &&
+                        routes.status != null &&
                         (routes.status == "OK" || routes.status == "ZERO_RESULTS")
                     ) {
                         if (routeRec == null) {

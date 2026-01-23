@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
 import info.mx.tracks.MxApplication
-import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentEmpty

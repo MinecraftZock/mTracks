@@ -16,7 +16,6 @@ data class CapturedLatLng(
         @ColumnInfo(name = "aktion") var action: String = "",
         @ColumnInfo(name = "extra") var extra: String = "",
         @ColumnInfo(name = "trackname") var trackname: String = ""
-
 ) {
     @Ignore
     constructor() : this(null, 0.0, 0.0, System.currentTimeMillis(), 0, 0, "", "", "")

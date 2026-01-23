@@ -7,7 +7,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ListView
@@ -25,13 +30,21 @@ import com.robotoworks.mechanoid.ops.OperationExecutorCallbacks
 import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.utils.ViewUtils.setTotalHeightOfListView
-import info.hannes.mechadmin_gen.ops.mxcal.*
-import info.hannes.mechadmin_gen.sqlite.DownLoadSiteRecord
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.TrackstageBrother
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.Videos
-import info.hannes.mechadmin_gen.sqlite.MxCalContract.QuellFile
-import info.hannes.mechadmin_gen.sqlite.QuellFileRecord
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpBrothersLoadOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpBrothersPushOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpLoadPictureVideoOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpMxCalLoadSearchOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpMxCallFixLatLngOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpMxCallPush2ServerOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpRiderPlanetLoadOperation
+import info.hannes.mechadminGen.ops.mxcal.AbstractOpTracksMapLoadOperation
+import info.hannes.mechadminGen.ops.mxcal.OpRiderPlanetLoadOperation
+import info.hannes.mechadminGen.sqlite.DownLoadSiteRecord
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract.TrackstageBrother
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract.Videos
+import info.hannes.mechadminGen.sqlite.MxCalContract.QuellFile
+import info.hannes.mechadminGen.sqlite.QuellFileRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresUBase
 import info.mx.tracks.R
 import info.mx.tracks.common.ImportStatusMessage
@@ -330,6 +343,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
         return when (loader) {
             LOADER_BROTHER_TRACKS -> SQuery.newQuery()
                 .createSupportLoader(TrackstageBrother.CONTENT_URI, null, null)
+
             LOADER_QUELL_FILE -> {
                 val query = SQuery.newQuery()
                     .expr(QuellFile.URL, SQuery.Op.LIKE, "$serverUrl%")
@@ -339,6 +353,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
                     QuellFile.CREATEDATE + " desc"
                 )
             }
+
             else -> throw RuntimeException("ImportstatusCal removed")
         }
     }
@@ -348,6 +363,7 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
             LOADER_BROTHER_TRACKS -> if (adapterSteps != null) {
                 adapterSteps!!.notifyDataSetChanged()
             }
+
             LOADER_QUELL_FILE -> adapter!!.swapCursor(cursor)
         }
     }

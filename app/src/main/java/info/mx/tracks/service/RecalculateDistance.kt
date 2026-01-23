@@ -72,7 +72,6 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         capturedLatLng.time = System.currentTimeMillis()
 
         if (distance > DISTANCE_MIN_TO_RECALC) {
-
             val records = calculateDistanceOnTracks(mxMemDatabase, location)
             if (records.isNotEmpty()) {
                 val trackLoc = Location("track")

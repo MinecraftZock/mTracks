@@ -62,7 +62,6 @@ class MxPlace : Parcelable {
         val photoMetadata = photoMeta?.get(0)
 
         photoMetadata?.let {
-
             // Create a FetchResolvedPhotoUriRequest.
             val photoRequest = FetchResolvedPhotoUriRequest.builder(it)
                     .setMaxWidth(width)

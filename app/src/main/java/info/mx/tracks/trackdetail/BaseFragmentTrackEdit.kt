@@ -1,37 +1,25 @@
 package info.mx.tracks.trackdetail
 
-import info.hannes.commonlib.DateHelper.shortWeekdays
-import info.mx.tracks.MxApplication.Companion.isGoogleTests
-import info.mx.tracks.service.LocationJobService.Companion.REQUEST_DAY
-import info.mx.tracks.MxCoreApplication.Companion.doSync
-import info.mx.tracks.base.FragmentBase
-import info.mx.tracks.sqlite.TracksRecord
-import android.os.Bundle
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import info.mx.tracks.R
-import info.mx.tracks.common.On3StateClickListener
-import android.content.Intent
-import info.mx.tracks.service.RecalculateDistance
-import android.os.Looper
-import info.mx.tracks.common.SecHelper
-import info.mx.tracks.common.StatusHelper
-import info.mx.tracks.sqlite.TrackstageRecord
-import info.mx.tracks.map.FragmentMapScroll
-import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.prefs.MxPreferences
-import android.os.Vibrator
-import android.os.Build
-import android.os.VibrationEffect
-import info.mx.tracks.map.ActivityMapExtension
-import info.mx.tracks.ops.OpGetLatLngOperation
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Point
 import android.location.Location
+import android.os.Build
+import android.os.Bundle
+import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationCallback
@@ -47,13 +35,29 @@ import com.robotoworks.mechanoid.ops.OperationExecutor
 import com.robotoworks.mechanoid.ops.OperationExecutorCallbacks
 import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
+import info.hannes.commonlib.DateHelper.shortWeekdays
 import info.mx.tracks.BuildConfig
+import info.mx.tracks.MxApplication.Companion.isGoogleTests
+import info.mx.tracks.MxCoreApplication.Companion.doSync
+import info.mx.tracks.R
+import info.mx.tracks.base.FragmentBase
+import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.common.On3StateClickListener
+import info.mx.tracks.common.SecHelper
+import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.databinding.FragmentTrackEditBinding
+import info.mx.tracks.map.ActivityMapExtension
+import info.mx.tracks.map.FragmentMapScroll
 import info.mx.tracks.ops.AbstractOpGetLatLngOperation
 import info.mx.tracks.ops.AbstractOpPostTrackAppovedOperation
+import info.mx.tracks.ops.OpGetLatLngOperation
+import info.mx.tracks.prefs.MxPreferences
+import info.mx.tracks.service.LocationJobService.Companion.REQUEST_DAY
+import info.mx.tracks.service.RecalculateDistance
+import info.mx.tracks.sqlite.TracksRecord
+import info.mx.tracks.sqlite.TrackstageRecord
 import timber.log.Timber
-import java.lang.NullPointerException
-import java.util.*
+import java.util.Locale
 import kotlin.math.roundToInt
 
 abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragListener,
@@ -371,7 +375,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
         var status = recordTrack!!.trackstatus
         if (status == null) status = ""
-        if (neu || !status.contentEquals(
+        if (neu ||
+            !status.contentEquals(
                 StatusHelper.getShortStatusText(
                     requireActivity(),
                     binding.teStatus.selectedItem as String

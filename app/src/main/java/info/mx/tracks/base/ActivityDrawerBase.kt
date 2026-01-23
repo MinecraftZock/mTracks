@@ -198,7 +198,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
             }
         } else if (menuItem.itemId == R.id.drawer_navigation) {
             if (this is ActivityTrackDetail) {
-
                 val record = TracksRecord.get(this.detailFragmentTab!!.recordLocalId)
                 if (record != null) {
                     LocationHelper.openNavi(
@@ -246,7 +245,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
 
     @SuppressLint("InflateParams")
     private fun doFeedBackDialog(trackName: String) {
-
         val builder = AlertDialog.Builder(this)
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater

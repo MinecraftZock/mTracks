@@ -49,10 +49,10 @@ internal class OpPushSharedImageOperation : AbstractOpPushSharedImageOperation()
                 os.flush()
                 os.close()
                 toTransfer = true
-            } else if (args.uri.startsWith("http")) {  // ... or download to local storage
+            } else if (args.uri.startsWith("http")) { // ... or download to local storage
                 toTransfer =
                     RetroFileHelper.downloadFile(commApiClient, args.uri, localCopy.absolutePath)
-            } else if (args.uri.startsWith("file:///")) {  // ... or download to local storage
+            } else if (args.uri.startsWith("file:///")) { // ... or download to local storage
                 val uri = args.uri.toUri()
                 val realPath = uri.path
                 localCopy = File(realPath.toString())

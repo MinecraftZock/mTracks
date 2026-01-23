@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
  * desired output ready for the UI.
  * It returns observables that emit data models.
  */
-open class DataManagerAdminBase: DataManagerBase() {
+open class DataManagerAdminBase : DataManagerBase() {
 
     protected object MemoryKeys {
         const val KEY_NETWORK = "key_network"

@@ -20,7 +20,6 @@ class DiskReceiver : BroadcastReceiver() {
             for (rec in records) {
                 val file = File(rec.localfile)
                 if (file.lastModified() < System.currentTimeMillis() - 1000 * 60 * 60 * 12) {
-
                     file.delete()
                 }
             }

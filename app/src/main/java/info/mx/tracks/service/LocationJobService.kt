@@ -103,7 +103,6 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
 
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-
         if (permissionHelper.hasLocationPermission()) {
             val handlerThread = HandlerThread("location handlerthread")
             handlerThread.start()
@@ -156,9 +155,7 @@ class LocationJobService : JobService(), GoogleApiClient.ConnectionCallbacks, Go
         startLocationUpdates()
     }
 
-    override fun onConnectionSuspended(i: Int) {
-
-    }
+    override fun onConnectionSuspended(i: Int) = Unit
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         if (isConnected) {

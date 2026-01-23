@@ -131,7 +131,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 var res = false // super.onTouch(view, motionEvent);
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
+
                     MotionEvent.ACTION_CANCEL -> res = true
+
                     MotionEvent.ACTION_UP -> {
                         res = true
                         if ((view as TextView).text.toString().contains("\n")) {
@@ -153,7 +155,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 var res = false // super.onTouch(view, motionEvent);
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
+
                     MotionEvent.ACTION_CANCEL -> res = true
+
                     MotionEvent.ACTION_UP -> {
                         res = true
                         doSendMail((view as TextView).text.toString())
@@ -169,7 +173,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 var res = false // super.onTouch(view, motionEvent);
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
+
                     MotionEvent.ACTION_CANCEL -> res = true
+
                     MotionEvent.ACTION_UP -> {
                         val loc = view.tag as Location
                         doOpenMap(loc)
@@ -192,7 +198,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 var res = false // super.onTouch(view, motionEvent);
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
+
                     MotionEvent.ACTION_CANCEL -> res = true
+
                     MotionEvent.ACTION_UP -> {
                         doOpenNavigation()
                         res = true
@@ -208,7 +216,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 var res = false // super.onTouch(view, motionEvent);
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN -> res = true
+
                     MotionEvent.ACTION_CANCEL -> res = true
+
                     MotionEvent.ACTION_UP -> {
                         res = true
                         openWebSite(requireActivity(), (view as TextView).text.toString())
@@ -357,8 +367,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         fileAbsolute = imageReturnedIntent.data!!.path
                     }
                     val newFile = File(fileAbsolute!!)
-                    if (imageReturnedIntent != null && !newFile.exists() && imageReturnedIntent.extras != null && imageReturnedIntent.extras!!
-                            .get("data") != null
+                    if (imageReturnedIntent != null &&
+                        !newFile.exists() &&
+                        imageReturnedIntent.extras != null &&
+                        imageReturnedIntent.extras!!.get("data") != null
                     ) {
                         val bitmap = imageReturnedIntent.extras!!.get("data") as Bitmap?
                         try {
@@ -546,8 +558,13 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 trackRec.opensunday == 0L
 
         binding.trLayoutOpening.visibility = if (hideTimes) View.GONE else View.VISIBLE
-        binding.trLayoutInfo.visibility = if (trackRec.mxtrack == 1L || trackRec.quad == 1L || trackRec.a4x4 == 1L || trackRec.endruo == 1L ||
-            trackRec.utv == 1L || trackRec.facebook != null && trackRec.facebook != ""
+        binding.trLayoutInfo.visibility = if (trackRec.mxtrack == 1L ||
+            trackRec.quad == 1L ||
+            trackRec.a4x4 == 1L ||
+            trackRec.endruo == 1L ||
+            trackRec.utv == 1L ||
+            trackRec.facebook != null &&
+            trackRec.facebook != ""
         )
             View.VISIBLE
         else
@@ -878,6 +895,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 .expr(Weather.TRACK_CLIENT_ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
                 .expr(Weather.TYPE, Op.EQ, "D")
                 .createSupportLoader(Weather.CONTENT_URI, null, Weather.DT)
+
             //LOADER_ROUTE
             else -> SQuery.newQuery()
                 .expr(Route.TRACK_CLIENT_ID, Op.EQ, bundle!!.getLong(RECORD_ID_LOCAL))
@@ -1186,7 +1204,9 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             // telephone with an icon
             if (which == R.string.phone) {
                 val inflater = activity.layoutInflater
-                @SuppressLint("InflateParams") val viewHeader = inflater.inflate(R.layout.dialog_header_image, null)
+
+                @SuppressLint("InflateParams")
+                val viewHeader = inflater.inflate(R.layout.dialog_header_image, null)
                 (viewHeader.findViewById<View>(R.id.dialogheader_button) as ImageView).setImageResource(android.R.drawable.ic_menu_call)
                 (viewHeader.findViewById<View>(R.id.dialogheader_text) as TextView).text = activity.getString(which)
                 builder.setCustomTitle(viewHeader)

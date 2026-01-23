@@ -29,9 +29,9 @@ import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.TrackingApplication
 import info.hannes.commonlib.utils.BackupHelper
 import info.hannes.mechadmin.LoggingHelperAdmin
-import info.hannes.mechadmin_gen.ops.OpFacebookSplitOperation
-import info.hannes.mechadmin_gen.ops.OpStageSplitOperation
-import info.hannes.mechadmin_gen.sqlite.MxCalContract
+import info.hannes.mechadminGen.ops.OpFacebookSplitOperation
+import info.hannes.mechadminGen.ops.OpStageSplitOperation
+import info.hannes.mechadminGen.sqlite.MxCalContract
 import info.hannes.mxadmin.picture.ActivityImageConfirm
 import info.hannes.mxadmin.picture.ActivityImageMXBrotherStage
 import info.hannes.mxadmin.service.DataManagerAdmin

@@ -7,9 +7,11 @@ class VersionInfo {
     @SerializedName("restVersion")
     @Expose
     var restVersion: String? = null
+
     @SerializedName("dbVersion")
     @Expose
     var dbVersion: String? = null
+
     @SerializedName("dbName")
     @Expose
     val dbName: String? = null

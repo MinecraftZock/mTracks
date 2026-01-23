@@ -21,7 +21,6 @@ class ApiAdminClient(logLevel: HttpLoggingInterceptor.Level) {
     }
 
     private fun getInternSurveillanceService(logLevel: HttpLoggingInterceptor.Level): ISurveillanceService {
-
         val interceptorHostSelect = HostSelectionInterceptor()
 
         return RestServiceCreationHelper.createAuthenticatedService(
@@ -33,7 +32,6 @@ class ApiAdminClient(logLevel: HttpLoggingInterceptor.Level) {
     }
 
     private fun getInternIAdminService(logLevel: HttpLoggingInterceptor.Level): IAdminService {
-
         val interceptorHostSelect = HostSelectionInterceptor()
 
         return RestServiceCreationHelper.createAuthenticatedService(

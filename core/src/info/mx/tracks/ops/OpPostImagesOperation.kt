@@ -33,8 +33,9 @@ internal class OpPostImagesOperation : AbstractOpPostImagesOperation(), CoreKoin
         val prefs = MxPreferences.getInstance()
         return if (isOnline(context.applicationContext)) {
             var start: Long
-            @SuppressLint("HardwareIds") val androidId =
-                Secure.getString(context.applicationContext.contentResolver, Secure.ANDROID_ID)
+
+            @SuppressLint("HardwareIds")
+            val androidId = Secure.getString(context.applicationContext.contentResolver, Secure.ANDROID_ID)
             val username = if (prefs.username == "") "unknown" else prefs.username
             try {
                 val imgList = SQuery.newQuery()

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.robotoworks.mechanoid.db.SQuery
-import info.hannes.mechadmin_gen.sqlite.MxAdminDBContract.TrackstageBrother
+import info.hannes.mechadminGen.sqlite.MxAdminDBContract.TrackstageBrother
 
 class StepsBrotherAdapter : BaseAdapter() {
 

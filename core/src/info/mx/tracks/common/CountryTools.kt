@@ -1,7 +1,5 @@
 package info.mx.tracks.common
 
-import java.util.ArrayList
-
 object CountryTools {
     private val countryList: MutableList<LatLngCountry> = ArrayList()
     fun getLatitude(countryCode: String): Double {

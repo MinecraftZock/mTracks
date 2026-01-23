@@ -7,6 +7,7 @@ class StatusResponse {
     @get:SerializedName("aktion")
     @Expose
     var changed: Long = 0
+
     @SerializedName("message")
     @Expose
     var message: String? = null
