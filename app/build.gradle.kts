@@ -207,7 +207,7 @@ android {
     }
     lint {
         checkReleaseBuilds = false
-        disable += listOf("MissingTranslation", "UnusedResources", "InvalidPackage", "Range")
+        disable += listOf("MissingTranslation", "UnusedResources", "Range")
     }
     // https://stackoverflow.com/a/67635863/1079990
     testOptions {
