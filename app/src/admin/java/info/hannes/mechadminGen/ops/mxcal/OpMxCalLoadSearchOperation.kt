@@ -65,7 +65,7 @@ internal class OpMxCalLoadSearchOperation : AbstractOpMxCalLoadSearchOperation()
                     val resultS = responseS.parse()
                     val impResS = ImportMxCalResult()
                     ImportDataHelper.importMXSerieFromHttp(impResS, resultS.serie, quellFileS)
-                } catch (eu: UnexpectedHttpStatusException) {
+                } catch (_: UnexpectedHttpStatusException) {
                     quellFileS.log = "UnexpectedHttpStatusException"
                     quellFileS.save()
                 }

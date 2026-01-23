@@ -149,7 +149,7 @@ internal class OpRiderPlanetLoadOperation : AbstractOpRiderPlanetLoadOperation()
         } catch (e: IOException) {
             Timber.e(e)
         }
-        Timber.d("doPostTrackZusatz " + (System.currentTimeMillis() - start) + "ms")
+        Timber.d("doPostTrackZusatz ${System.currentTimeMillis() - start}ms")
         return null
     }
 

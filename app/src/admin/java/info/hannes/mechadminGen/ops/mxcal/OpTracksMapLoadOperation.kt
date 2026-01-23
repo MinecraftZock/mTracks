@@ -47,7 +47,7 @@ internal open class OpTracksMapLoadOperation : AbstractOpTracksMapLoadOperation(
                 sb.append(RetroFileHelper.getFileContent(commApiClient, args.url))
                 val body = sb.substring(sb.indexOf("<form id"), sb.indexOf("</form>"))
                 var action = sb.substring(sb.indexOf("action=") + "action=".length + 1)
-                action = action.substring(0, action.indexOf("\">"))
+                action = action.substringBefore("\">")
                 val optionList = body.substring(body.indexOf("<option"), body.indexOf("</select>"))
                     .trim { it <= ' ' }
                 val options = optionList.split("</option>").toTypedArray()
@@ -395,12 +395,7 @@ internal open class OpTracksMapLoadOperation : AbstractOpTracksMapLoadOperation(
                             $telNr
                             ${tel.replace("Ü", "+").replace("\\n", "").trim { it <= ' ' }}
                             """.trimIndent()
-                        Timber.i(
-                            "tel " + name + "[" + getShortCountry(country) + "]" + tel.replace(
-                                "Ü",
-                                "+"
-                            ).replace("\\n", "")
-                        )
+                        Timber.i("tel $name [${getShortCountry(country)}]${tel.replace("Ü", "+").replace("\\n", "")}")
                     }
                 }
                 val wwwList = trackUrl.split("\n").toTypedArray()
@@ -423,78 +418,34 @@ ${zw.replace("mailto:", "")}""".trim { it <= ' ' }
                             var type: String
                             try {
                                 val url = URL(zw)
-                                Timber.v("typ " + name + "[" + getShortCountry(country) + "] " + zw + " start")
+                                Timber.v("typ $name [${getShortCountry(country)}] $zw start")
                                 val uc: URLConnection = url.openConnection()
                                 uc.connectTimeout = TIMEOUT_VALUE
                                 uc.readTimeout = TIMEOUT_VALUE
                                 type = uc.contentType
-                                if (type == null) {
-                                    Timber.w("typ " + name + "[" + getShortCountry(country) + "] " + zw + " null")
-                                    var tempWithoutPath = zw.replace("//", "üü")
-                                    if (tempWithoutPath.contains("/")) {
-                                        tempWithoutPath = tempWithoutPath.substring(
-                                            0,
-                                            tempWithoutPath.indexOf("/")
-                                        ).replace("üü", "//")
-                                        if (zw != tempWithoutPath) {
-                                            // download ohne Pfad
-                                            val url2 = URL(tempWithoutPath)
-                                            var uc2: URLConnection
-                                            Timber.v(
-                                                "typ 2x " + name + "[" + getShortCountry(
-                                                    country
-                                                ) + "] " + tempWithoutPath + " start"
-                                            )
-                                            uc2 = url2.openConnection()
-                                            uc2.connectTimeout = TIMEOUT_VALUE
-                                            uc2.readTimeout = TIMEOUT_VALUE
-                                            type = uc2.contentType
-                                            if (type == null) {
-                                                if (trackUrl.contains(
-                                                        """
-    $tempWithoutPath
-    
-    """.trimIndent()
-                                                    )
-                                                ) {
-                                                    trackUrl = """
-                                                        $trackUrl$tempWithoutPath
-                                                        
-                                                        """.trimIndent()
-                                                }
-                                                Timber.i(
-                                                    "typ 2x " + name + "[" + getShortCountry(
-                                                        country
-                                                    ) + "] " + tempWithoutPath + " " + type
-                                                )
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (trackUrl.contains(
-                                            """
-    $zw
-    
-    """.trimIndent()
-                                        )
-                                    ) {
-                                        trackUrl = """
-                                            $trackUrl$zw
-                                            
-                                            """.trimIndent()
-                                    }
-                                    Timber.i("typ " + name + "[" + getShortCountry(country) + "] " + zw + " " + type)
+                                if (trackUrl.contains(
+                                        """
+$zw
+
+""".trimIndent()
+                                    )
+                                ) {
+                                    trackUrl = """
+                                        $trackUrl$zw
+                                        
+                                        """.trimIndent()
                                 }
-                            } catch (e: SocketTimeoutException) {
-                                Timber.e("typ " + name + "[" + getShortCountry(country) + "] " + "SocketTimeoutException")
-                            } catch (e: UnknownHostException) {
-                                Timber.e("typ " + name + "[" + getShortCountry(country) + "] " + "UnknownHostException")
+                                Timber.i("typ $name[${getShortCountry(country)}] $zw $type")
+                            } catch (_: SocketTimeoutException) {
+                                Timber.e("typ $name[${getShortCountry(country)}] SocketTimeoutException")
+                            } catch (_: UnknownHostException) {
+                                Timber.e("typ $name[${getShortCountry(country)}] UnknownHostException")
                             } catch (e: IOException) {
-                                Timber.e("typ " + name + "[" + getShortCountry(country) + "] " + e.message)
+                                Timber.e("typ $name[${getShortCountry(country)}] ${e.message}")
                             }
                             trackUrl = """$trackUrl
 $zw""".trim { it <= ' ' }
-                            Timber.i("www " + name + "[" + getShortCountry(country) + "] " + zw)
+                            Timber.i("www $name[${getShortCountry(country)}] $zw")
                         }
                     }
                 }
@@ -551,15 +502,12 @@ $zw""".trim { it <= ' ' }
                         "$datGes $item"
                     }
                 }
-                Timber.i(
-                    "dat" + (if (datGes.contains(">")) ">" else " ") + name + "[" + getShortCountry(
-                        country
-                    ) + "] " + datGes.trim { it <= ' ' })
+                Timber.i("dat${if (datGes.contains(">")) ">" else " "}$name[${getShortCountry(country)}] ${datGes.trim { it <= ' ' }}")
                 fillDatum(trackStage, datGes.trim { it <= ' ' })
                 for (it in itemsRest) {
-                    Timber.i("res " + name + "[" + getShortCountry(country) + "] " + it)
+                    Timber.i("res $name[${getShortCountry(country)}] $it")
                 }
-                Timber.d("url " + getShortCountry(country) + name + " " + latlng + " " + telNr)
+                Timber.d("url ${getShortCountry(country)}$name $latlng $telNr")
                 trackStage.androidid = "debug"
                 trackStage.supercross = if (sx) 1 else -1
                 trackStage.kidstrack = if (kids) 1 else -1
@@ -611,7 +559,7 @@ $zw""".trim { it <= ' ' }
                             val resR = webClient.postRatings(requestR)
                             // PostRatingsResult responseR = resR.parse();
                             if (resR.responseCode != 200) {
-                                Timber.w(resR.responseCode.toString() + " " + restID)
+                                Timber.w("${resR.responseCode} $restID")
                                 // resR.checkResponseCodeOk();
                             }
                         }

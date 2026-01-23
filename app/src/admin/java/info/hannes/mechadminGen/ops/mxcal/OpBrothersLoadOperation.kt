@@ -109,7 +109,7 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                     if (trackDB == null) {
                         trackDB = track
                         if (trackDB!!.distance2location > 100) {
-                            Timber.w(trackDB.trackname + " weit weg " + trackDB.distance2location + "m")
+                            Timber.w("${trackDB.trackname} weit weg ${trackDB.distance2location}m")
                             newTrackStage.androidid = "admin"
                         }
                     }
@@ -126,16 +126,12 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                         newTrackStage.androidid = "admin"
                         newTrackStage.latitude = trackBrother.lat
                         newTrackStage.longitude = trackBrother.lon
-                        Timber.i(
-                            countryKz + " " + trackBrother.attributes?.city + " nextA " + trackNext.trackname + " " + trackNext.distance2location + "m"
-                        )
+                        Timber.i("$countryKz ${trackBrother.attributes?.city} nextA ${trackNext.trackname} ${trackNext.distance2location}m")
                     } else {
                         newTrackStage.latitude = trackBrother.lat
                         newTrackStage.longitude = trackBrother.lon
                         if (trackNext != null) {
-                            Timber.i(
-                                countryKz + " " + trackBrother.attributes?.city + " nextB " + trackNext.trackname + " " + trackNext.distance2location + "m"
-                            )
+                            Timber.i("$countryKz ${trackBrother.attributes?.city} nextB ${trackNext.trackname} ${trackNext.distance2location}m")
                         }
                     }
                 }

@@ -28,7 +28,7 @@ internal class OpLoadPictureVideoOperation : AbstractOpLoadPictureVideoOperation
             doDownloadVideos(apiClient)
             LoggingHelperAdmin.setMessage("")
         } catch (e: Exception) {
-            Timber.e(e.message)
+            Timber.e(e)
             return OperationResult.error(e)
         }
         return OperationResult.ok(bundle)
