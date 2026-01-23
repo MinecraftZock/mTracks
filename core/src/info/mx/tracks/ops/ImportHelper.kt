@@ -35,12 +35,12 @@ object ImportHelper {
             if (response.code() == 200) {
                 if (response.body() != null &&
                     response.body()!!.results != null &&
-                    response.body()!!.results.isNotEmpty() &&
-                    response.body()!!.results[0].geometry != null &&
-                    response.body()!!.results[0].geometry.location != null
+                    response.body()!!.results?.isNotEmpty() == true &&
+                    response.body()!!.results?.get(0)?.geometry != null &&
+                    response.body()!!.results?.get(0)?.geometry?.location != null
                 ) {
-                    val location = response.body()!!.results[0].geometry.location
-                    latlng = LatLng(location.lat!!, location.lng!!)
+                    val location = response.body()!!.results?.get(0)?.geometry?.location
+                    latlng = LatLng(location?.lat!!, location.lng!!)
                 }
             }
         } catch (e: IOException) {
@@ -59,10 +59,10 @@ object ImportHelper {
             val response = call.execute()
             if (response.code() == 200) {
                 if (response.body() != null && response.body()!!.results != null) {
-                    for (res in response.body()!!.results) {
-                        for (add in res.addressComponents) {
+                    for (res in response.body()!!.results!!) {
+                        for (add in res?.addressComponents!!) {
                             var typeOk = false
-                            for (typ in add.types) {
+                            for (typ in add?.types!!) {
                                 if (typ == "country") {
                                     typeOk = true
                                 }
