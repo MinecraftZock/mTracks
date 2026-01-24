@@ -5,9 +5,11 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import info.hannes.commonlib.DialogHelper
 import info.hannes.commonlib.DialogHelper.doAskYesNo
 import info.mx.tracks.ActivityBase
@@ -79,21 +81,33 @@ class ActivityTrackEdit : ActivityBase() {
         transaction.commit()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                if (fragmentTrackEdit!!.mask2Record(false)) {
-                    var txt = getString(R.string.ask_unsaved_changes)
-                    if (fragmentTrackEdit!!.hasDefaultLatLon()) {
-                        txt = getString(R.string.default_latlon) + "/n/n" + txt
-                    }
-                    doAskYesNo(this, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
-                    return false
-                }
-                return true
+    override fun onStart() {
+        super.onStart()
+
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: android.view.Menu, menuInflater: android.view.MenuInflater) {
+                // Menu creation handled by base class or not needed
             }
-        }
-        return super.onOptionsItemSelected(item)
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        if (fragmentTrackEdit!!.mask2Record(false)) {
+                            var txt = getString(R.string.ask_unsaved_changes)
+                            if (fragmentTrackEdit!!.hasDefaultLatLon()) {
+                                txt = getString(R.string.default_latlon) + "/n/n" + txt
+                            }
+                            doAskYesNo(this@ActivityTrackEdit, 0, R.string.unsaved_changes, txt, SaveStage(), CloseStage())
+                            false
+                        } else {
+                            true
+                        }
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 
     private inner class SaveStage : DialogHelper.Callable {
