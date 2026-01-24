@@ -22,7 +22,6 @@ object LocationHelper {
 
     fun getFormatDistance(showKm: Boolean, meterSource: Int): String {
         var meter = meterSource
-        // String res = Math.round(meter / 100) * 100 + " m";
         val res: String
         if (meter > FORMAT_THRESHOLD) {
             res = if (showKm) (meter / 1000).toFloat().roundToInt().toString() + " km"

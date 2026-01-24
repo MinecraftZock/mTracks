@@ -208,10 +208,10 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     private val smallRatio: Int
         get() {
             // scaling
-            val dp = Math.round(requireActivity().resources.getDimension(R.dimen.thumbnail_size_dp))
+            val dp = requireActivity().resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt()
             val dpExact = (dp / requireActivity().resources.displayMetrics.density).toInt()
             val ratio = dp.toFloat() / dpExact
-            return Math.round(150 * ratio)
+            return (150 * ratio).roundToInt()
         }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -322,8 +322,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         var lat = DEFAULT_LAT
         var lon = DEFAULT_LON
         marker?.let {
-            lat = Math.round(it.position.latitude * fak5).toDouble() / fak5
-            lon = Math.round(it.position.longitude * fak5).toDouble() / fak5
+            lat = (it.position.latitude * fak5).roundToInt().toDouble() / fak5
+            lon = (it.position.longitude * fak5).roundToInt().toDouble() / fak5
         }
         Timber.d("lat/lon:$lat/$lon")
         return lat == DEFAULT_LAT && lon == DEFAULT_LON
@@ -599,8 +599,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                         }
                 }
             } else { // new track
-                stage.latitude = Math.round(marker!!.position.latitude * fak6).toDouble() / fak6
-                stage.longitude = Math.round(marker!!.position.longitude * fak6).toDouble() / fak6
+                stage.latitude = (marker!!.position.latitude * fak6).roundToInt().toDouble() / fak6
+                stage.longitude = (marker!!.position.longitude * fak6).roundToInt().toDouble() / fak6
                 changed = true
                 if (permissionHelper.hasLocationPermission()) {
                     LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
@@ -611,7 +611,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                                 val dest = Location("x")
                                 dest.latitude = stage.latitude
                                 dest.longitude = stage.longitude
-                                stage.insDistance = Math.round(lastKnown.distanceTo(dest)).toLong()
+                                stage.insDistance = lastKnown.distanceTo(dest).roundToInt().toLong()
                             }
                         }
                 }

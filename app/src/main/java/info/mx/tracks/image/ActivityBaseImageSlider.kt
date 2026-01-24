@@ -25,6 +25,7 @@ import info.mx.tracks.util.SystemUiHider
 import info.mx.tracks.util.SystemUiHider.Companion.getInstance
 import info.mx.tracks.util.SystemUiHider.OnVisibilityChangeListener
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>, OnImageListItemClick, OnPageChangeListener {
 
@@ -57,7 +58,7 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
         thumbsAdapter = ImageCursorAdapter(
             this,
             null,
-            Math.round(resources.getDimension(R.dimen.thumbnail_size_dp)),
+            resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt(),
             false
         )
         val layoutRecycler = LinearLayoutManager(this)

@@ -59,19 +59,6 @@ public class TracksDistanceRecord extends TracksgesRecord implements Comparable<
         return res;
     }
 
-    // public void setDistance(int distance) {
-    // TracksDistanceRecord.distance = distance;
-    // }
-
-    public void setCurrentPos(Location currentPos) {
-        if (currentPos != null) {
-            final Location trackPos = new Location("track");
-            trackPos.setLatitude(this.getLatitude());
-            trackPos.setLongitude(this.getLongitude());
-            distance = Math.round(trackPos.distanceTo(currentPos));
-        }
-    }
-
     @Override
     public int compareTo(@NonNull TracksDistanceRecord another) {
         if (this.getDistance2location() == another.getDistance2location()) {

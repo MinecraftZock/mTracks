@@ -28,6 +28,7 @@ import java.net.UnknownHostException
 import java.util.Arrays
 import java.util.Locale
 import java.util.regex.Pattern
+import kotlin.math.roundToInt
 
 internal open class OpTracksMapLoadOperation : AbstractOpTracksMapLoadOperation(), KoinComponent {
 
@@ -684,7 +685,7 @@ $zw""".trim { it <= ' ' }
                 .trim { it <= ' ' }
             if (tok.matches(regularExpressionComma.toRegex())) {
                 val zwi = tok.replace(",", ".").toDouble()
-                return Math.round(if (zwi > 1000) zwi * 1 else zwi * 1000).toInt()
+                return (if (zwi > 1000) zwi * 1 else zwi * 1000).roundToInt()
             }
         }
         return trackLength
