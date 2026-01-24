@@ -21,7 +21,9 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.google.android.gms.location.LocationCallback
@@ -74,6 +76,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     private var sortOrder: String? = null
     private var viewBinder: ViewBinderTracks? = null
     private var searchView: SearchView? = null
+
+    @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
     private var locationCallback: LocationCallback? = null
 
@@ -91,7 +95,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ScreenListWithProgressbarBinding.inflate(inflater, container, false)
         val view = binding.root
-        setHasOptionsMenu(true)
+
 
         sortOrder = if (arguments == null) {
             Tracksges.TRACKNAME
@@ -139,6 +143,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        setupMenu()
 
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
@@ -273,78 +280,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         startActivityForResult(qWfIntent, 1)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        requireActivity().menuInflater.inflate(R.menu.menu_fragment_track_list, menu)
-        val searchItem = menu.findItem(R.id.menu_search)
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
-        if (searchItem != null) {
-            searchView = searchItem.actionView as SearchView
-            //            searchView.setQueryHint(getString(R.string.text));
-        }
-        if (searchView != null) {
-            searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-        }
-
-        if (searchView == null) {
-            return
-        }
-        searchAutoComplete = searchView!!.findViewById(R.id.search_src_text)
-        if (searchAutoComplete != null) {
-            searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
-        }
-
-        if (searchView != null && curFilter.isNotBlank()) {
-            if (searchAutoComplete != null) {
-                searchAutoComplete!!.setText(curFilter)
-            }
-            searchView!!.isIconified = false
-        } else {
-            if (searchAutoComplete != null) {
-                searchAutoComplete!!.setText("")
-            }
-            searchView!!.isIconified = true
-        }
-
-        val queryTextListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean {
-                if (newText != "") {
-                    setFilter2Fragment(newText)
-                }
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                setFilter2Fragment(query)
-                return true
-            }
-        }
-        searchItem!!.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                setFilter2Fragment("")
-                return true // Return true to collapse action view
-            }
-
-            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                // Do something when expanded
-                return true // Return true to expand action view
-            }
-        })
-
-        if (null != searchView) {
-            searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            searchView!!.setIconifiedByDefault(true)
-            searchView!!.setOnQueryTextListener(queryTextListener)
-            if (curFilter.isNotBlank()) {
-                if (searchAutoComplete != null) {
-                    searchItem.expandActionView()
-                    // searchView.setIconified(false);
-                    searchAutoComplete!!.setText(curFilter)
-                }
-            }
-        }
-    }
-
     protected fun setFilter2Fragment(filterString: String) {
         if (curFilter != filterString && isAdded) {
             curFilter = filterString
@@ -362,29 +297,10 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         i.putExtra(Intent.EXTRA_SUBJECT, "MX Tracks Info feedback")
         try {
             startActivity(Intent.createChooser(i, "Send mail..."))
-        } catch (ex: android.content.ActivityNotFoundException) {
+        } catch (_: android.content.ActivityNotFoundException) {
             Toast.makeText(activity, getString(R.string.no_email_installed), Toast.LENGTH_SHORT).show()
         }
 
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_add_track) {
-            val qWfaddIntent = Intent(activity, ActivityTrackEdit::class.java)
-            startActivityForResult(qWfaddIntent, 1)
-        } else if (item.itemId == R.id.menu_filter) {
-            val qWfIntent = Intent(activity, ActivityFilter::class.java)
-            startActivityForResult(qWfIntent, 2)
-        } else if (item.itemId == R.id.menu_filter_country) {
-            val qWfcIntent = Intent(activity, ActivityFilterCountry::class.java)
-            startActivityForResult(qWfcIntent, 3)
-        } else if (item.itemId == R.id.menu_settings) {
-            val qWfsIntent = Intent(activity, ActivitySetting::class.java)
-            startActivityForResult(qWfsIntent, 4)
-        } else if (item.itemId == R.id.menu_feedback) {
-            doSendFeedBackMail()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -445,10 +361,117 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
         when (loader.id) {
-            LOADER_TRACKS -> if (sortOrder != TracksGesSum.DISTANCE2LOCATION) {
-                adapter!!.swapCursor(null)
-            }
+            LOADER_TRACKS -> adapter!!.swapCursor(null)
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_track_list, menu)
+                val searchItem = menu.findItem(R.id.menu_search)
+                val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+                if (searchItem != null) {
+                    searchView = searchItem.actionView as SearchView
+                }
+                if (searchView != null) {
+                    searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+                }
+
+                if (searchView == null) {
+                    return
+                }
+                searchAutoComplete = searchView!!.findViewById(R.id.search_src_text)
+                if (searchAutoComplete != null) {
+                    searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
+                }
+
+                if (searchView != null && curFilter.isNotBlank()) {
+                    if (searchAutoComplete != null) {
+                        searchAutoComplete!!.setText(curFilter)
+                    }
+                    searchView!!.isIconified = false
+                } else {
+                    if (searchAutoComplete != null) {
+                        searchAutoComplete!!.setText("")
+                    }
+                    searchView!!.isIconified = true
+                }
+
+                val queryTextListener = object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        if (newText != "") {
+                            setFilter2Fragment(newText)
+                        }
+                        return true
+                    }
+
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        setFilter2Fragment(query)
+                        return true
+                    }
+                }
+                searchItem!!.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                        setFilter2Fragment("")
+                        return true
+                    }
+
+                    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                        return true
+                    }
+                })
+
+                if (null != searchView) {
+                    searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+                    searchView!!.setIconifiedByDefault(true)
+                    searchView!!.setOnQueryTextListener(queryTextListener)
+                    if (curFilter.isNotBlank()) {
+                        if (searchAutoComplete != null) {
+                            searchItem.expandActionView()
+                            searchAutoComplete!!.setText(curFilter)
+                        }
+                    }
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_add_track -> {
+                        val qWfaddIntent = Intent(activity, ActivityTrackEdit::class.java)
+                        startActivityForResult(qWfaddIntent, 1)
+                        true
+                    }
+
+                    R.id.menu_filter -> {
+                        val qWfIntent = Intent(activity, ActivityFilter::class.java)
+                        startActivityForResult(qWfIntent, 2)
+                        true
+                    }
+
+                    R.id.menu_filter_country -> {
+                        val qWfcIntent = Intent(activity, ActivityFilterCountry::class.java)
+                        startActivityForResult(qWfcIntent, 3)
+                        true
+                    }
+
+                    R.id.menu_settings -> {
+                        val qWfsIntent = Intent(activity, ActivitySetting::class.java)
+                        startActivityForResult(qWfsIntent, 4)
+                        true
+                    }
+
+                    R.id.menu_feedback -> {
+                        doSendFeedBackMail()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onStart() {

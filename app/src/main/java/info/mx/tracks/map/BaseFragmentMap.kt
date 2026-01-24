@@ -31,7 +31,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.androidmapsextensions.ClusteringSettings
@@ -235,7 +237,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         viewFilterActive!!.visibility = if (QueryHelper.isFiltered()) View.VISIBLE else View.GONE
         headerView!!.setCallBackFragment(this)
-        setHasOptionsMenu(true)
 
         return view
     }
@@ -248,6 +249,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        setupMenu()
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(TRACK_CLIENT_ID)) {
@@ -603,119 +607,148 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         // Location updates are handled directly through FusedLocationProviderClient
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_map, menu)
+    @SuppressLint("RestrictedApi")
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_map, menu)
 
-        // setup of searchView in actionbar
-        if (map == null) {
-            return
-        }
-        menuSearch = menu.findItem(R.id.menu_search)
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = (menu.findItem(R.id.menu_search).actionView as SearchView).apply {
-            visibility = View.GONE
-            setIconifiedByDefault(true)
-            isSubmitButtonEnabled = true
-            isIconified = true // to be opened collapsed
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-        }
-
-        if (menuSearch != null) {
-            searchView = menuSearch!!.actionView as SearchView
-        }
-        if (searchView != null) {
-            searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-        } else {
-            return
-        }
-
-        searchAutoComplete = searchView!!.findViewById(R.id.search_src_text)
-        if (searchAutoComplete != null) {
-            searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
-        }
-
-        val mGoButton = searchView!!.findViewById<ImageView>(R.id.search_go_btn)
-        mGoButton.setImageResource(android.R.drawable.ic_menu_search)
-
-        searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextChange(txt: String): Boolean {
-                if (txt.isEmpty() && srcText != "") {
-                    Timber.d("reset text")
-                    srcText = ""
-                    loaderManager.destroyLoader(LOADER_TRACKS)
-                    loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-                } else if (txt.length >= MIN_TEXT_SEARCH_LENGTH) {
-                    Timber.d("set:$txt")
-                    val bundle = Bundle()
-                    bundle.putString(SEARCH_TEXT, txt)
-                    loaderManager.destroyLoader(LOADER_TRACKS)
-                    loaderManager.restartLoader(LOADER_TRACKS, bundle, this@BaseFragmentMap)
-                    srcText = txt
+                // setup of searchView in actionbar
+                if (map == null) {
+                    return
                 }
-                inPlaceSearch = false
-                return false
-            }
-
-            override fun onQueryTextSubmit(txt: String): Boolean {
-                MxCoreApplication.trackEvent("search", txt)
-                val bounds = map!!.projection.visibleRegion.latLngBounds
-                val mAdapter = AdapterPlaceAutocomplete(this@BaseFragmentMap, map!!, bounds, txt)
-
-                searchList!!.adapter = mAdapter
-                hideKeyBoard()
-
-                inPlaceSearch = true
-                //show all tracks
-                loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-                return false
-            }
-        })
-
-        searchView!!.setOnCloseListener {
-            Timber.d("animate  :%s", savePos)
-            savePos?.let {
-                val cameraUpdate = CameraUpdateFactory.newCameraPosition(it)
-                map!!.animateCamera(cameraUpdate)
-                Timber.d("animateCameraSave %s", savePos)
-                loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-            }
-            setSearchListVisibility(View.GONE)
-            inPlaceSearch = false
-            false
-        }
-
-        searchView!!.setOnQueryTextFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                showKeyboard()
-                if (savePos == null) {
-                    savePos = map!!.cameraPosition
+                menuSearch = menu.findItem(R.id.menu_search)
+                val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+                searchView = (menu.findItem(R.id.menu_search).actionView as SearchView).apply {
+                    visibility = View.GONE
+                    setIconifiedByDefault(true)
+                    isSubmitButtonEnabled = true
+                    isIconified = true // to be opened collapsed
+                    setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
                 }
-                Timber.d("hasFocus :true animateSave:$savePos")
-                slidingDrawer!!.setPanelState(PanelState.HIDDEN)
-                setSearchListVisibility(View.VISIBLE)
-                map?.removeAllPlacesMarker()
-            } else {
-                if (!searchItemClick) {
-                    if (isKeyboardActive) {
-                        hideKeyBoard()
-                    } else {
-                        savePos?.let {
-                            val cameraUpdate = CameraUpdateFactory.newCameraPosition(it)
-                            map!!.animateCamera(cameraUpdate)
+
+                if (menuSearch != null) {
+                    searchView = menuSearch!!.actionView as SearchView
+                }
+                if (searchView != null) {
+                    searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+                } else {
+                    return
+                }
+
+                searchAutoComplete = searchView!!.findViewById(R.id.search_src_text)
+                if (searchAutoComplete != null) {
+                    searchAutoComplete!!.setHintTextColor(ContextCompat.getColor(requireActivity(), R.color.abc_secondary_text_material_light))
+                }
+
+                val mGoButton = searchView!!.findViewById<ImageView>(R.id.search_go_btn)
+                mGoButton.setImageResource(android.R.drawable.ic_menu_search)
+
+                searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                    override fun onQueryTextChange(txt: String): Boolean {
+                        if (txt.isEmpty() && srcText != "") {
+                            Timber.d("reset text")
+                            srcText = ""
+                            loaderManager.destroyLoader(LOADER_TRACKS)
+                            loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                        } else if (txt.length >= MIN_TEXT_SEARCH_LENGTH) {
+                            Timber.d("set:$txt")
+                            val bundle = Bundle()
+                            bundle.putString(SEARCH_TEXT, txt)
+                            loaderManager.destroyLoader(LOADER_TRACKS)
+                            loaderManager.restartLoader(LOADER_TRACKS, bundle, this@BaseFragmentMap)
+                            srcText = txt
                         }
-                        Timber.d("animateCameraSave2 %s", savePos)
+                        inPlaceSearch = false
+                        return false
+                    }
+
+                    override fun onQueryTextSubmit(txt: String): Boolean {
+                        MxCoreApplication.trackEvent("search", txt)
+                        val bounds = map!!.projection.visibleRegion.latLngBounds
+                        val mAdapter = AdapterPlaceAutocomplete(this@BaseFragmentMap, map!!, bounds, txt)
+
+                        searchList!!.adapter = mAdapter
+                        hideKeyBoard()
+
+                        inPlaceSearch = true
+                        //show all tracks
+                        loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                        return false
+                    }
+                })
+
+                searchView!!.setOnCloseListener {
+                    Timber.d("animate  :%s", savePos)
+                    savePos?.let {
+                        val cameraUpdate = CameraUpdateFactory.newCameraPosition(it)
+                        map!!.animateCamera(cameraUpdate)
+                        Timber.d("animateCameraSave %s", savePos)
                         loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
                     }
-                } else {
-                    closeSearch()
-                    loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                    setSearchListVisibility(View.GONE)
+                    inPlaceSearch = false
+                    false
                 }
 
+                searchView!!.setOnQueryTextFocusChangeListener { view, hasFocus ->
+                    if (hasFocus) {
+                        showKeyboard()
+                        if (savePos == null) {
+                            savePos = map!!.cameraPosition
+                        }
+                        Timber.d("hasFocus :true animateSave:$savePos")
+                        slidingDrawer!!.setPanelState(PanelState.HIDDEN)
+                        setSearchListVisibility(View.VISIBLE)
+                        map?.removeAllPlacesMarker()
+                    } else {
+                        if (!searchItemClick) {
+                            if (isKeyboardActive) {
+                                hideKeyBoard()
+                            } else {
+                                savePos?.let {
+                                    val cameraUpdate = CameraUpdateFactory.newCameraPosition(it)
+                                    map!!.animateCamera(cameraUpdate)
+                                }
+                                Timber.d("animateCameraSave2 %s", savePos)
+                                loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                            }
+                        } else {
+                            closeSearch()
+                            loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
+                        }
+
+                    }
+                    searchItemClick = false
+                }
             }
-            searchItemClick = false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
+
+            override fun onPrepareMenu(menu: Menu) {
+                val open = slidingDrawer!!.panelState == PanelState.EXPANDED || slidingDrawer!!.panelState == PanelState.ANCHORED
+                val stageOpen = slidingDrawer!!.panelState != PanelState.HIDDEN && headerView!!.detailStyle == PoiDetailStyle.DETAIL_STAGE
+
+                Timber.d("slider open:$open ${slidingDrawer!!.panelState} stageOpen:$stageOpen")
+                menu.findItem(R.id.menu_search).isVisible = !open && !stageOpen
+                menu.findItem(R.id.menu_map2_filter).isVisible = false
+                menu.findItem(R.id.menu_map_addtrack).isVisible = !stageOpen
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_map2_filter -> {
+                        val qWfIntent = Intent(activity, ActivityFilter::class.java)
+                        startActivityForResult(qWfIntent, ACTIVITY_FILTER)
+                        true
+                    }
+                    R.id.menu_map_addtrack -> {
+                        addNewTrack()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setFabPosition(panelState: PanelState, position: Float) {
@@ -735,29 +768,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val open = slidingDrawer!!.panelState == PanelState.EXPANDED || slidingDrawer!!.panelState == PanelState.ANCHORED
-
-        val stageOpen = slidingDrawer!!.panelState != PanelState.HIDDEN && headerView!!.detailStyle == PoiDetailStyle.DETAIL_STAGE
-
-        Timber.d("slider open:$open ${slidingDrawer!!.panelState} stageOpen:$stageOpen")
-        menu.findItem(R.id.menu_search).isVisible = !open && !stageOpen
-        menu.findItem(R.id.menu_map2_filter).isVisible = false
-        menu.findItem(R.id.menu_map_addtrack).isVisible = !stageOpen
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_map2_filter) {
-            val qWfIntent = Intent(activity, ActivityFilter::class.java)
-            startActivityForResult(qWfIntent, ACTIVITY_FILTER)
-            return true
-        } else if (item.itemId == R.id.menu_map_addtrack) {
-            addNewTrack()
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
-    }
 
     internal fun addNewTrack() {
         val intentAddEdit = Intent(activity, ActivityTrackEdit::class.java)

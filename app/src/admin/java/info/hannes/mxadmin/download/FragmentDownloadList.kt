@@ -17,6 +17,8 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
@@ -78,8 +80,21 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private val dataManagerAdmin: DataManagerAdmin by inject()
 
+    // Modern Activity Result API
+    private lateinit var shareResultLauncher: ActivityResultLauncher<Intent>
+
     internal interface Callbacks {
         fun onItemSelected(id: Long)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Register for activity result using modern API
+        shareResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Handle result if needed - for share intent, typically no result is needed
+            Timber.d("Share activity completed with result code: ${result.resultCode}")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -270,7 +285,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     Intent.EXTRA_TEXT,
                     "${TrackingApplication.getVersion(requireContext())}\nDB  Version: " + MxInfoDBOpenHelper.VERSION
                 )
-                startActivityForResult(Intent.createChooser(intentMail, "send debug info" + " ..."), SEND_MAIL)
+                shareResultLauncher.launch(Intent.createChooser(intentMail, "send debug info" + " ..."))
             } catch (ex: android.content.ActivityNotFoundException) {
                 Timber.e(ex)
             }
@@ -320,7 +335,6 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         private const val STATE_ACTIVATED_POSITION = "activated_position"
         private const val LOADER_SITE = 0
-        private const val SEND_MAIL = 34
 
         private val emptyCallbacks: Callbacks = object : Callbacks {
             override fun onItemSelected(id: Long) {}
