@@ -35,6 +35,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -98,10 +100,32 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     private var recordTrackDist: TracksDistanceRecord? = null
     private var currPosition: Int = 0
 
+    // Modern Activity Result API launchers
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
+    private lateinit var pickPhotoLauncher: ActivityResultLauncher<Intent>
+
     private var _binding: FragmentTrackDetailBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Register for photo capture result
+        takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                handlePhotoResult(result.data)
+            }
+        }
+
+        // Register for photo pick result
+        pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                handlePhotoResult(result.data)
+            }
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -328,8 +352,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, imageReturnedIntent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent)
+    private fun handlePhotoResult(imageReturnedIntent: Intent?) {
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
             recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
             if (recordTrack == null) {
@@ -338,107 +361,96 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
         if (recordTrack == null) {
             requireActivity().finish()
+            return
         }
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MAKE_PHOTO -> {
-                    var uriMakePhoto: Uri? = null
-                    if (imageReturnedIntent != null) {
-                        if (hasImageCaptureBug()) {
-                            val fi = File("/sdcard/tmp")
-                            try {
-                                uriMakePhoto =
-                                    MediaStore.Images.Media.insertImage(requireActivity().contentResolver, fi.absolutePath, null, null).toUri()
-                            } catch (e: FileNotFoundException) {
-                                Timber.e(e)
-                            }
 
-                        } else {
-                            uriMakePhoto = imageReturnedIntent.data
-                        }
-                        assert(uriMakePhoto != null)
-                        fileAbsolute = uriMakePhoto!!.path
-                    }
-                    if (imageReturnedIntent != null && imageReturnedIntent.data != null) {
-                        fileAbsolute = imageReturnedIntent.data!!.path
-                    }
-                    val newFile = File(fileAbsolute!!)
-                    if (imageReturnedIntent != null &&
-                        !newFile.exists() &&
-                        imageReturnedIntent.extras != null &&
-                        imageReturnedIntent.extras!!.get("data") != null
-                    ) {
-                        val bitmap = imageReturnedIntent.extras!!.get("data") as Bitmap?
-                        try {
-                            if (bitmap != null) {
-                                Timber.i("bitmap.height = %s, bitmap width %s", bitmap.height, bitmap.width)
-                                val fOut = FileOutputStream(fileAbsolute!!)
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut)
-                                fOut.flush()
-                                fOut.close()
-                            }
-                        } catch (e: IOException) {
-                            e.message?.let { showMessage(it, Snackbar.LENGTH_LONG) }
-                            Timber.e(e)
-                        }
+        if (imageReturnedIntent == null) {
+            showMessage(getString(R.string.nothing_selected), Snackbar.LENGTH_SHORT)
+            return
+        }
 
-                    }
-
-                    val orientation = requireActivity().requestedOrientation
-                    if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                        Timber.w("rotate should be done")
-                        // TODO
-                        // Bitmap bitmap = BitmapFactory.decodeFile(fileAbsolute);
-                        // JniBitmapHolder bitmapHolder = new JniBitmapHolder();
-                        // bitmapHolder.storeBitmap(bitmap);
-                        // bitmapHolder.rotateBitmapCw90();
-                        // bitmap = bitmapHolder.getBitmapAndFree();
-                    }
-
-                    val newImg = PicturesRecord()
-                    newImg.trackRestId = recordTrack!!.restId
-                    newImg.localfile = fileAbsolute
-                    newImg.save()
-
-                    val intentM = AbstractOpPostImagesOperation.newIntent()
-                    Ops.execute(intentM)
+        // Handle make photo result
+        if (imageReturnedIntent.hasExtra("photo_type") && imageReturnedIntent.getStringExtra("photo_type") == "take") {
+            var uriMakePhoto: Uri? = null
+            if (hasImageCaptureBug()) {
+                val fi = File("/sdcard/tmp")
+                try {
+                    uriMakePhoto =
+                        MediaStore.Images.Media.insertImage(requireActivity().contentResolver, fi.absolutePath, null, null).toUri()
+                } catch (e: FileNotFoundException) {
+                    Timber.e(e)
                 }
+            } else {
+                uriMakePhoto = imageReturnedIntent.data
+            }
 
-                SELECT_PHOTO -> {
-                    val uri = imageReturnedIntent!!.data
-
-                    if (uri != null) {
-                        var imageFilePath = ""
-                        val cursor = requireActivity().contentResolver
-                            .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
-                        if (cursor != null) {
-                            cursor.moveToFirst()
-                            imageFilePath = cursor.getString(0)
-                            cursor.close()
-                        }
-
-                        val sourceFile = File(imageFilePath)
-                        val localCopy = File(MxCoreApplication.getFilesDir(requireActivity()), sourceFile.name)
-                        try {
-                            FileHelper.copyFile(sourceFile, localCopy)
-                            val picRecord = PicturesRecord()
-                            picRecord.localfile = localCopy.absolutePath
-                            picRecord.username = MxPreferences.getInstance().username
-                            picRecord.trackRestId = recordTrack!!.restId
-                            picRecord.save()
-                            val intentS = AbstractOpPostImagesOperation.newIntent()
-                            Ops.execute(intentS)
-                        } catch (e: IOException) {
-                            e.message?.let { showMessage(it, Snackbar.LENGTH_LONG) }
-                            Timber.e("IOException %s", e.message)
-                        }
-
+            if (uriMakePhoto != null) {
+                fileAbsolute = uriMakePhoto.path
+            }
+            if (imageReturnedIntent.data != null) {
+                fileAbsolute = imageReturnedIntent.data!!.path
+            }
+            val newFile = File(fileAbsolute!!)
+            if (!newFile.exists() &&
+                imageReturnedIntent.extras != null &&
+                imageReturnedIntent.extras!!.get("data") != null
+            ) {
+                val bitmap = imageReturnedIntent.extras!!.get("data") as Bitmap?
+                try {
+                    if (bitmap != null) {
+                        Timber.i("bitmap.height = %s, bitmap width %s", bitmap.height, bitmap.width)
+                        val fOut = FileOutputStream(fileAbsolute!!)
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut)
+                        fOut.flush()
+                        fOut.close()
                     }
+                } catch (e: IOException) {
+                    e.message?.let { showMessage(it, Snackbar.LENGTH_LONG) }
+                    Timber.e(e)
                 }
             }
+
+            val orientation = requireActivity().requestedOrientation
+            if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                Timber.w("rotate should be done")
+            }
+
+            val newImg = PicturesRecord()
+            newImg.trackRestId = recordTrack!!.restId
+            newImg.localfile = fileAbsolute
+            newImg.save()
+
+            val intentM = AbstractOpPostImagesOperation.newIntent()
+            Ops.execute(intentM)
         } else {
-            when (requestCode) {
-                MAKE_PHOTO, SELECT_PHOTO -> showMessage(getString(R.string.nothing_selected), Snackbar.LENGTH_SHORT)
+            // Handle select photo result
+            val uri = imageReturnedIntent.data
+
+            if (uri != null) {
+                var imageFilePath = ""
+                val cursor = requireActivity().contentResolver
+                    .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
+                if (cursor != null) {
+                    cursor.moveToFirst()
+                    imageFilePath = cursor.getString(0)
+                    cursor.close()
+                }
+
+                val sourceFile = File(imageFilePath)
+                val localCopy = File(MxCoreApplication.getFilesDir(requireActivity()), sourceFile.name)
+                try {
+                    FileHelper.copyFile(sourceFile, localCopy)
+                    val picRecord = PicturesRecord()
+                    picRecord.localfile = localCopy.absolutePath
+                    picRecord.username = MxPreferences.getInstance().username
+                    picRecord.trackRestId = recordTrack!!.restId
+                    picRecord.save()
+                    val intentS = AbstractOpPostImagesOperation.newIntent()
+                    Ops.execute(intentS)
+                } catch (e: IOException) {
+                    e.message?.let { showMessage(it, Snackbar.LENGTH_LONG) }
+                    Timber.e("IOException %s", e.message)
+                }
             }
         }
     }
@@ -990,14 +1002,15 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         }
         intent.putExtra("return-data", true)
-        startActivityForResult(intent, MAKE_PHOTO)
+        intent.putExtra("photo_type", "take") // Mark as take photo for result handling
+        takePhotoLauncher.launch(intent)
     }
 
     fun doPicturePick() {
         if (permissionHelper.hasExternalStoragePermission()) {
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, SELECT_PHOTO)
+            pickPhotoLauncher.launch(photoPickerIntent)
         } else {
             requestPermissions(
                 arrayOf(permission.READ_EXTERNAL_STORAGE),
@@ -1019,7 +1032,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     // We can now safely use the API we requested access to
                     val photoPickerIntent = Intent(Intent.ACTION_PICK)
                     photoPickerIntent.type = "image/*"
-                    startActivityForResult(photoPickerIntent, SELECT_PHOTO)
+                    pickPhotoLauncher.launch(photoPickerIntent)
                 }
             }
         }
