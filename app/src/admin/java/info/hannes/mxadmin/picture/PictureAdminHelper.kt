@@ -10,12 +10,13 @@ import info.hannes.mechadminGen.sqlite.PictureStageRecord
 import info.mx.tracks.R
 import info.mx.tracks.prefs.MxPreferences
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 internal object PictureAdminHelper {
 
     fun checkAndSetImage(context: Context, record: PictureStageRecord, imageView: ImageView, wishSize: Int): Boolean {
         var res = false
-        val thumb = wishSize == Math.round(context.resources.getDimension(R.dimen.thumbnail_size_dp))
+        val thumb = wishSize == context.resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt()
         val prefs = MxPreferences.getInstance()
         var size = wishSize
 
