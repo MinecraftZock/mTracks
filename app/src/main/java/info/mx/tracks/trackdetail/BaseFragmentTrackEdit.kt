@@ -645,17 +645,19 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
         if (map == null && mapFragment != null) {
             mapFragment.getMapAsync { googleMap: GoogleMap ->
-                map = googleMap
-                map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
-                if (permissionHelper.hasLocationPermission()) {
-                    map!!.isMyLocationEnabled = false
+                map = googleMap.apply {
+                    mapType = GoogleMap.MAP_TYPE_HYBRID
+                    if (permissionHelper.hasLocationPermission()) {
+                        isMyLocationEnabled = false
+                    }
+                    isTrafficEnabled = false
+                    uiSettings.isZoomControlsEnabled = true
+                    uiSettings.isMapToolbarEnabled = false
+                    setOnMarkerDragListener(this@BaseFragmentTrackEdit)
+                    setOnMarkerClickListener(this@BaseFragmentTrackEdit)
+                    setOnMapLoadedCallback { doAfterMapLoaded() }
                 }
-                map!!.isTrafficEnabled = false
-                map!!.uiSettings.isZoomControlsEnabled = true
-                map!!.uiSettings.isMapToolbarEnabled = false
-                map!!.setOnMarkerDragListener(this@BaseFragmentTrackEdit)
-                map!!.setOnMarkerClickListener(this@BaseFragmentTrackEdit)
-                map!!.setOnMapLoadedCallback { doAfterMapLoaded() }
+
                 fillMask(id)
                 setUpLocationClientIfNeeded()
             }
