@@ -17,15 +17,16 @@ import timber.log.Timber
 class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
     private var currPic: PictureStageRecord? = null
     private var showOnlyInteresting = true
-    override fun getPicturesQuery(): SQuery {
-        return SQuery.newQuery()
-            .expr(
-                MxAdminDBContract.PictureStage.UNINTERESSANT,
-                SQuery.Op.EQ,
-                if (showOnlyInteresting) 0 else 1
-            )
-            .append(MxAdminDBContract.PictureStage.REST_ID + " is null")
-    }
+    override val picturesQuery: SQuery
+        get() {
+            return SQuery.newQuery()
+                .expr(
+                    MxAdminDBContract.PictureStage.UNINTERESSANT,
+                    SQuery.Op.EQ,
+                    if (showOnlyInteresting) 0 else 1
+                )
+                .append(MxAdminDBContract.PictureStage.REST_ID + " is null")
+        }
 
     override fun onPause() {
         if (currPic != null) {
@@ -64,11 +65,11 @@ class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor) {
+    override fun onLoadFinished(loader: Loader<Cursor?>, cursor: Cursor?) {
         super.onLoadFinished(loader, cursor)
         when (loader.id) {
             LOADER_PICTURE_THUMBS -> {
-                this.title = "Picture confirm " + cursor.count
+                this.title = "Picture confirm ${cursor?.count}"
                 if (currPic != null) {
                     currPic!!.reload()
                 }
@@ -80,7 +81,7 @@ class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
     override fun onPageSelected(position: Int) {
         super.onPageSelected(position)
         if (thumbsCursor != null) {
-            thumbsCursor.moveToPosition(position)
+            thumbsCursor?.moveToPosition(position)
             currPic = PictureStageRecord.fromCursor(thumbsCursor)
         }
         invalidateOptionsMenu()
