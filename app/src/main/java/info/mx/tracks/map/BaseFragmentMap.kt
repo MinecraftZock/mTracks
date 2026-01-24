@@ -6,7 +6,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -86,7 +85,6 @@ import info.mx.tracks.sqlite.TracksGesSumRecord
 import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.TrackstageRecord
 import info.mx.tracks.tools.AddMobHelper
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentPlaceDetail
 import info.mx.tracks.trackdetail.FragmentTrackDetail
@@ -1149,24 +1147,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_LOCATION -> {
-                for (i in grantResults.indices) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED && permissions[i].endsWith("LOCATION")) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    map!!.isMyLocationEnabled = true
-                    LocationJobService.scheduleJob(requireActivity())
-                    setUpLocationClientIfNeeded()
-                }
-            }
-        }
-    }
 
     companion object {
 
@@ -1176,7 +1156,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         private const val TOLERANCE = 60
         private const val TRACK_CLIENT_ID = "TRACK_CLIENT_ID"
         private const val CURR_ZOOM = "CURR_ZOOM"
-        private const val ACTIVITY_FILTER = 0
         private const val LOADER_TRACKS = 0
         private const val LOADER_STAGE = 1
         private const val LOADER_ROUTE = 2

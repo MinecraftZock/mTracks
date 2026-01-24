@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.os.Looper
@@ -53,7 +52,6 @@ import info.mx.tracks.settings.ActivitySetting
 import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.sqlite.TracksGesSumRecord
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -572,26 +570,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_LOCATION -> {
-                for (i in grantResults.indices) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED && permissions[i].endsWith("LOCATION")) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    LocationJobService.restartService(requireActivity())
-                    setUpLocationClientIfNeeded()
-                }
-            }
-        }
-    }
 
     companion object {
-        const val IS_FAVORITE = Tracks.TRACKNAME
         private const val LOADER_TRACKS = 0
         private const val FILTER = "FILTER"
         internal const val ONLY_FOREIGN = "only_foreign"
