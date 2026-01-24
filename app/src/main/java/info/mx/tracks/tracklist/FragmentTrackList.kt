@@ -328,11 +328,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        loaderManager.restartLoader(LOADER_TRACKS, this@FragmentTrackList.arguments, this@FragmentTrackList)
-    }
-
     override fun onCreateLoader(id: Int, bundleIn: Bundle?): Loader<Cursor> {
         var bundle = bundleIn
         when (id) {
@@ -466,25 +461,25 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                 return when (menuItem.itemId) {
                     R.id.menu_add_track -> {
                         val qWfaddIntent = Intent(activity, ActivityTrackEdit::class.java)
-                        startActivityForResult(qWfaddIntent, 1)
+                        addTrackLauncher.launch(qWfaddIntent)
                         true
                     }
 
                     R.id.menu_filter -> {
                         val qWfIntent = Intent(activity, ActivityFilter::class.java)
-                        startActivityForResult(qWfIntent, 2)
+                        filterLauncher.launch(qWfIntent)
                         true
                     }
 
                     R.id.menu_filter_country -> {
                         val qWfcIntent = Intent(activity, ActivityFilterCountry::class.java)
-                        startActivityForResult(qWfcIntent, 3)
+                        filterCountryLauncher.launch(qWfcIntent)
                         true
                     }
 
                     R.id.menu_settings -> {
                         val qWfsIntent = Intent(activity, ActivitySetting::class.java)
-                        startActivityForResult(qWfsIntent, 4)
+                        settingsLauncher.launch(qWfsIntent)
                         true
                     }
 
