@@ -144,7 +144,12 @@ class FragmentPlaceDetail : Fragment(), MxPlace.PhotoReadyCallBack {
                     }
                 }
 
-                MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> view.background = saveColor
+                MotionEvent.ACTION_UP -> {
+                    view.background = saveColor
+                    view.performClick()
+                }
+
+                MotionEvent.ACTION_CANCEL -> view.background = saveColor
             }
             return false
         }
