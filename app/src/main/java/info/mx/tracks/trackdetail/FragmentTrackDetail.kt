@@ -352,6 +352,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
     }
 
+    @SuppressLint("SdCardPath")
     private fun handlePhotoResult(imageReturnedIntent: Intent?) {
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
             recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
@@ -375,9 +376,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             if (hasImageCaptureBug()) {
                 val fi = File("/sdcard/tmp")
                 try {
-                    uriMakePhoto =
-                        MediaStore.Images.Media.insertImage(requireActivity().contentResolver, fi.absolutePath, null, null).toUri()
+                    uriMakePhoto = insertImageToMediaStore(requireActivity().contentResolver, fi)
                 } catch (e: FileNotFoundException) {
+                    Timber.e(e)
+                } catch (e: IOException) {
                     Timber.e(e)
                 }
             } else {
@@ -499,7 +501,8 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         binding.hWeatherGalery.layoutManager = layoutRecyclerW
         binding.hWeatherGalery.adapter = adapterWeather
         // in CI we don't show weather.
-        // TOOD a good usecase to use mocking
+        // TOOD a good use-case to use mocking
+        @Suppress("KotlinConstantConditions")
         if (BuildConfig.RUN_CI)
             binding.hWeatherGalery.visibility = View.INVISIBLE
         else
@@ -800,14 +803,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         openEdit(recordLocalId)
                         true
                     }
+
                     R.id.menu_event_add -> {
                         addEvent()
                         true
                     }
+
                     R.id.menu_navigation -> {
                         doOpenNavigation()
                         true
                     }
+
                     R.id.menu_detail_globus -> {
                         val recTrack = TracksRecord.get(recordLocalId)
                         if (recTrack != null) {
@@ -818,17 +824,21 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         }
                         true
                     }
+
                     R.id.menu_detail_radar -> {
                         false
                     }
+
                     R.id.menu_detail_share -> {
                         doShare()
                         false
                     }
+
                     R.id.menu_favorite -> {
                         toggleFavorite(menuItem)
                         true
                     }
+
                     else -> false
                 }
             }
@@ -987,6 +997,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         return devices.contains(Build.BRAND + "/" + Build.PRODUCT + "/" + Build.DEVICE)
     }
 
+    @SuppressLint("SdCardPath")
     private fun doPictureMake() {
         // make photo
         fileAbsolute = (MxCoreApplication.getFilesDir(requireActivity()) + File.separatorChar + PREFIX_IMAGE_NAME +
@@ -1135,11 +1146,40 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
     }
 
+    /**
+     * Insert an image into MediaStore using the modern ContentResolver API
+     * to replace deprecated MediaStore.Images.Media.insertImage()
+     */
+    @Throws(IOException::class, FileNotFoundException::class)
+    private fun insertImageToMediaStore(contentResolver: android.content.ContentResolver, imageFile: File): Uri? {
+        if (!imageFile.exists()) {
+            throw FileNotFoundException("Image file not found: ${imageFile.absolutePath}")
+        }
+
+        val imageFileName = imageFile.name
+        val contentValues = android.content.ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, imageFileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, android.os.Environment.DIRECTORY_PICTURES)
+            }
+        }
+
+        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        imageUri?.let { uri ->
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                imageFile.inputStream().use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+        }
+
+        return imageUri
+    }
+
     companion object {
         private var trackLoc: Location? = null
 
-        private const val SELECT_PHOTO = 100
-        private const val MAKE_PHOTO = 101
         private const val PREFIX_IMAGE_NAME = "img_"
         private const val IMAGE_EXTENSION = ".jpg"
         private const val CAPTURED_FILENAME = "captured_filename"
