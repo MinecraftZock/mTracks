@@ -28,7 +28,7 @@ import android.view.View
  *
  * @see .FLAG_LAYOUT_IN_SCREEN_OLDER_DEVICES
  */
-abstract class SystemUiHider protected constructor(protected var activity: Activity, protected var anchorView: View, protected var flags: Int) {
+abstract class SystemUiHider protected constructor(protected var activity: Activity, protected var flags: Int) {
 
     /**
      * The current visibility callback.
@@ -55,17 +55,6 @@ abstract class SystemUiHider protected constructor(protected var activity: Activ
      * Show the system UI.
      */
     abstract fun show()
-
-    /**
-     * Toggle the visibility of the system UI.
-     */
-    fun toggle() {
-        if (isVisible()) {
-            hide()
-        } else {
-            show()
-        }
-    }
 
     /**
      * Registers a callback, to be triggered when the system UI visibility
@@ -102,7 +91,7 @@ abstract class SystemUiHider protected constructor(protected var activity: Activ
          *
          *
          * This flag isn't used on newer devices because the [action
- * bar](http://developer.android.com/design/patterns/actionbar.html), the most important structural element of an Android app, should
+         * bar](http://developer.android.com/design/patterns/actionbar.html), the most important structural element of an Android app, should
          * be visible and not obscured by the system UI.
          */
         const val FLAG_LAYOUT_IN_SCREEN_OLDER_DEVICES = 0x1
