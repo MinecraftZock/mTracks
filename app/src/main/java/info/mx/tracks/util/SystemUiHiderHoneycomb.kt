@@ -13,7 +13,8 @@ import androidx.core.view.WindowInsetsControllerCompat
  * Constructor not intended to be called by clients. Use
  * [SystemUiHider.getInstance] to obtain an instance.
  */
-class SystemUiHiderHoneycomb(activity: Activity, anchorView: View, flags: Int) : SystemUiHiderBase(activity, anchorView, flags) {
+class SystemUiHiderHoneycomb(activity: Activity, anchorView: View, flags: Int) : SystemUiHiderBase(activity,
+    flags) {
 
     private val windowInsetsController: WindowInsetsControllerCompat =
         WindowCompat.getInsetsController(activity.window, anchorView)
