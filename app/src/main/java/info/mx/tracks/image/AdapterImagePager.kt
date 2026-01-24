@@ -9,7 +9,15 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import info.mx.tracks.sqlite.MxInfoDBContract
 import java.util.*
 
-class AdapterImagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+/**
+ * Adapter for image pager using FragmentStatePagerAdapter.
+ *
+ * Note: FragmentStatePagerAdapter is deprecated in favor of FragmentStateAdapter with ViewPager2.
+ * This adapter continues to use the legacy API for compatibility with the existing ViewPager
+ * implementation. Migration to ViewPager2 would require updating layouts and activities.
+ */
+@Suppress("DEPRECATION")
+class AdapterImagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val cachedFragments: MutableMap<Int, FragmentImage> = HashMap()
     private var cursor: Cursor? = null

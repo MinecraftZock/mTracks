@@ -9,9 +9,14 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract
 import java.util.*
 
 /**
- * Adapter class that provides Fragment instances
+ * Adapter for stage image pager using FragmentStatePagerAdapter.
+ *
+ * Note: FragmentStatePagerAdapter is deprecated in favor of FragmentStateAdapter with ViewPager2.
+ * This adapter continues to use the legacy API for compatibility with the existing ViewPager
+ * implementation. Migration to ViewPager2 would require updating layouts and activities.
  */
-class AdapterImageStagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+@Suppress("DEPRECATION")
+class AdapterImageStagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val cachedFragments: MutableMap<Int, FragmentImageStage> = HashMap()
     private var cursor: Cursor? = null
