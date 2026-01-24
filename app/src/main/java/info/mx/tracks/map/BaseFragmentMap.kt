@@ -132,6 +132,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     // Modern Activity Result API
     private lateinit var filterLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
     @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
@@ -206,6 +207,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             // Reload tracks after returning from filter
             loaderManager.restartLoader(LOADER_TRACKS, null, this)
+        }
+
+        // Register for location permissions result
+        requestLocationPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (granted && map != null) {
+                enableMyLocation()
+            }
         }
     }
 
@@ -455,10 +464,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         })
         map!!.isTrafficEnabled = MxPreferences.getInstance().mapTraffic
         if (permissionHelper.hasLocationPermission()) {
-            map!!.isMyLocationEnabled = true
+            enableMyLocation()
         } else {
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PermissionHelper.REQUEST_PERMISSION_LOCATION
+            requestLocationPermissionsLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )
         }
         map!!.uiSettings.isZoomControlsEnabled = true
@@ -617,6 +626,13 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (permissionHelper.hasLocationPermission() && map != null) {
+            map!!.isMyLocationEnabled = true
+        }
+    }
+
     private fun setUpLocationClientIfNeeded() {
         // Location client setup is no longer needed with FusedLocationProviderClient
         // Location updates are handled directly through FusedLocationProviderClient
@@ -756,10 +772,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         filterLauncher.launch(qWfIntent)
                         true
                     }
+
                     R.id.menu_map_addtrack -> {
                         addNewTrack()
                         true
                     }
+
                     else -> false
                 }
             }

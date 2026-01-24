@@ -81,7 +81,6 @@ import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.TracksgesRecord
 import info.mx.tracks.sqlite.WeatherRecord
 import info.mx.tracks.tasks.ImportTaskCompleteListener
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.util.CommentHelper
 import info.mx.tracks.util.EventHelper
 import timber.log.Timber
@@ -103,6 +102,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     // Modern Activity Result API launchers
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
     private lateinit var pickPhotoLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
 
     private var _binding: FragmentTrackDetailBinding? = null
 
@@ -123,6 +123,15 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 handlePhotoResult(result.data)
+            }
+        }
+
+        // Register for storage permission result
+        requestStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                pickPhotoLauncher.launch(photoPickerIntent)
             }
         }
     }
@@ -800,14 +809,17 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         openEdit(recordLocalId)
                         true
                     }
+
                     R.id.menu_event_add -> {
                         addEvent()
                         true
                     }
+
                     R.id.menu_navigation -> {
                         doOpenNavigation()
                         true
                     }
+
                     R.id.menu_detail_globus -> {
                         val recTrack = TracksRecord.get(recordLocalId)
                         if (recTrack != null) {
@@ -818,17 +830,21 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                         }
                         true
                     }
+
                     R.id.menu_detail_radar -> {
                         false
                     }
+
                     R.id.menu_detail_share -> {
                         doShare()
                         false
                     }
+
                     R.id.menu_favorite -> {
                         toggleFavorite(menuItem)
                         true
                     }
+
                     else -> false
                 }
             }
@@ -1012,29 +1028,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             photoPickerIntent.type = "image/*"
             pickPhotoLauncher.launch(photoPickerIntent)
         } else {
-            requestPermissions(
-                arrayOf(permission.READ_EXTERNAL_STORAGE),
-                PermissionHelper.REQUEST_PERMISSION_EXTERNAL_STORAGE
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_EXTERNAL_STORAGE -> {
-                for (grantResult in grantResults) {
-                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
-                    photoPickerIntent.type = "image/*"
-                    pickPhotoLauncher.launch(photoPickerIntent)
-                }
-            }
+            requestStoragePermissionLauncher.launch(permission.READ_EXTERNAL_STORAGE)
         }
     }
 

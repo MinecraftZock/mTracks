@@ -91,6 +91,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     private lateinit var filterLauncher: ActivityResultLauncher<Intent>
     private lateinit var filterCountryLauncher: ActivityResultLauncher<Intent>
     private lateinit var settingsLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
     private var _binding: ScreenListWithProgressbarBinding? = null
 
@@ -115,6 +116,14 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
         filterCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+
+        // Register for location permissions result
+        requestLocationPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (granted) {
+                startLocationUpdates()
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -531,9 +540,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         if (permissionHelper.hasLocationPermission()) {
             startLocationUpdates()
         } else if (sortOrder == Tracksges.TRACKNAME) { //otherwise it asks to often
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                PermissionHelper.REQUEST_PERMISSION_LOCATION
+            requestLocationPermissionsLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )
         }
     }
