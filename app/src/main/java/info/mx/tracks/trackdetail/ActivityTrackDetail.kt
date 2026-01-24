@@ -77,10 +77,17 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             menuFab.close(false)
             this@ActivityTrackDetail.detailFragmentTab?.addRating()
         }
+    }
 
-        // Setup back press handling using OnBackPressedDispatcher
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        // Override parent's back press handling to just finish this activity
+        // This is added in onPostCreate to ensure it's registered AFTER parent's callback
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                // Simply finish this activity and return to FragmentTrackList
+                // Do not show the "exit app" dialog like the parent does
                 finish()
             }
         })
