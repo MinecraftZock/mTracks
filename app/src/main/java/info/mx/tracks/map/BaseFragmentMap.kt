@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -425,7 +426,13 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             }
 
             override fun onMarkerDrag(marker: Marker) {
-                val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val vibratorManager = requireActivity().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                    vibratorManager.defaultVibrator
+                } else {
+                    @Suppress("DEPRECATION")
+                    requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                }
 
                 val projection = map!!.projection
                 val markerLocation = marker.position
