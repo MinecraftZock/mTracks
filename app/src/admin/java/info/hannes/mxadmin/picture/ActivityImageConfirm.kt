@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.mxadmin.service.DataManagerAdmin
@@ -35,6 +37,67 @@ class ActivityImageConfirm : ActivityBaseImageSlider() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             toolbar.setNavigationOnClickListener { finish() }
         }
+
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: android.view.MenuInflater) {
+                menuInflater.inflate(R.menu.menu_image_confirm, menu)
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                menu.findItem(R.id.menu_image_confirm).isVisible = false
+                val showAllItem = menu.findItem(R.id.menu_image_show_all)
+                showAllItem.isChecked = showAll
+                showAllItem.title = if (showAllItem.isChecked) "all" else "show confirm"
+                thumbsCursor?.let {
+                    if (it.count > 0 && currPic != null) {
+                        val confirmMenu = menu.findItem(R.id.menu_image_confirm)
+                        confirmMenu.isVisible = true
+                        when (currPic!!.approved) {
+                            0L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox_question)
+                            -1L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox_empty)
+                            1L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox)
+                            else -> confirmMenu.icon = null
+                        }
+                        title = "RI:" + currPic!!.restId + " A:" + currPic!!.approved + " D:" + currPic!!.deleted
+                    } else {
+                        title = "Image confirm?"
+                    }
+                }
+            }
+
+            @SuppressLint("HardwareIds")
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_image_confirm -> {
+                        if (currPic != null) {
+                            var status = currPic!!.approved.toInt() + 1
+                            if (status == 2) {
+                                status = -1
+                            }
+                            val approve = Approved()
+                            approve.id = currPic!!.restId
+                            approve.changeuser = Secure.getString(applicationContext.contentResolver, Secure.ANDROID_ID)
+                            approve.status = status
+                            dataManagerAdmin.approvePicture(approve).subscribe(object : BaseSingleObserver<ApproveResponse>(this@ActivityImageConfirm) {
+                                override fun onSuccess(result: ApproveResponse) {
+                                    Toast.makeText(this@ActivityImageConfirm, result.message, Toast.LENGTH_LONG).show()
+                                }
+                            })
+                        } else {
+                            Toast.makeText(this@ActivityImageConfirm, "picture not set", Toast.LENGTH_SHORT).show()
+                        }
+                        true
+                    }
+                    R.id.menu_image_show_all -> {
+                        showAll = !showAll
+                        restartThumbsLoader()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.RESUMED)
     }
 
     override val picturesQuery: SQuery
@@ -46,67 +109,6 @@ class ActivityImageConfirm : ActivityBaseImageSlider() {
         } else {
             SQuery.newQuery()
         }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_image_confirm, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_image_confirm).isVisible = false
-        val showAllItem = menu.findItem(R.id.menu_image_show_all)
-        showAllItem.isChecked = showAll
-        showAllItem.title = if (showAllItem.isChecked)
-            "all"
-        else
-            "show confirm"
-        thumbsCursor?.let {
-            if (it.count > 0 && currPic != null) {
-                val confirmMenu = menu.findItem(R.id.menu_image_confirm)
-                confirmMenu.isVisible = true
-                when (currPic!!.approved) {
-                    0L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox_question)
-                    -1L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox_empty)
-                    1L -> confirmMenu.setIcon(R.drawable.actionbar_checkbox)
-                    else -> confirmMenu.icon = null
-                }
-                title = "RI:" + currPic!!.restId + " A:" + currPic!!.approved + " D:" + currPic!!.deleted
-            } else {
-                title = "Image confirm?"
-            }
-        }
-
-        return super.onPrepareOptionsMenu(menu)
-    }
-
-    @SuppressLint("HardwareIds")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val i = item.itemId
-        if (i == R.id.menu_image_confirm) {
-            if (currPic != null) {
-                var status = currPic!!.approved.toInt() + 1
-                if (status == 2) {
-                    status = -1
-                }
-                val approve = Approved()
-                approve.id = currPic!!.restId
-                approve.changeuser = Secure.getString(applicationContext.contentResolver, Secure.ANDROID_ID)
-                approve.status = status
-                dataManagerAdmin.approvePicture(approve).subscribe(object : BaseSingleObserver<ApproveResponse>(this) {
-                    override fun onSuccess(result: ApproveResponse) {
-                        Toast.makeText(this@ActivityImageConfirm, result.message, Toast.LENGTH_LONG).show()
-                    }
-
-                })
-            } else {
-                Toast.makeText(this, "picture not set", Toast.LENGTH_SHORT).show()
-            }
-        } else if (i == R.id.menu_image_show_all) {
-            showAll = !showAll
-            restartThumbsLoader()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor) {
         super.onLoadFinished(loader, cursor)
