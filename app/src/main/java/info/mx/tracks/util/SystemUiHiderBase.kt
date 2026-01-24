@@ -1,7 +1,11 @@
 package info.mx.tracks.util
 
 import android.app.Activity
+import android.os.Build
 import android.view.WindowManager
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * A base implementation of [SystemUiHider]. Uses APIs available in all API levels to show and hide the status bar.
@@ -32,8 +36,20 @@ open class SystemUiHiderBase(activity: Activity, flags: Int) : SystemUiHider(act
 
     override fun hide() {
         if (flags and FLAG_FULLSCREEN != 0) {
-            activity.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Modern API (Android 11+): Use WindowInsetsController
+                val decorView = activity.window.decorView
+                val insetsController = WindowCompat.getInsetsController(activity.window, decorView)
+                insetsController.hide(WindowInsetsCompat.Type.statusBars())
+                insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                // Legacy API: Use deprecated FLAG_FULLSCREEN for older devices
+                @Suppress("DEPRECATION")
+                activity.window.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                )
+            }
         }
         mOnVisibilityChangeListener.onVisibilityChange(false)
         mVisible = false
@@ -41,7 +57,16 @@ open class SystemUiHiderBase(activity: Activity, flags: Int) : SystemUiHider(act
 
     override fun show() {
         if (flags and FLAG_FULLSCREEN != 0) {
-            activity.window.setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Modern API (Android 11+): Use WindowInsetsController
+                val decorView = activity.window.decorView
+                val insetsController = WindowCompat.getInsetsController(activity.window, decorView)
+                insetsController.show(WindowInsetsCompat.Type.statusBars())
+            } else {
+                // Legacy API: Clear FLAG_FULLSCREEN for older devices
+                @Suppress("DEPRECATION")
+                activity.window.setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }
         }
         mOnVisibilityChangeListener.onVisibilityChange(true)
         mVisible = true
