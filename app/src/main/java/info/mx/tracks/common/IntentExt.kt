@@ -13,5 +13,5 @@ inline fun <reified T : Parcelable> Intent.parcelableExtra(key: String): T? = wh
 @Suppress("DEPRECATION")
 inline fun <reified T : Parcelable> Intent.parcelableArrayListExtra(key: String): ArrayList<T>? = when {
     SDK_INT >= 33 -> getParcelableArrayListExtra(key, T::class.java)
-    else -> getParcelableArrayListExtra<T>(key) as? ArrayList<T>
+    else -> getParcelableArrayListExtra<T>(key)
 }

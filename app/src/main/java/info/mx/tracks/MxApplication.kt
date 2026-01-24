@@ -13,6 +13,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import info.hannes.crashlytic.CrashlyticsTree
 import info.hannes.timber.DebugFormatTree
+import info.mx.tracks.common.parcelableExtra
 import info.mx.tracks.koin.appModule
 import info.mx.tracks.koin.dbModule
 import info.mx.tracks.koin.flavorModule
@@ -47,7 +48,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val location = intent.getParcelableExtra<Location>(OpSyncFromServerOperation.LOCATION)
+            val location = intent.parcelableExtra<Location>(OpSyncFromServerOperation.LOCATION)
             val source = intent.getStringExtra(OpSyncFromServerOperation.SOURCE)
             LocationRecalculateService.enqueueWork(context, location, source)
         }
