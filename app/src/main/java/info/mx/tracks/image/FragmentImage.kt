@@ -64,14 +64,14 @@ class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun setImage(record: PicturesRecord) {
-        val point = Point()
-
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val width: Int
         val height: Int
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Modern API (Android 11+)
             val windowMetrics = wm.currentWindowMetrics
-            val windowInsets: WindowInsets = windowMetrics.windowInsets
+            val windowInsets = windowMetrics.windowInsets
 
             val insets = windowInsets.getInsetsIgnoringVisibility(
                 WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout()
@@ -79,27 +79,30 @@ class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             val insetsWidth = insets.right + insets.left
             val insetsHeight = insets.top + insets.bottom
 
-            val b = windowMetrics.bounds
-            width = b.width() - insetsWidth
-            height = b.height() - insetsHeight
-            point.x = width
-            point.y = height
+            val bounds = windowMetrics.bounds
+            width = bounds.width() - insetsWidth
+            height = bounds.height() - insetsHeight
         } else {
+            // Legacy API for Android 10 and below
+            @Suppress("DEPRECATION")
+            val display = wm.defaultDisplay
             val size = Point()
-            val display = wm.defaultDisplay // deprecated in API 30
-            display?.getSize(size) // deprecated in API 30
+            @Suppress("DEPRECATION")
+            display?.getSize(size)
             width = size.x
             height = size.y
-            point.x = width
-            point.y = height
         }
 
-        val size = if (point.y > point.x)
-            point.y
-        else
-            point.x
-        val pictureShown = PictureHelper.checkAndSetImage(requireContext(), record, binding.imageFullSize, record.localfile, size)
-        // stop loading file changes
+        val maxSize = if (height > width) height else width
+        val pictureShown = PictureHelper.checkAndSetImage(
+            requireContext(),
+            record,
+            binding.imageFullSize,
+            record.localfile,
+            maxSize
+        )
+
+        // Stop loading file changes
         if (pictureShown) {
             loaderManager.destroyLoader(LOADER_PICTURE_FULL_SIZE)
         }
