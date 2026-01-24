@@ -34,6 +34,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
@@ -1100,16 +1102,18 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private fun hideKeyBoard() {
         searchView?.let {
             val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             isKeyboardActive = false
         }
     }
 
     private fun showKeyboard() {
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-        isKeyboardActive = true
+        searchView?.let { view ->
+            view.requestFocus()
+            val windowInsetsController = WindowInsetsControllerCompat(requireActivity().window, view)
+            windowInsetsController.show(WindowInsetsCompat.Type.ime())
+            isKeyboardActive = true
+        }
     }
 
     private fun animateCameraToMarker(marker: Marker, zoomAnimate: Float) {
