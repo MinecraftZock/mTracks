@@ -87,21 +87,21 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
             tr_camera = convertView.findViewById(R.id.tr_camera)
             tr_calendar = convertView.findViewById(R.id.tr_calendar)
             convertView.tag = ViewHolderTracksDist(
-                tr_list_event,
-                tr_name,
-                tr_distance,
-                tr_ratingBar,
-                tr_mo,
-                tr_tu,
-                tr_we,
-                tr_th,
-                tr_fr,
-                tr_sa,
-                tr_so,
-                tr_country,
-                tr_track_access,
-                tr_camera,
-                tr_calendar
+                tr_list_event = tr_list_event,
+                tr_name = tr_name,
+                tr_distance = tr_distance,
+                tr_ratingBar = tr_ratingBar,
+                tr_mo = tr_mo,
+                tr_tu = tr_tu,
+                tr_we = tr_we,
+                tr_th = tr_th,
+                tr_fr = tr_fr,
+                tr_sa = tr_sa,
+                tr_so = tr_so,
+                tr_country = tr_country,
+                tr_track_access = tr_track_access,
+                tr_camera = tr_camera,
+                tr_calendar = tr_calendar
             )
         } else {
             val viewHolder = convertView.tag as ViewHolderTracksDist

@@ -24,7 +24,7 @@ suspend fun <Response> Task<Response>.suspended(): Response = suspendCoroutine {
 fun Resources.getDrawableIdentifier(name: String, packageName: String): Int {
     return try {
         getIdentifier(name, "drawable", packageName)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         0
     }
 }

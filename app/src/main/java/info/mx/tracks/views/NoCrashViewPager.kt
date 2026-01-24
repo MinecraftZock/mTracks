@@ -18,7 +18,7 @@ class NoCrashViewPager : ViewPager {
     override fun draw(canvas: Canvas) {
         try {
             super.draw(canvas)
-        } catch (ignored: NullPointerException) {
+        } catch (_: NullPointerException) {
         }
 
     }
