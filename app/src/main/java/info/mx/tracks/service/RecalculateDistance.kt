@@ -161,11 +161,11 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val extras = Bundle()
         intent.putExtras(extras)
-        val pendingIntent = PendingIntent.getActivity(context, 3210, intent, LocationJobService.pendingIntentFlags)
-        val editPendingIntent = PendingIntent.getActivity(context, 3211, intent, LocationJobService.pendingIntentFlags)
-        val showPendingIntent = PendingIntent.getActivity(context, 3212, intent, LocationJobService.pendingIntentFlags)
+        val pendingIntent = PendingIntent.getActivity(context, 3210, intent, LocationJobService.PENDING_INTENT_FLAGS)
+        val editPendingIntent = PendingIntent.getActivity(context, 3211, intent, LocationJobService.PENDING_INTENT_FLAGS)
+        val showPendingIntent = PendingIntent.getActivity(context, 3212, intent, LocationJobService.PENDING_INTENT_FLAGS)
 
-        Timber.w("send updateNotification4Admin1 ${LocationJobService.pendingIntentFlags}")
+        Timber.w("send updateNotification4Admin1 ${LocationJobService.PENDING_INTENT_FLAGS}")
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -236,11 +236,11 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         intentShow.putExtra(EDIT, false)
         val editIntent = Intent(intentShow)
         editIntent.putExtra(EDIT, true)
-        val pendingIntent = PendingIntent.getActivity(context, 3210, intentShow, LocationJobService.pendingIntentFlags)
-        val editPendingIntent = PendingIntent.getActivity(context, 3211, editIntent, LocationJobService.pendingIntentFlags)
-        val showPendingIntent = PendingIntent.getActivity(context, 3212, intentShow, LocationJobService.pendingIntentFlags)
+        val pendingIntent = PendingIntent.getActivity(context, 3210, intentShow, LocationJobService.PENDING_INTENT_FLAGS)
+        val editPendingIntent = PendingIntent.getActivity(context, 3211, editIntent, LocationJobService.PENDING_INTENT_FLAGS)
+        val showPendingIntent = PendingIntent.getActivity(context, 3212, intentShow, LocationJobService.PENDING_INTENT_FLAGS)
 
-        Timber.w("send updateNotification ${LocationJobService.pendingIntentFlags}")
+        Timber.w("send updateNotification ${LocationJobService.PENDING_INTENT_FLAGS}")
 
         val builder = NotificationCompat.Builder(context, LOCATION_CHANNEL_ID)
 

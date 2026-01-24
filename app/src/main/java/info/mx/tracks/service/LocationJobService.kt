@@ -69,7 +69,7 @@ class LocationJobService : JobService(), KoinComponent {
                     Timber.i("onLocationResult")
 
                     // TODO this is just a debug record
-                    val extra = "onLocationResult " + locationResult
+                    val extra = "onLocationResult $locationResult"
                     dbLog(extra)
 
                     for (location in locationResult.locations) {
@@ -100,7 +100,7 @@ class LocationJobService : JobService(), KoinComponent {
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         if (permissionHelper.hasLocationPermission()) {
-            val handlerThread = HandlerThread("location handlerthread")
+            val handlerThread = HandlerThread("location handler thread")
             handlerThread.start()
             LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(requestDay, mLocationCallback!!, handlerThread.looper)
@@ -150,6 +150,7 @@ class LocationJobService : JobService(), KoinComponent {
         jobFinished(jobParameters, false)
     }
 
+    @Suppress("SameParameterValue")
     private fun updateNotification4Admin(meter: Int, payLoad: String) {
         if (!MxCoreApplication.isAdmin) {
             return
@@ -163,18 +164,17 @@ class LocationJobService : JobService(), KoinComponent {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         val extras = Bundle()
         intent.putExtras(extras)
-        val pendingIntent = PendingIntent.getActivity(this, 3210, intent, pendingIntentFlags)
-        val editPendingIntent = PendingIntent.getActivity(this, 3211, intent, pendingIntentFlags)
-        val showPendingIntent = PendingIntent.getActivity(this, 3212, intent, pendingIntentFlags)
+        val pendingIntent = PendingIntent.getActivity(this, 3210, intent, PENDING_INTENT_FLAGS)
+        val editPendingIntent = PendingIntent.getActivity(this, 3211, intent, PENDING_INTENT_FLAGS)
+        val showPendingIntent = PendingIntent.getActivity(this, 3212, intent, PENDING_INTENT_FLAGS)
 
-        Timber.w("send pendingintent updateNotification4Admin2 $pendingIntentFlags")
+        Timber.w("send pendingIntent updateNotification4Admin2 $PENDING_INTENT_FLAGS")
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
-            val notificationChannel =
-                NotificationChannel(RecalculateDistance.ADMIN_LOCATION_CHANNEL_ID, RecalculateDistance.ADMIN_NOTIFICATION_CHANNEL_NAME, importance)
+            val notificationChannel = NotificationChannel(RecalculateDistance.ADMIN_LOCATION_CHANNEL_ID, RecalculateDistance.ADMIN_NOTIFICATION_CHANNEL_NAME, importance)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
             notificationManager.createNotificationChannel(notificationChannel)
@@ -251,7 +251,7 @@ class LocationJobService : JobService(), KoinComponent {
             scheduleJob(context)
         }
 
-        const val pendingIntentFlags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        const val PENDING_INTENT_FLAGS = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     }
 
 }
