@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
 import info.mx.tracks.StorageCleanupManager
@@ -27,11 +27,24 @@ import info.mx.tracks.util.SystemUiHider.OnVisibilityChangeListener
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>, OnImageListItemClick, OnPageChangeListener {
+abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>, OnImageListItemClick {
 
     private lateinit var imageSwipePagerAdapter: AdapterImagePager
 
-    override fun onPageScrollStateChanged(state: Int) = Unit
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageScrollStateChanged(state: Int) {
+            // Optional: handle scroll state changes
+        }
+
+        override fun onPageSelected(position: Int) {
+            Timber.d("%s", position)
+            binding.containerBaseImage.galleryThumbs.scrollToPosition(position)
+        }
+
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            // Optional: handle page scroll
+        }
+    }
 
     private var systemUiHider: SystemUiHider? = null
     private var trackId: Long = 0
@@ -66,9 +79,9 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
         binding.containerBaseImage.galleryThumbs.layoutManager = layoutRecycler
         binding.containerBaseImage.galleryThumbs.adapter = thumbsAdapter
 
-        imageSwipePagerAdapter = AdapterImagePager(supportFragmentManager)
-        binding.containerBaseImage.fragmentImagePager.setAdapter(imageSwipePagerAdapter)
-        binding.containerBaseImage.fragmentImagePager.addOnPageChangeListener(this)
+        imageSwipePagerAdapter = AdapterImagePager(this)
+        binding.containerBaseImage.fragmentImagePager.adapter = imageSwipePagerAdapter
+        binding.containerBaseImage.fragmentImagePager.registerOnPageChangeCallback(onPageChangeCallback)
 
         // Set up an instance of SystemUiHider to control the system UI for this activity.
         systemUiHider = getInstance(this, binding.containerBaseImage.fragmentImagePager, SystemUiHider.FLAG_HIDE_NAVIGATION)
@@ -143,9 +156,10 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
         super.onPause()
     }
 
-    override fun onPageSelected(position: Int) {
-        Timber.d("%s", position)
-        binding.containerBaseImage.galleryThumbs.scrollToPosition(position)
+    override fun onDestroy() {
+        binding.containerBaseImage.fragmentImagePager.unregisterOnPageChangeCallback(onPageChangeCallback)
+        imageSwipePagerAdapter.clearCache()
+        super.onDestroy()
     }
 
     /**

@@ -83,11 +83,4 @@ class AdapterImageStagePager(fragmentActivity: FragmentActivity) : FragmentState
         return initial
     }
 
-    /**
-     * Clear cached fragments when they're no longer needed
-     */
-    fun clearCache() {
-        cachedFragments.clear()
-    }
-
 }

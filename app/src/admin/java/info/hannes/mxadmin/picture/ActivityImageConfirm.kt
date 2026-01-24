@@ -108,21 +108,10 @@ class ActivityImageConfirm : ActivityBaseImageSlider() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
-
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor) {
         super.onLoadFinished(loader, cursor)
         this.title = "Picture confirm " + cursor.count
         currPic?.reload()
-        invalidateOptionsMenu()
-    }
-
-    override fun onPageSelected(position: Int) {
-        super.onPageSelected(position)
-        thumbsCursor?.let {
-            it.moveToPosition(position)
-            currPic = PicturesRecord.fromCursor(it)
-        }
         invalidateOptionsMenu()
     }
 

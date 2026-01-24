@@ -7,8 +7,8 @@ import android.text.Spanned
 import android.text.style.ImageSpan
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.trackdetail.comment.FragmentComment
@@ -16,11 +16,15 @@ import info.mx.tracks.trackdetail.event.FragmentEvent
 import timber.log.Timber
 import java.util.Locale
 
+/**
+ * Base adapter for track detail tabs using modern ViewPager2 with FragmentStateAdapter.
+ * Migrated from deprecated FragmentPagerAdapter.
+ */
 abstract class BaseAdapterFragmentTab internal constructor(
     private val context: Context,
-    fm: FragmentManager,
+    fragmentActivity: FragmentActivity,
     private val fragmentArguments: Bundle
-) : FragmentPagerAdapter(fm) {
+) : FragmentStateAdapter(fragmentActivity) {
     private val tabInfoList: List<TabFragmentInfo>
     private val fragments: MutableList<FragmentUpDown> = arrayListOf()
 
@@ -79,11 +83,20 @@ abstract class BaseAdapterFragmentTab internal constructor(
         return fragmentUpDown
     }
 
-    override fun getItem(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment {
         return fragments[position]
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getItemCount(): Int {
+        return tabInfoList.size
+    }
+
+    /**
+     * Get page title for the given position
+     * Note: ViewPager2 doesn't have built-in tab titles.
+     * Use TabLayout with TabLayoutMediator for tab titles with icons.
+     */
+    fun getPageTitle(position: Int): CharSequence? {
         val title = "  " + context.getString(tabInfoList[position].captionRes)
         // space added before text for convenience
         val sb = SpannableStringBuilder(title.uppercase(Locale.getDefault()))
@@ -102,7 +115,11 @@ abstract class BaseAdapterFragmentTab internal constructor(
         return sb
     }
 
-    override fun getCount(): Int {
-        return tabInfoList.size
+    fun getTabIcon(position: Int): Int {
+        return tabInfoList[position].iconRes
+    }
+
+    fun getTabTitle(position: Int): Int {
+        return tabInfoList[position].captionRes
     }
 }

@@ -11,7 +11,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.mechadminGen.sqlite.MxAdminDBContract
 import info.hannes.mechadminGen.sqlite.PictureStageRecord
@@ -22,27 +22,24 @@ import info.mx.tracks.trackdetail.ImageCursorAdapter
 import info.mx.tracks.trackdetail.ImageCursorAdapter.OnImageListItemClick
 import info.mx.tracks.util.SystemUiHider
 import info.mx.tracks.util.SystemUiHider.OnVisibilityChangeListener
-import info.mx.tracks.views.NoCrashViewPager
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.LoaderCallbacks<Cursor?>,
-    OnImageListItemClick, OnPageChangeListener {
-    private var imageViewPager: NoCrashViewPager? = null
+    OnImageListItemClick {
+    private var imageViewPager: ViewPager2? = null
     private var imageSwipePagerAdapter: AdapterImageStagePager? = null
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-    }
-
-    override fun onPageSelected(position: Int) {
-        Timber.d("%s", position)
-        thumbsGallery!!.scrollToPosition(position)
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            Timber.d("%s", position)
+            thumbsGallery?.scrollToPosition(position)
+        }
     }
 
     /**
-     * The instance of the [SystemUiHider] for this activity.
+     * If set, will toggle the system UI visibility upon interaction. Otherwise, will show the system UI visibility upon interaction.
      */
     private var mSystemUiHider: SystemUiHider? = null
     private var trackId: Long = 0
@@ -68,12 +65,12 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
         }
 
         val controlsView = findViewById<View>(R.id.fullscreen_content_controls)
-        thumbsGallery = findViewById<RecyclerView>(R.id.gallery_thumbs)
+        thumbsGallery = findViewById(R.id.gallery_thumbs)
 
         thumbsAdapter = ImageCursorAdapter(
             this,
             null,
-            Math.round(getResources().getDimension(R.dimen.thumbnail_size_dp)),
+            getResources().getDimension(R.dimen.thumbnail_size_dp).roundToInt(),
             false
         )
         val layoutRecycler = LinearLayoutManager(this)
@@ -121,10 +118,10 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
     }
 
     private fun initViewPager() {
-        imageSwipePagerAdapter = AdapterImageStagePager(supportFragmentManager)
-        imageViewPager = findViewById<NoCrashViewPager>(R.id.fragmentImagePager)
-        imageViewPager!!.setAdapter(imageSwipePagerAdapter)
-        imageViewPager!!.addOnPageChangeListener(this)
+        imageSwipePagerAdapter = AdapterImageStagePager(this)
+        imageViewPager = findViewById(R.id.fragmentImagePager)
+        imageViewPager!!.adapter = imageSwipePagerAdapter
+        imageViewPager!!.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
 
@@ -155,11 +152,11 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
 
     public override fun onResume() {
         super.onResume()
-        supportLoaderManager.initLoader<Cursor?>(LOADER_PICTURE_THUMBS, null, this)
+        LoaderManager.getInstance(this).initLoader<Cursor?>(LOADER_PICTURE_THUMBS, null, this)
     }
 
     public override fun onPause() {
-        supportLoaderManager.destroyLoader(LOADER_PICTURE_THUMBS)
+        LoaderManager.getInstance(this).destroyLoader(LOADER_PICTURE_THUMBS)
         super.onPause()
     }
 
@@ -177,11 +174,7 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
         }
 
     var mHideHandler: Handler = Handler(Looper.getMainLooper())
-    var mHideRunnable: Runnable = object : Runnable {
-        override fun run() {
-            mSystemUiHider!!.hide()
-        }
-    }
+    var mHideRunnable: Runnable = Runnable { mSystemUiHider!!.hide() }
 
     /**
      * Schedules a call to hide() in [info.mx.tracks.util.Wait.delay] milliseconds, canceling any previously scheduled calls.
@@ -238,7 +231,7 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
                     }
                     thumbsAdapter!!.swapCursor(nonNullCursor)
                     if (imageSwipePagerAdapter!!.setCursor(nonNullCursor)) { //prevent flickering
-                        imageViewPager!!.setCurrentItem(position)
+                        imageViewPager!!.currentItem = position
                     }
                 }
             }
@@ -258,13 +251,13 @@ abstract class ActivityBaseImageStageSlider : ActivityRx(), LoaderManager.Loader
 
     private fun openImageFragment(position: Int) {
         if (imageViewPager!!.adapter != null) {
-            (imageViewPager!!.adapter as AdapterImageStagePager).resetZoom()
+            imageSwipePagerAdapter?.resetZoom()
         }
-        imageViewPager!!.setCurrentItem(position, true)
+        imageViewPager!!.currentItem = position
     }
 
     protected fun restartThumbsLoader() {
-        supportLoaderManager.restartLoader<Cursor?>(LOADER_PICTURE_THUMBS, null, this)
+        LoaderManager.getInstance(this).restartLoader<Cursor?>(LOADER_PICTURE_THUMBS, null, this)
     }
 
     companion object {
