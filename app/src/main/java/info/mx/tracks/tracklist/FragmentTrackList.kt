@@ -96,7 +96,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         _binding = ScreenListWithProgressbarBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        setupMenu()
 
         sortOrder = if (arguments == null) {
             Tracksges.TRACKNAME
@@ -144,6 +143,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        setupMenu()
 
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {

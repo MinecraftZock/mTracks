@@ -228,8 +228,6 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             binding.trLayoutDistance.visibility = View.GONE
         }
 
-        setupMenu()
-
         return view
     }
 
@@ -246,6 +244,11 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        setupMenu()
+
+        // Restore saved state
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(CAPTURED_FILENAME)) {
                 fileAbsolute = savedInstanceState.getString(CAPTURED_FILENAME)

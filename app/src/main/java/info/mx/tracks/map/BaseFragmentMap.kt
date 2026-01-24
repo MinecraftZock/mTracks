@@ -238,8 +238,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         viewFilterActive!!.visibility = if (QueryHelper.isFiltered()) View.VISIBLE else View.GONE
         headerView!!.setCallBackFragment(this)
 
-        setupMenu()
-
         return view
     }
 
@@ -251,6 +249,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup menu using MenuProvider
+        setupMenu()
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(TRACK_CLIENT_ID)) {

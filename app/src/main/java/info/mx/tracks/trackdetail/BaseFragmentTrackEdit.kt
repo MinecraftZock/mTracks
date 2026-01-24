@@ -140,6 +140,16 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         adapterAccess = TrackAccessSpinnerAdapter(requireContext())
         binding.teDetailAccess.adapter = adapterAccess
 
+        setUpMapIfNeeded()
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupMenu() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_fragment_track_edit, menu)
@@ -157,14 +167,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        setUpMapIfNeeded()
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun toggleMap() {
@@ -715,6 +717,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupMenu()
         getMoviesOperationExecutor = OperationExecutor(OP_GET_LAT_LNG, null, mOpeExCallbacks)
     }
 
