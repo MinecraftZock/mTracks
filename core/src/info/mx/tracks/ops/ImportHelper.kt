@@ -1,20 +1,54 @@
 package info.mx.tracks.ops
 
 import android.content.Context
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import com.google.android.gms.maps.model.LatLng
 import info.mx.comlib.retrofit.CommApiClient
 import timber.log.Timber
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 object ImportHelper {
+
+    /**
+     * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
+     * This method blocks until addresses are retrieved or timeout occurs.
+     */
+    private fun getAddressesFromLocation(geocoder: Geocoder, latitude: Double, longitude: Double, @Suppress("SameParameterValue") maxResults: Int): List<Address>? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Modern API (Android 13+)
+            val latch = CountDownLatch(1)
+            var addresses: List<Address>? = null
+
+            geocoder.getFromLocation(latitude, longitude, maxResults) { result ->
+                addresses = result
+                latch.countDown()
+            }
+
+            // Wait up to 5 seconds for the result
+            latch.await(5, TimeUnit.SECONDS)
+            addresses
+        } else {
+            // Legacy API (Android 12 and below)
+            @Suppress("DEPRECATION")
+            try {
+                geocoder.getFromLocation(latitude, longitude, maxResults)
+            } catch (e: IOException) {
+                Timber.e(e, "Error getting addresses from location")
+                null
+            }
+        }
+    }
 
     fun getShortCountryCoder(latitude: Double, longitude: Double, context: Context): String? {
         var countryKZ: String? = null
         val coder = Geocoder(context)
         try {
-            val addresses = coder.getFromLocation(latitude, longitude, 1)
+            val addresses = getAddressesFromLocation(coder, latitude, longitude, 1)
             if (addresses != null && addresses.isNotEmpty()) {
                 val address = addresses[0]
                 countryKZ = address.countryCode
@@ -25,6 +59,8 @@ object ImportHelper {
 
         return countryKZ
     }
+
+    // ...existing code...
 
     private fun getLatLngFromToken(apiClient: CommApiClient, token: String): LatLng? {
         var latlng: LatLng? = null

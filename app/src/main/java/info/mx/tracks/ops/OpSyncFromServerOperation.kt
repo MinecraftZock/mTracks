@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Resources.NotFoundException
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
@@ -28,6 +29,8 @@ import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.NetworkHelper
 import info.hannes.commonlib.TrackingApplication
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import info.mx.comlib.retrofit.service.model.TrackR
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.MxCoreApplication
@@ -61,6 +64,36 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     private lateinit var operationContext: OperationContext
 
     private val dataManagerApp: DataManagerApp by inject()
+
+    /**
+     * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
+     * This method blocks until addresses are retrieved or timeout occurs.
+     */
+    private fun getAddressesFromLocation(geocoder: Geocoder, latitude: Double, longitude: Double, @Suppress("SameParameterValue") maxResults: Int): List<Address>? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Modern API (Android 13+)
+            val latch = CountDownLatch(1)
+            var addresses: List<Address>? = null
+
+            geocoder.getFromLocation(latitude, longitude, maxResults) { result ->
+                addresses = result
+                latch.countDown()
+            }
+
+            // Wait up to 5 seconds for the result
+            latch.await(5, TimeUnit.SECONDS)
+            addresses
+        } else {
+            // Legacy API (Android 12 and below)
+            @Suppress("DEPRECATION")
+            try {
+                geocoder.getFromLocation(latitude, longitude, maxResults)
+            } catch (e: IOException) {
+                Timber.e(e, "Error getting addresses from location")
+                null
+            }
+        }
+    }
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         operationContext = context
@@ -352,7 +385,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         for (record in tracks) {
             val coder = Geocoder(context)
             try {
-                val addresses = coder.getFromLocation(SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
+                val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
                 if (addresses != null && addresses.isNotEmpty()) {
                     val country = addresses[0].countryCode
                     Timber.d("${record.trackname}  country:$country")
