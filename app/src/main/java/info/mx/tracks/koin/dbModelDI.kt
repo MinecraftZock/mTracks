@@ -11,7 +11,7 @@ val dbModule = module {
     single {
         Room.databaseBuilder(get(), MxDatabase::class.java, MxDatabase.ROOM_DATABASE_NAME)
             .allowMainThreadQueries()
-            .fallbackToDestructiveMigrationFrom(1, 2, 3, 4)
+            .fallbackToDestructiveMigrationFrom(true, 1, 2, 3, 4)
             .build()
     }
 
