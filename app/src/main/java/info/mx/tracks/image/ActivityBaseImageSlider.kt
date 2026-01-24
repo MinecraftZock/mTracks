@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
+import info.mx.tracks.StorageCleanupManager
 import info.mx.tracks.databinding.ActivityImageSlideBinding
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
@@ -129,6 +130,10 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
 
     public override fun onResume() {
         super.onResume()
+
+        // Proactively check storage and cleanup old cached images if needed
+        StorageCleanupManager.checkAndCleanupIfNeeded(this)
+
         supportLoaderManager.initLoader(LOADER_PICTURE_THUMBS, null, this)
     }
 
