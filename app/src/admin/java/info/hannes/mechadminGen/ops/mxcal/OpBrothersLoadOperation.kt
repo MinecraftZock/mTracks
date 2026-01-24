@@ -1,6 +1,8 @@
 package info.hannes.mechadminGen.ops.mxcal
 
+import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import com.google.gson.Gson
 import com.robotoworks.mechanoid.db.SQuery
@@ -28,10 +30,42 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), CoreKoinComponent {
 
     val commApiClient: CommApiClient by inject()
+
+    /**
+     * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
+     * This method blocks until addresses are retrieved or timeout occurs.
+     */
+    private fun getAddressesFromLocation(geocoder: Geocoder, latitude: Double, longitude: Double, @Suppress("SameParameterValue") maxResults: Int): List<Address>? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Modern API (Android 13+)
+            val latch = CountDownLatch(1)
+            var addresses: List<Address>? = null
+
+            geocoder.getFromLocation(latitude, longitude, maxResults) { result ->
+                addresses = result
+                latch.countDown()
+            }
+
+            // Wait up to 5 seconds for the result
+            latch.await(5, TimeUnit.SECONDS)
+            addresses
+        } else {
+            // Legacy API (Android 12 and below)
+            @Suppress("DEPRECATION")
+            try {
+                geocoder.getFromLocation(latitude, longitude, maxResults)
+            } catch (e: IOException) {
+                Timber.e(e, "Error getting addresses from location")
+                null
+            }
+        }
+    }
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         val bundle = Bundle()
@@ -43,11 +77,10 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                 LoggingHelperAdmin.setMessage("get " + args.url.replace("http://", ""))
                 var httpContent = RetroFileHelper.getFileContent(commApiClient, args.url)
                 LoggingHelperAdmin.setMessage("write $FILE_MAIN")
-                httpContent = "{" + httpContent.substring(httpContent.indexOf(TOKEN_START_1))
-                httpContent =
-                    httpContent.substring(0, httpContent.indexOf(TOKEN_END_1) + TOKEN_END_1.length)
-                httpContent = "{" + httpContent.substring(httpContent.indexOf(TOKEN_START_FEAT))
-                httpContent = httpContent.substring(0, httpContent.indexOf(TOKEN_END_1) - 2) + "}"
+                httpContent = "{" + httpContent.substringAfter(TOKEN_START_1)
+                httpContent = httpContent.take(httpContent.indexOf(TOKEN_END_1) + TOKEN_END_1.length)
+                httpContent = "{" + httpContent.substringAfter(TOKEN_START_FEAT)
+                httpContent = httpContent.take(httpContent.indexOf(TOKEN_END_1) - 2) + "}"
                 writeToFile(file, httpContent)
             }
             LoggingHelperAdmin.setMessage("pars $FILE_MAIN")
@@ -74,7 +107,7 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
                 val newTrackStage = TrackstageBrotherRecord()
                 newTrackStage.androidid = "debug"
                 val geoCoder = Geocoder(context.applicationContext)
-                val addresses = geoCoder.getFromLocation(trackBrother.lat, trackBrother.lon, 1)
+                val addresses = getAddressesFromLocation(geoCoder, trackBrother.lat, trackBrother.lon, 1)
                 var countryKz = ""
                 addresses?.let {
                     if (it.isNotEmpty()) {
