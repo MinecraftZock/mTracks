@@ -47,12 +47,9 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val intentService = Intent(context, LocationRecalculateService::class.java)
             val location = intent.getParcelableExtra<Location>(OpSyncFromServerOperation.LOCATION)
             val source = intent.getStringExtra(OpSyncFromServerOperation.SOURCE)
-            intentService.putExtra(OpSyncFromServerOperation.LOCATION, location)
-            intentService.putExtra(OpSyncFromServerOperation.SOURCE, source)
-            LocationRecalculateService.enqueueWork(context, intentService)
+            LocationRecalculateService.enqueueWork(context, location, source)
         }
     }
 
