@@ -38,7 +38,9 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.MenuProvider
 import androidx.core.widget.TextViewCompat
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -226,7 +228,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             binding.trLayoutDistance.visibility = View.GONE
         }
 
-        setHasOptionsMenu(true)
+        setupMenu()
 
         return view
     }
@@ -751,76 +753,71 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_fragment_track_detail, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        if (requireArguments().containsKey(IN_SLIDER) && requireArguments().getBoolean(IN_SLIDER)) {
-            menu.findItem(R.id.menu_detail_globus).isVisible = false
-            menu.findItem(R.id.menu_detail_radar).isVisible = false
-            menu.findItem(R.id.menu_event_add).isVisible = false
-
-            menu.findItem(R.id.menu_detail_radar)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_detail_globus).setShowAsActionFlags(
-                MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
-            )
-            menu.findItem(R.id.menu_track_edit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_navigation).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-            menu.findItem(R.id.menu_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-        } else {
-            menu.findItem(R.id.menu_detail_globus).isVisible = true
-        }
-        menu.findItem(R.id.menu_navigation).isVisible = permissionHelper.hasLocationPermission()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
-
-        when (item.itemId) {
-            R.id.menu_track_edit -> {
-                openEdit(recordLocalId)
-                res = true
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_track_detail, menu)
             }
 
-            R.id.menu_event_add -> {
-                addEvent()
-                res = true
-            }
+            override fun onPrepareMenu(menu: Menu) {
+                if (requireArguments().containsKey(IN_SLIDER) && requireArguments().getBoolean(IN_SLIDER)) {
+                    menu.findItem(R.id.menu_detail_globus).isVisible = false
+                    menu.findItem(R.id.menu_detail_radar).isVisible = false
+                    menu.findItem(R.id.menu_event_add).isVisible = false
 
-            R.id.menu_navigation -> {
-                doOpenNavigation()
-                res = true
-            }
-
-            R.id.menu_detail_globus -> {
-                val recTrack = TracksRecord.get(recordLocalId)
-                if (recTrack != null) {
-                    trackLoc = Location("trackloc")
-                    trackLoc!!.latitude = SecHelper.entcryptXtude(recTrack.latitude)
-                    trackLoc!!.longitude = SecHelper.entcryptXtude(recTrack.longitude)
-                    doOpenMap(trackLoc!!)
+                    menu.findItem(R.id.menu_detail_radar)
+                        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+                    menu.findItem(R.id.menu_detail_globus).setShowAsActionFlags(
+                        MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+                    )
+                    menu.findItem(R.id.menu_track_edit).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+                    menu.findItem(R.id.menu_navigation).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+                    menu.findItem(R.id.menu_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+                } else {
+                    menu.findItem(R.id.menu_detail_globus).isVisible = true
                 }
-                res = true
+                menu.findItem(R.id.menu_navigation).isVisible = permissionHelper.hasLocationPermission()
             }
 
-            R.id.menu_detail_radar -> {
-                // TODO
-                res = false
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_track_edit -> {
+                        openEdit(recordLocalId)
+                        true
+                    }
+                    R.id.menu_event_add -> {
+                        addEvent()
+                        true
+                    }
+                    R.id.menu_navigation -> {
+                        doOpenNavigation()
+                        true
+                    }
+                    R.id.menu_detail_globus -> {
+                        val recTrack = TracksRecord.get(recordLocalId)
+                        if (recTrack != null) {
+                            trackLoc = Location("trackloc")
+                            trackLoc!!.latitude = SecHelper.entcryptXtude(recTrack.latitude)
+                            trackLoc!!.longitude = SecHelper.entcryptXtude(recTrack.longitude)
+                            doOpenMap(trackLoc!!)
+                        }
+                        true
+                    }
+                    R.id.menu_detail_radar -> {
+                        false
+                    }
+                    R.id.menu_detail_share -> {
+                        doShare()
+                        false
+                    }
+                    R.id.menu_favorite -> {
+                        toggleFavorite(menuItem)
+                        true
+                    }
+                    else -> false
+                }
             }
-
-            R.id.menu_detail_share -> {
-                doShare()
-                res = false
-            }
-
-            R.id.menu_favorite -> {
-                toggleFavorite(item)
-                res = true
-            }
-        }
-        return res
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     fun addEvent() {

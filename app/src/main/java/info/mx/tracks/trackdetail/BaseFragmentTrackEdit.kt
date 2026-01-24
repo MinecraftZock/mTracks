@@ -14,6 +14,8 @@ import android.os.Vibrator
 import android.provider.Settings
 import android.view.*
 import android.widget.*
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -137,7 +139,25 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
         adapterAccess = TrackAccessSpinnerAdapter(requireContext())
         binding.teDetailAccess.adapter = adapterAccess
-        setHasOptionsMenu(true)
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_fragment_track_edit, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_save -> {
+                        if (mask2Record(true)) {
+                            requireActivity().finish()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         setUpMapIfNeeded()
         return view
     }
@@ -612,21 +632,6 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         return value ?: ""
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_fragment_track_edit, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res = super.onOptionsItemSelected(item)
-        if (item.itemId == R.id.menu_save) {
-            if (mask2Record(true)) {
-                requireActivity().finish()
-            }
-            res = true
-        }
-        return res
-    }
 
     @SuppressLint("MissingPermission")
     private fun setUpMapIfNeeded() {
