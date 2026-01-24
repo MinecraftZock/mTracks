@@ -6,7 +6,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -86,7 +85,6 @@ import info.mx.tracks.sqlite.TracksGesSumRecord
 import info.mx.tracks.sqlite.TracksRecord
 import info.mx.tracks.sqlite.TrackstageRecord
 import info.mx.tracks.tools.AddMobHelper
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentPlaceDetail
 import info.mx.tracks.trackdetail.FragmentTrackDetail
@@ -132,6 +130,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     // Modern Activity Result API
     private lateinit var filterLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
     @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
@@ -206,6 +205,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             // Reload tracks after returning from filter
             loaderManager.restartLoader(LOADER_TRACKS, null, this)
+        }
+
+        // Register for location permissions result
+        requestLocationPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (granted && map != null) {
+                enableMyLocation()
+            }
         }
     }
 
@@ -455,10 +462,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         })
         map!!.isTrafficEnabled = MxPreferences.getInstance().mapTraffic
         if (permissionHelper.hasLocationPermission()) {
-            map!!.isMyLocationEnabled = true
+            enableMyLocation()
         } else {
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PermissionHelper.REQUEST_PERMISSION_LOCATION
+            requestLocationPermissionsLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )
         }
         map!!.uiSettings.isZoomControlsEnabled = true
@@ -617,6 +624,13 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (permissionHelper.hasLocationPermission() && map != null) {
+            map!!.isMyLocationEnabled = true
+        }
+    }
+
     private fun setUpLocationClientIfNeeded() {
         // Location client setup is no longer needed with FusedLocationProviderClient
         // Location updates are handled directly through FusedLocationProviderClient
@@ -756,10 +770,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         filterLauncher.launch(qWfIntent)
                         true
                     }
+
                     R.id.menu_map_addtrack -> {
                         addNewTrack()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -1131,24 +1147,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_LOCATION -> {
-                for (i in grantResults.indices) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED && permissions[i].endsWith("LOCATION")) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    map!!.isMyLocationEnabled = true
-                    LocationJobService.scheduleJob(requireActivity())
-                    setUpLocationClientIfNeeded()
-                }
-            }
-        }
-    }
 
     companion object {
 
@@ -1158,7 +1156,6 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         private const val TOLERANCE = 60
         private const val TRACK_CLIENT_ID = "TRACK_CLIENT_ID"
         private const val CURR_ZOOM = "CURR_ZOOM"
-        private const val ACTIVITY_FILTER = 0
         private const val LOADER_TRACKS = 0
         private const val LOADER_STAGE = 1
         private const val LOADER_ROUTE = 2

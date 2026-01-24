@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.os.Looper
@@ -53,7 +52,6 @@ import info.mx.tracks.settings.ActivitySetting
 import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.sqlite.TracksGesSumRecord
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -91,6 +89,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     private lateinit var filterLauncher: ActivityResultLauncher<Intent>
     private lateinit var filterCountryLauncher: ActivityResultLauncher<Intent>
     private lateinit var settingsLauncher: ActivityResultLauncher<Intent>
+    private lateinit var requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
     private var _binding: ScreenListWithProgressbarBinding? = null
 
@@ -115,6 +114,14 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
         filterCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+
+        // Register for location permissions result
+        requestLocationPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (granted) {
+                startLocationUpdates()
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -531,9 +538,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         if (permissionHelper.hasLocationPermission()) {
             startLocationUpdates()
         } else if (sortOrder == Tracksges.TRACKNAME) { //otherwise it asks to often
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                PermissionHelper.REQUEST_PERMISSION_LOCATION
+            requestLocationPermissionsLauncher.launch(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             )
         }
     }
@@ -564,26 +570,8 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_LOCATION -> {
-                for (i in grantResults.indices) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED && permissions[i].endsWith("LOCATION")) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    LocationJobService.restartService(requireActivity())
-                    setUpLocationClientIfNeeded()
-                }
-            }
-        }
-    }
 
     companion object {
-        const val IS_FAVORITE = Tracks.TRACKNAME
         private const val LOADER_TRACKS = 0
         private const val FILTER = "FILTER"
         internal const val ONLY_FOREIGN = "only_foreign"

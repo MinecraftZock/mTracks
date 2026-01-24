@@ -3,9 +3,10 @@ package info.mx.tracks.tracklist
 import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -25,7 +26,6 @@ import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.settings.ActivitySetting
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
-import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentTrackDetail
@@ -44,6 +44,9 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
 
     private lateinit var binding: ActivityTracksListBinding
 
+    // Modern Activity Result API launcher for location permissions
+    private lateinit var requestLocationPermissionsLauncher: ActivityResultLauncher<Array<String>>
+
     override fun onResume() {
         super.onResume()
         if (findViewById<View>(R.id.track_detail_container) != null) {
@@ -58,6 +61,21 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         binding = ActivityTracksListBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // Register for location permissions result
+        requestLocationPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all { it.value }
+            if (granted) {
+                LocationJobService.restartService(this)
+            } else {
+                // Permission was denied
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // Display UI and wait for user interaction
+                    showMessageOKCancel { _, _ -> this@ActivityTrackList.openPermission() }
+                }
+                // Otherwise permission is permanently denied, user needs to go to settings
+            }
+        }
 
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -113,36 +131,6 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        var granted = false
-        when (requestCode) {
-            PermissionHelper.REQUEST_PERMISSION_LOCATION -> {
-                for (i in grantResults.indices) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED && permissions[i].endsWith("LOCATION")) {
-                        granted = true
-                    }
-                }
-                if (granted) {
-                    // We can now safely use the API we requested access to
-                    LocationJobService.restartService(this)
-                } else {
-                    // Permission was denied or request was cancelled; currently do nothing, no dialog..
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                        // Display UI and wait for user interaction
-                        showMessageOKCancel { _, _ -> this@ActivityTrackList.openPermission() }
-                    } else {
-                        ActivityCompat.requestPermissions(
-                            this,
-                            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-                            PermissionHelper.REQUEST_PERMISSION_LOCATION
-                        )
-                    }
-                }
-            }
-        }
-    }
 
     private fun showMessageOKCancel(onClickListener: DialogInterface.OnClickListener) {
         val myAlertDialog = AlertDialog.Builder(this)
