@@ -339,6 +339,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     open inner class FeedBackTouchListener : View.OnTouchListener {
         private var saveColor: Drawable? = null
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -346,7 +347,12 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_blue))
                 }
 
-                MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> view.background = saveColor
+                MotionEvent.ACTION_UP -> {
+                    view.background = saveColor
+                    view.performClick()
+                }
+
+                MotionEvent.ACTION_CANCEL -> view.background = saveColor
             }
             return false
         }
