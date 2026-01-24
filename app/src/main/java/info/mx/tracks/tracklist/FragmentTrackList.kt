@@ -74,7 +74,10 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     private var sortOrder: String? = null
     private var viewBinder: ViewBinderTracks? = null
     private var searchView: SearchView? = null
+
+    @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
+
     private var locationCallback: LocationCallback? = null
 
     private val mxMemDatabase: MxMemDatabase by inject()
@@ -273,6 +276,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         startActivityForResult(qWfIntent, 1)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         requireActivity().menuInflater.inflate(R.menu.menu_fragment_track_list, menu)
         val searchItem = menu.findItem(R.id.menu_search)
@@ -362,7 +366,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         i.putExtra(Intent.EXTRA_SUBJECT, "MX Tracks Info feedback")
         try {
             startActivity(Intent.createChooser(i, "Send mail..."))
-        } catch (ex: android.content.ActivityNotFoundException) {
+        } catch (_: android.content.ActivityNotFoundException) {
             Toast.makeText(activity, getString(R.string.no_email_installed), Toast.LENGTH_SHORT).show()
         }
 
