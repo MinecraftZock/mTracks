@@ -27,6 +27,8 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
@@ -128,6 +130,9 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     private var isKeyboardActive = false
     private var inPlaceSearch = false
 
+    // Modern Activity Result API
+    private lateinit var filterLauncher: ActivityResultLauncher<Intent>
+
     @SuppressLint("RestrictedApi")
     private var searchAutoComplete: SearchAutoComplete? = null
 
@@ -193,6 +198,16 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Register for activity result using modern API
+        filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Reload tracks after returning from filter
+            loaderManager.restartLoader(LOADER_TRACKS, null, this)
+        }
+    }
 
     @SuppressLint("RtlHardcoded")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -738,7 +753,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 return when (menuItem.itemId) {
                     R.id.menu_map2_filter -> {
                         val qWfIntent = Intent(activity, ActivityFilter::class.java)
-                        startActivityForResult(qWfIntent, ACTIVITY_FILTER)
+                        filterLauncher.launch(qWfIntent)
                         true
                     }
                     R.id.menu_map_addtrack -> {

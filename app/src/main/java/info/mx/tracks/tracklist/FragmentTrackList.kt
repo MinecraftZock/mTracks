@@ -18,6 +18,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.content.ContextCompat
@@ -83,6 +85,13 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     private val mxMemDatabase: MxMemDatabase by inject()
 
+    // Modern Activity Result API launchers
+    private lateinit var trackDetailLauncher: ActivityResultLauncher<Intent>
+    private lateinit var addTrackLauncher: ActivityResultLauncher<Intent>
+    private lateinit var filterLauncher: ActivityResultLauncher<Intent>
+    private lateinit var filterCountryLauncher: ActivityResultLauncher<Intent>
+    private lateinit var settingsLauncher: ActivityResultLauncher<Intent>
+
     private var _binding: ScreenListWithProgressbarBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -90,6 +99,22 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
     internal interface Callbacks {
         fun onItemSelected(id: Long)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Register for activity results using modern API
+        val resultCallback: (androidx.activity.result.ActivityResult) -> Unit = {
+            // Reload the track list after returning from any activity
+            loaderManager.restartLoader(LOADER_TRACKS, this.arguments, this)
+        }
+
+        trackDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+        addTrackLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+        filterLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+        filterCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
+        settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), resultCallback)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -277,7 +302,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         }
         bundle.putInt(FragmentUpDown.CURSOR_POSITION, position)
         qWfIntent.putExtras(bundle)
-        startActivityForResult(qWfIntent, 1)
+        trackDetailLauncher.launch(qWfIntent)
     }
 
     protected fun setFilter2Fragment(filterString: String) {
