@@ -5,10 +5,8 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
@@ -32,7 +30,6 @@ import com.google.android.gms.location.LocationServices
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.LocationHelper
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.DiskReceiver
 import info.mx.tracks.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
@@ -74,7 +71,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
     private var curFilter: String = ""
 
     private var isFav: Boolean = false
-    private var diskReceiver: DiskReceiver? = null
     private var sortOrder: String? = null
     private var viewBinder: ViewBinderTracks? = null
     private var searchView: SearchView? = null
@@ -465,13 +461,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
         MxCoreApplication.doSync(false, false, BuildConfig.FLAVOR)
 
-        diskReceiver = DiskReceiver()
-        val filter = IntentFilter()
-        filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireActivity().registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
-        } else
-            requireActivity().registerReceiver(diskReceiver, filter)
 
         if (adapterTracksSort == null) {
             loaderManager.restartLoader(LOADER_TRACKS, this.arguments, this)
@@ -492,13 +481,6 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
         }
 
         super.onPause()
-        if (diskReceiver != null) {
-            try {
-                requireActivity().unregisterReceiver(diskReceiver)
-            } catch (ignored: Exception) {
-            }
-
-        }
         stopLocationUpdates()
     }
 

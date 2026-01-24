@@ -1,11 +1,7 @@
 package info.hannes.mxadmin.picture;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +19,6 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract;
 import info.hannes.mechadminGen.sqlite.PictureStageRecord;
 import timber.log.Timber;
 import info.mx.tracks.base.ActivityRx;
-import info.mx.tracks.DiskReceiver;
 import info.mx.tracks.R;
 import info.mx.tracks.sqlite.TracksRecord;
 import info.mx.tracks.trackdetail.ImageCursorAdapter;
@@ -70,7 +65,6 @@ public abstract class ActivityBaseImageStageSlider extends ActivityRx implements
     private ImageCursorAdapter thumbsAdapter;
 
     private RecyclerView thumbsGallery;
-    private DiskReceiver diskReceiver;
     protected long currPictureRestId;
     protected Cursor thumbsCursor;
 
@@ -171,25 +165,11 @@ public abstract class ActivityBaseImageStageSlider extends ActivityRx implements
     @Override
     public void onResume() {
         super.onResume();
-        diskReceiver = new DiskReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(diskReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
-        } else
-            registerReceiver(diskReceiver, filter);
         getSupportLoaderManager().initLoader(LOADER_PICTURE_THUMBS, null, this);
     }
 
     @Override
     public void onPause() {
-        if (diskReceiver != null) {
-            try {
-                unregisterReceiver(diskReceiver);
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-        }
         getSupportLoaderManager().destroyLoader(LOADER_PICTURE_THUMBS);
         super.onPause();
     }

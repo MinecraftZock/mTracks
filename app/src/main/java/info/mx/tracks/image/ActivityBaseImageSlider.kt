@@ -1,10 +1,7 @@
 package info.mx.tracks.image
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.IntentFilter
 import android.database.Cursor
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,8 +13,8 @@ import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.robotoworks.mechanoid.db.SQuery
-import info.mx.tracks.DiskReceiver
 import info.mx.tracks.R
+import info.mx.tracks.StorageCleanupManager
 import info.mx.tracks.databinding.ActivityImageSlideBinding
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
 import info.mx.tracks.sqlite.PicturesRecord
@@ -40,7 +37,6 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
     private var imageRestId: Long = 0
     protected var trackRestId: Long = 0
     private lateinit var thumbsAdapter: ImageCursorAdapter
-    private var diskReceiver: DiskReceiver? = null
     private var currPictureRestId: Long = 0
     protected var thumbsCursor: Cursor? = null
 
@@ -134,20 +130,14 @@ abstract class ActivityBaseImageSlider : AppCompatActivity(), LoaderManager.Load
 
     public override fun onResume() {
         super.onResume()
-        diskReceiver = DiskReceiver()
-        val filter = IntentFilter()
-        filter.addAction(Intent.ACTION_DEVICE_STORAGE_LOW)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(diskReceiver, filter, RECEIVER_NOT_EXPORTED)
-        } else
-            registerReceiver(diskReceiver, filter)
+
+        // Proactively check storage and cleanup old cached images if needed
+        StorageCleanupManager.checkAndCleanupIfNeeded(this)
+
         supportLoaderManager.initLoader(LOADER_PICTURE_THUMBS, null, this)
     }
 
     public override fun onPause() {
-        if (diskReceiver != null) {
-            unregisterReceiver(diskReceiver)
-        }
         supportLoaderManager.destroyLoader(LOADER_PICTURE_THUMBS)
         super.onPause()
     }

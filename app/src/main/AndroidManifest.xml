@@ -147,13 +147,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name="info.mx.tracks.DiskReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
-            </intent-filter>
-        </receiver>
 
         <!--        core-->
         <!--https://developers.google.com/maps/documentation/android-sdk/config#specify_requirement_for_apache_http_legacy_library-->
