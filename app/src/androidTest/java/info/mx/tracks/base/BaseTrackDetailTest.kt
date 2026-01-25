@@ -16,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import info.hannes.timber.DebugFormatTree
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.MapIdlingResource
@@ -27,6 +28,7 @@ import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runners.MethodSorters
+import timber.log.Timber
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -48,6 +50,8 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
 
     @Before
     fun pictureIdlingBefore() {
+        Timber.plant(DebugFormatTree())
+
         registerIdlingResource()
 //        IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
