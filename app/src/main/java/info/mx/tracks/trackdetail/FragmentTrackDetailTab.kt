@@ -103,7 +103,8 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
 
     override fun onResume() {
         super.onResume()
-        adapterFragmentsTab.notifyDataSetChanged()
+        // Removed notifyDataSetChanged() as it causes IllegalStateException with ViewPager2
+        // ViewPager2 with FragmentStateAdapter manages fragment lifecycle automatically
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
             recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
             fillMask(recordLocalId)
