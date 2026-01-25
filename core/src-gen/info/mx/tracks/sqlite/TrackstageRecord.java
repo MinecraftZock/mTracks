@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class TrackstageRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<TrackstageRecord> sFactory = new ActiveRecordFactory<TrackstageRecord>() {
-		@Override
-		public TrackstageRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<TrackstageRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public TrackstageRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Trackstage.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Trackstage.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<TrackstageRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<TrackstageRecord> CREATOR 
-    	= new Parcelable.Creator<TrackstageRecord>() {
+    	= new Parcelable.Creator<>() {
         public TrackstageRecord createFromParcel(Parcel in) {
             return new TrackstageRecord(in);
         }
@@ -1460,10 +1460,15 @@ public class TrackstageRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
-	public static TrackstageRecord fromBundle(Bundle bundle, String key) {
-		bundle.setClassLoader(TrackstageRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+
+    @SuppressWarnings("deprecation")
+   	public static TrackstageRecord fromBundle(Bundle bundle, String key) {
+        bundle.setClassLoader(TrackstageRecord.class.getClassLoader());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, TrackstageRecord.class);
+        } else {
+            return bundle.getParcelable(key);
+        }
 	}
 	
 	public static TrackstageRecord get(long id) {
