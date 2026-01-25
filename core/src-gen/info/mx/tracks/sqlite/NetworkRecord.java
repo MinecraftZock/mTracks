@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class NetworkRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<NetworkRecord> sFactory = new ActiveRecordFactory<NetworkRecord>() {
-		@Override
-		public NetworkRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<NetworkRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public NetworkRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Network.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Network.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<NetworkRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<NetworkRecord> CREATOR 
-    	= new Parcelable.Creator<NetworkRecord>() {
+    	= new Parcelable.Creator<>() {
         public NetworkRecord createFromParcel(Parcel in) {
             return new NetworkRecord(in);
         }
@@ -184,11 +184,16 @@ public class NetworkRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
-	public static NetworkRecord fromBundle(Bundle bundle, String key) {
-		bundle.setClassLoader(NetworkRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
-	}
+
+    @SuppressWarnings("deprecation")
+    public static NetworkRecord fromBundle(Bundle bundle, String key) {
+        bundle.setClassLoader(NetworkRecord.class.getClassLoader());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, NetworkRecord.class);
+        } else {
+            return bundle.getParcelable(key);
+        }
+    }
 	
 	public static NetworkRecord get(long id) {
 	    Cursor c = null;
