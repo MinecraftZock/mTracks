@@ -67,15 +67,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     }
 
     @Test
-    fun abcDummyToSkipFirstSettings() {
-        // open menu
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
-
-        // map
-        onView(withText("Show on map")).perform(click())
-    }
-
-    @Test
     fun detailTrack() {
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
