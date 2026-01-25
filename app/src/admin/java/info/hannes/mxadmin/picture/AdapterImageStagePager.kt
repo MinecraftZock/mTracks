@@ -1,75 +1,85 @@
 package info.hannes.mxadmin.picture
 
 import android.database.Cursor
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import info.hannes.mechadminGen.sqlite.MxAdminDBContract
-import java.util.*
 
 /**
- * Adapter for stage image pager using FragmentStatePagerAdapter.
+ * Adapter for stage image pager using modern ViewPager2 with FragmentStateAdapter.
  *
- * Note: FragmentStatePagerAdapter is deprecated in favor of FragmentStateAdapter with ViewPager2.
- * This adapter continues to use the legacy API for compatibility with the existing ViewPager
- * implementation. Migration to ViewPager2 would require updating layouts and activities.
+ * Migrated from deprecated FragmentStatePagerAdapter to FragmentStateAdapter for
+ * better performance and modern Android architecture.
  */
-@Suppress("DEPRECATION")
-class AdapterImageStagePager(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class AdapterImageStagePager(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
-    private val cachedFragments: MutableMap<Int, FragmentImageStage> = HashMap()
-    private var cursor: Cursor? = null
+    private val cachedFragments: MutableMap<Long, FragmentImageStage> = HashMap()
+    private var imageIds: List<Long> = emptyList()
 
-    override fun getItem(i: Int): Fragment {
-        cursor!!.moveToPosition(i)
-        val imageClientId = cursor!!.getLong(cursor!!.getColumnIndex(MxAdminDBContract.PictureStage._ID))
-        return FragmentImageStage.newInstance(imageClientId)
-    }
-
-    override fun getCount(): Int {
-        return if (cursor == null) 0 else cursor!!.count
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-        cursor!!.move(position)
-        return "" + position
-    }
-
-    override fun getItemPosition(`object`: Any): Int {
-        return super.getItemPosition(`object`)
-    }
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val fragment = super.instantiateItem(container, position)
-        cachedFragments[position] = fragment as FragmentImageStage
+    override fun createFragment(position: Int): Fragment {
+        val imageClientId = imageIds[position]
+        val fragment = FragmentImageStage.newInstance(imageClientId)
+        cachedFragments[imageClientId] = fragment
         return fragment
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        cachedFragments.remove(position)
-        super.destroyItem(container, position, `object`)
+    override fun getItemCount(): Int = imageIds.size
+
+    override fun getItemId(position: Int): Long {
+        return imageIds[position]
+    }
+
+    override fun containsItem(itemId: Long): Boolean {
+        return imageIds.contains(itemId)
     }
 
     /**
-     * Reset the image zoom to default value for each CachedFragments
+     * Reset the image zoom to default value for each cached fragment
      */
     fun resetZoom() {
         for (fragmentImage in cachedFragments.values) {
-            fragmentImage.imageView!!.resetZoom()
+            fragmentImage.imageView?.resetZoom()
         }
     }
 
     /**
-     * Set Cursor
+     * Set Cursor and update the adapter with new data
      *
-     * @param cursor Cursor
-     * @return return TRUE if no cursor was set previous, necessary to prevent flickering
+     * @param cursor Cursor containing image data
+     * @return return TRUE if no cursor was set previously, necessary to prevent flickering
      */
-    fun setCursor(cursor: Cursor): Boolean {
-        val initial = this.cursor == null
-        this.cursor = cursor
-        notifyDataSetChanged()
+    fun setCursor(cursor: Cursor?): Boolean {
+        val initial = imageIds.isEmpty()
+
+        val newImageIds = mutableListOf<Long>()
+        cursor?.let {
+            if (it.moveToFirst()) {
+                do {
+                    val imageClientId = it.getLong(it.getColumnIndexOrThrow(MxAdminDBContract.PictureStage._ID))
+                    newImageIds.add(imageClientId)
+                } while (it.moveToNext())
+            }
+        }
+
+        // Use DiffUtil for efficient updates
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = imageIds.size
+            override fun getNewListSize(): Int = newImageIds.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return imageIds[oldItemPosition] == newImageIds[newItemPosition]
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return imageIds[oldItemPosition] == newImageIds[newItemPosition]
+            }
+        })
+
+        imageIds = newImageIds
+        diffResult.dispatchUpdatesTo(this)
+
         return initial
     }
 

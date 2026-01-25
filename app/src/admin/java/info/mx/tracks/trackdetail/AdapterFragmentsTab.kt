@@ -2,14 +2,14 @@ package info.mx.tracks.trackdetail
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import info.mx.tracks.MxApplication
 
 import info.mx.tracks.R
 
-class AdapterFragmentsTab(context: Context, fm: FragmentManager, arguments: Bundle) : BaseAdapterFragmentTab(
+class AdapterFragmentsTab(context: Context, fragmentActivity: FragmentActivity, arguments: Bundle) : BaseAdapterFragmentTab(
     context,
-    fm,
+    fragmentActivity,
     arguments
 ) {
     override fun addAdditionalTabs(tabs: MutableList<TabFragmentInfo>) {

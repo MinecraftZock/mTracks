@@ -10,8 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.Ops
 import info.mx.tracks.MxCoreApplication
@@ -27,7 +28,6 @@ import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TracksgesRecord
-import info.mx.tracks.util.ZoomOutPageTransformer
 import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.util.Locale
@@ -41,7 +41,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
     private val fragmentTrackDetail: FragmentTrackDetail?
         get() {
             var fragmentTrackDetail: FragmentTrackDetail? = null
-            for (i in 0 until adapterFragmentsTab.count) {
+            for (i in 0 until adapterFragmentsTab.itemCount) {
                 val fragment = findPagerFragmentByPosition(i)
                 if (fragment != null) {
                     if (fragment is FragmentTrackDetail) {
@@ -62,16 +62,18 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         _binding = ContentFragmentDetailTabsIndicatorBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        adapterFragmentsTab = AdapterFragmentsTab(requireActivity(), childFragmentManager, requireArguments())
+        adapterFragmentsTab = AdapterFragmentsTab(requireActivity(), requireActivity(), requireArguments())
 
         binding.viewPager.adapter = adapterFragmentsTab
-        binding.viewPager.currentItem = MxPreferences.getInstance().tabDetailPosition
-        binding.viewPager.setPageTransformer(true, ZoomOutPageTransformer())
-        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.viewPager.setCurrentItem(MxPreferences.getInstance().tabDetailPosition, false)
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
-            override fun onPageScrollStateChanged(state: Int) = Unit
+        // Setup TabLayout with ViewPager2
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = adapterFragmentsTab.getPageTitle(position)
+        }.attach()
 
+        // Setup page change callback
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 MxPreferences.getInstance().edit().putTabDetailPosition(position).apply()
             }
@@ -101,7 +103,8 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
 
     override fun onResume() {
         super.onResume()
-        adapterFragmentsTab.notifyDataSetChanged()
+        // Removed notifyDataSetChanged() as it causes IllegalStateException with ViewPager2
+        // ViewPager2 with FragmentStateAdapter manages fragment lifecycle automatically
         if (requireArguments().containsKey(RECORD_ID_LOCAL)) {
             recordLocalId = requireArguments().getLong(RECORD_ID_LOCAL)
             fillMask(recordLocalId)
@@ -113,7 +116,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         bundle.putLong(RECORD_ID_LOCAL, localId)
         loaderManager.restartLoader(LOADER_TRACK, bundle, this)
 
-        for (i in 0 until adapterFragmentsTab.count) {
+        for (i in 0 until adapterFragmentsTab.itemCount) {
             val fragment = findPagerFragmentByPosition(i)
             if (fragment != null) {
                 // Tablets have a FragmentTrackList
@@ -121,13 +124,13 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
                     fragment.fillMask(localId)
                 }
             } else {
-                Timber.d("fragment not found $i/${adapterFragmentsTab.count} null")
+                Timber.d("fragment not found $i/${adapterFragmentsTab.itemCount} null")
             }
         }
     }
 
     private fun findPagerFragmentByPosition(position: Int): Fragment? {
-        var result = parentFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapterFragmentsTab.getItemId(position))
+        var result = childFragmentManager.findFragmentByTag("f$position")
         if (result == null) {
             result = childFragmentManager.findFragmentByTag("android:switcher:" + binding.viewPager.id + ":" + adapterFragmentsTab.getItemId(position))
         }

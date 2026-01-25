@@ -78,12 +78,4 @@ class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
         }
     }
 
-    override fun onPageSelected(position: Int) {
-        super.onPageSelected(position)
-        if (thumbsCursor != null) {
-            thumbsCursor?.moveToPosition(position)
-            currPic = PictureStageRecord.fromCursor(thumbsCursor)
-        }
-        invalidateOptionsMenu()
-    }
 }

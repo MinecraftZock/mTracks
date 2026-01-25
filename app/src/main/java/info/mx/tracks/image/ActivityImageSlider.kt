@@ -8,6 +8,4 @@ class ActivityImageSlider : ActivityBaseImageSlider() {
     override val picturesQuery: SQuery
         get() = QueryHelper.getPictureFilter(trackRestId)
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
-
 }
