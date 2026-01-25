@@ -10,6 +10,8 @@ import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.Suppress
 import info.mx.tracks.base.BaseSyncTest
+import info.mx.tracks.prefs.MxPreferences
+import info.mx.tracks.prefs.MxPreferences.PREFERENCES_NAME
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.`is`
 import org.junit.Rule
@@ -116,6 +118,13 @@ class SplashTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, android.content.Context.MODE_PRIVATE)
+
+        sharedPreferences.edit()
+            .remove(MxPreferences.Keys.LAST_OPEN_START_ACTIVITY)
+            .apply()
+
         Thread.sleep(300)
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}") })
