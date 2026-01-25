@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class EventsumRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<EventsumRecord> sFactory = new ActiveRecordFactory<EventsumRecord>() {
-		@Override
-		public EventsumRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<EventsumRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public EventsumRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Eventsum.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Eventsum.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<EventsumRecord> getFactory() {
 		return sFactory;
 	}
 
-    public static final Parcelable.Creator<EventsumRecord> CREATOR 
-    	= new Parcelable.Creator<EventsumRecord>() {
+    public static final Parcelable.Creator<EventsumRecord> CREATOR
+    	= new Parcelable.Creator<>() {
         public EventsumRecord createFromParcel(Parcel in) {
             return new EventsumRecord(in);
         }
@@ -160,10 +160,15 @@ public class EventsumRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static EventsumRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(EventsumRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, EventsumRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static EventsumRecord get(long id) {

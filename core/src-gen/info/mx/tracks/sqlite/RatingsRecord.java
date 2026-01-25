@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class RatingsRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<RatingsRecord> sFactory = new ActiveRecordFactory<RatingsRecord>() {
-		@Override
-		public RatingsRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<RatingsRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public RatingsRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Ratings.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Ratings.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<RatingsRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<RatingsRecord> CREATOR 
-    	= new Parcelable.Creator<RatingsRecord>() {
+    	= new Parcelable.Creator<>() {
         public RatingsRecord createFromParcel(Parcel in) {
             return new RatingsRecord(in);
         }
@@ -338,10 +338,15 @@ public class RatingsRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static RatingsRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(RatingsRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, RatingsRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static RatingsRecord get(long id) {

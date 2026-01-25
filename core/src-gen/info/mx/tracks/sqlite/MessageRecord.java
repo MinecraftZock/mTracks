@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class MessageRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<MessageRecord> sFactory = new ActiveRecordFactory<MessageRecord>() {
-		@Override
-		public MessageRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<MessageRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public MessageRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Message.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Message.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<MessageRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<MessageRecord> CREATOR 
-    	= new Parcelable.Creator<MessageRecord>() {
+    	= new Parcelable.Creator<>() {
         public MessageRecord createFromParcel(Parcel in) {
             return new MessageRecord(in);
         }
@@ -228,10 +228,15 @@ public class MessageRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static MessageRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(MessageRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, MessageRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static MessageRecord get(long id) {

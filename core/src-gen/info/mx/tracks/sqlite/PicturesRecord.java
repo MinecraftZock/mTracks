@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class PicturesRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<PicturesRecord> sFactory = new ActiveRecordFactory<PicturesRecord>() {
-		@Override
-		public PicturesRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<PicturesRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public PicturesRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Pictures.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Pictures.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<PicturesRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<PicturesRecord> CREATOR 
-    	= new Parcelable.Creator<PicturesRecord>() {
+    	= new Parcelable.Creator<>() {
         public PicturesRecord createFromParcel(Parcel in) {
             return new PicturesRecord(in);
         }
@@ -316,10 +316,15 @@ public class PicturesRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static PicturesRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(PicturesRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, PicturesRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static PicturesRecord get(long id) {

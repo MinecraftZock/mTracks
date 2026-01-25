@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class UserActivityRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<UserActivityRecord> sFactory = new ActiveRecordFactory<UserActivityRecord>() {
-		@Override
-		public UserActivityRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<UserActivityRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public UserActivityRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return UserActivity.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return UserActivity.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<UserActivityRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<UserActivityRecord> CREATOR 
-    	= new Parcelable.Creator<UserActivityRecord>() {
+    	= new Parcelable.Creator<>() {
         public UserActivityRecord createFromParcel(Parcel in) {
             return new UserActivityRecord(in);
         }
@@ -181,10 +181,15 @@ public class UserActivityRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static UserActivityRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(UserActivityRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, UserActivityRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static UserActivityRecord get(long id) {

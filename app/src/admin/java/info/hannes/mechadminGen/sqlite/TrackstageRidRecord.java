@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract.TrackstageRid.Builder;
 
 public class TrackstageRidRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<TrackstageRidRecord> sFactory = new ActiveRecordFactory<TrackstageRidRecord>() {
-		@Override
-		public TrackstageRidRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<TrackstageRidRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public TrackstageRidRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return TrackstageRid.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return TrackstageRid.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<TrackstageRidRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<TrackstageRidRecord> CREATOR
-    	= new Creator<TrackstageRidRecord>() {
+    	= new Creator<>() {
         public TrackstageRidRecord createFromParcel(Parcel in) {
             return new TrackstageRidRecord(in);
         }
@@ -252,10 +252,15 @@ public class TrackstageRidRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static TrackstageRidRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(TrackstageRidRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, TrackstageRidRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static TrackstageRidRecord get(long id) {

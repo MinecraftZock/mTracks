@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class CountrycountRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<CountrycountRecord> sFactory = new ActiveRecordFactory<CountrycountRecord>() {
-		@Override
-		public CountrycountRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<CountrycountRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public CountrycountRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Countrycount.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Countrycount.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<CountrycountRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<CountrycountRecord> CREATOR 
-    	= new Parcelable.Creator<CountrycountRecord>() {
+    	= new Parcelable.Creator<>() {
         public CountrycountRecord createFromParcel(Parcel in) {
             return new CountrycountRecord(in);
         }
@@ -181,10 +181,15 @@ public class CountrycountRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static CountrycountRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(CountrycountRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, CountrycountRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static CountrycountRecord get(long id) {

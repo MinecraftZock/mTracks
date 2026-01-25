@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxCalContract.MxSeriesTrack.Builder;
 
 public class MxSeriesTrackRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<MxSeriesTrackRecord> sFactory = new ActiveRecordFactory<MxSeriesTrackRecord>() {
-		@Override
-		public MxSeriesTrackRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<MxSeriesTrackRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public MxSeriesTrackRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return MxSeriesTrack.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return MxSeriesTrack.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<MxSeriesTrackRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<MxSeriesTrackRecord> CREATOR
-    	= new Creator<MxSeriesTrackRecord>() {
+    	= new Creator<>() {
         public MxSeriesTrackRecord createFromParcel(Parcel in) {
             return new MxSeriesTrackRecord(in);
         }
@@ -318,10 +318,15 @@ public class MxSeriesTrackRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static MxSeriesTrackRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(MxSeriesTrackRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, MxSeriesTrackRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static MxSeriesTrackRecord get(long id) {

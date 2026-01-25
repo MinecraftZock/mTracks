@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract.PictureStage.Builder;
 
 public class PictureStageRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<PictureStageRecord> sFactory = new ActiveRecordFactory<PictureStageRecord>() {
-		@Override
-		public PictureStageRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<PictureStageRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public PictureStageRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return PictureStage.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return PictureStage.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<PictureStageRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<PictureStageRecord> CREATOR
-    	= new Creator<PictureStageRecord>() {
+    	= new Creator<>() {
         public PictureStageRecord createFromParcel(Parcel in) {
             return new PictureStageRecord(in);
         }
@@ -274,10 +274,15 @@ public class PictureStageRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static PictureStageRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(PictureStageRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, PictureStageRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static PictureStageRecord get(long id) {

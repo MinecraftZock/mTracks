@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxCalContract.QuellFile.Builder;
 
 public class QuellFileRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<QuellFileRecord> sFactory = new ActiveRecordFactory<QuellFileRecord>() {
-		@Override
-		public QuellFileRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<QuellFileRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public QuellFileRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return QuellFile.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return QuellFile.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<QuellFileRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<QuellFileRecord> CREATOR
-    	= new Creator<QuellFileRecord>() {
+    	= new Creator<>() {
         public QuellFileRecord createFromParcel(Parcel in) {
             return new QuellFileRecord(in);
         }
@@ -274,10 +274,15 @@ public class QuellFileRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static QuellFileRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(QuellFileRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, QuellFileRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static QuellFileRecord get(long id) {

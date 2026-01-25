@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<TracksGesSumRecord> sFactory = new ActiveRecordFactory<TracksGesSumRecord>() {
-		@Override
-		public TracksGesSumRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<TracksGesSumRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public TracksGesSumRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return TracksGesSum.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return TracksGesSum.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<TracksGesSumRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<TracksGesSumRecord> CREATOR 
-    	= new Parcelable.Creator<TracksGesSumRecord>() {
+    	= new Parcelable.Creator<>() {
         public TracksGesSumRecord createFromParcel(Parcel in) {
             return new TracksGesSumRecord(in);
         }
@@ -1357,10 +1357,15 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static TracksGesSumRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(TracksGesSumRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, TracksGesSumRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static TracksGesSumRecord get(long id) {

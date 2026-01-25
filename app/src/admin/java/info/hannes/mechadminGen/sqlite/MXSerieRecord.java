@@ -297,9 +297,14 @@ public class MXSerieRecord extends ActiveRecord implements Parcelable {
         return item;
     }
 
+    @SuppressWarnings("deprecation")
     public static MXSerieRecord fromBundle(Bundle bundle, String key) {
         bundle.setClassLoader(MXSerieRecord.class.getClassLoader());
-        return bundle.getParcelable(key);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, MXSerieRecord.class);
+        } else {
+            return bundle.getParcelable(key);
+        }
     }
 
     public static MXSerieRecord get(long id) {
