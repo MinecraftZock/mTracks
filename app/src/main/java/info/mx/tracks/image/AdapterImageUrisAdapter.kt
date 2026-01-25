@@ -10,13 +10,18 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import info.mx.tracks.R
 import info.mx.tracks.common.PictureHelper.getRealPathFromUri
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class AdapterImageUrisAdapter(
     private val context: Context,
-    private val uris: ArrayList<Uri>
+    private val uris: ArrayList<Uri>,
+    private val lifecycleOwner: LifecycleOwner
 ) : BaseAdapter() {
 
     init {
@@ -33,7 +38,7 @@ class AdapterImageUrisAdapter(
     }
 
     override fun getItem(position: Int): Any {
-        return uris.get(position)
+        return uris[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -52,8 +57,12 @@ class AdapterImageUrisAdapter(
         val imageView = view.findViewById<ImageView>(R.id.imageShare)
         if (getItem(position).toString().startsWith("http")) {
             if (imageView.tag == null) {
-                val setImageTask = AsyncSetImage(imageView)
-                setImageTask.execute(getItem(position).toString())
+                lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                    AsyncSetImage.loadImageIntoView(
+                        imageView,
+                        getItem(position).toString()
+                    )
+                }
             }
         } else if (getItem(position).toString().startsWith("content")) {
             val realPath = getRealPathFromUri(context, Uri.parse(getItem(position).toString()))
@@ -63,11 +72,13 @@ class AdapterImageUrisAdapter(
                 imageView.setImageBitmap(myBitmap)
             }
         } else if (getItem(position).toString().startsWith("file:///")) {
-            val realPath = (getItem(position) as Uri).path!!
-            val imgFile = File(realPath)
-            if (imgFile.exists()) {
-                val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                imageView.setImageBitmap(myBitmap)
+            val realPath = (getItem(position) as Uri).path
+            if (realPath != null) {
+                val imgFile = File(realPath)
+                if (imgFile.exists()) {
+                    val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                    imageView.setImageBitmap(myBitmap)
+                }
             }
         }
 

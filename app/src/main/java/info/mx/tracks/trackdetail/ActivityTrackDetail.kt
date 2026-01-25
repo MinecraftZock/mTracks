@@ -227,11 +227,11 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
             var listView: ListView? = null
             if (uris.size == 1) {
                 listView = ListView(context)
-                listView.adapter = AdapterImageUrisAdapter(context, uris)
+                listView.adapter = AdapterImageUrisAdapter(context, uris, context as androidx.lifecycle.LifecycleOwner)
             } else {
                 gridView = GridView(context)
                 gridView.numColumns = 2
-                gridView.adapter = AdapterImageUrisAdapter(context, uris)
+                gridView.adapter = AdapterImageUrisAdapter(context, uris, context as androidx.lifecycle.LifecycleOwner)
             }
 
             val alertDialogBuilder = AlertDialog.Builder(context)
