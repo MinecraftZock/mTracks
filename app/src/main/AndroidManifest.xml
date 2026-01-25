@@ -133,8 +133,7 @@
         <provider
             android:name="info.mx.tracks.sqlite.MxInfoDBContentProvider"
             android:authorities="${applicationId}.sqlite.mxinfodb"
-            android:exported="false"
-            tools:replace="android:authorities" />
+            android:exported="false" />
 
         <receiver
             android:name="info.mx.tracks.service.BootReceiver"
