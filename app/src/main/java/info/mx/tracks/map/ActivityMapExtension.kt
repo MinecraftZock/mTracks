@@ -118,12 +118,12 @@ class ActivityMapExtension : ActivityDrawerBase() {
             }
         })
 
-        val cl = ChangeLog(this)
-        if (cl.isFirstRunEver) {
+        val changeLog = ChangeLog(this)
+        if (changeLog.isFirstRunEver) {
             val settingIntent = Intent(this, ActivitySetting::class.java)
             startActivity(settingIntent)
-        } else if (cl.isFirstRun && !MxCoreApplication.isEmulator) {
-            cl.fullLogDialog.show()
+        } else if (changeLog.isFirstRun && !MxCoreApplication.isEmulator) {
+            changeLog.fullLogDialog.show()
         }
     }
 
