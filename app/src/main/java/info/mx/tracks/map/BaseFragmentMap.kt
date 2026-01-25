@@ -513,7 +513,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         trackstageRecord.trackRestId = tracksRecord!!.restId
         trackstageRecord.updated = 1
         trackstageRecord.save(false)
-        MxCoreApplication.doSync(true, true, BuildConfig.FLAVOR)
+        MxCoreApplication.doSync(
+            updateProvider = true,
+            force = true,
+            flavor = BuildConfig.FLAVOR
+        )
     }
 
     private fun openTrackInSlider(id: Long) {
@@ -570,7 +574,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     override fun onResume() {
         super.onResume()
 
-        MxCoreApplication.doSync(false, false, BuildConfig.FLAVOR)
+        MxCoreApplication.doSync(
+            updateProvider = false,
+            force = false,
+            flavor = BuildConfig.FLAVOR
+        )
 
         setUpLocationClientIfNeeded()
     }
@@ -730,7 +738,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     false
                 }
 
-                searchView!!.setOnQueryTextFocusChangeListener { view, hasFocus ->
+                searchView!!.setOnQueryTextFocusChangeListener { _, hasFocus ->
                     if (hasFocus) {
                         showKeyboard()
                         if (savePos == null) {
@@ -1025,12 +1033,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     }
 
     override fun onMapButtonTypeClicked() {
-        val fragmentManager = fragmentManager
         val dialog = MapLayerDialog()
         val bundle = Bundle()
         dialog.arguments = bundle
-        if (fragmentManager != null) {
-            dialog.show(fragmentManager, "fragment_map_layer")
+        fragmentManager?.let {
+            dialog.show(it, "fragment_map_layer")
         }
     }
 
