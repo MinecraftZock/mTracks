@@ -58,7 +58,7 @@
         android:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hImgGalery_gen"
+            android:id="@+id/hImgGalleryGen"
             android:layout_width="match_parent"
             android:layout_height="@dimen/thumbnail_size_dp"
             android:layout_alignParentStart="true"

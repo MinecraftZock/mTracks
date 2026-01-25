@@ -184,8 +184,8 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         adapterImages = ImageCursorAdapter(requireActivity(), null, resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt(), true)
         val layoutRecycler = LinearLayoutManager(requireActivity())
         layoutRecycler.orientation = LinearLayoutManager.HORIZONTAL
-        binding.hImgGaleryGen.layoutManager = layoutRecycler
-        binding.hImgGaleryGen.adapter = adapterImages
+        binding.hImgGalleryGen.layoutManager = layoutRecycler
+        binding.hImgGalleryGen.adapter = adapterImages
 
         val layoutRecyclerW = LinearLayoutManager(activity)
         layoutRecyclerW.orientation = LinearLayoutManager.HORIZONTAL
