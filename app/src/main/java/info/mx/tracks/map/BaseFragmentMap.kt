@@ -38,6 +38,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.androidmapsextensions.ClusteringSettings
@@ -95,6 +96,7 @@ import info.mx.tracks.trackdetail.FragmentTrackDetailTab
 import info.mx.tracks.tracklist.ViewBinderTracks
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import kotlin.math.abs
@@ -915,11 +917,15 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 }
 
                 if (!MxPreferences.getInstance().mapCluster) {
-                    map?.clearTrackMarkers()
-                    map?.addFilteredMarkersAsync(cursor, false)
+                    lifecycleScope.launch {
+                        map?.clearTrackMarkers()
+                        map?.addFilteredMarkersAsync(cursor, false)
+                    }
                 } else {
-                    map?.clearTrackMarkers()
-                    map?.addFilteredMarkersAsync(cursor, false)
+                    lifecycleScope.launch {
+                        map?.clearTrackMarkers()
+                        map?.addFilteredMarkersAsync(cursor, false)
+                    }
                 }
 
                 if (currId != 0L) {

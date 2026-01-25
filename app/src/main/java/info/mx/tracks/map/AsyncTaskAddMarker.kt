@@ -2,7 +2,6 @@ package info.mx.tracks.map
 
 import android.content.Context
 import android.database.Cursor
-import android.os.AsyncTask
 import com.androidmapsextensions.GoogleMap
 import com.androidmapsextensions.MarkerOptions
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -10,35 +9,52 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import info.mx.tracks.sqlite.MxInfoDBContract
 import info.mx.tracks.sqlite.TrackMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.*
 
 /**
- * You can do something like this. Load the data you need in doInBackground and draw the markers in onProgressUpdate. To call onProgressUpdate just
- * do a publishProgress() from doInBackground. That way you can update the UI from within the ASyncTask.
+ * Coroutine-based marker loading and drawing for Google Maps.
+ * Replaces the deprecated AsyncTask with modern Kotlin coroutines.
  */
-class AsyncTaskAddMarker internal constructor(private val mGMap: GoogleMap, private var animateTo: Boolean, private val cursor: Cursor) :
-    AsyncTask<Void, MarkerOptions, LatLngBounds.Builder>(), KoinComponent {
-    private var startTime: Long = 0
+class AsyncTaskAddMarker internal constructor(
+    private val mGMap: GoogleMap,
+    private var animateTo: Boolean,
+    private val cursor: Cursor
+) : KoinComponent {
+
     private val builder: LatLngBounds.Builder = LatLngBounds.Builder()
-    private val tracks: MutableList<TrackMap>
+    private val tracks: MutableList<TrackMap> = ArrayList()
 
     val context: Context by inject()
 
-    init {
-        tracks = ArrayList()
+    /**
+     * Execute the marker loading process using coroutines.
+     * Call this from a coroutine scope (e.g., lifecycleScope.launch { ... })
+     */
+    suspend fun execute() {
+        val startTime = System.currentTimeMillis()
+
+        // Prepare tracks on main thread (cursor access)
+        prepareTracks(startTime)
+
+        // Process markers and draw them
+        val resultBuilder = processMarkers()
+
+        // Finalize on main thread
+        finalize(resultBuilder, startTime)
     }
 
-    override fun onPreExecute() {
+    private fun prepareTracks(startTime: Long) {
         if (cursor.count > 0) {
-            startTime = System.currentTimeMillis()
             val posAccess = cursor.getColumnIndex(MxInfoDBContract.Tracksges.TRACKACCESS)
             val posStatus = cursor.getColumnIndex(MxInfoDBContract.Tracksges.TRACKSTATUS)
             val posLat = cursor.getColumnIndex(MxInfoDBContract.Tracksges.LATITUDE)
             val posLon = cursor.getColumnIndex(MxInfoDBContract.Tracksges.LONGITUDE)
             val posId = cursor.getColumnIndex(MxInfoDBContract.Tracksges._ID)
+
             try {
                 cursor.moveToPosition(-1)
                 while (cursor.moveToNext()) {
@@ -50,7 +66,13 @@ class AsyncTaskAddMarker internal constructor(private val mGMap: GoogleMap, priv
                     if (cursor.getString(posLon) != "") {
                         lon = cursor.getDouble(posLon)
                     }
-                    val track = TrackMap(cursor.getLong(posId), lat, lon, cursor.getString(posAccess), cursor.getString(posStatus))
+                    val track = TrackMap(
+                        cursor.getLong(posId),
+                        lat,
+                        lon,
+                        cursor.getString(posAccess),
+                        cursor.getString(posStatus)
+                    )
                     tracks.add(track)
                 }
                 cursor.moveToFirst()
@@ -62,26 +84,35 @@ class AsyncTaskAddMarker internal constructor(private val mGMap: GoogleMap, priv
         }
     }
 
-    override fun doInBackground(vararg nothing: Void): LatLngBounds.Builder {
+    private suspend fun processMarkers(): LatLngBounds.Builder = withContext(Dispatchers.Default) {
         var markerIncluded = false
-        var markerId: Int
 
-        tracks.forEach {
-            markerId = it.access.getTrackPinId()
-            val markerOption = context.getMarkerOption(it._id, it.latDecrypt, it.lonDecrypt, markerId, it.status)
+        tracks.forEach { track ->
+            val markerId = track.access.getTrackPinId()
+            val markerOption = context.getMarkerOption(
+                track._id,
+                track.latDecrypt,
+                track.lonDecrypt,
+                markerId,
+                track.status
+            )
 
-            publishProgress(markerOption)
+            // Draw marker on main thread
+            withContext(Dispatchers.Main) {
+                drawMarker(mGMap, markerOption)
+            }
 
-            val position = LatLng(it.latDecrypt, it.lonDecrypt)
+            val position = LatLng(track.latDecrypt, track.lonDecrypt)
             builder.include(position)
             markerIncluded = true
         }
+
         // animate only with given poi
         animateTo = animateTo && markerIncluded
-        return builder
+        builder
     }
 
-    override fun onPostExecute(resultBuilder: LatLngBounds.Builder) {
+    private fun finalize(resultBuilder: LatLngBounds.Builder, startTime: Long) {
         val milliSec = System.currentTimeMillis() - startTime
         Timber.i("%s ms add marker:", milliSec)
 
@@ -96,9 +127,5 @@ class AsyncTaskAddMarker internal constructor(private val mGMap: GoogleMap, priv
 
     private fun drawMarker(googleMap: GoogleMap, markerOption: MarkerOptions) {
         googleMap.addMarker(markerOption)
-    }
-
-    override fun onProgressUpdate(vararg markerOption: MarkerOptions) {
-        drawMarker(this.mGMap, markerOption[0])
     }
 }
