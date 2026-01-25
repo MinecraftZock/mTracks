@@ -65,11 +65,15 @@ abstract class BaseAdapterFragmentTab internal constructor(
     private fun <T : FragmentUpDown?> getFragment(fragmentClass: Class<T>): T? {
         var fragmentUpDown: T? = null
         try {
-            fragmentUpDown = fragmentClass.newInstance()
+            fragmentUpDown = fragmentClass.getDeclaredConstructor().newInstance()
             fragmentUpDown!!.arguments = fragmentArguments
         } catch (e: InstantiationException) {
             Timber.e(e)
         } catch (e: IllegalAccessException) {
+            Timber.e(e)
+        } catch (e: NoSuchMethodException) {
+            Timber.e(e)
+        } catch (e: java.lang.reflect.InvocationTargetException) {
             Timber.e(e)
         }
         return fragmentUpDown
