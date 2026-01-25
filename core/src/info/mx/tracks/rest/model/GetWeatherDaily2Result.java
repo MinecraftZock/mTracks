@@ -26,19 +26,17 @@ public class GetWeatherDaily2Result implements Serializable, Parcelable {
     @SerializedName("list")
     @Expose
     private java.util.List<info.mx.tracks.rest.model.List> list = null;
-    public final static Parcelable.Creator<GetWeatherDaily2Result> CREATOR = new Creator<GetWeatherDaily2Result>() {
+    public final static Parcelable.Creator<GetWeatherDaily2Result> CREATOR = new Creator<>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public GetWeatherDaily2Result createFromParcel(Parcel in) {
             GetWeatherDaily2Result instance = new GetWeatherDaily2Result();
             instance.cod = ((String) in.readValue((String.class.getClassLoader())));
             instance.message = ((String) in.readValue((String.class.getClassLoader())));
             instance.city = ((City) in.readValue((City.class.getClassLoader())));
             instance.cnt = ((Integer) in.readValue((Integer.class.getClassLoader())));
-            in.readList(instance.list, (info.mx.tracks.rest.model.List.class.getClassLoader()));
+            instance.list = new java.util.ArrayList<>();
+            in.readParcelableList(instance.list, info.mx.tracks.rest.model.List.class.getClassLoader(), info.mx.tracks.rest.model.List.class);
             return instance;
         }
 
@@ -94,7 +92,7 @@ public class GetWeatherDaily2Result implements Serializable, Parcelable {
         dest.writeValue(message);
         dest.writeValue(city);
         dest.writeValue(cnt);
-        dest.writeList(list);
+        dest.writeParcelableList(list, flags);
     }
 
     public int describeContents() {
