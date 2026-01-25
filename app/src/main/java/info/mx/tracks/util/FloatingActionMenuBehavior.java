@@ -11,7 +11,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.ViewCompat;
 
 public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     private float mTranslationY;
@@ -37,9 +36,9 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     private void updateTranslation(CoordinatorLayout parent, View child, View dependency) {
         float translationY = this.getTranslationY(parent, child);
         if (translationY != this.mTranslationY) {
-            ViewCompat.animate(child).cancel();
+            child.animate().cancel();
             if (Math.abs(translationY - this.mTranslationY) == (float) dependency.getHeight()) {
-                ViewCompat.animate(child)
+                child.animate()
                         .translationY(translationY)
                         .setListener(null);
             } else {
