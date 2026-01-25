@@ -231,9 +231,14 @@ public class DownLoadSiteRecord extends ActiveRecord implements Parcelable {
         return item;
     }
 
+    @SuppressWarnings("deprecation")
     public static DownLoadSiteRecord fromBundle(Bundle bundle, String key) {
         bundle.setClassLoader(DownLoadSiteRecord.class.getClassLoader());
-        return bundle.getParcelable(key);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, DownLoadSiteRecord.class);
+        } else {
+            return bundle.getParcelable(key);
+        }
     }
 
     public static DownLoadSiteRecord get(long id) {

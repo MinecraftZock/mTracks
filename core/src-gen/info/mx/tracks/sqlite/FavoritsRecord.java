@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class FavoritsRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<FavoritsRecord> sFactory = new ActiveRecordFactory<FavoritsRecord>() {
-		@Override
-		public FavoritsRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<FavoritsRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public FavoritsRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Favorits.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Favorits.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<FavoritsRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<FavoritsRecord> CREATOR 
-    	= new Parcelable.Creator<FavoritsRecord>() {
+    	= new Parcelable.Creator<>() {
         public FavoritsRecord createFromParcel(Parcel in) {
             return new FavoritsRecord(in);
         }
@@ -140,10 +140,15 @@ public class FavoritsRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static FavoritsRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(FavoritsRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, FavoritsRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static FavoritsRecord get(long id) {

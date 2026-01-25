@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxCalContract.QuellFileSmall.Builder;
 
 public class QuellFileSmallRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<QuellFileSmallRecord> sFactory = new ActiveRecordFactory<QuellFileSmallRecord>() {
-		@Override
-		public QuellFileSmallRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<QuellFileSmallRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public QuellFileSmallRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return QuellFileSmall.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return QuellFileSmall.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<QuellFileSmallRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<QuellFileSmallRecord> CREATOR
-    	= new Creator<QuellFileSmallRecord>() {
+    	= new Creator<>() {
         public QuellFileSmallRecord createFromParcel(Parcel in) {
             return new QuellFileSmallRecord(in);
         }
@@ -225,10 +225,15 @@ public class QuellFileSmallRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static QuellFileSmallRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(QuellFileSmallRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, QuellFileSmallRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static QuellFileSmallRecord get(long id) {

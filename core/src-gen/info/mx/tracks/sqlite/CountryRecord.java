@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class CountryRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<CountryRecord> sFactory = new ActiveRecordFactory<CountryRecord>() {
-		@Override
-		public CountryRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<CountryRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public CountryRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Country.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Country.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<CountryRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<CountryRecord> CREATOR 
-    	= new Parcelable.Creator<CountryRecord>() {
+    	= new Parcelable.Creator<>() {
         public CountryRecord createFromParcel(Parcel in) {
             return new CountryRecord(in);
         }
@@ -162,10 +162,15 @@ public class CountryRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static CountryRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(CountryRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, CountryRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static CountryRecord get(long id) {

@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class WeatherRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<WeatherRecord> sFactory = new ActiveRecordFactory<WeatherRecord>() {
-		@Override
-		public WeatherRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<WeatherRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public WeatherRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Weather.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Weather.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<WeatherRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<WeatherRecord> CREATOR 
-    	= new Parcelable.Creator<WeatherRecord>() {
+    	= new Parcelable.Creator<>() {
         public WeatherRecord createFromParcel(Parcel in) {
             return new WeatherRecord(in);
         }
@@ -250,10 +250,15 @@ public class WeatherRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static WeatherRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(WeatherRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, WeatherRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static WeatherRecord get(long id) {

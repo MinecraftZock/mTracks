@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class Events2seriesRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<Events2seriesRecord> sFactory = new ActiveRecordFactory<Events2seriesRecord>() {
-		@Override
-		public Events2seriesRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<Events2seriesRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public Events2seriesRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Events2series.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Events2series.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<Events2seriesRecord> getFactory() {
 		return sFactory;
 	}
 
-    public static final Parcelable.Creator<Events2seriesRecord> CREATOR 
-    	= new Parcelable.Creator<Events2seriesRecord>() {
+    public static final Parcelable.Creator<Events2seriesRecord> CREATOR
+    	= new Parcelable.Creator<>() {
         public Events2seriesRecord createFromParcel(Parcel in) {
             return new Events2seriesRecord(in);
         }
@@ -244,10 +244,15 @@ public class Events2seriesRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static Events2seriesRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(Events2seriesRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, Events2seriesRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static Events2seriesRecord get(long id) {

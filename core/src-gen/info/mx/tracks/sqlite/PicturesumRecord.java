@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class PicturesumRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<PicturesumRecord> sFactory = new ActiveRecordFactory<PicturesumRecord>() {
-		@Override
-		public PicturesumRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<PicturesumRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public PicturesumRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Picturesum.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Picturesum.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<PicturesumRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<PicturesumRecord> CREATOR 
-    	= new Parcelable.Creator<PicturesumRecord>() {
+    	= new Parcelable.Creator<>() {
         public PicturesumRecord createFromParcel(Parcel in) {
             return new PicturesumRecord(in);
         }
@@ -160,10 +160,15 @@ public class PicturesumRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static PicturesumRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(PicturesumRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, PicturesumRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static PicturesumRecord get(long id) {

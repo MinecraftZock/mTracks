@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class SeriesRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<SeriesRecord> sFactory = new ActiveRecordFactory<SeriesRecord>() {
-		@Override
-		public SeriesRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<SeriesRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public SeriesRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Series.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Series.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<SeriesRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<SeriesRecord> CREATOR 
-    	= new Parcelable.Creator<SeriesRecord>() {
+    	= new Parcelable.Creator<>() {
         public SeriesRecord createFromParcel(Parcel in) {
             return new SeriesRecord(in);
         }
@@ -206,10 +206,15 @@ public class SeriesRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static SeriesRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(SeriesRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, SeriesRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static SeriesRecord get(long id) {

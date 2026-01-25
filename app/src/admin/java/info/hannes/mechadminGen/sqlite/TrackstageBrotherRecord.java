@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract.TrackstageBrother.Build
 
 public class TrackstageBrotherRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<TrackstageBrotherRecord> sFactory = new ActiveRecordFactory<TrackstageBrotherRecord>() {
-		@Override
-		public TrackstageBrotherRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<TrackstageBrotherRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public TrackstageBrotherRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return TrackstageBrother.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return TrackstageBrother.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<TrackstageBrotherRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<TrackstageBrotherRecord> CREATOR
-    	= new Creator<TrackstageBrotherRecord>() {
+    	= new Creator<>() {
         public TrackstageBrotherRecord createFromParcel(Parcel in) {
             return new TrackstageBrotherRecord(in);
         }
@@ -803,9 +803,14 @@ public class TrackstageBrotherRecord extends ActiveRecord implements Parcelable 
 	    return item;
 	}
 	
-	public static TrackstageBrotherRecord fromBundle(Bundle bundle, String key) {
+	@SuppressWarnings("deprecation")
+    public static TrackstageBrotherRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(TrackstageBrotherRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, TrackstageBrotherRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static TrackstageBrotherRecord get(long id) {

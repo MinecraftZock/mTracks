@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class EventsRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<EventsRecord> sFactory = new ActiveRecordFactory<EventsRecord>() {
-		@Override
-		public EventsRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<EventsRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public EventsRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Events.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Events.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<EventsRecord> getFactory() {
 		return sFactory;
 	}
 
-    public static final Parcelable.Creator<EventsRecord> CREATOR 
-    	= new Parcelable.Creator<EventsRecord>() {
+    public static final Parcelable.Creator<EventsRecord> CREATOR
+    	= new Parcelable.Creator<>() {
         public EventsRecord createFromParcel(Parcel in) {
             return new EventsRecord(in);
         }
@@ -272,10 +272,15 @@ public class EventsRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static EventsRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(EventsRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, EventsRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static EventsRecord get(long id) {

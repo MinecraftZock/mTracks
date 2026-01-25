@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class RouteRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<RouteRecord> sFactory = new ActiveRecordFactory<RouteRecord>() {
-		@Override
-		public RouteRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<RouteRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public RouteRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Route.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Route.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<RouteRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<RouteRecord> CREATOR 
-    	= new Parcelable.Creator<RouteRecord>() {
+    	= new Parcelable.Creator<>() {
         public RouteRecord createFromParcel(Parcel in) {
             return new RouteRecord(in);
         }
@@ -228,10 +228,15 @@ public class RouteRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static RouteRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(RouteRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, RouteRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static RouteRecord get(long id) {

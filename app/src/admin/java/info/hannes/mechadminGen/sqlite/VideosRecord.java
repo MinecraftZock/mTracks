@@ -21,29 +21,29 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract.Videos.Builder;
 
 public class VideosRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<VideosRecord> sFactory = new ActiveRecordFactory<VideosRecord>() {
-		@Override
-		public VideosRecord create(Cursor c) {
-			return fromCursor(c);
-		}
+	private static final ActiveRecordFactory<VideosRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public VideosRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
-		@Override
-		public Uri getContentUri() {
-			return Videos.CONTENT_URI;
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
-	};
+        @Override
+        public Uri getContentUri() {
+            return Videos.CONTENT_URI;
+        }
+
+        @Override
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+    };
 	
 	public static ActiveRecordFactory<VideosRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Creator<VideosRecord> CREATOR
-    	= new Creator<VideosRecord>() {
+    	= new Creator<>() {
         public VideosRecord createFromParcel(Parcel in) {
             return new VideosRecord(in);
         }
@@ -252,10 +252,15 @@ public class VideosRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static VideosRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(VideosRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, VideosRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static VideosRecord get(long id) {

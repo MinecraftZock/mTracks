@@ -19,29 +19,29 @@ import com.robotoworks.mechanoid.db.AbstractValuesBuilder;
 
 public class TracksRecord extends ActiveRecord implements Parcelable {
 
-	private static ActiveRecordFactory<TracksRecord> sFactory = new ActiveRecordFactory<TracksRecord>() {
-		@Override
-		public TracksRecord create(Cursor c) {
-			return fromCursor(c);
-		}
-		
-		@Override
-		public String[] getProjection() {
-			return PROJECTION;
-		}
+	private static final ActiveRecordFactory<TracksRecord> sFactory = new ActiveRecordFactory<>() {
+        @Override
+        public TracksRecord create(Cursor c) {
+            return fromCursor(c);
+        }
 
         @Override
-                    public Uri getContentUri() {
-                        return Tracks.CONTENT_URI;
-                    }
-                };
+        public String[] getProjection() {
+            return PROJECTION;
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Tracks.CONTENT_URI;
+        }
+    };
 
     			public static ActiveRecordFactory<TracksRecord> getFactory() {
 		return sFactory;
 	}
 
     public static final Parcelable.Creator<TracksRecord> CREATOR 
-    	= new Parcelable.Creator<TracksRecord>() {
+    	= new Parcelable.Creator<>() {
         public TracksRecord createFromParcel(Parcel in) {
             return new TracksRecord(in);
         }
@@ -1482,10 +1482,15 @@ public class TracksRecord extends ActiveRecord implements Parcelable {
 		
 	    return item;
 	}
-	
+
+    @SuppressWarnings("deprecation")
 	public static TracksRecord fromBundle(Bundle bundle, String key) {
 		bundle.setClassLoader(TracksRecord.class.getClassLoader());
-		return bundle.getParcelable(key);
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+			return bundle.getParcelable(key, TracksRecord.class);
+		} else {
+			return bundle.getParcelable(key);
+		}
 	}
 	
 	public static TracksRecord get(long id) {
