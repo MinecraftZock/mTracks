@@ -62,6 +62,8 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
         registerIdlingResource()
         IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
+
+        skipFirstAppUsage()
     }
 
     @After
@@ -73,8 +75,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
 
     @Test
     fun detailTrack() {
-        skipFirstAppUsage()
-
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        if (pressBack)
