@@ -408,19 +408,19 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                 fileAbsolute = imageReturnedIntent.data!!.path
             }
             val newFile = File(fileAbsolute!!)
-            if (!newFile.exists() &&
-                imageReturnedIntent.extras != null &&
-                imageReturnedIntent.extras!!.get("data") != null
-            ) {
-                val bitmap = imageReturnedIntent.extras!!.get("data") as Bitmap?
+            val bitmapData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                imageReturnedIntent.extras?.getParcelable(DATA, Bitmap::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                imageReturnedIntent.extras?.getParcelable(DATA)
+            }
+            if (!newFile.exists() && bitmapData != null) {
                 try {
-                    if (bitmap != null) {
-                        Timber.i("bitmap.height = %s, bitmap width %s", bitmap.height, bitmap.width)
-                        val fOut = FileOutputStream(fileAbsolute!!)
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut)
-                        fOut.flush()
-                        fOut.close()
-                    }
+                    Timber.i("bitmap.height = %s, bitmap width %s", bitmapData.height, bitmapData.width)
+                    val fOut = FileOutputStream(fileAbsolute!!)
+                    bitmapData.compress(Bitmap.CompressFormat.PNG, 85, fOut)
+                    fOut.flush()
+                    fOut.close()
                 } catch (e: IOException) {
                     e.message?.let { showMessage(it, Snackbar.LENGTH_LONG) }
                     Timber.e(e)
@@ -1171,6 +1171,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
     }
 
     companion object {
+        const val DATA = "data"
         private var trackLoc: Location? = null
 
         private const val PREFIX_IMAGE_NAME = "img_"
