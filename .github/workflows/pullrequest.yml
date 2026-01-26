@@ -71,13 +71,13 @@ jobs:
       #      - name: prepare
       #        run: brew install exiftool imagemagick
       - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.7
+        uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
         run: ./signing/decrypt.sh
         env:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - name: Run instrumentation tests
-        uses: hannesa2/action-android/emulator-run-cmd@0.1.16.7
+        uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
         with:
           cmd: |
             ./gradlew :app:connectedPaidDebugAndroidTest --continue
@@ -188,7 +188,7 @@ jobs:
           distribution: "adopt"
           java-version: ${{ matrix.java_version }}
       - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.7
+        uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
         run: ./signing/decrypt.sh
         env:
@@ -220,7 +220,7 @@ jobs:
           distribution: "adopt"
           java-version: ${{ matrix.java_version }}
       - name: Install Android SDK
-        uses: hannesa2/action-android/install-sdk@0.1.16.7
+        uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
         run: ./signing/decrypt.sh
         env:
