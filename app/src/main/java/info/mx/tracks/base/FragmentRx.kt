@@ -19,10 +19,10 @@ abstract class FragmentRx : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        removeDisposeable()
+        removeDisposeAble()
     }
 
-    private fun removeDisposeable() {
+    private fun removeDisposeAble() {
         compositeDisposable?.dispose()
     }
 

@@ -6,7 +6,6 @@ import com.robotoworks.mechanoid.db.SQuery.Op;
 import info.mx.tracks.MxCoreApplication;
 import info.mx.tracks.prefs.MxPreferences;
 import info.mx.tracks.sqlite.MxInfoDBContract.Country;
-import info.mx.tracks.sqlite.MxInfoDBContract.Events2series;
 import info.mx.tracks.sqlite.MxInfoDBContract.Favorits;
 import info.mx.tracks.sqlite.MxInfoDBContract.Pictures;
 import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges;
@@ -20,20 +19,6 @@ public class QueryHelper {
         return SQuery.newQuery()
                 .expr(Pictures.DELETED, Op.NEQ, 1)
                 .expr(Pictures.TRACK_REST_ID, Op.EQ, tracksRestID);
-    }
-
-    public static SQuery getEventFilter(long tracksID) {
-        final SQuery query = SQuery.newQuery()
-                .expr(Events2series.EVENT_DATE, Op.GTEQ, System.currentTimeMillis() / 1000)
-                .expr(Events2series.TRACK_REST_ID, Op.EQ, tracksID);
-        final MxPreferences prefs = MxPreferences.getInstance();
-        if (prefs.getOnlyApproved()) {
-            query.expr(Events2series.APPROVED, Op.EQ, 1);
-        } else if (!MxCoreApplication.Companion.isAdmin()) {
-            query.expr(Events2series.APPROVED, Op.GT, -1);
-        }
-
-        return query;
     }
 
     private static SQuery buildTrackFavorite(SQuery query) {
@@ -52,10 +37,9 @@ public class QueryHelper {
             stageFilter = stageFilter + " and " + Trackstage.ANDROIDID + Op.NEQ + "'confirm'";
         }
         stageFilter = stageFilterPre + stageFilter;
-        final SQuery res = query;
-        res.append(Tracksges.REST_ID + " in (select " + Trackstage.TRACK_REST_ID + " from "
+        query.append(Tracksges.REST_ID + " in (select " + Trackstage.TRACK_REST_ID + " from "
                 + MxInfoDBOpenHelper.Sources.TRACKSTAGE + stageFilter + ")");
-        return res;
+        return query;
     }
 
     public static SQuery buildUserTrackSearchFilter(SQuery query, String mFilter, boolean isFav, String table) {
@@ -65,7 +49,7 @@ public class QueryHelper {
         } else {
             query = buildTracksFilter(query, table);
         }
-        if (mFilter != null && !mFilter.trim().equals("")) {
+        if (mFilter != null && !mFilter.trim().isEmpty()) {
             final String[] token = mFilter.trim().split(" ");
             boolean first = true;
             final SQuery filterQ = SQuery.newQuery();

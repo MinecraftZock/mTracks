@@ -25,7 +25,7 @@ import info.mx.tracks.sqlite.TrackstageRecord;
 
 public class StageHelper {
 
-    private static HashMap<Marker, Long> stageHashMap = new HashMap<>();
+    private static final HashMap<Marker, Long> stageHashMap = new HashMap<>();
 
     public static void addStageMarkers(GoogleMap mMap, Cursor cursor, boolean showAllStage) {
         clearStageMarkers();
@@ -84,7 +84,7 @@ public class StageHelper {
             final LatLng latlng = new LatLng(stage.getLatitude(), stage.getLongitude());
             result = mMap.addMarker(new MarkerOptions()
                     .position(latlng)
-                    .title(titel + stage.getTrackname() == null ? "<kein name>" : stage.getTrackname())
+                    .title(stage.getTrackname())
                     .snippet(stageDetail.toString())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_stage))
             );
@@ -116,7 +116,7 @@ public class StageHelper {
                     !cursor.getColumnName(i).equals(Trackstage.CREATED) &&
                     !cursor.getColumnName(i).equals(Trackstage.APPROVED)) {
                 if (cursor.getString(i) != null && !cursor.getString(i).equals("0") && !cursor.getString(i).equals("0.0")
-                        && !cursor.getString(i).equals("")) {
+                        && !cursor.getString(i).isEmpty()) {
                     final int colIndex = trackCur.getColumnIndex(cursor.getColumnName(i));
                     String colorStrPre = "";
                     if (colIndex == -1) {
@@ -127,7 +127,7 @@ public class StageHelper {
                     } else {
                         colorStrPre = "<font color=\"red\">";
                     }
-                    res += "\n" + cursor.getColumnName(i) + "=" + colorStrPre + cursor.getString(i) + (colorStrPre.equals("") ? "" : "</font>");
+                    res += "\n" + cursor.getColumnName(i) + "=" + colorStrPre + cursor.getString(i) + (colorStrPre.isEmpty() ? "" : "</font>");
                 }
             }
         }

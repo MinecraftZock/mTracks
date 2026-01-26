@@ -46,7 +46,7 @@ class OperationErrorPeerCertificateServiceListener(private val context: Context)
         alertDialogBuilder
             .setMessage(text)
             .setCancelable(true)
-            .setPositiveButton(android.R.string.ok) { dialog: DialogInterface?, id: Int ->
+            .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
                 context.startActivity(Intent(Settings.ACTION_DATE_SETTINGS))
             }
         val alertDialog = alertDialogBuilder.create()
@@ -58,7 +58,7 @@ class OperationErrorPeerCertificateServiceListener(private val context: Context)
         alertDialogBuilder.setMessage(text)
             .setTitle(R.string.info)
             .setCancelable(true)
-            .setPositiveButton(android.R.string.ok) { dialog: DialogInterface?, which: Int -> }
+            .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int -> }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
