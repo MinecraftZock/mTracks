@@ -252,7 +252,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
                     }
                 }
             val alertDialog = alertDialogBuilder.create()
-            alertDialog.window!!.setLayout(AdapterImageUrisAdapter.getDesiredScreenWidth(), AdapterImageUrisAdapter.getDesiredScreenHeight())
+            alertDialog.window!!.setLayout(AdapterImageUrisAdapter.desiredScreenWidth, AdapterImageUrisAdapter.desiredScreenHeight)
             alertDialog.show()
         }
     }
