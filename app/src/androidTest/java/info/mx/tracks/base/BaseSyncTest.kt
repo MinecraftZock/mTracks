@@ -3,6 +3,7 @@ package info.mx.tracks.base
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import info.mx.tracks.ops.ImportIdlingResource
+import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.prefs.MxPreferences.PREFERENCES_NAME
 import org.junit.After
@@ -22,11 +23,14 @@ abstract class BaseSyncTest {
         IdlingPolicies.setIdlingResourceTimeout(4, TimeUnit.MINUTES)
         IdlingPolicies.setMasterPolicyTimeout(2, TimeUnit.MINUTES)
         IdlingRegistry.getInstance().register(ImportIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
+
     }
 
     @After
     fun unregisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(ImportIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
     }
 
     fun dontRememberLastUsedActivity() {
