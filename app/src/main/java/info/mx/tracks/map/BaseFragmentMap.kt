@@ -1042,9 +1042,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         val dialog = MapLayerDialog()
         val bundle = Bundle()
         dialog.arguments = bundle
-        fragmentManager?.let {
-            dialog.show(it, "fragment_map_layer")
-        }
+        dialog.show(parentFragmentManager, "fragment_map_layer")
     }
 
     override fun onMapButtonClusterClicked() {
