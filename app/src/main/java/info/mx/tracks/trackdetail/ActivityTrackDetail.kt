@@ -26,6 +26,7 @@ import info.mx.tracks.base.ActivityDrawerBase
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.common.parcelableArrayListExtra
 import info.mx.tracks.common.parcelableExtra
+import info.mx.tracks.databinding.ActivityTrackDetailBinding
 import info.mx.tracks.image.AdapterImageUrisAdapter
 import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
 import info.mx.tracks.sqlite.TracksRecord
@@ -34,6 +35,7 @@ import timber.log.Timber
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {
 
     var detailFragmentTab: FragmentTrackDetailTab? = null
+    private lateinit var binding: ActivityTrackDetailBinding
 
     //    FragmentManager.getFragments can only be called from within the same library group (groupId=com.android.support) less... (⌘F1)
     //    This inspection looks at Android API calls that have been annotated with various support annotations (such as RequiresPermission or
@@ -41,7 +43,7 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_track_detail)
+        binding = ActivityTrackDetailBinding.inflate(layoutInflater)
 
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(window, false)
