@@ -1,8 +1,6 @@
 package info.mx.tracks.base
 
 import android.Manifest
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.view.View
@@ -24,13 +22,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
-import info.hannes.changelog.ChangeLog.Companion.VERSION_KEY
 import info.hannes.timber.DebugFormatTree
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.MapIdlingResource
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.prefs.MxPreferences.PREFERENCES_NAME
 import info.mx.tracks.ops.google.PictureIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.hamcrest.Matcher
@@ -67,6 +62,8 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
         registerIdlingResource()
         IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
+
+        skipFirstAppUsage()
     }
 
     @After
@@ -78,8 +75,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
 
     @Test
     fun detailTrack() {
-        skipFirstAppUsage()
-
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        if (pressBack)
@@ -159,23 +154,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
         onView(withText("Show on map")).perform(click())
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-map") })
-    }
-
-    private fun skipFirstAppUsage() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-
-        // with changelog <= 3.8.1 we have to use deprecated version PreferenceManager.getDefaultSharedPreferences(context)
-        // with changelog >= 3.8.2 we have to use context.getSharedPreferences("changelog", MODE_PRIVATE)
-        val sp = context.getSharedPreferences("changelog", MODE_PRIVATE)
-        val editor = sp.edit()
-        editor.putInt(VERSION_KEY, 123)
-        editor.commit()
-
-        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
-
-        sharedPreferences.edit()
-            .remove(MxPreferences.Keys.LAST_OPEN_START_ACTIVITY)
-            .apply()
     }
 
     private fun scrollImageGalleryToEnd(): ViewAction {
