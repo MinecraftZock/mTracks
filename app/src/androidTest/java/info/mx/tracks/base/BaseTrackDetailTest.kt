@@ -29,7 +29,6 @@ import info.hannes.timber.DebugFormatTree
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.MapIdlingResource
-import info.mx.tracks.ops.RecalculateIdlingResource
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.prefs.MxPreferences.PREFERENCES_NAME
 import info.mx.tracks.ops.google.PictureIdlingResource
@@ -67,7 +66,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
 
         registerIdlingResource()
         IdlingRegistry.getInstance().register(PictureIdlingResource.countingIdlingResource)
-        IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(MapIdlingResource.countingIdlingResource)
     }
 
@@ -75,7 +73,6 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
     fun pictureIdlingBeforeAfter() {
         unregisterIdlingResource()
         IdlingRegistry.getInstance().unregister(PictureIdlingResource.countingIdlingResource)
-        IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
     }
 
