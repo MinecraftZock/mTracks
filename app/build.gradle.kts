@@ -246,7 +246,7 @@ dependencies {
 
     implementation("androidx.multidex:multidex:2.0.1")
 
-    "adminImplementation"("org.jsoup:jsoup:1.21.2")
+    "adminImplementation"("org.jsoup:jsoup:1.22.1")
     implementation("com.github.hannesa2:android-maps-extensions:3.2.1")
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.7.1")
     implementation("com.github.MikeOrtiz:TouchImageView:3.7.1")
