@@ -26,7 +26,18 @@ class AdapterImageUrisAdapter(
 
     init {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        DisplayMetrics().let { displayMetrics ->
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            // Modern approach for Android 11+ (API 30+)
+            val windowMetrics = wm.currentWindowMetrics
+            val bounds = windowMetrics.bounds
+            desiredScreenWidth = bounds.width() * 80 / 100
+            desiredScreenHeight = bounds.height() * PERCENTAGE / 100
+        } else {
+            // Fallback for older Android versions
+            @Suppress("DEPRECATION")
+            val displayMetrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
             wm.defaultDisplay.getMetrics(displayMetrics)
             desiredScreenWidth = displayMetrics.widthPixels * 80 / 100
             desiredScreenHeight = displayMetrics.heightPixels * PERCENTAGE / 100
