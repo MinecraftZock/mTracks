@@ -226,7 +226,7 @@ dependencies {
     implementation("com.google.firebase:firebase-core:21.1.1")
     implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
     implementation("com.google.firebase:firebase-analytics:23.0.0") // (Recommended) Add Analytics
-    implementation("com.google.firebase:firebase-crashlytics:20.0.3")
+    implementation("com.google.firebase:firebase-crashlytics:20.0.4")
 
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
