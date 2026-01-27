@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
@@ -21,24 +20,24 @@ import info.hannes.commonlib.DateHelper
 import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.R
+import info.mx.tracks.base.FragmentRx
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.DistanceHelper.checkDistance4View
 import info.mx.tracks.common.DistanceHelper.setDistanceString
 import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.MxInfoDBContract.Route
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.MxInfoDBContract.TracksGesSum
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
-import info.mx.tracks.sqlite.RouteRecord
-import info.mx.tracks.sqlite.TracksGesSumRecord
-import info.mx.tracks.sqlite.TracksRecord
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.sqlite.*
+import info.mx.tracks.sqlite.MxInfoDBContract.*
 import info.mx.tracks.util.getDrawableIdentifier
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.Locale
 
-class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayout(myContext, attrs) {
+class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayout(myContext, attrs), KoinComponent {
     private val viewAddress: TextView
     private val lyAddress: View
     private val lyRating: View
@@ -63,8 +62,10 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
     private val viewDistance: TextView
     private var myLoc: Location? = null
     private val shortWeekdays: Array<String> = DateHelper.shortWeekdays
-    private var fragmentCallBack: Fragment? = null
+    private var fragmentRxCallBack: FragmentRx? = null
     private var currentPoi: TracksGesSumRecord? = null
+
+    private val mxDatabase: MxDatabase by inject()
 
     interface PoiDetailHeaderListener {
         fun onHeaderLayoutUpdated(height: Int)
@@ -117,8 +118,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         viewSo.text = shortWeekdays[1]
         val distNew = stageRecord.insDistance.toInt()
         viewDistance.visibility = VISIBLE
-        viewDistance.text =
-            getFormatDistance(prefs!!.unitsKm, distNew)
+        viewDistance.text = getFormatDistance(prefs!!.unitsKm, distNew)
         Timber.d("Route:%s", viewDistance.text.toString())
         viewDistance.setTextColor(ContextCompat.getColor(context, R.color.distance_font))
         onLayoutUpdateFinished()
@@ -159,17 +159,22 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
                 poiRecord.trackstatus
             )
         )
-        viewCamera.visibility =
-            if (poiRecord.picturecount == "0") GONE else VISIBLE
-        viewCalendar.visibility =
-            if (poiRecord.eventcount == "0") GONE else VISIBLE
+        viewCamera.visibility = if (poiRecord.picturecount == "0") GONE else VISIBLE
+        viewCalendar.visibility = if (poiRecord.eventcount == "0") GONE else VISIBLE
         if (poiRecord.country != null) {
             val countryValue = poiRecord.country.lowercase(Locale.getDefault()) + "2x"
             val countryResId =
                 context.resources.getDrawableIdentifier(countryValue, context.packageName)
             viewCountry.setImageResource(countryResId)
+            fragmentRxCallBack!!.addDisposable(
+                mxDatabase.commentDao().avgByTrackId(poiRecord.restId)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ rating: Float? ->
+                        viewRating.rating = rating!!
+                    }) { Timber.e("Subscribing to registerRx failed") }
+            )
         }
-        viewRating.rating = poiRecord.rating.toFloat()
         viewName.text =
             (if (isAdminOrDebug && poiRecord.approved == -1L) "--" else "") + poiRecord.trackname
         viewMo.setDayLayout(poiRecord.openmondays == 1L)
@@ -310,15 +315,15 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         override fun onLoaderReset(loader: Loader<Cursor>) {}
     }
 
-    fun setCallBackFragment(fragment: Fragment?) {
-        fragmentCallBack = fragment
+    fun setCallBackFragment(fragmentRx: FragmentRx?) {
+        fragmentRxCallBack = fragmentRx
     }
 
     private fun onLayoutUpdateFinished() {
         mainLayout.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
         val height = mainLayout.measuredHeight
-        if (fragmentCallBack is PoiDetailHeaderListener) {
-            (fragmentCallBack as PoiDetailHeaderListener?)!!.onHeaderLayoutUpdated(height)
+        if (fragmentRxCallBack is PoiDetailHeaderListener) {
+            (fragmentRxCallBack as PoiDetailHeaderListener?)!!.onHeaderLayoutUpdated(height)
         }
     }
 
@@ -334,8 +339,8 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         inflater.inflate(R.layout.item_track, this, true)
         mainLayout = findViewById(R.id.layoutPoiHeaderMain)
         mainLayout.setOnClickListener { view: View ->
-            if (fragmentCallBack is PoiDetailHeaderListener) {
-                (fragmentCallBack as PoiDetailHeaderListener?)!!.onHeaderClicked(view, currentPoi)
+            if (fragmentRxCallBack is PoiDetailHeaderListener) {
+                (fragmentRxCallBack as PoiDetailHeaderListener?)!!.onHeaderClicked(view, currentPoi)
             }
         }
         setParentLayoutParams(PoiDetailStyle.DETAIL_TRACK)
