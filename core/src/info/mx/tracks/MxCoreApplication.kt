@@ -10,7 +10,6 @@ import com.robotoworks.mechanoid.ops.Ops
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.tracks.koin.CoreKoinContext
 import info.mx.tracks.koin.coreModule
-import info.mx.tracks.ops.AbstractOpPostRatingsOperation
 import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
 import info.mx.tracks.prefs.MxPreferences
 import info.mx.tracks.rest.MxInfo
@@ -86,9 +85,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun doSync(updateProvider: Boolean, force: Boolean, flavor: String) {
             if (MxPreferences.getInstance().lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
-                val intentM = AbstractOpPostRatingsOperation.newIntent()
-                Ops.execute(intentM)
-
                 val intent = AbstractOpSyncFromServerOperation.newIntent(updateProvider, flavor)
                 Ops.execute(intent)
             }
