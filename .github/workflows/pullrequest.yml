@@ -69,7 +69,7 @@ jobs:
           distribution: "adopt"
           java-version: ${{ matrix.java_version }}
       #      - name: prepare
-      #        run: brew install exiftool imagemagick
+      #        run: brew install exiftool imagemagick telnet
       - name: Install Android SDK
         uses: hannesa2/action-android/install-sdk@0.1.16.9
       - name: Decrypt keystore
@@ -80,7 +80,7 @@ jobs:
         uses: hannesa2/action-android/emulator-run-cmd@0.1.16.9
         with:
           cmd: |
-            ./gradlew :app:connectedPaidDebugAndroidTest --continue
+            scripts/gradleStart.sh
           api: ${{ matrix.api }}
           tag: ${{ matrix.tag }}
           abi: ${{ matrix.abi }}
