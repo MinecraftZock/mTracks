@@ -31,9 +31,9 @@ import com.robotoworks.mechanoid.net.ServiceException
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
-import info.mx.commonlib.NetworkHelper
 import info.hannes.commonlib.TrackingApplication
 import info.mx.comlib.retrofit.service.model.TrackR
+import info.mx.commonlib.NetworkHelper
 import info.mx.core.MxCoreApplication
 import info.mx.core.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.core.common.ImportStatusMessage
@@ -1229,12 +1229,11 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     private fun doBuildCountryTable(context: Context): String {
         val result = ""
-        val delAnz = SQuery.newQuery().append(
+        val deleteCount = SQuery.newQuery().append(
             Country._ID + " in (select " + Countrycount._ID + " from " + AbstractMxInfoDBOpenHelper.Sources.COUNTRYCOUNT + " where " +
                     Countrycount.COUNT + "=0)"
-        )
-            .delete(Country.CONTENT_URI)
-        Timber.d("Country gelöscht %s", delAnz)
+        ).delete(Country.CONTENT_URI)
+        Timber.d("Country deleted $deleteCount")
 
         val countryGroup = SQuery.newQuery().select<CountrysumRecord>(Countrysum.CONTENT_URI, Countrysum._ID)
         for (recordC in countryGroup) {
