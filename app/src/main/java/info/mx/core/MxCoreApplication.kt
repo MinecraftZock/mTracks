@@ -7,18 +7,14 @@ import android.text.Spanned
 import com.robotoworks.mechanoid.Mechanoid
 import com.robotoworks.mechanoid.net.ServiceClient
 import com.robotoworks.mechanoid.ops.Ops
-import info.hannes.commonlib.TrackingApplication.Companion.appTracker
-import info.hannes.commonlib.TrackingApplication.Companion.applicationScope
 import info.mx.comlib.prefs.CommLibPrefs
 import info.mx.core.koin.CoreKoinContext
 import info.mx.core.koin.coreModule
-import info.mx.core_generated.ops.AbstractOpPostRatingsOperation
+import info.mx.core.rest.MxInfo
 import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.tracks.MxAccessApplication
-import info.mx.tracks.MxAccessApplication.Companion.aadhresUParams
-import info.mx.core.rest.MxInfo
 import info.mx.tracks.BuildConfig
+import info.mx.tracks.MxAccessApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.logging.HttpLoggingInterceptor
@@ -91,9 +87,6 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun doSync(updateProvider: Boolean, force: Boolean, flavor: String) {
             if (MxPreferences.getInstance().lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
-                val intentM = AbstractOpPostRatingsOperation.newIntent()
-                Ops.execute(intentM)
-
                 val intent = AbstractOpSyncFromServerOperation.newIntent(updateProvider, flavor)
                 Ops.execute(intent)
             }
