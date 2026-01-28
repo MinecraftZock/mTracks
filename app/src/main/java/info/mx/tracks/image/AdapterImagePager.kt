@@ -49,7 +49,16 @@ class AdapterImagePager(fragmentActivity: FragmentActivity) : FragmentStateAdapt
      */
     fun resetZoom() {
         for (fragmentImage in cachedFragments.values) {
-            fragmentImage.binding.imageFullSize.resetZoom()
+            // Check if fragment is added and view is created before accessing binding
+            if (fragmentImage.isAdded && fragmentImage.view != null) {
+                try {
+                    fragmentImage.binding.imageFullSize.resetZoom()
+                } catch (_: IllegalStateException) {
+                    // Fragment view might have been destroyed, ignore
+                } catch (_: NullPointerException) {
+                    // Fragment binding might be null, ignore
+                }
+            }
         }
     }
 
