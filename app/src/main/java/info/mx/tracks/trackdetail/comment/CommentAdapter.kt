@@ -103,7 +103,7 @@ internal class CommentAdapter(private val context: Context) : RecyclerView.Adapt
         }
     }
 
-    internal inner class CommentDiffCallback(private val oldComment: List<Comment>, private val newComment: List<Comment>) : DiffUtil.Callback() {
+    internal class CommentDiffCallback(private val oldComment: List<Comment>, private val newComment: List<Comment>) : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int {
             return oldComment.size
