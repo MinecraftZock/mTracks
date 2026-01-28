@@ -25,7 +25,7 @@ android {
         compileSdk = 36
         consumerProguardFiles.addAll(
             listOf(
-                file("proguard-RxCommLib.pro")
+                file("proguard-RxCommLib-consumer.pro")
             )
         )
 

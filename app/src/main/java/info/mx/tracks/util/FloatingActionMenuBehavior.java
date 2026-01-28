@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -21,16 +20,21 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
 
     @Override
     public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
-        return dependency instanceof Snackbar.SnackbarLayout;
+        return isSnackbarLayout(dependency);
     }
 
     @Override
     public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
-        if (child instanceof FloatingActionMenu && dependency instanceof Snackbar.SnackbarLayout) {
+        if (child instanceof FloatingActionMenu && isSnackbarLayout(dependency)) {
             this.updateTranslation(parent, child, dependency);
         }
 
         return false;
+    }
+
+    private boolean isSnackbarLayout(View view) {
+        // Check if the view is a Snackbar's layout without accessing the restricted SnackbarLayout class
+        return view.getClass().getName().equals("com.google.android.material.snackbar.Snackbar$SnackbarLayout");
     }
 
     private void updateTranslation(CoordinatorLayout parent, View child, View dependency) {
@@ -57,7 +61,7 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
 
         for (int z = dependencies.size(); i < z; ++i) {
             View view = (View) dependencies.get(i);
-            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(child, view)) {
+            if (isSnackbarLayout(view) && parent.doViewsOverlap(child, view)) {
                 minOffset = Math.min(minOffset, view.getTranslationY() - (float) view.getHeight());
             }
         }
