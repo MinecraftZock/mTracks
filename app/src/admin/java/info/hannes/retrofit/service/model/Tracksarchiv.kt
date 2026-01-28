@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Tracksarchiv : Serializable, Parcelable {
+open class Tracksarchiv : Serializable, Parcelable {
 
     @SerializedName("trackstatus")
     @Expose
@@ -253,73 +253,73 @@ class Tracksarchiv : Serializable, Parcelable {
     var changeuser: String? = null
 
     protected constructor(parcel: Parcel) {
-        trackstatus = parcel.readValue(String::class.java.getClassLoader()).toString()
-        openwednesday = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        quad = parcel.readValue(String::class.java.getClassLoader()) as Long
-        areatype = parcel.readValue(String::class.java.getClassLoader()).toString()
-        hourssaturday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        tracklength = parcel.readValue(String::class.java.getClassLoader()) as Long
-        noiselimit = parcel.readValue(String::class.java.getClassLoader()).toString()
-        hourstuesday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        campingrvrvhookup = parcel.readValue(String::class.java.getClassLoader()) as Long
-        logourl = parcel.readValue(String::class.java.getClassLoader()).toString()
-        singletracks = parcel.readValue(String::class.java.getClassLoader()) as Long
-        adress = parcel.readValue(String::class.java.getClassLoader()).toString()
-        openfriday = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        fees = parcel.readValue(String::class.java.getClassLoader()).toString()
-        hourssunday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        id = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        shower = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        trackname = parcel.readValue(String::class.java.getClassLoader()).toString()
-        camping = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        electricity = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        mxtrack = parcel.readValue(String::class.java.getClassLoader()) as Long
-        indoor = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        opensaturday = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        metatext = parcel.readValue(String::class.java.getClassLoader()).toString()
-        workshop = parcel.readValue(String::class.java.getClassLoader()).toString()
-        latitude = parcel.readValue(Double::class.java.getClassLoader()) as Double
-        showroom = parcel.readValue(String::class.java.getClassLoader()).toString()
-        trackaccess = parcel.readValue(String::class.java.getClassLoader()).toString()
-        soiltype = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        hoursfriday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        feescamping = parcel.readValue(String::class.java.getClassLoader()).toString()
-        validuntil = parcel.readValue(String::class.java.getClassLoader()).toString()
-        opensunday = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        a4x4 = parcel.readValue(String::class.java.getClassLoader()) as Long
-        enduro = parcel.readValue(String::class.java.getClassLoader()) as Long
-        hoursthursday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        openmondays = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        phone = parcel.readValue(String::class.java.getClassLoader()).toString()
-        openthursday = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        facebook = parcel.readValue(String::class.java.getClassLoader()).toString()
-        hourswednesday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        licence = parcel.readValue(String::class.java.getClassLoader()).toString()
-        brands = parcel.readValue(String::class.java.getClassLoader()).toString()
-        supercross = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        approved = parcel.readValue(String::class.java.getClassLoader()) as Long
-        daysopen = parcel.readValue(String::class.java.getClassLoader()).toString()
-        archId = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        url = parcel.readValue(String::class.java.getClassLoader()).toString()
-        country = parcel.readValue(String::class.java.getClassLoader()).toString()
-        notes = parcel.readValue(String::class.java.getClassLoader()).toString()
-        changed = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        longitude = parcel.readValue(Double::class.java.getClassLoader()) as Double
-        opentuesdays = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        hoursmonday = parcel.readValue(String::class.java.getClassLoader()).toString()
-        contact = parcel.readValue(String::class.java.getClassLoader()).toString()
-        utv = parcel.readValue(String::class.java.getClassLoader()) as Long
-        schwierigkeit = parcel.readValue(String::class.java.getClassLoader()) as Long
-        archDate = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        kidstrack = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        cleaning = parcel.readValue(Integer::class.java.getClassLoader()) as Long
-        changeuser = parcel.readValue(String::class.java.getClassLoader()).toString()
+        trackstatus = parcel.readValue(String::class.java.classLoader).toString()
+        openwednesday = parcel.readValue(Int::class.java.classLoader) as Long
+        quad = parcel.readValue(String::class.java.classLoader) as Long
+        areatype = parcel.readValue(String::class.java.classLoader).toString()
+        hourssaturday = parcel.readValue(String::class.java.classLoader).toString()
+        tracklength = parcel.readValue(String::class.java.classLoader) as Long
+        noiselimit = parcel.readValue(String::class.java.classLoader).toString()
+        hourstuesday = parcel.readValue(String::class.java.classLoader).toString()
+        campingrvrvhookup = parcel.readValue(String::class.java.classLoader) as Long
+        logourl = parcel.readValue(String::class.java.classLoader).toString()
+        singletracks = parcel.readValue(String::class.java.classLoader) as Long
+        adress = parcel.readValue(String::class.java.classLoader).toString()
+        openfriday = parcel.readValue(Int::class.java.classLoader) as Long
+        fees = parcel.readValue(String::class.java.classLoader).toString()
+        hourssunday = parcel.readValue(String::class.java.classLoader).toString()
+        id = parcel.readValue(Int::class.java.classLoader) as Long
+        shower = parcel.readValue(Int::class.java.classLoader) as Long
+        trackname = parcel.readValue(String::class.java.classLoader).toString()
+        camping = parcel.readValue(Int::class.java.classLoader) as Long
+        electricity = parcel.readValue(Int::class.java.classLoader) as Long
+        mxtrack = parcel.readValue(String::class.java.classLoader) as Long
+        indoor = parcel.readValue(Int::class.java.classLoader) as Long
+        opensaturday = parcel.readValue(Int::class.java.classLoader) as Long
+        metatext = parcel.readValue(String::class.java.classLoader).toString()
+        workshop = parcel.readValue(String::class.java.classLoader).toString()
+        latitude = parcel.readValue(Double::class.java.classLoader) as Double
+        showroom = parcel.readValue(String::class.java.classLoader).toString()
+        trackaccess = parcel.readValue(String::class.java.classLoader).toString()
+        soiltype = parcel.readValue(Int::class.java.classLoader) as Long
+        hoursfriday = parcel.readValue(String::class.java.classLoader).toString()
+        feescamping = parcel.readValue(String::class.java.classLoader).toString()
+        validuntil = parcel.readValue(String::class.java.classLoader).toString()
+        opensunday = parcel.readValue(Int::class.java.classLoader) as Long
+        a4x4 = parcel.readValue(String::class.java.classLoader) as Long
+        enduro = parcel.readValue(String::class.java.classLoader) as Long
+        hoursthursday = parcel.readValue(String::class.java.classLoader).toString()
+        openmondays = parcel.readValue(Int::class.java.classLoader) as Long
+        phone = parcel.readValue(String::class.java.classLoader).toString()
+        openthursday = parcel.readValue(Int::class.java.classLoader) as Long
+        facebook = parcel.readValue(String::class.java.classLoader).toString()
+        hourswednesday = parcel.readValue(String::class.java.classLoader).toString()
+        licence = parcel.readValue(String::class.java.classLoader).toString()
+        brands = parcel.readValue(String::class.java.classLoader).toString()
+        supercross = parcel.readValue(Int::class.java.classLoader) as Long
+        approved = parcel.readValue(String::class.java.classLoader) as Long
+        daysopen = parcel.readValue(String::class.java.classLoader).toString()
+        archId = parcel.readValue(Int::class.java.classLoader) as Long
+        url = parcel.readValue(String::class.java.classLoader).toString()
+        country = parcel.readValue(String::class.java.classLoader).toString()
+        notes = parcel.readValue(String::class.java.classLoader).toString()
+        changed = parcel.readValue(Int::class.java.classLoader) as Long
+        longitude = parcel.readValue(Double::class.java.classLoader) as Double
+        opentuesdays = parcel.readValue(Int::class.java.classLoader) as Long
+        hoursmonday = parcel.readValue(String::class.java.classLoader).toString()
+        contact = parcel.readValue(String::class.java.classLoader).toString()
+        utv = parcel.readValue(String::class.java.classLoader) as Long
+        schwierigkeit = parcel.readValue(String::class.java.classLoader) as Long
+        archDate = parcel.readValue(Int::class.java.classLoader) as Long
+        kidstrack = parcel.readValue(Int::class.java.classLoader) as Long
+        cleaning = parcel.readValue(Int::class.java.classLoader) as Long
+        changeuser = parcel.readValue(String::class.java.classLoader).toString()
     }
 
     /**
      * No args constructor for use in serialization
      */
-    constructor() {}
+    constructor()
 
     fun getOpenwednesday(): Long {
         return openwednesday
