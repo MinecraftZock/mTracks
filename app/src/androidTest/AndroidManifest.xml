@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:label="MxTest"
-        tools:replace="label" />
+        android:label="MxTest" />
 
 </manifest>
