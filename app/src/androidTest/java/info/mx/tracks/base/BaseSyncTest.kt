@@ -2,6 +2,7 @@ package info.mx.tracks.base
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
@@ -10,6 +11,7 @@ import info.mx.core.ops.ImportIdlingResource
 import info.mx.core.ops.RecalculateIdlingResource
 import info.mx.core_generated.prefs.MxPreferences.Companion.PREFERENCES_NAME
 import info.mx.core_generated.prefs.MxPreferences.Keys
+import info.mx.tracks.map.ActivityMapExtension
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -30,6 +32,11 @@ abstract class BaseSyncTest {
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
         firstTimeImport()
 
+        // Create intent with specific location (example MX track)
+        val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityMapExtension::class.java).apply {
+            putExtra(ActivityMapExtension.LAT, 48.1351) // Example latitude
+            putExtra(ActivityMapExtension.LON, 11.5820) // Example longitude (Munich area)
+        }
     }
 
     @After
