@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import info.hannes.commonlib.LocationHelper
+import info.mx.commonlib.LocationHelper
 import info.hannes.commonlib.dialog.BackDialog
 import info.mx.tracks.ActivityBase
 import info.mx.tracks.R

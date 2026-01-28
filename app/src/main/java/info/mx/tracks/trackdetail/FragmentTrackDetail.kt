@@ -53,7 +53,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.DateHelper
-import info.hannes.commonlib.LocationHelper
+import info.mx.commonlib.LocationHelper
 import info.hannes.commonlib.utils.FileHelper
 import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication

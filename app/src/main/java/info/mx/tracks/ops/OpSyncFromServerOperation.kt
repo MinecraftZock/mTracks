@@ -31,7 +31,7 @@ import com.robotoworks.mechanoid.net.ServiceException
 import com.robotoworks.mechanoid.ops.OperationContext
 import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.Ops
-import info.hannes.commonlib.NetworkHelper
+import info.mx.commonlib.NetworkHelper
 import info.hannes.commonlib.TrackingApplication
 import info.mx.comlib.retrofit.service.model.TrackR
 import info.mx.core.MxCoreApplication

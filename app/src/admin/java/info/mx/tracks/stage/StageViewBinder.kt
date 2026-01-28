@@ -15,7 +15,7 @@ import android.widget.TextView
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.Ops
-import info.hannes.commonlib.LocationHelper.getFormatDistance
+import info.mx.commonlib.LocationHelper.getFormatDistance
 import info.hannes.commonlib.utils.ViewUtils.disableView
 import info.hannes.commonlib.utils.ViewUtils.enableView
 import info.hannes.mxadmin.service.DataManagerAdmin

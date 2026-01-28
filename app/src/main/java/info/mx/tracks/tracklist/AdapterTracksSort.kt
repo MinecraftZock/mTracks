@@ -11,7 +11,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import info.hannes.commonlib.DateHelper
-import info.hannes.commonlib.LocationHelper.getFormatDistance
+import info.mx.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.setDayLayout

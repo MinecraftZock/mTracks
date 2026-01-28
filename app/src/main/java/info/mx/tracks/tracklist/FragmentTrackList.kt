@@ -31,7 +31,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.robotoworks.mechanoid.db.SQuery
-import info.hannes.commonlib.LocationHelper
+import info.mx.commonlib.LocationHelper
 import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication
 import info.mx.tracks.R

@@ -18,7 +18,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
-import info.hannes.commonlib.LocationHelper.getFormatDistance
+import info.mx.commonlib.LocationHelper.getFormatDistance
 import info.mx.core.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper

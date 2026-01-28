@@ -189,12 +189,6 @@ android {
         }
     }
 
-    sourceSets {
-        named("main") {
-            java.srcDirs("src/main/java", "../core/src")
-        }
-    }
-
     buildFeatures {
         viewBinding = true
         buildConfig = true

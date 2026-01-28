@@ -24,7 +24,7 @@ import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.commonlib.DateHelper.shortWeekdays
-import info.hannes.commonlib.LocationHelper.getFormatDistance
+import info.mx.commonlib.LocationHelper.getFormatDistance
 import info.hannes.mxadmin.service.DataManagerAdmin
 import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication.Companion.isAdmin
