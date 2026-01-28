@@ -30,6 +30,8 @@ import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.core.util.LocationHelper
+import info.mx.core.util.isEurope
+import info.mx.core.util.isUSA
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -103,11 +105,12 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         mxDatabase.capturedLatLngDao().insertAll(capturedLatLng)
 
         //reset countries to show
+        Timber.i("CountriesShow firstTimeLocation=${MxPreferences.getInstance().firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()}")
         if (!MxPreferences.getInstance().firstTimeLocation) {
             if (SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI) > 2) {
-                if (LocationHelper.isAmerica(location)) {
+                if (location.isUSA()) {
                     hideEurope(context)
-                } else if (isEurope(location)) {
+                } else if (location.isEurope()) {
                     LocationHelper.hideAmerica(context)
                 } else {
                     LocationHelper.hideAmerica(context)
@@ -135,7 +138,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             countryLocation.longitude = longitude
             if (latitude + longitude == 0.0) {
                 country.show = (if (MxCoreApplication.isAdmin) 1 else 0).toLong()
-            } else if (isEurope(countryLocation)) {
+            } else if (countryLocation.isEurope()) {
                 country.show = 0
             } else {
                 country.show = 1
@@ -143,11 +146,6 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             country.save(false)
         }
         context.contentResolver.notifyChange(MxInfoDBContract.Tracks.CONTENT_URI, null)
-    }
-
-    private fun isEurope(location: Location): Boolean {
-        Timber.d("isEurope=${MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)} longitude=${location.longitude}")
-        return MxCoreApplication.isEmulator || (location.longitude > -31 && location.longitude < 65)
     }
 
     private fun updateNotification4Admin(meter: Int) {
