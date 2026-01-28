@@ -26,7 +26,7 @@ jobs:
 
   buildTest:
     name: Test
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
       pull-requests: write
@@ -36,7 +36,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-24.04 ]
         flavor: [ "paid" ]
         api: [ 34 ]
         abi: [ x86_64 ]
