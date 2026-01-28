@@ -71,7 +71,7 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
                         if (requestNewFromInternet && showWeather) {
                             requestNewDataFromInternet(context, args, gson, trackRec, weatherClient)
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         val resp2 = gson.fromJson(weatherCached, GetWeatherDaily2Result::class.java)
                         storeResult2DBv2(context, args.trackClientId, gson, resp2)
                         if (requestNewFromInternet && showWeather) {
@@ -94,16 +94,16 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
                 Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             val track = trackRec!!.trackname
-            Timber.w("OpWeatherCachedOperation/ServiceException '$track' " + Log.getStackTraceString(e))
+            Timber.w("OpWeatherCachedOperation/ServiceException '$track' ${Log.getStackTraceString(e)}")
             return OperationResult.error(e)
-        } catch (je: JsonSyntaxException) {
+        } catch (_: JsonSyntaxException) {
             return OperationResult.ok(bundle)
         } catch (e: Exception) {
             if (isAdminOrDebug) {
                 Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
             }
             val track = if (trackRec != null) trackRec.trackname else trackRec?.restId.toString() + ""
-            Timber.w("OpWeatherCachedOperation/Exception '$track' " + Log.getStackTraceString(e))
+            Timber.w("OpWeatherCachedOperation/Exception '$track' ${Log.getStackTraceString(e)}")
             return OperationResult.error(e)
         }
         return OperationResult.ok(bundle)
@@ -160,7 +160,7 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
             }
             postWeatherToMX(args.trackClientId, resAll)
         } catch (e: ServiceException) {
-            Timber.w(resAll + " " + e.message)
+            Timber.w("$resAll ${e.message}")
         }
     }
 
@@ -290,7 +290,7 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
             }
             jsonString
         } catch (e: IOException) {
-            Timber.e(trackClientId.toString() + " " + e.message)
+            Timber.e("$trackClientId ${e.message}")
             EMPTY_RESULT_FROM_MX
         }
     }
@@ -318,7 +318,7 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
                 if (response != null) {
                     resp = response.readAsText()
                 }
-                Timber.w(e.message + " " + resp)
+                Timber.w("${e.message} $resp")
                 //                if (i == MAX_LOOP) {
                 //                    throw new ServiceException(e);
                 //                }
@@ -329,11 +329,11 @@ internal class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(),
                 }
                 if (response!!.responseCode == Response.HTTP_UNAUTHORIZED) {
                     if (!alreadySent401) {
-                        Timber.e(e.message + " " + resp + " " + WEATHER_ID)
+                        Timber.e("${e.message} $resp $WEATHER_ID")
                         alreadySent401 = true
                     }
                 } else {
-                    Timber.w(e.message + " " + resp)
+                    Timber.w("${e.message} $resp")
                 }
             }
         }

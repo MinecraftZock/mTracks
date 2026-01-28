@@ -52,7 +52,7 @@ internal class OpPostImagesOperation : AbstractOpPostImagesOperation(), CoreKoin
                             picRecord.restId = response.id.toLong()
                             picRecord.changed =
                                 response.changed - 1 // so wird vom server aktuallisiert
-                            Timber.d(response.id.toString() + " Zeit: " + (System.currentTimeMillis() - start) + "ms")
+                            Timber.d("${response.id} Zeit: ${System.currentTimeMillis() - start}ms")
                             picRecord.save()
                         }
                     } else {
@@ -93,7 +93,7 @@ internal class OpPostImagesOperation : AbstractOpPostImagesOperation(), CoreKoin
         )
         try {
             val result = call.execute()
-            Timber.d("doPostImage " + (System.currentTimeMillis() - start) + "ms")
+            Timber.d("doPostImage ${System.currentTimeMillis() - start}ms")
             return result.body()
         } catch (e: IOException) {
             Timber.e(e)
