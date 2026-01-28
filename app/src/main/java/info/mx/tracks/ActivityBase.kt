@@ -9,11 +9,12 @@ import info.mx.tracks.base.ActivityRx
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.common.OperationErrorPeerCertificateServiceListener
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
 import org.koin.android.ext.android.inject
 import androidx.core.net.toUri
+import info.mx.core.MxCoreApplication
 
 abstract class ActivityBase : ActivityRx() {
 
@@ -57,7 +58,7 @@ abstract class ActivityBase : ActivityRx() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         try {
             super.onRestoreInstanceState(savedInstanceState)
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
     }

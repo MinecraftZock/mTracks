@@ -9,8 +9,8 @@ import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
-import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Pictures
+import info.mx.core_generated.sqlite.PicturesRecord
 import timber.log.Timber
 import java.io.File
 import java.util.UUID

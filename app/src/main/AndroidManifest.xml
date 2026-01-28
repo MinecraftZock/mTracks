@@ -131,7 +131,7 @@
             android:value="@integer/google_play_services_version" />
 
         <provider
-            android:name="info.mx.tracks.sqlite.MxInfoDBContentProvider"
+            android:name="info.mx.core.sqlite.MxInfoDBContentProvider"
             android:authorities="${applicationId}.sqlite.mxinfodb"
             android:exported="false" />
 
@@ -157,12 +157,12 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
-            android:name="info.mx.tracks.ops.MxInfoService"
+            android:name="info.mx.core.ops.MxInfoService"
             android:foregroundServiceType="dataSync"
             android:exported="false" />
 
         <service
-            android:name="info.mx.tracks.ops.google.MxGoogleService"
+            android:name="info.mx.core.ops.google.MxGoogleService"
             android:foregroundServiceType="dataSync"
             android:exported="false" />
 

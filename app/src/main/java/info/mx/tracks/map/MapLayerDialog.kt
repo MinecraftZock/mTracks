@@ -8,7 +8,7 @@ import android.widget.CompoundButton
 import android.widget.RadioButton
 import androidx.fragment.app.DialogFragment
 import info.mx.tracks.R
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 
 class MapLayerDialog : DialogFragment(), CompoundButton.OnCheckedChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {

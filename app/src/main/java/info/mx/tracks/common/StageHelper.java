@@ -18,10 +18,10 @@ import java.util.Map.Entry;
 
 import timber.log.Timber;
 import info.mx.tracks.R;
-import info.mx.tracks.prefs.MxPreferences;
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks;
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage;
-import info.mx.tracks.sqlite.TrackstageRecord;
+import info.mx.core_generated.prefs.MxPreferences;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage;
+import info.mx.core_generated.sqlite.TrackstageRecord;
 
 public class StageHelper {
 

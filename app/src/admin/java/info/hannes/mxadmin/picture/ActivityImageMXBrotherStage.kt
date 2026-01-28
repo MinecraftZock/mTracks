@@ -9,9 +9,9 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract
 import info.hannes.mechadminGen.sqlite.PictureStageRecord
 import info.hannes.mechadminGen.sqlite.TrackstageBrotherRecord
 import info.mx.tracks.R
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.TracksRecord
 import timber.log.Timber
 
 class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {

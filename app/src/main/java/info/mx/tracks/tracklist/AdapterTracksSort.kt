@@ -15,9 +15,9 @@ import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
 import info.mx.tracks.common.setDayLayout
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.room.memory.entity.TracksDistance
-import info.mx.tracks.sqlite.TracksGesSumRecord
+import info.mx.core_generated.sqlite.TracksGesSumRecord
 import info.mx.tracks.util.getDrawableIdentifier
 import java.util.*
 import kotlin.math.roundToInt

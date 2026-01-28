@@ -2,7 +2,7 @@
 package info.mx.tracks.koin
 
 import info.mx.comlib.retrofit.CommApiClient
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import org.koin.dsl.module
 
 val restModule = module {

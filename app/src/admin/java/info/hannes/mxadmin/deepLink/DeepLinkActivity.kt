@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import info.hannes.mxadmin.base.ActivityAdminBase
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.MxCoreApplication.Companion.doSync
+import info.mx.core.MxCoreApplication.Companion.doSync
 import info.mx.tracks.common.parcelable
 import timber.log.Timber
 

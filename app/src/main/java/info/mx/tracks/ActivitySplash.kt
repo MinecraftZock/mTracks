@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.view.Window
 import info.hannes.commonlib.TrackingApplication
 import info.hannes.commonlib.getPackageInfoCompat
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.databinding.ActivitySplashBinding
 import info.mx.tracks.map.ActivityMapExtension
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.tracklist.ActivityTrackList
 
 class ActivitySplash : ActivityBase() {

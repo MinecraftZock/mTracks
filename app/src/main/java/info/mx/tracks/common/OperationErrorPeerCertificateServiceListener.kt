@@ -10,7 +10,7 @@ import com.robotoworks.mechanoid.ops.OperationResult
 import com.robotoworks.mechanoid.ops.OperationServiceListener
 import info.mx.tracks.R
 import info.mx.tracks.ops.OpSyncFromServerOperation
-import info.mx.tracks.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.MxInfoDBContract
 
 class OperationErrorPeerCertificateServiceListener(private val context: Context) : OperationServiceListener() {
 

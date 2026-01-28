@@ -14,9 +14,9 @@ import com.robotoworks.mechanoid.ops.Ops
 import info.hannes.mechadmin.WebClient
 import info.hannes.mechadminGen.rest.MxAdmin
 import info.hannes.mechadminGen.rest.PostPictureApprovedRequest
-import info.mx.tracks.ops.AbstractOpPostImagesOperation
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.ops.AbstractOpPostImagesOperation
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.PicturesRecord
 import timber.log.Timber
 
 internal class OpPostPictureApprovedOperation : AbstractOpPostPictureApprovedOperation() {

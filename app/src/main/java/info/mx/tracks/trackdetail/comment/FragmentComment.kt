@@ -13,8 +13,8 @@ import com.robotoworks.mechanoid.db.SQuery.Op
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.sqlite.MxInfoDBContract.Ratings
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.MxInfoDBContract.Ratings
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
 import org.koin.android.ext.android.inject
 
 class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.LoaderCallbacks<Cursor> {

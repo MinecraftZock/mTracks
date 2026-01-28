@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import info.mx.tracks.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.MxInfoDBContract
 import java.util.*
 
 /**

@@ -3,7 +3,7 @@ package info.mx.tracks.base
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.ListFragment
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 
 open class ListFragmentBase : ListFragment() {
 

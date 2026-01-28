@@ -8,7 +8,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.R
 import timber.log.Timber
 

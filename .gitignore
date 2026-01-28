@@ -16,7 +16,7 @@ build
 bin
 gen
 project.properties
-/core/src-gen/**/.gitignore
+/core/src/**/.gitignore
 
 adblogcat.emulator*.log
 release

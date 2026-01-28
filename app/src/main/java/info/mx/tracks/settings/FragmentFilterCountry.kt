@@ -21,10 +21,10 @@ import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
 import info.mx.tracks.base.ListFragmentBase
-import info.mx.tracks.sqlite.CountryRecord
-import info.mx.tracks.sqlite.CountrycountRecord
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.MxInfoDBContract.Countrycount
+import info.mx.core_generated.sqlite.CountryRecord
+import info.mx.core_generated.sqlite.CountrycountRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.MxInfoDBContract.Countrycount
 import info.mx.tracks.util.getDrawableIdentifier
 import timber.log.Timber
 import java.util.Locale

@@ -17,7 +17,7 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract
 import info.hannes.mechadminGen.sqlite.PictureStageRecord
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityRx
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ImageCursorAdapter
 import info.mx.tracks.trackdetail.ImageCursorAdapter.OnImageListItemClick
 import info.mx.tracks.util.SystemUiHider

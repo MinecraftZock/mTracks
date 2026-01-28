@@ -10,16 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.robotoworks.mechanoid.db.SQuery
-import info.mx.tracks.MxCoreApplication
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.core.MxCoreApplication
+import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.tracks.R
 import info.mx.tracks.common.On3StateClickListener
 import info.mx.tracks.common.PictureHelper
 import info.mx.tracks.image.ActivityBaseImageSlider
 import info.mx.tracks.image.ActivityImageSlider
 import info.mx.tracks.recyclerview.CursorRecyclerViewAdapter
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.PicturesRecord
 import timber.log.Timber
 import kotlin.math.roundToInt
 

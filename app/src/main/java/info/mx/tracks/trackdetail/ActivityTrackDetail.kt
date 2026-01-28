@@ -27,8 +27,8 @@ import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.common.parcelableArrayListExtra
 import info.mx.tracks.common.parcelableExtra
 import info.mx.tracks.image.AdapterImageUrisAdapter
-import info.mx.tracks.ops.AbstractOpPushSharedImageOperation
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.ops.AbstractOpPushSharedImageOperation
+import info.mx.core_generated.sqlite.TracksRecord
 import timber.log.Timber
 
 class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageListItemClick {

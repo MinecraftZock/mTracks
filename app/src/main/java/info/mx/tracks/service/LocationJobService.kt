@@ -24,11 +24,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.common.NotificationHelper
 import info.mx.tracks.map.ActivityMapExtension
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.tools.PermissionHelper

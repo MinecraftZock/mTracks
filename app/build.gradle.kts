@@ -191,7 +191,7 @@ android {
 
     sourceSets {
         named("main") {
-            java.srcDirs("src/main/java", "../core/src", "../core/src-gen")
+            java.srcDirs("src/main/java", "../core/src")
         }
     }
 

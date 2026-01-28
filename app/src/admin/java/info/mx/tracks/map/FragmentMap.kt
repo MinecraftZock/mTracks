@@ -3,7 +3,7 @@ package info.mx.tracks.map
 import android.os.Bundle
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.MxInfoDBContract
 import info.mx.tracks.stage.FragmentStageNewDetail
 import info.mx.tracks.trackdetail.FragmentTrackDetail
 

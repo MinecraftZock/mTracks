@@ -15,10 +15,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.sothree.slidinguppanel.PanelState
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.settings.ActivitySetting
 import info.mx.tracks.trackdetail.FragmentTrackDetailTab
 import kotlin.math.roundToInt

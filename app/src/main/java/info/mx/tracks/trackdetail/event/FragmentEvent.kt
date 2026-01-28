@@ -17,8 +17,8 @@ import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.sqlite.MxInfoDBContract.Events2series
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.MxInfoDBContract.Events2series
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
 
 class FragmentEvent : FragmentUpDown(), LoaderManager.LoaderCallbacks<Cursor> {
     private val projectionEvents = arrayOf(Events2series.EVENT_DATE, Events2series.COMMENT, Events2series.SERIESNAME)

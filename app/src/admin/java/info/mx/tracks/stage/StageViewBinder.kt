@@ -24,9 +24,9 @@ import info.mx.tracks.R
 import info.mx.tracks.base.FragmentRx
 import info.mx.tracks.common.getStageValues
 import info.mx.tracks.common.getStringVal
-import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
-import info.mx.tracks.sqlite.MxInfoDBContract.UserActivity
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
+import info.mx.core_generated.sqlite.MxInfoDBContract.UserActivity
+import info.mx.core_generated.sqlite.TrackstageRecord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber

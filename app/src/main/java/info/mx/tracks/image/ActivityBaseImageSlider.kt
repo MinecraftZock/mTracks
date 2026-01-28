@@ -16,9 +16,9 @@ import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
 import info.mx.tracks.StorageCleanupManager
 import info.mx.tracks.databinding.ActivityImageSlideBinding
-import info.mx.tracks.sqlite.MxInfoDBContract.Pictures
-import info.mx.tracks.sqlite.PicturesRecord
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Pictures
+import info.mx.core_generated.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ImageCursorAdapter
 import info.mx.tracks.trackdetail.ImageCursorAdapter.OnImageListItemClick
 import info.mx.tracks.util.SystemUiHider

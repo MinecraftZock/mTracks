@@ -3,7 +3,7 @@ package info.mx.tracks.koin
 
 import info.hannes.mxadmin.service.DataManagerAdmin
 import info.hannes.retrofit.ApiAdminClient
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import org.koin.dsl.module
 
 val flavorModule = module {

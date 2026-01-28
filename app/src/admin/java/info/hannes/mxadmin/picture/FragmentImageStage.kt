@@ -27,8 +27,8 @@ import info.hannes.mechadminGen.sqlite.TrackstageBrotherRecord
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.SecHelper
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.FragmentTrackDetail
 import timber.log.Timber

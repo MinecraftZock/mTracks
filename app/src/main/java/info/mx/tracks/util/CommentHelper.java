@@ -17,12 +17,12 @@ import com.robotoworks.mechanoid.db.SQuery.Op;
 import java.util.Locale;
 
 import info.mx.tracks.BuildConfig;
-import info.mx.tracks.MxCoreApplication;
+import info.mx.core.MxCoreApplication;
 import info.mx.tracks.R;
-import info.mx.tracks.prefs.MxPreferences;
-import info.mx.tracks.sqlite.MxInfoDBContract.Ratings;
-import info.mx.tracks.sqlite.RatingsRecord;
-import info.mx.tracks.sqlite.TracksRecord;
+import info.mx.core_generated.prefs.MxPreferences;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Ratings;
+import info.mx.core_generated.sqlite.RatingsRecord;
+import info.mx.core_generated.sqlite.TracksRecord;
 
 public class CommentHelper {
 

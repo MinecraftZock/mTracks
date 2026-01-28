@@ -27,7 +27,7 @@ import info.hannes.commonlib.DateHelper.shortWeekdays
 import info.hannes.commonlib.LocationHelper.getFormatDistance
 import info.hannes.mxadmin.service.DataManagerAdmin
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
@@ -35,10 +35,10 @@ import info.mx.tracks.common.SecHelper
 import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.common.getStageValues
 import info.mx.tracks.databinding.FragmentTrackDetailBinding
-import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
+import info.mx.core_generated.sqlite.TrackstageRecord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject

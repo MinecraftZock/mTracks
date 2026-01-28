@@ -9,7 +9,7 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import timber.log.Timber
 
 abstract class FragmentUpDown : FragmentBase() {
