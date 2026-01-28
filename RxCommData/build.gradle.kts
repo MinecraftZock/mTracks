@@ -1,6 +1,5 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
 }
 
 android {
@@ -26,7 +25,7 @@ android {
             isMinifyEnabled = false
             proguardFiles.addAll(
                 listOf(
-                    getDefaultProguardFile("proguard-android.txt"),
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
                     file("proguard-RxCommLib.pro"),
                 ),
             )

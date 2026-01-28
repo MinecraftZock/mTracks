@@ -16,9 +16,8 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("com.github.triplet.play")
-    id("kotlin-android")
     id("com.google.devtools.ksp")
+    id("com.github.triplet.play")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -50,6 +49,11 @@ val unixTime = "UNIX_TIME_CREATED"
 
 android {
     namespace = "info.mx.tracks"
+
+    androidResources {
+        generateLocaleConfig = false
+    }
+
     defaultConfig {
         compileSdk = 36
         targetSdk { version = release(36) }
@@ -76,7 +80,7 @@ android {
 
         sourceSets {
             getByName("androidTest") {
-                assets.srcDirs(files("$projectDir/schemas"))
+                assets.setSrcDirs(listOf(files("$projectDir/schemas")))
             }
         }
     }
