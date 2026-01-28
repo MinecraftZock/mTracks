@@ -13,13 +13,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.databinding.ContentActivityTracksTabsBinding
 import info.mx.tracks.service.RecalculateDistance
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import timber.log.Timber
 
 /**

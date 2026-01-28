@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 
 import info.hannes.commonlib.utils.ViewUtils
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.R
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 
 class MapButtonsOverlay(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 

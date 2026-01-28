@@ -14,8 +14,8 @@ import info.mx.tracks.MxApplication.Companion.isGoogleTests
 import info.mx.tracks.R
 import info.mx.tracks.common.StageHelper
 import info.mx.tracks.react.ErrorCommand
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
+import info.mx.core_generated.sqlite.TrackstageRecord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject

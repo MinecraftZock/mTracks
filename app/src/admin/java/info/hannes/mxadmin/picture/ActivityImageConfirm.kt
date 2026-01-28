@@ -16,8 +16,8 @@ import info.mx.comAdminlib.retrofit.service.model.Approved
 import info.mx.comlib.retrofit.service.data.BaseSingleObserver
 import info.mx.tracks.R
 import info.mx.tracks.image.ActivityBaseImageSlider
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.PicturesRecord
 import org.koin.android.ext.android.inject
 
 class ActivityImageConfirm : ActivityBaseImageSlider() {

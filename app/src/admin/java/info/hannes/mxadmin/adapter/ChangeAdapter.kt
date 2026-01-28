@@ -16,8 +16,8 @@ import info.mx.comlib.retrofit.service.data.Data
 import info.mx.comlib.retrofit.service.data.DataSingleObserver
 import info.mx.tracks.R
 import info.mx.tracks.common.SecHelper
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.TracksRecord
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.lang.reflect.InvocationTargetException

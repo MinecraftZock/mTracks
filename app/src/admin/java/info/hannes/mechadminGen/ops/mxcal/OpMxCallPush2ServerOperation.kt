@@ -17,7 +17,7 @@ import info.hannes.mechadminGen.sqlite.MxSeriesTrackRecord
 import info.hannes.mechadminGen.sqlite.MxTrackRecord
 import info.hannes.mechadminGen.sqlite.QuellFileRecord
 import info.hannes.retrofit.ApiAdminClient
-import info.mx.tracks.util.Wait.delay
+import info.mx.core.util.Wait.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

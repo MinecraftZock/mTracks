@@ -29,7 +29,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.libraries.places.api.Places
-import info.hannes.commonlib.LocationHelper
+import info.mx.commonlib.LocationHelper
 import info.mx.tracks.R
 import info.mx.tracks.adapter.AdapterBitmaps
 import info.mx.tracks.common.parcelable

@@ -17,18 +17,18 @@ import androidx.core.view.WindowInsetsCompat
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.mx.tracks.ActivityBase
-import info.mx.tracks.MxCoreApplication.Companion.isAdmin
+import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.tracks.R
 import info.mx.tracks.adapter.ArrayAdapterRightAlign
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.databinding.ActivityFilterBinding
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService.Companion.restartService
-import info.mx.tracks.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.tracks.sqlite.CountryRecord
-import info.mx.tracks.sqlite.MxInfoDBContract.Country
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.CountryRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Country
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import timber.log.Timber
 
 class ActivityFilter : ActivityBase() {

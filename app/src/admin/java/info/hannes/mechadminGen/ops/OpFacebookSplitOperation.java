@@ -15,9 +15,9 @@ import java.util.List;
 import info.mx.tracks.common.SecHelper;
 import timber.log.Timber;
 import info.mx.tracks.ops.OpSyncFromServerOperation;
-import info.mx.tracks.sqlite.MxInfoDBContract;
-import info.mx.tracks.sqlite.TracksRecord;
-import info.mx.tracks.sqlite.TrackstageRecord;
+import info.mx.core_generated.sqlite.MxInfoDBContract;
+import info.mx.core_generated.sqlite.TracksRecord;
+import info.mx.core_generated.sqlite.TrackstageRecord;
 
 public class OpFacebookSplitOperation extends AbstractOpFacebookSplitOperation {
     @Override

@@ -18,10 +18,10 @@ import info.hannes.retrofit.service.model.StatusResponse
 import info.mx.comlib.retrofit.service.data.BaseObserver
 import info.mx.comlib.retrofit.service.data.BaseSingleObserver
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.ops.AbstractOpPostImagesOperation
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.PicturesRecord
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.ops.AbstractOpPostImagesOperation
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 
 object ApproveImageAction {

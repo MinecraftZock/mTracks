@@ -16,8 +16,8 @@ import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.common.PictureHelper
 import info.mx.tracks.databinding.FragmentImageSliderBinding
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.PicturesRecord
 
 class FragmentImage : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private var imageRestId: Long = 0

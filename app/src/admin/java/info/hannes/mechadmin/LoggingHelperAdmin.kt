@@ -1,6 +1,6 @@
 package info.hannes.mechadmin
 
-import info.mx.tracks.common.ImportStatusMessage
+import info.mx.core.common.ImportStatusMessage
 import info.mx.tracks.ops.OpSyncFromServerOperation
 
 object LoggingHelperAdmin {

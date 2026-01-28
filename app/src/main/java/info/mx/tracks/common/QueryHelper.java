@@ -3,14 +3,14 @@ package info.mx.tracks.common;
 import com.robotoworks.mechanoid.db.SQuery;
 import com.robotoworks.mechanoid.db.SQuery.Op;
 
-import info.mx.tracks.MxCoreApplication;
-import info.mx.tracks.prefs.MxPreferences;
-import info.mx.tracks.sqlite.MxInfoDBContract.Country;
-import info.mx.tracks.sqlite.MxInfoDBContract.Favorits;
-import info.mx.tracks.sqlite.MxInfoDBContract.Pictures;
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges;
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage;
-import info.mx.tracks.sqlite.MxInfoDBOpenHelper;
+import info.mx.core.MxCoreApplication;
+import info.mx.core_generated.prefs.MxPreferences;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Country;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Favorits;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Pictures;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage;
+import info.mx.core.sqlite.MxInfoDBOpenHelper;
 import timber.log.Timber;
 
 public class QueryHelper {

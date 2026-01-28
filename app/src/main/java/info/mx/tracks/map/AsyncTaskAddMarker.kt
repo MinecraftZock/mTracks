@@ -7,8 +7,8 @@ import com.androidmapsextensions.MarkerOptions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TrackMap
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core.sqlite.TrackMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent

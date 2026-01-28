@@ -15,10 +15,10 @@ import info.hannes.mechadminGen.sqlite.MxAdminDBContract.TrackstageBrother
 import info.hannes.mechadminGen.sqlite.TrackstageBrotherRecord
 import info.mx.comlib.retrofit.CommApiClient
 import info.mx.comlib.util.RetroFileHelper
-import info.mx.tracks.common.DistanceHelper.calcDistance2TracksCrypt
-import info.mx.tracks.koin.CoreKoinComponent
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core.common.DistanceHelper.calcDistance2TracksCrypt
+import info.mx.core.koin.CoreKoinComponent
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.TracksRecord
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.BufferedInputStream

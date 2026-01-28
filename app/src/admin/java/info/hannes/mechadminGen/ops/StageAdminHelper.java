@@ -9,12 +9,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import timber.log.Timber;
-import info.mx.tracks.common.LoggingHelper;
+import info.mx.core.common.LoggingHelper;
 import info.mx.tracks.common.SecHelper;
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks;
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage;
-import info.mx.tracks.sqlite.TracksRecord;
-import info.mx.tracks.sqlite.TrackstageRecord;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks;
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage;
+import info.mx.core_generated.sqlite.TracksRecord;
+import info.mx.core_generated.sqlite.TrackstageRecord;
 
 public class StageAdminHelper {
 

@@ -18,11 +18,11 @@ import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.TrackingApplication.Companion.getVersionName
 import info.mx.tracks.ActivityBase
 import info.mx.tracks.BuildConfig
-import info.mx.tracks.MxCoreApplication.Companion.readSettings
-import info.mx.tracks.MxCoreApplication.Companion.trackEvent
+import info.mx.core.MxCoreApplication.Companion.readSettings
+import info.mx.core.MxCoreApplication.Companion.trackEvent
 import info.mx.tracks.R
 import info.mx.tracks.databinding.ActivitySettingBinding
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 
 class ActivitySetting : ActivityBase() {
 

@@ -23,10 +23,10 @@ import info.mx.tracks.MxApplication.Companion.isGoogleTests
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.StageHelper
-import info.mx.tracks.ops.AbstractOpSyncFromServerOperation
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
-import info.mx.tracks.sqlite.TracksRecord
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
+import info.mx.core_generated.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.stage.StageViewBinder
 import org.koin.android.ext.android.inject
 import retrofit2.Response

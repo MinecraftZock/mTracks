@@ -47,7 +47,7 @@ import info.hannes.mechadminGen.sqlite.MxCalContract.QuellFile
 import info.hannes.mechadminGen.sqlite.QuellFileRecord
 import info.mx.tracks.MxAccessApplication.Companion.aadhresUBase
 import info.mx.tracks.R
-import info.mx.tracks.common.ImportStatusMessage
+import info.mx.core.common.ImportStatusMessage
 import info.mx.tracks.ops.OpSyncFromServerOperation
 import timber.log.Timber
 

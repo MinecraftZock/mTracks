@@ -2,7 +2,7 @@ package info.hannes.mxadmin
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import info.hannes.crashlytic.CrashlyticsTree
-import info.mx.tracks.util.NetworkUtils
+import info.mx.core.util.NetworkUtils
 import timber.log.Timber
 
 class MxAppAdmin : MxAdminBaseApp() {

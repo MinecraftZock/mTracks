@@ -26,7 +26,7 @@ import info.hannes.timber.DebugFormatTree
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.map.MapIdlingResource
-import info.mx.tracks.ops.google.PictureIdlingResource
+import info.mx.core.ops.google.PictureIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.hamcrest.Matcher
 import org.junit.After

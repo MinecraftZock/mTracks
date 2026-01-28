@@ -9,11 +9,11 @@ import info.hannes.mechadmin.LoggingHelperAdmin
 import info.hannes.mechadminGen.sqlite.MxCalContract.MxTrack
 import info.hannes.mechadminGen.sqlite.MxTrackRecord
 import info.mx.comlib.retrofit.CommApiClient
-import info.mx.tracks.MxCoreApplication.Companion.mxInfo
-import info.mx.tracks.ops.ImportHelper.getLatLngFromAddress
-import info.mx.tracks.rest.LatLng
-import info.mx.tracks.rest.PostLatLngRequest
-import info.mx.tracks.util.Wait.delay
+import info.mx.core.MxCoreApplication.Companion.mxInfo
+import info.mx.core.ops.ImportHelper.getLatLngFromAddress
+import info.mx.core_generated.rest.LatLng
+import info.mx.core_generated.rest.PostLatLngRequest
+import info.mx.core.util.Wait.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber

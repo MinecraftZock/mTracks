@@ -6,8 +6,8 @@ import android.net.Uri
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import io.reactivex.functions.BiFunction
 

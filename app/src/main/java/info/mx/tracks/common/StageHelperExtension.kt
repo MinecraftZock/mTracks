@@ -12,10 +12,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracks
-import info.mx.tracks.sqlite.MxInfoDBContract.Trackstage
-import info.mx.tracks.sqlite.TrackstageRecord
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
+import info.mx.core_generated.sqlite.TrackstageRecord
 import timber.log.Timber
 
 object StageHelperExtension {

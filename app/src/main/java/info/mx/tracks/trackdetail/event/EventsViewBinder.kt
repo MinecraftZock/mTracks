@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.tracks.R
-import info.mx.tracks.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.MxInfoDBContract
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date

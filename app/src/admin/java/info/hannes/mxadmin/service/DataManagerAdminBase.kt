@@ -2,7 +2,7 @@ package info.hannes.mxadmin.service
 
 import info.mx.comlib.data.MemoryCache
 import info.mx.tracks.MxAccessApplication.Companion.aadhresUBase
-import info.mx.tracks.data.DataManagerBase
+import info.mx.core.data.DataManagerBase
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single

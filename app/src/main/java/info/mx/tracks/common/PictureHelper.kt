@@ -9,11 +9,11 @@ import android.provider.MediaStore
 import android.widget.ImageView
 import com.robotoworks.mechanoid.ops.Ops
 import info.mx.tracks.R
-import info.mx.tracks.ops.AbstractOpDownLoadImageOperation
-import info.mx.tracks.ops.AbstractOpResetLocalImagesOperation
-import info.mx.tracks.ops.google.PictureIdlingResource
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.sqlite.PicturesRecord
+import info.mx.core_generated.ops.AbstractOpDownLoadImageOperation
+import info.mx.core_generated.ops.AbstractOpResetLocalImagesOperation
+import info.mx.core.ops.google.PictureIdlingResource
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.PicturesRecord
 import timber.log.Timber
 import java.io.File
 import kotlin.math.roundToInt

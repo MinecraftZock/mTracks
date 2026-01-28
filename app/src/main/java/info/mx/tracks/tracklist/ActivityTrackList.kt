@@ -22,10 +22,10 @@ import info.mx.tracks.common.FragmentEmpty
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.databinding.ActivityTracksListBinding
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.settings.ActivitySetting
-import info.mx.tracks.sqlite.MxInfoDBContract.Tracksges
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentTrackDetail

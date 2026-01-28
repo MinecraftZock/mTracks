@@ -3,7 +3,7 @@ package info.hannes.mxadmin.base
 import android.os.Bundle
 import com.robotoworks.mechanoid.ops.OperationServiceListener
 import com.robotoworks.mechanoid.ops.Ops
-import info.mx.tracks.MxCoreApplication.Companion.trackActivity
+import info.mx.core.MxCoreApplication.Companion.trackActivity
 import info.mx.tracks.base.ActivityRx
 import info.mx.tracks.common.OperationErrorPeerCertificateServiceListener
 

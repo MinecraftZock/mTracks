@@ -9,10 +9,10 @@ import android.widget.EditText
 import android.widget.Toast
 import info.mx.tracks.BuildConfig
 import info.mx.tracks.MxApplication.Companion.isGoogleTests
-import info.mx.tracks.MxCoreApplication.Companion.doSync
+import info.mx.core.MxCoreApplication.Companion.doSync
 import info.mx.tracks.R
-import info.mx.tracks.sqlite.EventsRecord
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.EventsRecord
+import info.mx.core_generated.sqlite.TracksRecord
 import timber.log.Timber
 import java.util.Calendar
 

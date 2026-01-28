@@ -8,7 +8,7 @@ import java.io.File
 
 import info.hannes.mechadminGen.sqlite.PictureStageRecord
 import info.mx.tracks.R
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import timber.log.Timber
 import kotlin.math.roundToInt
 

@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import info.hannes.commonlib.LocationHelper
+import info.mx.commonlib.LocationHelper
 import info.hannes.commonlib.dialog.BackDialog
 import info.mx.tracks.ActivityBase
 import info.mx.tracks.R
@@ -27,11 +27,11 @@ import info.mx.tracks.common.FragmentUpDown
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.navigation.AppNavigationMenu
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.settings.ActivityFilter
 import info.mx.tracks.settings.ActivitySetting
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.tracklist.ActivityTrackList

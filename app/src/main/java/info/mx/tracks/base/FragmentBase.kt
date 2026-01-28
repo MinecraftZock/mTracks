@@ -4,7 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
-import info.mx.tracks.MxCoreApplication
+import info.mx.core.MxCoreApplication
 import info.mx.tracks.tools.PermissionHelper
 import org.koin.android.ext.android.inject
 

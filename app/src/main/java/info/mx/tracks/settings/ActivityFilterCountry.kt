@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityRx
 import info.mx.tracks.databinding.ActivityFilterCountryBinding
-import info.mx.tracks.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences
 
 class ActivityFilterCountry : ActivityRx() {
 

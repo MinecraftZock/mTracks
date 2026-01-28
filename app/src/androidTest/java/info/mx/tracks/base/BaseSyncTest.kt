@@ -6,10 +6,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import info.hannes.changelog.ChangeLog.Companion.VERSION_KEY
-import info.mx.tracks.ops.ImportIdlingResource
-import info.mx.tracks.ops.RecalculateIdlingResource
-import info.mx.tracks.prefs.MxPreferences
-import info.mx.tracks.prefs.MxPreferences.PREFERENCES_NAME
+import info.mx.core.ops.ImportIdlingResource
+import info.mx.core.ops.RecalculateIdlingResource
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.prefs.MxPreferences.PREFERENCES_NAME
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -11,8 +11,8 @@ import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.mxadmin.adapter.ChangeAdapter
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.sqlite.MxInfoDBContract
-import info.mx.tracks.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.core_generated.sqlite.TracksRecord
 
 class FragmentChanges : FragmentUpDown() {
 
