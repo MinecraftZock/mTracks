@@ -105,9 +105,10 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         mxDatabase.capturedLatLngDao().insertAll(capturedLatLng)
 
         //reset countries to show
-        Timber.i("CountriesShow firstTimeLocation=${MxPreferences.getInstance().firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()}")
+        val countCountries = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
+        Timber.i("CountriesShow $countCountries firstTimeLocation=${MxPreferences.getInstance().firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()} $location")
         if (!MxPreferences.getInstance().firstTimeLocation) {
-            if (SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI) > 2) {
+            if (countCountries > 2) {
                 if (location.isUSA()) {
                     hideEurope(context)
                 } else if (location.isEurope()) {

@@ -3,7 +3,6 @@ package info.mx.core.util
 import android.content.Context
 import android.location.Location
 import com.robotoworks.mechanoid.db.SQuery
-import info.mx.core.MxCoreApplication
 import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.core.common.CountryTools
 import info.mx.core_generated.sqlite.CountryRecord
@@ -14,9 +13,11 @@ fun Location.isUSA(): Boolean {
     return this.longitude > -179 && this.longitude < -31
 }
 
-fun Location.isEurope(): Boolean {
-    Timber.d("isEurope=${MxCoreApplication.isEmulator || (this.longitude > -31 && this.longitude < 65)} longitude=${this.longitude}")
-    return MxCoreApplication.isEmulator || (this.longitude > -31 && this.longitude < 65)
+fun Location.isEurope(isEmulator: Boolean = false): Boolean {
+//    isEmulator = MxCoreApplication.isEmulator
+//    Timber.d("(this.longitude > -31 && this.longitude < 65) longitude=${this.longitude}")
+//    MxCoreApplication.isEmulator ||
+    return (this.longitude > -31 && this.longitude < 65)
 }
 
 object LocationHelper {
