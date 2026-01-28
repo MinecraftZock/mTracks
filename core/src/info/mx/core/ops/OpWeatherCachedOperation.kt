@@ -231,17 +231,17 @@ class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoin
         gson: Gson,
         resp: GetWeatherDaily2Result?
     ) {
-        if (resp != null && resp.list != null) {
-            for (weatherDay in resp.list) {
+        if (resp != null) {
+            for (weatherDay in resp.weatherList) {
                 var weatherRec = SQuery.newQuery()
-                    .expr(MxInfoDBContract.Weather.DT, SQuery.Op.EQ, weatherDay.dt)
+                    .expr(MxInfoDBContract.Weather.DT, SQuery.Op.EQ, weatherDay.dt!!)
                     .expr(MxInfoDBContract.Weather.TYPE, SQuery.Op.EQ, "D")
                     .expr(MxInfoDBContract.Weather.TRACK_CLIENT_ID, SQuery.Op.EQ, trackClientId)
                     .selectFirst<WeatherRecord>(MxInfoDBContract.Weather.CONTENT_URI)
                 if (weatherRec == null) {
                     weatherRec = WeatherRecord()
                 }
-                weatherRec.dt = weatherDay.dt.toLong()
+                weatherRec.dt = weatherDay.dt!!.toLong()
                 weatherRec.type = "D"
                 weatherRec.content = gson.toJson(weatherDay)
                 weatherRec.trackClientId = trackClientId
@@ -325,9 +325,6 @@ class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoin
                     resp = response.readAsText()
                 }
                 Timber.w("${e.message} $resp")
-                //                if (i == MAX_LOOP) {
-                //                    throw new ServiceException(e);
-                //                }
             } catch (e: Exception) {
                 var resp = ""
                 if (response != null) {
