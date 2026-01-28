@@ -121,6 +121,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         RecalculateIdlingResource.decrement()
         val sendNewDistance = Intent(DISTANCE_NEW)
+        sendNewDistance.setPackage(context.packageName)
         context.sendBroadcast(sendNewDistance)
     }
 

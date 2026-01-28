@@ -287,6 +287,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     private fun calcDistance(context: Context, location: Location) {
         val recalcTracks = Intent(RECALC_TRACKS)
+        recalcTracks.setPackage(context.packageName)
         recalcTracks.putExtra(LOCATION, location)
         recalcTracks.putExtra(SOURCE, "Sync")
         context.sendBroadcast(recalcTracks)

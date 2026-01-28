@@ -3,7 +3,6 @@ import java.util.Properties
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
 }
 
 // TODO redundant code, same like MxApp
@@ -26,7 +25,7 @@ android {
         compileSdk = 36
         consumerProguardFiles.addAll(
             listOf(
-                file("proguard-RxCommLib.pro")
+                file("proguard-RxCommLib-consumer.pro")
             )
         )
 
@@ -47,7 +46,7 @@ android {
             isMinifyEnabled = false
             proguardFiles.addAll(
                 listOf(
-                    getDefaultProguardFile("proguard-android.txt"),
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
                     file("proguard-RxCommLib.pro"),
                 ),
             )
