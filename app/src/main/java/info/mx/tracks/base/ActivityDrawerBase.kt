@@ -17,7 +17,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuProvider
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.navigation.NavigationView
 import info.mx.commonlib.LocationHelper
 import info.hannes.commonlib.dialog.BackDialog
@@ -65,14 +67,25 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
         editNameDialog.show(fm, BACK)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return if (itemId == android.R.id.home) {
-            showBackDialog()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
+    override fun onStart() {
+        super.onStart()
+
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: android.view.Menu, menuInflater: android.view.MenuInflater) {
+                // Menu creation handled by base class or subclass
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        showBackDialog()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 
     private fun initToolbar() {
