@@ -79,9 +79,6 @@ android {
                 assets.srcDirs(files("$projectDir/schemas"))
             }
         }
-//        sourceSets {
-//            androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
-//        }
     }
 
     ksp {
@@ -197,7 +194,6 @@ android {
             java.srcDirs("src/main/java", "../core/src", "../core/src-gen")
             res.srcDirs("src/main/res", "../core/res")
             assets.srcDirs("assets", "../core/assets")
-            //disable automatic ndk-build
         }
     }
 
