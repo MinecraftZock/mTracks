@@ -235,7 +235,7 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-navigation:$koinVersion")
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
-    val work_version = "2.11.0"
+    val work_version = "2.11.1"
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
