@@ -239,8 +239,6 @@ dependencies {
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
-    implementation("androidx.multidex:multidex:2.0.1")
-
     "adminImplementation"("org.jsoup:jsoup:1.22.1")
     implementation("com.github.hannesa2:android-maps-extensions:3.2.1")
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.7.1")
