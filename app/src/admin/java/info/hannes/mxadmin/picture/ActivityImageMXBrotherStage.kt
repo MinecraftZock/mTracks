@@ -3,6 +3,8 @@ package info.hannes.mxadmin.picture
 import android.database.Cursor
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.mechadminGen.sqlite.MxAdminDBContract
@@ -42,27 +44,33 @@ class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
         super.onPause()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_image_confirm, menu)
-        return true
-    }
+    override fun onStart() {
+        super.onStart()
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_image_confirm).isVisible = false
-        val showAllItem = menu.findItem(R.id.menu_image_show_all)
-        showAllItem.isChecked = showOnlyInteresting
-        showAllItem.title = if (showAllItem.isChecked) "interesting" else "not interesting"
-        return super.onPrepareOptionsMenu(menu)
-    }
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: android.view.MenuInflater) {
+                menuInflater.inflate(R.menu.menu_image_confirm, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val i = item.itemId
-        if (i == R.id.menu_image_confirm) {
-        } else if (i == R.id.menu_image_show_all) {
-            showOnlyInteresting = !showOnlyInteresting
-            restartThumbsLoader()
-        }
-        return super.onOptionsItemSelected(item)
+            override fun onPrepareMenu(menu: Menu) {
+                menu.findItem(R.id.menu_image_confirm).isVisible = false
+                val showAllItem = menu.findItem(R.id.menu_image_show_all)
+                showAllItem.isChecked = showOnlyInteresting
+                showAllItem.title = if (showAllItem.isChecked) "interesting" else "not interesting"
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_image_show_all -> {
+                        showOnlyInteresting = !showOnlyInteresting
+                        restartThumbsLoader()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor?>, cursor: Cursor?) {
