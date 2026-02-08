@@ -65,7 +65,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         adapterFragmentsTab = AdapterFragmentsTab(requireActivity(), requireActivity(), requireArguments())
 
         binding.viewPager.adapter = adapterFragmentsTab
-        binding.viewPager.setCurrentItem(MxPreferences.getInstance().tabDetailPosition, false)
+        binding.viewPager.setCurrentItem(MxPreferences.instance.tabDetailPosition, false)
 
         // Setup TabLayout with ViewPager2
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
@@ -75,7 +75,7 @@ class FragmentTrackDetailTab : FragmentUpDown(), LoaderManager.LoaderCallbacks<C
         // Setup page change callback
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                MxPreferences.getInstance().edit().putTabDetailPosition(position).apply()
+                MxPreferences.instance.edit().putTabDetailPosition(position).apply()
             }
 
         })

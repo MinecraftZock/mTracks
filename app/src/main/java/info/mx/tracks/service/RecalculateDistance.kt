@@ -104,8 +104,8 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         //reset countries to show
         val countCountries = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
-        Timber.i("CountriesShow $countCountries firstTimeLocation=${MxPreferences.getInstance().firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()} $location")
-        if (!MxPreferences.getInstance().firstTimeLocation) {
+        Timber.i("CountriesShow $countCountries firstTimeLocation=${MxPreferences.instance.firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()} $location")
+        if (!MxPreferences.instance.firstTimeLocation) {
             if (countCountries > 2) {
                 if (location.isUSA()) {
                     LocationHelper.hideEurope(context)
@@ -115,7 +115,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
                     LocationHelper.hideAmerica(context)
                 }
                 QueryHelper.resetFilter()
-                MxPreferences.getInstance().edit().putFirstTimeLocation(true).commit()
+                MxPreferences.instance.firstTimeLocation = true
             }
         }
 

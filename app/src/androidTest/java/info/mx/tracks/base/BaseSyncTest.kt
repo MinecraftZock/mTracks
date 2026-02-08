@@ -9,7 +9,7 @@ import info.hannes.changelog.ChangeLog.Companion.VERSION_KEY
 import info.mx.core.ops.ImportIdlingResource
 import info.mx.core.ops.RecalculateIdlingResource
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.core_generated.prefs.MxPreferences.PREFERENCES_NAME
+import info.mx.core_generated.prefs.MxPreferences.Companion.PREFERENCES_NAME
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

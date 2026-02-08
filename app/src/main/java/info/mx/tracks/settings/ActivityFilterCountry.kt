@@ -48,7 +48,7 @@ class ActivityFilterCountry : ActivityRx() {
     override fun onPause() {
         super.onPause()
         // force a refresh of markers in map
-        MxPreferences.getInstance().edit().putSearchOpenDi(MxPreferences.getInstance().searchOpenDi)
+        MxPreferences.instance.edit().putSearchOpenDi(MxPreferences.instance.searchOpenDi)
             .commit()
     }
 }

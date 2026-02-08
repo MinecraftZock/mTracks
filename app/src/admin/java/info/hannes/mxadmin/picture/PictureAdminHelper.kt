@@ -17,7 +17,7 @@ internal object PictureAdminHelper {
     fun checkAndSetImage(context: Context, record: PictureStageRecord, imageView: ImageView, wishSize: Int): Boolean {
         var res = false
         val thumb = wishSize == context.resources.getDimension(R.dimen.thumbnail_size_dp).roundToInt()
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         var size = wishSize
 
         // crop image if too big

@@ -29,7 +29,7 @@ class AdapterTracksSort(private val context: Context) : BaseAdapter() {
     private val showKm: Boolean
 
     init {
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         showKm = prefs.unitsKm
         tracksCached = arrayOfNulls(0)
     }

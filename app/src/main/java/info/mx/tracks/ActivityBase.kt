@@ -91,9 +91,9 @@ abstract class ActivityBase : ActivityRx() {
         // during share url this values are not delivered
         if (intent.extras != null && !intent.extras!!.containsKey(CONTENT_URI)) {
             bundle = Bundle(intent.extras)
-            bundle.putString(CONTENT_URI, MxPreferences.getInstance().restoreContentUri)
+            bundle.putString(CONTENT_URI, MxPreferences.instance.restoreContentUri)
             if (!intent.extras!!.containsKey(RECORD_ID_LOCAL)) {
-                bundle.putLong(RECORD_ID_LOCAL, MxPreferences.getInstance().restoreID)
+                bundle.putLong(RECORD_ID_LOCAL, MxPreferences.instance.restoreID)
             }
         }
         return bundle

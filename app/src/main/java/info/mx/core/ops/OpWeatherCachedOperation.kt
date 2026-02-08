@@ -131,7 +131,7 @@ class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoin
         request.setLangParam(Locale.getDefault().language)
         requestAnonym.setCntParam(DAYS_DOWNLOAD)
         requestAnonym.setLangParam(Locale.getDefault().language)
-        if (MxPreferences.getInstance().unitsKm) {
+        if (MxPreferences.instance.unitsKm) {
             request.setUnitsParam(METRIC)
             requestAnonym.setUnitsParam(METRIC)
         } else {
@@ -184,7 +184,7 @@ class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoin
             val webClient = mxInfo
             val requestBody = PostWeatherRequest(
                 trackRecord.restId,
-                if (MxPreferences.getInstance().unitsKm) "metric" else "imperial",
+                if (MxPreferences.instance.unitsKm) "metric" else "imperial",
                 Locale.getDefault().toString(),
                 content
             )
@@ -286,7 +286,7 @@ class OpWeatherCachedOperation : AbstractOpGetWeatherCachedOperation(), CoreKoin
         val trackRecord = TracksRecord.get(trackClientId)
             ?: return EMPTY_RESULT_FROM_MX
         return try {
-            val units = if (MxPreferences.getInstance().unitsKm) "metric" else "imperial"
+            val units = if (MxPreferences.instance.unitsKm) "metric" else "imperial"
             val picturesResponse = dataManagerCore
                 .getWeather4TrackSync(trackRecord.restId, units, Locale.getDefault().toString())
             picturesResponse.checkResponseCodeOk()

@@ -459,7 +459,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                     FileHelper.copyFile(sourceFile, localCopy)
                     val picRecord = PicturesRecord()
                     picRecord.localfile = localCopy.absolutePath
-                    picRecord.username = MxPreferences.getInstance().username
+                    picRecord.username = MxPreferences.instance.username
                     picRecord.trackRestId = recordTrack!!.restId
                     picRecord.save()
                     val intentS = AbstractOpPostImagesOperation.newIntent()
@@ -528,8 +528,8 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         trackLoc!!.longitude = SecHelper.entcryptXtude(trackRec.longitude)
         binding.distanceContainer.trDetailDistance.tag = trackLoc
         binding.trDetailCoordinates.tag = trackLoc
-        val prefs = MxPreferences.getInstance()
-        if (prefs.firstTimeUse && !MxCoreApplication.isEmulator) {
+        val mxPreferences = MxPreferences.instance
+        if (mxPreferences.firstTimeUse && !MxCoreApplication.isEmulator) {
             MxCoreApplication.showDlgHtml(
                 requireActivity(),
                 Html.fromHtml(requireActivity().getString(R.string.firstime_title)),
@@ -544,7 +544,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
                             )
                 )
             )
-            prefs.edit().putFirstTimeUse(false).commit()
+            mxPreferences.firstTimeUse = false
         }
 
         if (permissionHelper.hasLocationPermission()) {

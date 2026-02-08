@@ -136,12 +136,12 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     override suspend fun checkToRepairOrSync() {
         applicationScope.async {
-            if (MxPreferences.getInstance().repairDB) {
+            if (MxPreferences.instance.repairDB) {
                 MxInfoDBOpenHelper.getDatabase()?.close()
                 val db = File(MxInfoDBOpenHelper.getDir(applicationContext))
 
                 db.delete()
-                MxPreferences.getInstance().edit().putRepairDB(false).commit()
+                MxPreferences.instance.edit().putRepairDB(false).commit()
             }
         }.await()
         OpGetRouteOperation.deleteOldRoutes()

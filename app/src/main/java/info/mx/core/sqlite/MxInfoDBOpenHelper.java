@@ -55,7 +55,7 @@ public class MxInfoDBOpenHelper extends AbstractMxInfoDBOpenHelper {
                 final String country = Locale.getDefault().getCountry();
                 final String defCountry = country.substring(0, country.length() < 2 ? country.length() : 2);
                 final ContentValues cvToShow = Country.newBuilder()
-                        .setCountry(defCountry.equals("") ? "DE" : defCountry) // TODO
+                        .setCountry(defCountry.isEmpty() ? "DE" : defCountry) // TODO
                         .setShow(1)
                         .getValues();
                 db.insert(MxInfoDBOpenHelper.Sources.COUNTRY, null, cvToShow);

@@ -13,7 +13,7 @@ import java.io.File
 class OpResetLocalImagesOperation : AbstractOpResetLocalImagesOperation() {
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         val res = OperationResult(OperationResult.RESULT_OK)
-        if (MxPreferences.getInstance().resetPictureStorageCount > MAX_RESET) {
+        if (MxPreferences.instance.resetPictureStorageCount > MAX_RESET) {
             return res
         }
         for (activeRecord in SQuery.newQuery()
@@ -33,8 +33,8 @@ class OpResetLocalImagesOperation : AbstractOpResetLocalImagesOperation() {
                 pictureRecord.save(false)
             }
         }
-        MxPreferences.getInstance().edit()
-            .putResetPictureStorageCount(MxPreferences.getInstance().resetPictureStorageCount + 1)
+        MxPreferences.instance.edit()
+            .putResetPictureStorageCount(MxPreferences.instance.resetPictureStorageCount + 1)
             .apply()
         return res
     }
