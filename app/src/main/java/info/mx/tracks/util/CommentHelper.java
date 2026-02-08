@@ -3,7 +3,6 @@ package info.mx.tracks.util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,24 +91,9 @@ public class CommentHelper {
         dlg.show();
     }
 
+    @SuppressLint("HardwareIds")
     private static String getAndroidID(Activity activity) {
         return Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
-    public static void doDeleteNote(final Context context, final int ratingId) {
-        final RatingsRecord record = RatingsRecord.get(ratingId);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            if (record != null) {
-                record.delete();
-            }
-        });
-        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-        });
-        final AlertDialog delDialog = builder.create();
-        delDialog.setMessage("Do you really want to delete this Note?"); // TODO
-        delDialog.show();
     }
 
 }

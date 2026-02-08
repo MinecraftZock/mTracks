@@ -221,7 +221,7 @@ class LocationJobService : JobService(), KoinComponent {
         fun scheduleJob(context: Context) {
             val applicationScope = MainScope()
             applicationScope.launch {
-                if (MxPreferences.getInstance().agreeTrackSurveillance) {
+                if (MxPreferences.instance.agreeTrackSurveillance) {
                     val serviceComponent = ComponentName(context, LocationJobService::class.java)
                     val builder = JobInfo.Builder(JOB_ID_DISTANCE, serviceComponent)
                     builder.setPersisted(true)

@@ -32,7 +32,7 @@ class OpPostImagesOperation : AbstractOpPostImagesOperation(), CoreKoinComponent
 
     override fun onExecute(context: OperationContext, args: Args): OperationResult {
         val bundle = Bundle()
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         return if (isOnline(context.applicationContext)) {
             var start: Long
 

@@ -127,7 +127,7 @@ class FragmentStageNewDetail : FragmentBase(), LoaderManager.LoaderCallbacks<Cur
         val trackAccess = if (trackRec.trackaccess == null) "" else trackRec.trackaccess
         binding.trDetailDifficult.rating = trackRec.schwierigkeit.toFloat()
         binding.distanceContainer.trDetailDistance.text = getFormatDistance(
-            MxPreferences.getInstance().unitsKm, trackRec.insDistance
+            MxPreferences.instance.unitsKm, trackRec.insDistance
                 .toInt()
         )
         binding.trLayoutDifficult.visibility = if (trackRec.schwierigkeit == 0L) View.GONE else View.VISIBLE

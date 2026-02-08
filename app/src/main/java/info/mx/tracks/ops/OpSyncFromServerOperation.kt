@@ -158,7 +158,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                 doCleanFromDecline()
 
-                MxPreferences.getInstance().edit().putLastSyncTime(System.currentTimeMillis()).apply()
+                MxPreferences.instance.edit().putLastSyncTime(System.currentTimeMillis()).apply()
             }
             LoggingHelper.setMessage("")
             val bundle = Bundle()
@@ -1271,16 +1271,16 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
 
         //reset countries to show
-        if (!MxPreferences.getInstance().firstTimeLocation && LocationHelper.isAmericaShown) {
+        if (!MxPreferences.instance.firstTimeLocation && LocationHelper.isAmericaShown) {
             //FIXME for US
             // when locations is confirmed and we are in US
             // currently to nothing. Flavor US should handle this
             Timber.d("We are not first time, let's keep America")
-        } else if (!MxPreferences.getInstance().firstTimeCountry) {
+        } else if (!MxPreferences.instance.firstTimeCountry) {
             if (SQuery.newQuery().count(Country.CONTENT_URI) > 2) {
                 Timber.d("We are not firstTimeCountry, hide Europe")
                 LocationHelper.hideAmerica(context)
-                MxPreferences.getInstance().edit().putFirstTimeCountry(true).commit()
+                MxPreferences.instance.firstTimeCountry = true
             } else {
                 Timber.d("We are not firstTimeCountry, Nothing to do with hide/shwow countries")
             }

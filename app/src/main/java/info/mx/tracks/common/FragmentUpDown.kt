@@ -20,7 +20,7 @@ abstract class FragmentUpDown : FragmentBase() {
     protected var nextLocalId = 0L
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        MxPreferences.getInstance().edit().putRestoreID(recordLocalId).putRestoreContentUri(contentUri).commit()
+        MxPreferences.instance.edit().putRestoreID(recordLocalId).putRestoreContentUri(contentUri).commit()
         savedInstanceState.putLong(RECORD_ID_LOCAL, recordLocalId)
         savedInstanceState.putString(CONTENT_URI, contentUri)
         super.onSaveInstanceState(savedInstanceState)
@@ -60,7 +60,7 @@ abstract class FragmentUpDown : FragmentBase() {
             fillMask(prevLocalId)
             recordLocalId = x
             requireArguments().putLong(RECORD_ID_LOCAL, recordLocalId)
-            MxPreferences.getInstance().edit().putRestoreID(recordLocalId).commit()
+            MxPreferences.instance.edit().putRestoreID(recordLocalId).commit()
         } else {
             Timber.w(getString(R.string.empty))
             Toast.makeText(activity, getString(R.string.empty), Toast.LENGTH_SHORT).show()
@@ -74,7 +74,7 @@ abstract class FragmentUpDown : FragmentBase() {
             fillMask(nextLocalId)
             recordLocalId = x
             requireArguments().putLong(RECORD_ID_LOCAL, recordLocalId)
-            MxPreferences.getInstance().edit().putRestoreID(recordLocalId).commit()
+            MxPreferences.instance.edit().putRestoreID(recordLocalId).commit()
         } else {
             Timber.w(getString(R.string.empty))
             Toast.makeText(activity, getString(R.string.empty), Toast.LENGTH_SHORT).show()

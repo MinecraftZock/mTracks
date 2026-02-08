@@ -52,7 +52,7 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
         if (recWeather.type == "D") {
             val timeDay = gson.fromJson(recWeather.content, TimeDay::class.java)
             var sdf = SimpleDateFormat("E dd.MM")
-            if (!MxPreferences.getInstance().unitsKm) {
+            if (!MxPreferences.instance.unitsKm) {
                 sdf = SimpleDateFormat("E MM.dd")
             }
             viewHolder.textDate.text = sdf.format(Date(timeDay.dt * 1000))
@@ -74,7 +74,7 @@ class WeatherCursorAdapter(val context: Context, cursor: Cursor?) : CursorRecycl
             Timber.d("TimeHour:%s", recWeather.content)
             val timeHour = gson.fromJson(recWeather.content, TimeHour::class.java)
             var sdf = SimpleDateFormat("E dd.MM\nHH:mm")
-            if (!MxPreferences.getInstance().unitsKm) {
+            if (!MxPreferences.instance.unitsKm) {
                 sdf = SimpleDateFormat("E MM.dd\nhh:mm a")
             }
             viewHolder.textDate.text = sdf.format(Date(timeHour.dt * 1000))

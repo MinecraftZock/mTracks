@@ -121,7 +121,7 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
         val header = navigationView.inflateHeaderView(R.layout.drawer_header)
         val textUserName = header.findViewById<TextView>(R.id.textUserName)
-        val mxPrefs = MxPreferences.getInstance()
+        val mxPrefs = MxPreferences.instance
         // trim if necessary
         if (mxPrefs.username.trim { it <= ' ' } != mxPrefs.username) {
             mxPrefs.edit().putUsername(mxPrefs.username.trim { it <= ' ' }).apply()
