@@ -7,6 +7,7 @@ import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.core.common.getLocationFromCountryList
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract
+import timber.log.Timber
 
 fun Location.isUSA(): Boolean {
     return this.longitude > -179 && this.longitude < -31
@@ -27,6 +28,7 @@ object LocationHelper {
             .count(MxInfoDBContract.Country.CONTENT_URI) == 1
 
     fun hideAmerica(context: Context) {
+        Timber.d("LocationHelper")
         val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
         for (country in countries) {
             val countryLocation = country.country.getLocationFromCountryList()
@@ -34,6 +36,23 @@ object LocationHelper {
                 countryLocation.latitude + countryLocation.longitude == 0.0 -> country.show = if (isAdmin) 1 else 0.toLong()
                 countryLocation.isUSA() -> country.show = 0
                 else -> country.show = 1
+            }
+            country.save(false)
+        }
+        context.contentResolver.notifyChange(MxInfoDBContract.Tracks.CONTENT_URI, null)
+    }
+
+    fun hideEurope(context: Context) {
+        Timber.d("LocationHelper")
+        val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
+        for (country in countries) {
+            val countryLocation = country.country.getLocationFromCountryList()
+            if (countryLocation.latitude + countryLocation.longitude == 0.0) {
+                country.show = (if (isAdmin) 1 else 0).toLong()
+            } else if (countryLocation.isEurope()) {
+                country.show = 0
+            } else {
+                country.show = 1
             }
             country.save(false)
         }
