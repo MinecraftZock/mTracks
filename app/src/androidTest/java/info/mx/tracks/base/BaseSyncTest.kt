@@ -8,7 +8,6 @@ import androidx.test.espresso.IdlingRegistry
 import info.hannes.changelog.ChangeLog.Companion.VERSION_KEY
 import info.mx.core.ops.ImportIdlingResource
 import info.mx.core.ops.RecalculateIdlingResource
-import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.prefs.MxPreferences.Companion.PREFERENCES_NAME
 import info.mx.core_generated.prefs.MxPreferences.Keys
 import org.junit.After
@@ -44,9 +43,9 @@ abstract class BaseSyncTest {
         val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
 
         sharedPreferences.edit()
-            .remove(MxPreferences.Keys.FIRST_TIME_USE)
-            .remove(MxPreferences.Keys.FIRST_TIME_LOCATION)
-            .remove(MxPreferences.Keys.FIRST_TIME_COUNTRY)
+            .remove(Keys.FIRST_TIME_USE)
+            .remove(Keys.FIRST_TIME_LOCATION)
+            .remove(Keys.FIRST_TIME_COUNTRY)
             .apply()
     }
 
@@ -55,7 +54,7 @@ abstract class BaseSyncTest {
         val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
 
         sharedPreferences.edit()
-            .remove(MxPreferences.Keys.LAST_OPEN_START_ACTIVITY)
+            .remove(Keys.LAST_OPEN_START_ACTIVITY)
             .apply()
     }
 
@@ -72,7 +71,7 @@ abstract class BaseSyncTest {
         val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
 
         sharedPreferences.edit()
-            .remove(MxPreferences.Keys.LAST_OPEN_START_ACTIVITY)
+            .remove(Keys.LAST_OPEN_START_ACTIVITY)
             .apply()
     }
 }
