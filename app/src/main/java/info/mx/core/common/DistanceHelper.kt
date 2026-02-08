@@ -110,7 +110,7 @@ object DistanceHelper {
         }
         if (distance2Track < MAX_DISTANCE) {
             textView.alpha = 1f
-            textView.text = getFormatDistance(MxPreferences.getInstance().unitsKm, distance2Track)
+            textView.text = getFormatDistance(MxPreferences.instance.unitsKm, distance2Track)
             Timber.d("Route:%s", textView.text.toString())
         }
         if (seconds2Track < MAX_SECONDS) {
@@ -122,7 +122,7 @@ object DistanceHelper {
 
     fun checkDistance4View(poiRecord: TracksgesRecord, viewDistance: TextView, myLoc: Location?) {
         val distanceOld = poiRecord.distance2location.toInt()
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         val distNew: Int
         if (myLoc != null) {
             viewDistance.visibility = View.VISIBLE
@@ -164,7 +164,7 @@ object DistanceHelper {
         myLoc: Location?
     ) {
         val distanceOld = poiRecord.distance2location.toInt()
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         val distNew: Int
         if (myLoc != null) {
             viewDistance.visibility = View.VISIBLE

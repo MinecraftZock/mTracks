@@ -48,9 +48,9 @@ class MapButtonsOverlay(context: Context, attrs: AttributeSet) : LinearLayout(co
 
         if (!isInEditMode) {
             trafficBtn.setBackgroundResource(
-                    if (MxPreferences.getInstance().mapTraffic) R.drawable.map_traffic_on_btn else R.drawable.map_traffic_off_btn)
+                    if (MxPreferences.instance.mapTraffic) R.drawable.map_traffic_on_btn else R.drawable.map_traffic_off_btn)
             clusterBtn.setBackgroundResource(
-                    if (MxPreferences.getInstance().mapCluster) R.drawable.map_cluster_on_btn else R.drawable.map_cluster_off_btn)
+                    if (MxPreferences.instance.mapCluster) R.drawable.map_cluster_on_btn else R.drawable.map_cluster_off_btn)
             setAdminView()
         }
 
@@ -74,13 +74,13 @@ class MapButtonsOverlay(context: Context, attrs: AttributeSet) : LinearLayout(co
     }
 
     fun toggleTrafficShow(): Boolean {
-        val trafficOn = !MxPreferences.getInstance().mapTraffic
+        val trafficOn = !MxPreferences.instance.mapTraffic
         trafficBtn.setBackgroundResource(if (trafficOn) R.drawable.map_traffic_on_btn else R.drawable.map_traffic_off_btn)
         return trafficOn
     }
 
     fun toggleClusterShow(): Boolean {
-        val clusterOn = !MxPreferences.getInstance().mapCluster
+        val clusterOn = !MxPreferences.instance.mapCluster
         clusterBtn.setBackgroundResource(if (clusterOn) R.drawable.map_cluster_on_btn else R.drawable.map_cluster_off_btn)
         return clusterOn
     }

@@ -35,7 +35,7 @@ class ActivityImageMXBrotherStage : ActivityBaseImageStageSlider() {
                 .expr(MxInfoDBContract.Tracks.REST_ID, SQuery.Op.EQ, trackBrother.trackRestId)
                 .selectFirst<TracksRecord>(MxInfoDBContract.Tracks.CONTENT_URI)
             if (track != null) {
-                MxPreferences.getInstance().edit().putRestoreID(track.id).commit()
+                MxPreferences.instance.edit().putRestoreID(track.id).commit()
                 Timber.d("set current Track: %s", track.trackname)
             }
         }

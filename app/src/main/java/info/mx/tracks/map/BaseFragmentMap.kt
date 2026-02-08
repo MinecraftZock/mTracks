@@ -289,7 +289,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
 
         binding.mapButtonsOverlay.setListener(this)
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
 
         prefMapLayerListener = OnSharedPreferenceChangeListener { _, key ->
             if (key == MxPreferences.Keys.MAP_TYPE) {
@@ -336,7 +336,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun setMapTypeFromPrefs() {
         if (map != null) {
-            when (MxPreferences.getInstance().mapType) {
+            when (MxPreferences.instance.mapType) {
                 0 -> map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
                 1 -> map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
                 2 -> map!!.mapType = GoogleMap.MAP_TYPE_TERRAIN
@@ -472,7 +472,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 }
             }
         })
-        map!!.isTrafficEnabled = MxPreferences.getInstance().mapTraffic
+        map!!.isTrafficEnabled = MxPreferences.instance.mapTraffic
         if (permissionHelper.hasLocationPermission()) {
             enableMyLocation()
         } else {
@@ -833,15 +833,15 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun zoomToInterestLocation() {
         if (interestLatLng != null && map != null) {
-            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(interestLatLng!!, MxPreferences.getInstance().mapZoom))
-            Timber.d("animateCameraInterest $interestLatLng ${MxPreferences.getInstance().mapZoom}")
+            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(interestLatLng!!, MxPreferences.instance.mapZoom))
+            Timber.d("animateCameraInterest $interestLatLng ${MxPreferences.instance.mapZoom}")
         }
     }
 
     private fun zoomToLocation(position: LatLng?) {
         if (position != null && map != null) {
-            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(position, MxPreferences.getInstance().mapZoom))
-            Timber.d("animateCameraLocation $position ${MxPreferences.getInstance().mapZoom}")
+            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(position, MxPreferences.instance.mapZoom))
+            Timber.d("animateCameraLocation $position ${MxPreferences.instance.mapZoom}")
         }
     }
 
@@ -852,8 +852,8 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 if (location != null) {
                     // Move the camera to the user's location if they are off-screen!
                     val latlong = LatLng(location.latitude, location.longitude)
-                    map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, MxPreferences.getInstance().mapZoom))
-                    Timber.d("animateCameraMy $latlong ${MxPreferences.getInstance().mapZoom}")
+                    map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, MxPreferences.instance.mapZoom))
+                    Timber.d("animateCameraMy $latlong ${MxPreferences.instance.mapZoom}")
                 }
             }
         }
@@ -917,7 +917,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     }
                 }
 
-                if (!MxPreferences.getInstance().mapCluster) {
+                if (!MxPreferences.instance.mapCluster) {
                     lifecycleScope.launch {
                         map?.clearTrackMarkers()
                         map?.addFilteredMarkersAsync(cursor, false)
@@ -1008,7 +1008,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onCameraChange(cameraPosition: CameraPosition) {
         if (cameraPosition.target.latitude != 0.0 && cameraPosition.target.longitude != 0.0) {
-            MxPreferences.getInstance().edit().putMapZoom(cameraPosition.zoom).putMapLatitude(cameraPosition.target.latitude.toFloat())
+            MxPreferences.instance.edit().putMapZoom(cameraPosition.zoom).putMapLatitude(cameraPosition.target.latitude.toFloat())
                 .putMapLongitude(cameraPosition.target.longitude.toFloat()).commit()
         }
     }
@@ -1035,7 +1035,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         val show = binding.mapButtonsOverlay.toggleTrafficShow()
         if (map != null) {
             map!!.isTrafficEnabled = show
-            MxPreferences.getInstance().edit().putMapTraffic(show).commit()
+            MxPreferences.instance.edit().putMapTraffic(show).commit()
         }
     }
 
@@ -1048,7 +1048,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     override fun onMapButtonClusterClicked() {
         val show = binding.mapButtonsOverlay.toggleClusterShow()
-        MxPreferences.getInstance().edit().putMapCluster(show).commit()
+        MxPreferences.instance.edit().putMapCluster(show).commit()
         updateClustering(show)
     }
 
@@ -1059,7 +1059,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 //                        map.getCameraPosition().zoom + 2)
                 //                map.animateCamera(newPos)
                 map!!.animateCamera(CameraUpdateFactory.zoomIn())
-                Timber.d("animateCameraZoomIn %s", MxPreferences.getInstance().mapZoom)
+                Timber.d("animateCameraZoomIn %s", MxPreferences.instance.mapZoom)
             }
         }
     }

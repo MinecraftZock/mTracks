@@ -68,7 +68,7 @@ class ActivityFilter : ActivityBase() {
             insets
         }
 
-        prefs = MxPreferences.getInstance()
+        prefs = MxPreferences.instance
         val spinnerAdapter = ArrayAdapterRightAlign.createFromResource(this, R.array.location_list, R.layout.spinner_right)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_item_right)
         binding.include.spinnerLocation.adapter = spinnerAdapter

@@ -90,7 +90,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
             get() = mxServerUrl!!.contains(".info")
 
         fun doSync(updateProvider: Boolean, force: Boolean, flavor: String) {
-            if (MxPreferences.getInstance().lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
+            if (MxPreferences.instance.lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
                 val intentM = AbstractOpPostRatingsOperation.newIntent()
                 Ops.execute(intentM)
 

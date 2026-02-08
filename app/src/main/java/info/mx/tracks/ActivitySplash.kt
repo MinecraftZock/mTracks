@@ -35,7 +35,7 @@ class ActivitySplash : ActivityBase() {
     }
 
     private fun openLastOpenedActivity() {
-        val lastOpenActivity = MxPreferences.getInstance().lastOpenStartActivity
+        val lastOpenActivity = MxPreferences.instance.lastOpenStartActivity
         if (lastOpenActivity != null && lastOpenActivity == ActivityMapExtension::class.java.simpleName) {
             startMXActivity(ActivityMapExtension::class.java)
         } else {

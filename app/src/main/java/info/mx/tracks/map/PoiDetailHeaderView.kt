@@ -340,7 +340,7 @@ class PoiDetailHeaderView(myContext: Context, attrs: AttributeSet?) : LinearLayo
         }
         setParentLayoutParams(PoiDetailStyle.DETAIL_TRACK)
         if (!isInEditMode) {
-            prefs = MxPreferences.getInstance()
+            prefs = MxPreferences.instance
         }
         viewTrackAccess = findViewById(R.id.tr_track_access)
         viewCamera = findViewById(R.id.tr_camera)
