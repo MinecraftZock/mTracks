@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.mx.core.MxCoreApplication
-import info.mx.core.common.getLocationFromCountryList
 import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
@@ -24,7 +23,6 @@ import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.core_generated.sqlite.TracksRecord
@@ -110,7 +108,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         if (!MxPreferences.getInstance().firstTimeLocation) {
             if (countCountries > 2) {
                 if (location.isUSA()) {
-                    hideEurope(context)
+                    LocationHelper.hideEurope(context)
                 } else if (location.isEurope()) {
                     LocationHelper.hideAmerica(context)
                 } else {
@@ -127,22 +125,6 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         val sendNewDistance = Intent(DISTANCE_NEW)
         sendNewDistance.setPackage(context.packageName)
         context.sendBroadcast(sendNewDistance)
-    }
-
-    private fun hideEurope(context: Context) {
-        val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
-        for (country in countries) {
-            val countryLocation = country.country.getLocationFromCountryList()
-            if (countryLocation.latitude + countryLocation.longitude == 0.0) {
-                country.show = (if (MxCoreApplication.isAdmin) 1 else 0).toLong()
-            } else if (countryLocation.isEurope()) {
-                country.show = 0
-            } else {
-                country.show = 1
-            }
-            country.save(false)
-        }
-        context.contentResolver.notifyChange(MxInfoDBContract.Tracks.CONTENT_URI, null)
     }
 
     private fun updateNotification4Admin(meter: Int) {

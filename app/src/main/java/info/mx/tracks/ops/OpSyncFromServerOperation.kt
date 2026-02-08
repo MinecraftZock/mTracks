@@ -1275,12 +1275,17 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             //FIXME for US
             // when locations is confirmed and we are in US
             // currently to nothing. Flavor US should handle this
+            Timber.d("We are not first time, let's keep America")
         } else if (!MxPreferences.getInstance().firstTimeCountry) {
             if (SQuery.newQuery().count(Country.CONTENT_URI) > 2) {
+                Timber.d("We are not firstTimeCountry, hide Europe")
                 LocationHelper.hideAmerica(context)
                 MxPreferences.getInstance().edit().putFirstTimeCountry(true).commit()
+            } else {
+                Timber.d("We are not firstTimeCountry, Nothing to do with hide/shwow countries")
             }
-        }
+        } else
+            Timber.d("Nothing to do with hide/show countries")
 
         val countries = SQuery.newQuery()
             .expr(Country.COUNTRY, Op.EQ, "zz")
