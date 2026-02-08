@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.Build
 import android.provider.Settings
-import androidx.multidex.MultiDex
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import info.hannes.crashlytic.CrashlyticsTree
@@ -115,7 +114,6 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 
     override val siteId: Int
