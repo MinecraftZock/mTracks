@@ -11,7 +11,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
+// it's used in layout_fab_right.xml, but we can't reference the SnackbarLayout class directly because it's restricted, so we check the class name instead
+@SuppressWarnings("unused")
+public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior<FloatingActionMenu> {
     private float mTranslationY;
 
     public FloatingActionMenuBehavior(Context context, AttributeSet attrs) {
@@ -19,13 +21,13 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     }
 
     @Override
-    public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
+    public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull FloatingActionMenu child, @NonNull View dependency) {
         return isSnackbarLayout(dependency);
     }
 
     @Override
-    public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
-        if (child instanceof FloatingActionMenu && isSnackbarLayout(dependency)) {
+    public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull FloatingActionMenu child, @NonNull View dependency) {
+        if (isSnackbarLayout(dependency)) {
             this.updateTranslation(parent, child, dependency);
         }
 
@@ -56,11 +58,11 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
 
     private float getTranslationY(CoordinatorLayout parent, View child) {
         float minOffset = 0.0F;
-        List dependencies = parent.getDependencies(child);
+        List<View> dependencies = parent.getDependencies(child);
         int i = 0;
 
         for (int z = dependencies.size(); i < z; ++i) {
-            View view = (View) dependencies.get(i);
+            View view = dependencies.get(i);
             if (isSnackbarLayout(view) && parent.doViewsOverlap(child, view)) {
                 minOffset = Math.min(minOffset, view.getTranslationY() - (float) view.getHeight());
             }
