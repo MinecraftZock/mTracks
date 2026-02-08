@@ -10,6 +10,7 @@ import info.mx.core.ops.ImportIdlingResource
 import info.mx.core.ops.RecalculateIdlingResource
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.prefs.MxPreferences.Companion.PREFERENCES_NAME
+import info.mx.core_generated.prefs.MxPreferences.Keys
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +29,7 @@ abstract class BaseSyncTest {
         IdlingPolicies.setMasterPolicyTimeout(2, TimeUnit.MINUTES)
         IdlingRegistry.getInstance().register(ImportIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(RecalculateIdlingResource.countingIdlingResource)
+        firstTimeImport()
 
     }
 
@@ -35,6 +37,17 @@ abstract class BaseSyncTest {
     fun unregisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(ImportIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(RecalculateIdlingResource.countingIdlingResource)
+    }
+
+    fun firstTimeImport() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+
+        sharedPreferences.edit()
+            .remove(MxPreferences.Keys.FIRST_TIME_USE)
+            .remove(MxPreferences.Keys.FIRST_TIME_LOCATION)
+            .remove(MxPreferences.Keys.FIRST_TIME_COUNTRY)
+            .apply()
     }
 
     fun dontRememberLastUsedActivity() {
