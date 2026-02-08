@@ -191,11 +191,18 @@ class MxPreferences private constructor(context: Context) {
             -1
         )
 
-    val onlyOpen: Boolean
+    var onlyOpen: Boolean = false
         get() = sharedPreferences.getBoolean(
             Keys.ONLY_OPEN,
             false
         )
+        set(value) {
+            sharedPreferences.edit().putBoolean(
+                Keys.ONLY_OPEN,
+                value
+            ).commit()
+            field = value
+        }
 
     val onlyApproved: Boolean
         get() = sharedPreferences.getBoolean(

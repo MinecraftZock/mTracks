@@ -137,7 +137,7 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
     override suspend fun checkToRepairOrSync() {
         applicationScope.async {
             if (MxPreferences.instance.repairDB) {
-                MxInfoDBOpenHelper.getDatabase()?.close()
+                MxInfoDBOpenHelper.database?.close()
                 val db = File(MxInfoDBOpenHelper.getDir(applicationContext))
 
                 db.delete()
