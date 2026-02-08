@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.mx.core.MxCoreApplication
-import info.mx.core.common.CountryTools
+import info.mx.core.common.getLocationFromCountryList
 import info.mx.tracks.R
 import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
@@ -132,12 +132,8 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
     private fun hideEurope(context: Context) {
         val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
         for (country in countries) {
-            val latitude = CountryTools.getLatitude(country.country)
-            val longitude = CountryTools.getLongitude(country.country)
-            val countryLocation = Location("country")
-            countryLocation.latitude = latitude
-            countryLocation.longitude = longitude
-            if (latitude + longitude == 0.0) {
+            val countryLocation = country.country.getLocationFromCountryList()
+            if (countryLocation.latitude + countryLocation.longitude == 0.0) {
                 country.show = (if (MxCoreApplication.isAdmin) 1 else 0).toLong()
             } else if (countryLocation.isEurope()) {
                 country.show = 0

@@ -4,10 +4,9 @@ import android.content.Context
 import android.location.Location
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.core.MxCoreApplication.Companion.isAdmin
-import info.mx.core.common.CountryTools
+import info.mx.core.common.getLocationFromCountryList
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract
-import timber.log.Timber
 
 fun Location.isUSA(): Boolean {
     return this.longitude > -179 && this.longitude < -31
@@ -30,13 +29,9 @@ object LocationHelper {
     fun hideAmerica(context: Context) {
         val countries = SQuery.newQuery().select<CountryRecord>(MxInfoDBContract.Country.CONTENT_URI)
         for (country in countries) {
-            val latitude = CountryTools.getLatitude(country.country)
-            val longitude = CountryTools.getLongitude(country.country)
-            val countryLocation = Location("country")
-            countryLocation.latitude = latitude
-            countryLocation.longitude = longitude
+            val countryLocation = country.country.getLocationFromCountryList()
             when {
-                latitude + longitude == 0.0 -> country.show = if (isAdmin) 1 else 0.toLong()
+                countryLocation.latitude + countryLocation.longitude == 0.0 -> country.show = if (isAdmin) 1 else 0.toLong()
                 countryLocation.isUSA() -> country.show = 0
                 else -> country.show = 1
             }
