@@ -171,11 +171,11 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             .setContentIntent(pendingIntent)
             .setAutoCancel(false)
             .addAction(
-                if (NotificationHelper.isDark()) R.drawable.ic_create_white_36dp else R.drawable.ic_create_black_36dp,
+                R.drawable.ic_create_black_36dp,
                 "Edit",
                 editPendingIntent
             )
-            .addAction(if (NotificationHelper.isDark()) R.drawable.ic_flag_white_36dp else R.drawable.ic_flag_black_36dp, "Show", showPendingIntent)
+            .addAction(R.drawable.ic_flag_black_36dp, "Show", showPendingIntent)
 
         notificationManager.notify(NOTIFICATION_ID_ADMIN, notification.build())
     }
@@ -243,11 +243,11 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .addAction(
-                if (NotificationHelper.isDark()) R.drawable.ic_create_white_36dp else R.drawable.ic_create_black_36dp,
+                R.drawable.ic_create_black_36dp,
                 "Edit",
                 editPendingIntent
             )
-            .addAction(if (NotificationHelper.isDark()) R.drawable.ic_flag_white_36dp else R.drawable.ic_flag_black_36dp, "Show", showPendingIntent)
+            .addAction(R.drawable.ic_flag_black_36dp, "Show", showPendingIntent)
 
         notificationManager.notify(notificationID, notification.build())
 
