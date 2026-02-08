@@ -118,7 +118,7 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
         }
 
         this.setPhoneHasNoOptionsBtn()
-        MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityTrackList.javaClass.simpleName).apply()
+        MxPreferences.instance.edit().putLastOpenStartActivity(this@ActivityTrackList.javaClass.simpleName).apply()
 
         val changeLog = ChangeLog(this)
         if (MxApplication.isRunningEspresso()) {

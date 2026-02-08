@@ -85,7 +85,7 @@ class OpPushSharedImageOperation : AbstractOpPushSharedImageOperation(), CoreKoi
             if (toTransfer) {
                 val picRecord = PicturesRecord()
                 picRecord.localfile = localCopy.absolutePath
-                picRecord.username = MxPreferences.getInstance().username
+                picRecord.username = MxPreferences.instance.username
                 picRecord.trackRestId = args.trackRestId
                 picRecord.save()
                 val intentM: Intent = AbstractOpPostImagesOperation.newIntent()

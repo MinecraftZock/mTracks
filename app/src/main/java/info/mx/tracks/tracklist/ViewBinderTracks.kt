@@ -44,7 +44,7 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
     val permissionHelper: PermissionHelper by inject()
 
     init {
-        val prefs = MxPreferences.getInstance()
+        val prefs = MxPreferences.instance
         showKm = prefs.unitsKm
         this.myLoc = myLoc
         this.withSum = withSum

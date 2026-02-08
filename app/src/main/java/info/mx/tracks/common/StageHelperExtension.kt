@@ -53,7 +53,7 @@ object StageHelperExtension {
             query.or().expr(queryLatLng)
         }
         val mainQuery = SQuery.newQuery().expr(query)
-        if (MxPreferences.getInstance().showOnlyNewTrackStage) {
+        if (MxPreferences.instance.showOnlyNewTrackStage) {
             val approved = SQuery.newQuery()
                 .expr(Trackstage.APPROVED, SQuery.Op.EQ, 0)
                 .or()

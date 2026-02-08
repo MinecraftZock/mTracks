@@ -688,10 +688,10 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_new_track))
                     .draggable(true)
             )
-            val clickZlr = MxPreferences.getInstance().markerShowLongClickText
+            val clickZlr = MxPreferences.instance.markerShowLongClickText
             if (clickZlr < MAX_MARKER_TEXT_SHOW) {
                 marker?.title = requireActivity().getString(R.string.stage_longclick)
-                MxPreferences.getInstance().edit().putMarkerShowLongClickText(clickZlr + 1).commit()
+                MxPreferences.instance.edit().putMarkerShowLongClickText(clickZlr + 1).commit()
                 marker?.showInfoWindow()
             }
             it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))

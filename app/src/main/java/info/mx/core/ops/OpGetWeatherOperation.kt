@@ -51,7 +51,7 @@ class OpGetWeatherOperation : AbstractOpGetWeatherOperation() {
                     request.setCntParam(DAYS_DOWNLOAD)
                     request.setAPPIDParam(WEATHER_ID)
                     request.setLangParam(Locale.getDefault().language)
-                    if (MxPreferences.getInstance().unitsKm) {
+                    if (MxPreferences.instance.unitsKm) {
                         request.setUnitsParam(METRIC)
                     } else {
                         request.setUnitsParam(IMPERIAL)
@@ -92,7 +92,7 @@ class OpGetWeatherOperation : AbstractOpGetWeatherOperation() {
                     request.setCntParam(HOUR_DOWNLOAD)
                     request.setAPPIDParam(WEATHER_ID)
                     request.setLangParam(Locale.getDefault().language)
-                    if (MxPreferences.getInstance().unitsKm) {
+                    if (MxPreferences.instance.unitsKm) {
                         request.setUnitsParam(METRIC)
                     } else {
                         request.setUnitsParam(IMPERIAL)

@@ -26,7 +26,7 @@ class MapLayerDialog : DialogFragment(), CompoundButton.OnCheckedChangeListener 
         val toggleSatellite = view.findViewById<RadioButton>(R.id.radioMapStellite)
         val toggleHybrid = view.findViewById<RadioButton>(R.id.radioMapHybrid)
         val toggleTerrain = view.findViewById<RadioButton>(R.id.radioMapTerrain)
-        when (MxPreferences.getInstance().mapType) {
+        when (MxPreferences.instance.mapType) {
             0 -> toggleStd.isChecked = true
             1 -> toggleHybrid.isChecked = true
             2 -> toggleTerrain.isChecked = true
@@ -44,10 +44,10 @@ class MapLayerDialog : DialogFragment(), CompoundButton.OnCheckedChangeListener 
         val id = buttonView.id
         if (isChecked) {
             when (id) {
-                R.id.radioMapStd -> MxPreferences.getInstance().edit().putMapType(0).commit()
-                R.id.radioMapStellite -> MxPreferences.getInstance().edit().putMapType(3).commit()
-                R.id.radioMapHybrid -> MxPreferences.getInstance().edit().putMapType(1).commit()
-                R.id.radioMapTerrain -> MxPreferences.getInstance().edit().putMapType(2).commit()
+                R.id.radioMapStd -> MxPreferences.instance.edit().putMapType(0).commit()
+                R.id.radioMapStellite -> MxPreferences.instance.edit().putMapType(3).commit()
+                R.id.radioMapHybrid -> MxPreferences.instance.edit().putMapType(1).commit()
+                R.id.radioMapTerrain -> MxPreferences.instance.edit().putMapType(2).commit()
             }
             dismiss()
         }

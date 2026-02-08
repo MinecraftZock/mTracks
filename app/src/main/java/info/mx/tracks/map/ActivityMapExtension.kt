@@ -104,7 +104,7 @@ class ActivityMapExtension : ActivityDrawerBase() {
             size.y
         }
 
-        MxPreferences.getInstance().edit().putLastOpenStartActivity(this@ActivityMapExtension.javaClass.simpleName).apply()
+        MxPreferences.instance.edit().putLastOpenStartActivity(this@ActivityMapExtension.javaClass.simpleName).apply()
 
         // Setup back press handling using OnBackPressedDispatcher
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

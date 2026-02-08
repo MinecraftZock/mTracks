@@ -58,7 +58,7 @@ class ActivitySetting : ActivityBase() {
             insets
         }
 
-        prefs = MxPreferences.getInstance()
+        prefs = MxPreferences.instance
         binding.containerSetting.layoutLicense.setOnClickListener {
             startActivity(Intent(this@ActivitySetting, ActivityAcknowledgement::class.java))
         }
