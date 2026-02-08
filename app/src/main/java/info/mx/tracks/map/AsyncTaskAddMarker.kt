@@ -90,7 +90,7 @@ class AsyncTaskAddMarker internal constructor(
         tracks.forEach { track ->
             val markerId = track.access.getTrackPinId()
             val markerOption = context.getMarkerOption(
-                track._id,
+                track.id,
                 track.latDecrypt,
                 track.lonDecrypt,
                 markerId,

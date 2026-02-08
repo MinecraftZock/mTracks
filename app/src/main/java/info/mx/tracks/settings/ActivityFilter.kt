@@ -149,7 +149,7 @@ class ActivityFilter : ActivityBase() {
             setTrackCount()
         }
         binding.include.filterOnlyOpen.setOnClickListener { view: View ->
-            prefs.edit().putOnlyOpen((view as CheckBox).isChecked).commit()
+            prefs.onlyOpen = (view as CheckBox).isChecked
             setTrackCount()
         }
         binding.include.filterOnlyApproved.setOnClickListener { view: View ->

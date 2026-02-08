@@ -50,6 +50,7 @@ import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
 import info.mx.core.sqlite.MxInfoDBOpenHelper
 import info.mx.core.util.NetworkUtils
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -275,7 +276,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         } else if (i == R.id.menu_share) {
             val intentMail = BackupHelper.createShareIntent(
                 requireContext(), requireActivity().getString(R.string.app_name),
-                MxInfoDBOpenHelper.getDir(requireActivity()), MxInfoDBOpenHelper.VERSION
+                MxInfoDBOpenHelper.getDir(requireActivity()), AbstractMxInfoDBOpenHelper.VERSION
             )
             try {
                 // intentMail.setType("message/rfc822");
@@ -283,7 +284,7 @@ class FragmentDownloadList : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 intentMail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " DB dump")
                 intentMail.putExtra(
                     Intent.EXTRA_TEXT,
-                    "${TrackingApplication.getVersion(requireContext())}\nDB  Version: " + MxInfoDBOpenHelper.VERSION
+                    "${TrackingApplication.getVersion(requireContext())}\nDB  Version: " + AbstractMxInfoDBOpenHelper.VERSION
                 )
                 shareResultLauncher.launch(Intent.createChooser(intentMail, "send debug info" + " ..."))
             } catch (ex: android.content.ActivityNotFoundException) {
