@@ -263,7 +263,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             toast.setGravity(Gravity.TOP or Gravity.LEFT, 0, 0)
             toast.show()
         }
-        viewFilterActive!!.visibility = if (QueryHelper.isFiltered()) View.VISIBLE else View.GONE
+        viewFilterActive!!.visibility = if (QueryHelper.isFiltered) View.VISIBLE else View.GONE
         headerView!!.setCallBackFragment(this)
 
         return view
@@ -295,7 +295,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
             if (key == MxPreferences.Keys.MAP_TYPE) {
                 this@BaseFragmentMap.setMapTypeFromPrefs()
             }
-            viewFilterActive!!.visibility = if (QueryHelper.isFiltered()) View.VISIBLE else View.GONE
+            viewFilterActive!!.visibility = if (QueryHelper.isFiltered) View.VISIBLE else View.GONE
             if (this@BaseFragmentMap.isAdded && this@BaseFragmentMap.map != null) {
                 this@BaseFragmentMap.loaderManager.restartLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
             }
