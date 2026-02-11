@@ -261,7 +261,7 @@ dependencies {
     implementation("com.github.hannesa2:mechanoid:4.6")
     implementation(project(":RxCommLib"))
     implementation("com.google.code.gson:gson:2.13.2")
-    implementation("net.lingala.zip4j:zip4j:2.11.5")
+    implementation("net.lingala.zip4j:zip4j:2.11.6")
     implementation("com.github.hannesa2:android-emulator-detector:1.5")
     implementation("com.google.android.gms:play-services-maps:20.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
