@@ -54,6 +54,11 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
                 menuInflater.inflate(R.menu.activity_filter_country, menu)
             }
 
+            override fun onPrepareMenu(menu: Menu) {
+                // Update menu icon when menu is prepared/invalidated
+                menu.findItem(R.id.action_settings_filter_country).icon = getIcon4SetAllCountry(requireActivity())
+            }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return handleMenuItemSelected(menuItem)
             }
@@ -156,10 +161,6 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_settings_filter_country).icon = getIcon4SetAllCountry(requireActivity())
-        super.onPrepareOptionsMenu(menu)
-    }
 
     private fun getIcon4SetAllCountry(context: Context): Drawable? {
         hided = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)

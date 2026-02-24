@@ -15,9 +15,11 @@ import android.widget.GridView
 import android.widget.ListView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
+import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.snackbar.Snackbar
 import com.robotoworks.mechanoid.ops.Ops
@@ -189,22 +191,28 @@ class ActivityTrackDetail : ActivityDrawerBase(), ImageCursorAdapter.OnImageList
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container_detail, detailFragmentTab!!, FragmentTrackDetailTab.TAG)
         // transaction.addToBackStack(null);
-        transaction.commit()
-    }
+        detailFragmentTab = supportFragmentManager.findFragmentById(R.id.track_detail_container) as FragmentTrackDetailTab?
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_base_edit, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: android.view.MenuInflater) {
+                menuInflater.inflate(R.menu.activity_base_edit, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val i = item.itemId
-        if (i == R.id.menu_prev) {
-            detailFragmentTab?.moveUp()
-        } else if (i == R.id.menu_next) {
-            detailFragmentTab?.moveDown()
-        }
-        return super.onOptionsItemSelected(item)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_prev -> {
+                        detailFragmentTab?.moveUp()
+                        true
+                    }
+                    R.id.menu_next -> {
+                        detailFragmentTab?.moveDown()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.RESUMED)
     }
 
     override fun onImageItemClick(position: Int, imageRestId: Long) {
