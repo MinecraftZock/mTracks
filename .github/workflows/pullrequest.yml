@@ -89,14 +89,14 @@ jobs:
           bootTimeout: 120 # 2 minutes
       - name: Archive screenshots ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MXPro-Screenshots-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
             app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected
       - name: Archive Espresso results ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MXPro-Espresso-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
@@ -115,7 +115,7 @@ jobs:
           ./screenShotScript/screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MXPro-diffs-${{ needs.env-job.outputs.modified-branch-name }}-${{ matrix.flavor }}-${{ matrix.emulatorApi }}
           path: |
@@ -161,7 +161,7 @@ jobs:
       - name: gradle check
         run: ./gradlew lintDebug ktlintCheck
       - name: Archive Lint report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: MX-Lint-report-${{ needs.env-job.outputs.modified-branch-name }}
