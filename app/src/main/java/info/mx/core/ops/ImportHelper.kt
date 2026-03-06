@@ -49,7 +49,7 @@ object ImportHelper {
         val coder = Geocoder(context)
         try {
             val addresses = getAddressesFromLocation(coder, latitude, longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
+            if (!addresses.isNullOrEmpty()) {
                 val address = addresses[0]
                 countryKZ = address.countryCode
             }

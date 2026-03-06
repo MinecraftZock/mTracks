@@ -136,7 +136,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     doFixMissingCounty(context.applicationContext)
                     doHandleTrackStage(context.applicationContext, webClient)
                 }
-                countryResult = doBuildCountryTable(context.applicationContext)
+                countryResult = doBuildCountryTableMech(context.applicationContext)
                 imported = 0
                 Thread.sleep(4000)
 
@@ -1228,7 +1228,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         Timber.i("$opName gesamt ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
     }
 
-    private fun doBuildCountryTable(context: Context): String {
+    private fun doBuildCountryTableMech(context: Context): String {
         val result = ""
         val deleteCount = SQuery.newQuery().append(
             Country._ID + " in (select " + Countrycount._ID + " from " + AbstractMxInfoDBOpenHelper.Sources.COUNTRYCOUNT + " where " +
