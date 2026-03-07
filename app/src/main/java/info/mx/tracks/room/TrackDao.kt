@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import info.mx.tracks.room.entity.CountrySum
 import info.mx.tracks.room.entity.Track
 import info.mx.tracks.room.entity.TrackStage
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +33,9 @@ interface TrackDao {
 
     @Query("DELETE FROM Track where approved = -1 and changed != :maxChanged")
     fun deleteNotApproved(maxChanged: Long)
+
+    @get:Query("SELECT * FROM CountrySum")
+    val countrySum: List<CountrySum>
 
 //    @Query("SELECT avg(rating) FROM Track WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
 //    fun avgByTrackIdMT(trackId: Long): Float

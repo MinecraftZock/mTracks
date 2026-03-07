@@ -25,8 +25,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
     public static final int TRACKSTAGE_ID = 3;
     public static final int FAVORITS = 8;
     public static final int FAVORITS_ID = 9;
-    public static final int COUNTRY = 10;
-    public static final int COUNTRY_ID = 11;
     public static final int PICTURES = 12;
     public static final int PICTURES_ID = 13;
     public static final int WEATHER = 20;
@@ -63,8 +61,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         matcher.addURI(authority, "trackstage/#", TRACKSTAGE_ID);
         matcher.addURI(authority, "favorits", FAVORITS);
         matcher.addURI(authority, "favorits/#", FAVORITS_ID);
-        matcher.addURI(authority, "country", COUNTRY);
-        matcher.addURI(authority, "country/#", COUNTRY_ID);
         matcher.addURI(authority, "pictures", PICTURES);
         matcher.addURI(authority, "pictures/#", PICTURES_ID);
         matcher.addURI(authority, "weather", WEATHER);
@@ -100,8 +96,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
         contentTypes[TRACKSTAGE_ID] = MxInfoDBContract.Trackstage.ITEM_CONTENT_TYPE;
         contentTypes[FAVORITS] = MxInfoDBContract.Favorits.CONTENT_TYPE;
         contentTypes[FAVORITS_ID] = MxInfoDBContract.Favorits.ITEM_CONTENT_TYPE;
-        contentTypes[COUNTRY] = MxInfoDBContract.Country.CONTENT_TYPE;
-        contentTypes[COUNTRY_ID] = MxInfoDBContract.Country.ITEM_CONTENT_TYPE;
         contentTypes[PICTURES] = MxInfoDBContract.Pictures.CONTENT_TYPE;
         contentTypes[PICTURES_ID] = MxInfoDBContract.Pictures.ITEM_CONTENT_TYPE;
         contentTypes[WEATHER] = MxInfoDBContract.Weather.CONTENT_TYPE;
@@ -151,10 +145,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
                 return createFavoritsActions();
             case FAVORITS_ID:
                 return createFavoritsByIdActions();
-            case COUNTRY:
-                return createCountryActions();
-            case COUNTRY_ID:
-                return createCountryByIdActions();
             case PICTURES:
                 return createPicturesActions();
             case PICTURES_ID:
@@ -218,14 +208,6 @@ public abstract class AbstractMxInfoDBContentProvider extends MechanoidContentPr
 
     protected ContentProviderActions createFavoritsActions() {
         return new DefaultContentProviderActions(Sources.FAVORITS, false, FavoritsRecord.getFactory());
-    }
-
-    protected ContentProviderActions createCountryByIdActions() {
-        return new DefaultContentProviderActions(Sources.COUNTRY, true, CountryRecord.getFactory());
-    }
-
-    protected ContentProviderActions createCountryActions() {
-        return new DefaultContentProviderActions(Sources.COUNTRY, false, CountryRecord.getFactory());
     }
 
     protected ContentProviderActions createPicturesByIdActions() {

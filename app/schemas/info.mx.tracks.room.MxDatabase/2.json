@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "61463736952320e807d32724193df83d",
+    "identityHash": "b7ea80b07b1d0b02925d417a038877d4",
     "entities": [
       {
         "tableName": "CapturedLatLng",
@@ -1411,9 +1411,19 @@
         ]
       }
     ],
+    "views": [
+      {
+        "viewName": "CountrySum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select country, count(*) as count from Track group by Country"
+      },
+      {
+        "viewName": "CountryCount",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select C.id as id, C.country as country, C.show as show, ifnull(S.count,0) as count from Country as C left join CountrySum as S on C.country = S.Country group by S.Country"
+      }
+    ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61463736952320e807d32724193df83d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b7ea80b07b1d0b02925d417a038877d4')"
     ]
   }
 }
