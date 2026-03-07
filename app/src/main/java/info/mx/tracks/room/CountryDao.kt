@@ -6,6 +6,8 @@ import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
 import info.mx.tracks.room.entity.Country
+import info.mx.tracks.room.entity.CountryCount
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -19,6 +21,9 @@ interface CountryDao {
 
     @get:Query("SELECT * FROM Country where show = 1")
     val allShown: List<Country>
+
+    @Query("SELECT * FROM CountryCount ORDER BY country")
+    fun getAllCountryCount(): Flow<List<CountryCount>>
 
     @Query("DELETE FROM Country WHERE id IN (SELECT id FROM CountryCount WHERE count = 0)")
     fun cleanupFromEmptyCounties(): Int
