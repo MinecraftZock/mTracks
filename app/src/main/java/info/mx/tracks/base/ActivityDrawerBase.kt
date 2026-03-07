@@ -35,7 +35,6 @@ import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.tracklist.ActivityTrackList
-import info.mx.tracks.util.EventHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -177,15 +176,6 @@ abstract class ActivityDrawerBase : ActivityBase(), NavigationView.OnNavigationI
                 bundle.putLong(FragmentUpDown.RECORD_ID_LOCAL, this.detailFragmentTab!!.recordLocalId) // FIXME
                 qWfIntent.putExtras(bundle)
                 startActivity(qWfIntent)
-                result = true
-            }
-        } else if (menuItem.itemId == R.id.drawer_event_add) {
-            if (this is ActivityTrackDetail) {
-                val parent = this
-                val record = TracksRecord.get(parent.detailFragmentTab!!.recordLocalId)
-                if (record != null) {
-                    EventHelper().doAddEvent(parent, record)
-                }
                 result = true
             }
         } else if (menuItem.itemId == R.id.drawer_track_feedback) {
