@@ -77,6 +77,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     private lateinit var operationContext: OperationContext
 
     private val dataManagerApp: DataManagerApp by inject()
+    private val locationHelper: LocationHelper by inject()
 
     /**
      * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
@@ -1271,7 +1272,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
 
         //reset countries to show
-        if (!MxPreferences.instance.firstTimeLocation && LocationHelper.isAmericaShown) {
+        if (!MxPreferences.instance.firstTimeLocation && locationHelper.isAmericaShown) {
             //FIXME for US
             // when locations is confirmed and we are in US
             // currently to nothing. Flavor US should handle this
@@ -1279,7 +1280,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         } else if (!MxPreferences.instance.firstTimeCountry) {
             if (SQuery.newQuery().count(Country.CONTENT_URI) > 2) {
                 Timber.d("We are not firstTimeCountry, hide Europe")
-                LocationHelper.hideAmerica(context)
+                locationHelper.hideAmerica(context)
                 MxPreferences.instance.firstTimeCountry = true
             } else {
                 Timber.d("We are not firstTimeCountry, Nothing to do with hide/shwow countries")

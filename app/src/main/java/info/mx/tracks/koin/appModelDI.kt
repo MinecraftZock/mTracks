@@ -1,6 +1,7 @@
 @file:Suppress("ktlint:standard:filename")
 package info.mx.tracks.koin
 
+import info.mx.core.util.LocationHelper
 import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.navigation.AppNavigationMenu
 import info.mx.tracks.tools.AddMobHelper
@@ -12,6 +13,7 @@ val appModule = module {
     single { PermissionHelper(get()) }
     single { AppNavigationMenu() }
     single { AddMobHelper(get()) }
+    single { LocationHelper(get()) }
 
     single { DataManagerApp(get()) }
 

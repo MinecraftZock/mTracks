@@ -7,6 +7,7 @@ import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.core.common.getLocationFromCountryList
 import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract
+import info.mx.tracks.room.MxDatabase
 import timber.log.Timber
 
 fun Location.isUSA(): Boolean {
@@ -17,10 +18,11 @@ fun Location.isEurope(isEmulator: Boolean = false): Boolean {
 //    isEmulator = MxCoreApplication.isEmulator
 //    Timber.d("(this.longitude > -31 && this.longitude < 65) longitude=${this.longitude}")
 //    MxCoreApplication.isEmulator ||
-    return (this.longitude > -31 && this.longitude < 65)
+    return this.longitude > -31 && this.longitude < 65
 }
 
-object LocationHelper {
+class LocationHelper(private val mxDatabase: MxDatabase) {
+
     val isAmericaShown: Boolean
         get() = SQuery.newQuery()
             .expr(MxInfoDBContract.Country.COUNTRY, SQuery.Op.EQ, "US")
