@@ -1102,8 +1102,10 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
         }
         var query = SQuery.newQuery()
         query = QueryHelper.buildUserTrackSearchFilter(
-            query, requireArguments().getString(FILTER), isFav,
-            AbstractMxInfoDBOpenHelper.Sources.TRACKSGES
+            query = query,
+            mFilter = requireArguments().getString(FILTER),
+            isFav = isFav,
+            table = AbstractMxInfoDBOpenHelper.Sources.TRACKSGES,
         )
         val curs = query.select(Tracksges.CONTENT_URI, arrayOf(Tracksges._ID), sort)
         // from Map there is no position

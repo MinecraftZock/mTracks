@@ -60,11 +60,21 @@ import com.robotoworks.mechanoid.db.SQuery
 import com.sothree.slidinguppanel.PanelSlideListener
 import com.sothree.slidinguppanel.PanelState
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication
+import info.mx.core.common.ImportStatusMessage
+import info.mx.core.rest.google.Routes
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.MxInfoDBContract.Route
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
+import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
+import info.mx.core_generated.sqlite.RouteRecord
+import info.mx.core_generated.sqlite.TracksGesSumRecord
+import info.mx.core_generated.sqlite.TracksRecord
+import info.mx.core_generated.sqlite.TrackstageRecord
+import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.core.common.ImportStatusMessage
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.common.StageHelperExtension
@@ -74,20 +84,10 @@ import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailHeaderListener
 import info.mx.tracks.map.PoiDetailHeaderView.PoiDetailStyle
 import info.mx.tracks.map.cluster.MapClusterOptionsProvider
 import info.mx.tracks.ops.OpSyncFromServerOperation
-import info.mx.core_generated.prefs.MxPreferences
-import info.mx.core.rest.google.Routes
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.settings.ActivityFilter
-import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.MxInfoDBContract.Route
-import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
-import info.mx.core_generated.sqlite.MxInfoDBContract.Trackstage
-import info.mx.core_generated.sqlite.RouteRecord
-import info.mx.core_generated.sqlite.TracksGesSumRecord
-import info.mx.core_generated.sqlite.TracksRecord
-import info.mx.core_generated.sqlite.TrackstageRecord
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentPlaceDetail
@@ -99,7 +99,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import kotlin.jvm.java
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -898,7 +897,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         var query = querySource
         query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
         if (bundle != null && bundle.containsKey(SEARCH_TEXT)) {
-            query = QueryHelper.buildUserTrackSearchFilter(query, bundle.getString(SEARCH_TEXT), false, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
+            query = QueryHelper.buildUserTrackSearchFilter(
+                query = query,
+                mFilter = bundle.getString(SEARCH_TEXT),
+                isFav = false,
+                table = AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM,
+            )
             searchList!!.adapter = searchAdapter
         } else if (!inPlaceSearch) {
             searchList!!.adapter = null

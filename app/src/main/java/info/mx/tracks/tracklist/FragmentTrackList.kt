@@ -32,12 +32,15 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.robotoworks.mechanoid.db.SQuery
 import info.mx.commonlib.LocationHelper
-import info.mx.tracks.BuildConfig
 import info.mx.core.MxCoreApplication
+import info.mx.core.common.ImportStatusMessage
+import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
+import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.core_generated.sqlite.TracksGesSumRecord
+import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
-import info.mx.core.common.ImportStatusMessage
 import info.mx.tracks.common.OverScrollListView
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
@@ -49,9 +52,6 @@ import info.mx.tracks.service.RecalculateDistance
 import info.mx.tracks.settings.ActivityFilter
 import info.mx.tracks.settings.ActivityFilterCountry
 import info.mx.tracks.settings.ActivitySetting
-import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.MxInfoDBContract.*
-import info.mx.core_generated.sqlite.TracksGesSumRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -351,7 +351,12 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                 if (isStage) {
                     query = QueryHelper.buildStageFilter(query, isOnlyForeign)
                 } else {
-                    query = QueryHelper.buildUserTrackSearchFilter(query, curFilter, isFav, AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM)
+                    query = QueryHelper.buildUserTrackSearchFilter(
+                        query = query,
+                        mFilter = curFilter,
+                        isFav = isFav,
+                        table = AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM,
+                    )
                 }
                 return query.createSupportLoader(TracksGesSum.CONTENT_URI, null, order)
             }
