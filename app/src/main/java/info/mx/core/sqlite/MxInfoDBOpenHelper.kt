@@ -24,7 +24,7 @@ class MxInfoDBOpenHelper(context: Context) : AbstractMxInfoDBOpenHelper(context,
         return object : DefaultMxInfoDBMigrationV1() {
             override fun onAfterUp(db: SQLiteDatabase) {
                 val cvToFilter = Country.newBuilder()
-                    .setCountry("zz")
+                    .setCountry("DummyAfterMechanoidDBUpdate")
                     .setShow(0)
                     .values
                 db.insert(Sources.COUNTRY, null, cvToFilter)

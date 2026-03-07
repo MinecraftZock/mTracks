@@ -1288,7 +1288,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             Timber.d("Nothing to do with hide/show countries")
 
         val countries = SQuery.newQuery()
-            .expr(Country.COUNTRY, Op.EQ, "zz")
+            .expr(Country.COUNTRY, Op.EQ, "DummyAfterMechanoidDBUpdate")
             .select<CountryRecord>(Country.CONTENT_URI)
         for (recordC in countries) {
             SQuery.newQuery()
