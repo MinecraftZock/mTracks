@@ -111,8 +111,6 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
 
     private val mxDatabase: MxDatabase by inject()
 
-    private val appApiClient: AppApiClient by inject()
-
     private val commentViewModel: CommentViewModel by viewModel()
     private val eventViewModel: EventViewModel by viewModel()
 
@@ -1209,6 +1207,7 @@ class FragmentTrackDetail : FragmentUpDown(), ImportTaskCompleteListener<String>
             mFilter = requireArguments().getString(FILTER),
             isFav = isFav,
             table = AbstractMxInfoDBOpenHelper.Sources.TRACKSGES,
+            mxDatabase = mxDatabase,
         )
         val curs = query.select(Tracksges.CONTENT_URI, arrayOf(Tracksges._ID), sort)
         // from Map there is no position

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "61463736952320e807d32724193df83d",
+    "identityHash": "8732e0c0a45ac543058a4a43dfdbeac0",
     "entities": [
       {
         "tableName": "CapturedLatLng",
@@ -521,13 +521,12 @@
       },
       {
         "tableName": "Track",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackname` TEXT, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT, `fees` TEXT, `phone` TEXT, `contact` TEXT NOT NULL, `metatext` TEXT, `licence` TEXT, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT, `hourstuesday` TEXT, `hourswednesday` TEXT, `hoursthursday` TEXT, `hoursfriday` TEXT, `hourssaturday` TEXT, `hourssunday` TEXT, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT, `brands` TEXT, `facebook` TEXT, `adress` TEXT, `feescamping` TEXT, `daysopen` TEXT, `noiselimit` TEXT, `trackstatus` TEXT, `andoridid` TEXT NOT NULL, `notes` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackname",
             "columnName": "trackname",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "longitude",
@@ -556,20 +555,17 @@
           {
             "fieldPath": "url",
             "columnName": "url",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "fees",
             "columnName": "fees",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "phone",
             "columnName": "phone",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "contact",
@@ -580,14 +576,12 @@
           {
             "fieldPath": "metatext",
             "columnName": "metatext",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "licence",
             "columnName": "licence",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "kidstrack",
@@ -640,44 +634,37 @@
           {
             "fieldPath": "hoursmonday",
             "columnName": "hoursmonday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourstuesday",
             "columnName": "hourstuesday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourswednesday",
             "columnName": "hourswednesday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hoursthursday",
             "columnName": "hoursthursday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hoursfriday",
             "columnName": "hoursfriday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourssaturday",
             "columnName": "hourssaturday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourssunday",
             "columnName": "hourssunday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "tracklength",
@@ -790,8 +777,7 @@
           {
             "fieldPath": "areatype",
             "columnName": "areatype",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "schwierigkeit",
@@ -820,50 +806,42 @@
           {
             "fieldPath": "logoURL",
             "columnName": "logoURL",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "brands",
             "columnName": "brands",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "facebook",
             "columnName": "facebook",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "adress",
             "columnName": "adress",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "feescamping",
             "columnName": "feescamping",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "daysopen",
             "columnName": "daysopen",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "noiselimit",
             "columnName": "noiselimit",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "trackstatus",
             "columnName": "trackstatus",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "andoridid",
@@ -874,8 +852,7 @@
           {
             "fieldPath": "notes",
             "columnName": "notes",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -915,7 +892,7 @@
       },
       {
         "tableName": "TrackStage",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `updated` INTEGER NOT NULL, `insLongitude` REAL NOT NULL, `insLatitude` REAL NOT NULL, `insDistance` INTEGER NOT NULL, `trackname` TEXT NOT NULL, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT NOT NULL, `fees` TEXT NOT NULL, `phone` TEXT NOT NULL, `contact` TEXT NOT NULL, `metatext` TEXT NOT NULL, `licence` TEXT NOT NULL, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT NOT NULL, `hourstuesday` TEXT NOT NULL, `hourswednesday` TEXT NOT NULL, `hoursthursday` TEXT NOT NULL, `hoursfriday` TEXT NOT NULL, `hourssaturday` TEXT NOT NULL, `hourssunday` TEXT NOT NULL, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT NOT NULL, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT NOT NULL, `brands` TEXT NOT NULL, `facebook` TEXT NOT NULL, `adress` TEXT NOT NULL, `feescamping` TEXT NOT NULL, `daysopen` TEXT NOT NULL, `noiselimit` TEXT NOT NULL, `trackstatus` TEXT NOT NULL, `andoridid` TEXT NOT NULL, `notes` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `updated` INTEGER NOT NULL, `insLongitude` REAL NOT NULL, `insLatitude` REAL NOT NULL, `insDistance` INTEGER NOT NULL, `trackname` TEXT, `longitude` REAL NOT NULL, `latitude` REAL NOT NULL, `approved` INTEGER NOT NULL, `country` TEXT NOT NULL, `url` TEXT, `fees` TEXT, `phone` TEXT, `contact` TEXT NOT NULL, `metatext` TEXT, `licence` TEXT, `kidstrack` INTEGER NOT NULL, `openmondays` INTEGER NOT NULL, `opentuesdays` INTEGER NOT NULL, `openwednesday` INTEGER NOT NULL, `openthursday` INTEGER NOT NULL, `openfriday` INTEGER NOT NULL, `opensaturday` INTEGER NOT NULL, `opensunday` INTEGER NOT NULL, `hoursmonday` TEXT, `hourstuesday` TEXT, `hourswednesday` TEXT, `hoursthursday` TEXT, `hoursfriday` TEXT, `hourssaturday` TEXT, `hourssunday` TEXT, `tracklength` INTEGER NOT NULL, `soiltype` INTEGER NOT NULL, `camping` INTEGER NOT NULL, `shower` INTEGER NOT NULL, `cleaning` INTEGER NOT NULL, `electricity` INTEGER NOT NULL, `distance2location` INTEGER NOT NULL, `supercross` INTEGER NOT NULL, `showroom` INTEGER NOT NULL, `workshop` INTEGER NOT NULL, `validuntil` INTEGER NOT NULL, `singletracks` INTEGER NOT NULL, `campingrvrvhookup` INTEGER NOT NULL, `mxtrack` INTEGER NOT NULL, `a4x4` INTEGER NOT NULL, `enduro` INTEGER NOT NULL, `utv` INTEGER NOT NULL, `quad` INTEGER NOT NULL, `areatype` TEXT, `schwierigkeit` INTEGER NOT NULL, `indoor` INTEGER NOT NULL, `lastAsked` INTEGER NOT NULL, `trackaccess` TEXT NOT NULL, `logoURL` TEXT, `brands` TEXT, `facebook` TEXT, `adress` TEXT, `feescamping` TEXT, `daysopen` TEXT, `noiselimit` TEXT, `trackstatus` TEXT, `andoridid` TEXT NOT NULL, `notes` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `restId` INTEGER NOT NULL, `changed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -950,8 +927,7 @@
           {
             "fieldPath": "trackname",
             "columnName": "trackname",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "longitude",
@@ -980,20 +956,17 @@
           {
             "fieldPath": "url",
             "columnName": "url",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "fees",
             "columnName": "fees",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "phone",
             "columnName": "phone",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "contact",
@@ -1004,14 +977,12 @@
           {
             "fieldPath": "metatext",
             "columnName": "metatext",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "licence",
             "columnName": "licence",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "kidstrack",
@@ -1064,44 +1035,37 @@
           {
             "fieldPath": "hoursmonday",
             "columnName": "hoursmonday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourstuesday",
             "columnName": "hourstuesday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourswednesday",
             "columnName": "hourswednesday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hoursthursday",
             "columnName": "hoursthursday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hoursfriday",
             "columnName": "hoursfriday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourssaturday",
             "columnName": "hourssaturday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "hourssunday",
             "columnName": "hourssunday",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "tracklength",
@@ -1214,8 +1178,7 @@
           {
             "fieldPath": "areatype",
             "columnName": "areatype",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "schwierigkeit",
@@ -1244,50 +1207,42 @@
           {
             "fieldPath": "logoURL",
             "columnName": "logoURL",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "brands",
             "columnName": "brands",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "facebook",
             "columnName": "facebook",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "adress",
             "columnName": "adress",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "feescamping",
             "columnName": "feescamping",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "daysopen",
             "columnName": "daysopen",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "noiselimit",
             "columnName": "noiselimit",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "trackstatus",
             "columnName": "trackstatus",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "andoridid",
@@ -1298,8 +1253,7 @@
           {
             "fieldPath": "notes",
             "columnName": "notes",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "id",
@@ -1411,9 +1365,39 @@
         ]
       }
     ],
+    "views": [
+      {
+        "viewName": "CountrySum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select country, count(*) as count from Track group by Country"
+      },
+      {
+        "viewName": "RatingSum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select id as id, trackId as trackId, count(*) as ratingcount, round(avg(rating),1) as ratingavg from Comment where approved > -1 group by trackId"
+      },
+      {
+        "viewName": "EventSum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select id as id, trackRestId as trackRestId, count(*) as eventcount from Event where approved > -1 and eventDate > strftime('%s', 'now') group by trackRestId"
+      },
+      {
+        "viewName": "PictureSum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select id as id, trackId as trackId, count(*) as picturecount from Picture where approved > -1 group by trackId"
+      },
+      {
+        "viewName": "CountryCount",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select C.id as id, C.country as country, C.show as show, ifnull(S.count,0) as count from Country as C left join CountrySum as S on C.country = S.Country group by S.Country"
+      },
+      {
+        "viewName": "TracksGes",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select trackname as trackname, approved as approved, distance2location as distance2location, openmondays as openmondays, opentuesdays as opentuesdays, openwednesday as openwednesday, openthursday as openthursday, openfriday as openfriday, opensaturday as opensaturday, opensunday as opensunday, country as country, trackaccess as trackaccess, Track.id as id, brands as brands, metatext as metatext, kidstrack as kidstrack, supercross as supercross, shower as shower, cleaning as cleaning, electricity as electricity, camping as camping, latitude as latitude, longitude as longitude, hoursmonday as hoursmonday, hourstuesday as hourstuesday, hourswednesday as hourswednesday, hoursthursday as hoursthursday, hoursfriday as hoursfriday, hourssaturday as hourssaturday, hourssunday as hourssunday, validuntil as validuntil, url as url, phone as phone, contact as contact, notes as notes, tracklength as tracklength, soiltype as soiltype, facebook as facebook, adress as adress, licence as licence, fees as fees, feescamping as feescamping, daysopen as daysopen, noiselimit as noiselimit, campingrvrvhookup as campingrvrvhookup, singletracks as singletracks, mxtrack as mxtrack, a4x4 as a4x4, enduro as enduro, utv as utv, quad as quad, trackstatus as trackstatus, areatype as areatype, schwierigkeit as schwierigkeit, indoor as indoor, (cast(ifnull(PictureSum.picturecount, 0) as integer)) as picturecount, (cast(ifnull(EventSum.eventcount, 0) as integer)) as eventcount from Track left join PictureSum on Track.id = PictureSum.trackId left join EventSum on Track.id = EventSum.trackRestId"
+      },
+      {
+        "viewName": "TracksGesSum",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select trackname as trackname, approved as approved, distance2location as distance2location, openmondays as openmondays, opentuesdays as opentuesdays, openwednesday as openwednesday, openthursday as openthursday, openfriday as openfriday, opensaturday as opensaturday, opensunday as opensunday, country as country, trackaccess as trackaccess, Track.id as id, brands as brands, metatext as metatext, kidstrack as kidstrack, supercross as supercross, shower as shower, cleaning as cleaning, electricity as electricity, camping as camping, latitude as latitude, longitude as longitude, hoursmonday as hoursmonday, hourstuesday as hourstuesday, hourswednesday as hourswednesday, hoursthursday as hoursthursday, hoursfriday as hoursfriday, hourssaturday as hourssaturday, hourssunday as hourssunday, validuntil as validuntil, url as url, phone as phone, contact as contact, notes as notes, tracklength as tracklength, soiltype as soiltype, facebook as facebook, adress as adress, licence as licence, fees as fees, feescamping as feescamping, daysopen as daysopen, noiselimit as noiselimit, campingrvrvhookup as campingrvrvhookup, singletracks as singletracks, mxtrack as mxtrack, a4x4 as a4x4, enduro as enduro, utv as utv, quad as quad, trackstatus as trackstatus, areatype as areatype, schwierigkeit as schwierigkeit, indoor as indoor, (cast(ifnull(RatingSum.ratingavg, 0) as real)) as rating, (cast(ifnull(PictureSum.picturecount, 0) as integer)) as picturecount, (cast(ifnull(EventSum.eventcount, 0) as integer)) as eventcount from Track left join PictureSum on Track.id = PictureSum.trackId left join EventSum on Track.id = EventSum.trackRestId left join RatingSum on Track.id = RatingSum.trackId"
+      }
+    ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61463736952320e807d32724193df83d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8732e0c0a45ac543058a4a43dfdbeac0')"
     ]
   }
 }

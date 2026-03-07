@@ -26,6 +26,7 @@ val appModule = module {
     single { CommentViewModel() }
     single { CommentRepository() }
     single { TrackDetailRepository() }
+    single { LocationHelper(get()) }
 
     single { DataManagerApp(get()) }
 

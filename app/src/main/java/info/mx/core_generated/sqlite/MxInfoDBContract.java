@@ -409,77 +409,6 @@ public class MxInfoDBContract {
     }
 
     /**
-     * <p>Column definitions and helper methods to work with the Country.</p>
-     */
-    public static class Country implements CountryColumns, BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("country").build();
-
-        /**
-         * <p>The content type for a cursor that contains many Country rows.</p>
-         */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.country";
-
-        /**
-         * <p>The content type for a cursor that contains a single Country row.</p>
-         */
-        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.country";
-
-        /**
-         * <p>Builds a Uri with appended id for a row in Country,
-         * eg:- content://info.mx.tracks.sqlite.mxinfodb/country/123.</p>
-         */
-        public static Uri buildUriWithId(long id) {
-            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
-        public static int delete() {
-            return Mechanoid.getContentResolver().delete(Country.CONTENT_URI, null, null);
-        }
-
-        public static int delete(String where, String[] selectionArgs) {
-            return Mechanoid.getContentResolver().delete(Country.CONTENT_URI, where, selectionArgs);
-        }
-
-        /**
-         * <p>Create a new Builder for Country</p>
-         */
-        public static Builder newBuilder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Build and execute insert or update statements for Country.</p>
-         *
-         * <p>Use {@link Country#newBuilder()} to create new builder</p>
-         */
-        public static class Builder extends AbstractValuesBuilder {
-            private Builder() {
-                super(Mechanoid.getApplicationContext(), Country.CONTENT_URI);
-            }
-
-            public Builder setCountry(String value) {
-                mValues.put(Country.COUNTRY, value);
-                return this;
-            }
-
-            public Builder setShow(long value) {
-                mValues.put(Country.SHOW, value);
-                return this;
-            }
-        }
-
-        static final Set<Uri> VIEW_URIS;
-
-        static {
-            HashSet<Uri> viewUris = new HashSet<>();
-
-            viewUris.add(Countrycount.CONTENT_URI);
-
-            VIEW_URIS = Collections.unmodifiableSet(viewUris);
-        }
-    }
-
-    /**
      * <p>Column definitions and helper methods to work with the Favorits.</p>
      */
     public static class Favorits implements FavoritsColumns, BaseColumns {
@@ -2660,7 +2589,6 @@ public class MxInfoDBContract {
     static {
         Map<Uri, Set<Uri>> map = new HashMap<>();
 
-        map.put(Country.CONTENT_URI, Country.VIEW_URIS);
         map.put(Favorits.CONTENT_URI, Favorits.VIEW_URIS);
         map.put(Pictures.CONTENT_URI, Pictures.VIEW_URIS);
         map.put(Route.CONTENT_URI, Route.VIEW_URIS);
@@ -2686,7 +2614,6 @@ public class MxInfoDBContract {
      * <p>Delete all rows from all tables</p>
      */
     public static void deleteAll() {
-        Country.delete();
         Favorits.delete();
         Pictures.delete();
         Route.delete();

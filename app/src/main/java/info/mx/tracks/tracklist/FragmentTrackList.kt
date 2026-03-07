@@ -41,12 +41,14 @@ import info.mx.tracks.BuildConfig
 import info.mx.tracks.R
 import info.mx.tracks.base.FragmentBase
 import info.mx.tracks.common.FragmentUpDown
+import info.mx.tracks.common.FragmentUpDown.Companion.FILTER
 import info.mx.tracks.common.OverScrollListView
 import info.mx.tracks.common.QueryHelper
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.databinding.ScreenListWithProgressbarBinding
 import info.mx.tracks.ops.OpSyncFromServerOperation
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Country
 import info.mx.tracks.room.memory.MxMemDatabase
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.service.RecalculateDistance
@@ -360,6 +362,7 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                         mFilter = curFilter,
                         isFav = isFav,
                         table = AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM,
+                        mxDatabase = mxDatabase,
                     )
                 }
                 return query.createSupportLoader(TracksGesSum.CONTENT_URI, null, order)
@@ -378,8 +381,11 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                     adapter!!.swapCursor(cursor)
                 }
                 if (cursor.count == 0) {
+                    val countries = mxDatabase.countryDao().allShown.joinToString(", ") { "\"${it.country}\"" }
                     val gesAnz = SQuery.newQuery()
-                        .append(" " + TracksGesSum.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)", "1")
+                        // with two databases it needs unfortunately a list, instead of a subquery
+                        .append(" " + TracksGesSum.COUNTRY + " IN ($countries)", "1")
+//                        .append(" " + TracksGesSum.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)", "1")
                         .firstInt(TracksGesSum.CONTENT_URI, "max(" + TracksGesSum._ID + ")")
                     if (gesAnz == 0 && !isFav) {
                         binding.txtNoDisplays.text = getString(R.string.empty) + "\n" + getString(R.string.empty_countyselection)

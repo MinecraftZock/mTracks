@@ -19,12 +19,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
-import info.mx.core_generated.sqlite.CountryRecord
+import info.mx.core_generated.sqlite.CountrycountRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Countrycount
 import info.mx.tracks.R
 import info.mx.tracks.base.ListFragmentBase
-import info.mx.core_generated.sqlite.CountrycountRecord
-import info.mx.core_generated.sqlite.MxInfoDBContract
-import info.mx.core_generated.sqlite.MxInfoDBContract.Countrycount
 import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.util.getDrawableIdentifier
 import org.koin.android.ext.android.inject
@@ -98,10 +96,10 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
                 chk.isChecked = cursor.getInt(columnIndex) == 1
                 chk.setOnClickListener { view1: View ->
                     val chk1 = view1 as CheckBox
-                    val rec = CountryRecord.get(view1.getTag().toString().toLong())
-                    if (rec != null) {
-                        rec.show = if (chk1.isChecked) 1 else 0.toLong()
-                        rec.save()
+                    val country = mxDatabase.countryDao().byId(view1.tag.toString().toLong())
+                    if (country != null) {
+                        country.show = if (chk1.isChecked) 1 else 0
+                        mxDatabase.countryDao().update(country)
                     }
                     requireActivity().invalidateOptionsMenu()
                 }
@@ -136,23 +134,19 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
 
     override fun onListItemClick(listView: ListView, view: View, position: Int, id: Long) {
         super.onListItemClick(listView, view, position, id)
-        val rec = CountryRecord.get(id)
-        if (rec != null) {
-            rec.show = if (rec.show == 1L) 0 else 1.toLong()
-            rec.save()
+        val country = mxDatabase.countryDao().byId(id)
+        if (country != null) {
+            country.show = if (country.show == 1) 0 else 1
+            mxDatabase.countryDao().update(country)
         }
     }
 
     private fun handleMenuItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings_filter_country) {
-            val anz: Int
-            val query = SQuery.newQuery()
-            anz = if (hided == 0) {
-                query.expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 1) // obsolete
-                MxInfoDBContract.Country.newBuilder().setShow(0).update(query, true)
+            val anz: Int = if (hided == 0) {
+                mxDatabase.countryDao().updateShowByCountryCode(false)
             } else {
-                query.expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
-                MxInfoDBContract.Country.newBuilder().setShow(1).update(query, true)
+                mxDatabase.countryDao().updateShowByCountryCode(true)
             }
             Timber.d("update country %s", anz)
             item.icon = getIcon4SetAllCountry(requireActivity())
@@ -166,9 +160,9 @@ class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<
     }
 
     private fun getIcon4SetAllCountry(context: Context): Drawable? {
-        hided = SQuery.newQuery().expr(MxInfoDBContract.Country.SHOW, SQuery.Op.EQ, 0)
-            .count(MxInfoDBContract.Country.CONTENT_URI)
-        val all = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
+        val allCountries = mxDatabase.countryDao().all
+        hided = allCountries.filter { it.show == 0 }.size
+        val all = allCountries.size
         val drawable: Drawable? = when (hided) {
             0 -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox)
             all -> ContextCompat.getDrawable(context, R.drawable.actionbar_checkbox_empty)

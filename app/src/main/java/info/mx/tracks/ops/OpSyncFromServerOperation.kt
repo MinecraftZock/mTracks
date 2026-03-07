@@ -54,9 +54,6 @@ import info.mx.core_generated.rest.PostTrackstageIDRequest
 import info.mx.core_generated.rest.PutTrackstageRequest
 import info.mx.core_generated.rest.RESTnetworkError
 import info.mx.core_generated.rest.RESTtrackStage
-import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.CountryRecord
-import info.mx.core_generated.sqlite.CountrysumRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.core_generated.sqlite.TrackstageRecord
@@ -64,6 +61,7 @@ import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Country
 import info.mx.tracks.room.entity.Picture
 import info.mx.tracks.room.entity.TrackStage
 import net.lingala.zip4j.ZipFile
@@ -149,7 +147,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     doFixMissingCounty(context.applicationContext)
                     doHandleTrackStage(context.applicationContext, webClient)
                 }
-                countryResult = doBuildCountryTableMechanoid(context.applicationContext)
+                countryResult = doBuildCountryTableRoom(context.applicationContext)
                 imported = 0
                 Thread.sleep(4000)
 
@@ -1019,35 +1017,26 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return zlrInsertedReturn
     }
 
-    private fun doBuildCountryTableMechanoid(context: Context): String {
+    private fun doBuildCountryTableRoom(context: Context): String {
         val result = ""
-        val deleteCount = SQuery.newQuery().append(
-            Country._ID + " in (select " + Countrycount._ID + " from " + AbstractMxInfoDBOpenHelper.Sources.COUNTRYCOUNT + " where " +
-                    Countrycount.COUNT + "=0)"
-        ).delete(Country.CONTENT_URI)
+        val deleteCount = mxDatabase.countryDao().cleanupFromEmptyCounties()
         Timber.d("Country deleted $deleteCount")
 
-        val countryGroup = SQuery.newQuery().select<CountrysumRecord>(Countrysum.CONTENT_URI, Countrysum._ID)
-        for (recordC in countryGroup) {
-            val countryExist = SQuery.newQuery()
-                .expr(
-                    Country.COUNTRY, Op.EQ,
-                    if (recordC.country == null || recordC.country == "") "\"\"" else recordC.country
-                )
-                .exists(Country.CONTENT_URI)
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        mxDatabase.trackDao().countrySum.forEach { countrySum ->
+            val countryExist = mxDatabase.countryDao().exists(if (countrySum.country == "") "\"\"" else countrySum.country)
             if (!countryExist) {
-                val rec = CountryRecord()
-                if (!(recordC.country == null || recordC.country == "")) {
-                    rec.country = recordC.country
+                val countryEntity = info.mx.tracks.room.entity.Country()
+                if (countrySum.country != "") {
+                    countryEntity.country = countrySum.country
                 }
                 var country = Locale.getDefault().country
                 if (country.length < 2) {
                     country = "DE"
                 }
-                var showCountry = if (country == recordC.country) 1 else 0
-                val manager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                val isoSim = manager.simCountryIso
-                val isoNetwork = manager.networkCountryIso
+                var showCountry = if (country == countrySum.country) 1 else 0
+                val isoSim = telephonyManager.simCountryIso
+                val isoNetwork = telephonyManager.networkCountryIso
                 if (country == isoSim) {
                     showCountry = 1
                 }
@@ -1055,9 +1044,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     showCountry = 1
                 }
 
-                rec.show = showCountry.toLong()
-                rec.save()
-                Timber.d("${rec.country} Country added ${rec.show}")
+                countryEntity.show = showCountry
+                mxDatabase.countryDao().insertCountry(countryEntity)
+                Timber.d("${countryEntity.country} Country added ${countryEntity.show}")
             }
         }
 
@@ -1068,9 +1057,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             // currently to nothing. Flavor US should handle this
             Timber.d("We are not first time, let's keep America")
         } else if (!MxPreferences.instance.firstTimeCountry) {
-            if (SQuery.newQuery().count(Country.CONTENT_URI) > 2) {
+            if (mxDatabase.countryDao().allShown.size > 2) {
                 Timber.d("We are not firstTimeCountry, hide Europe")
-                locationHelper.hideAmerica(context)
+                locationHelper.hideAmerica()
                 MxPreferences.instance.firstTimeCountry = true
             } else {
                 Timber.d("We are not firstTimeCountry, Nothing to do with hide/show countries")
@@ -1078,14 +1067,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         } else
             Timber.d("Nothing to do with hide/show countries")
 
-        val countries = SQuery.newQuery()
-            .expr(Country.COUNTRY, Op.EQ, "zz")
-            .select<CountryRecord>(Country.CONTENT_URI)
-        for (recordC in countries) {
-            SQuery.newQuery()
-                .expr(Country._ID, Op.EQ, recordC.id)
-                .delete(Country.CONTENT_URI, false)
-        }
+        mxDatabase.countryDao().deleteByCountryCode("zz")
         return result
     }
 
