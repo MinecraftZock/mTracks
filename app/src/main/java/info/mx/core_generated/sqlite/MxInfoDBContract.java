@@ -1030,8 +1030,6 @@ public class MxInfoDBContract {
         static {
             HashSet<Uri> viewUris = new HashSet<>();
 
-            viewUris.add(Countrycount.CONTENT_URI);
-            viewUris.add(Countrysum.CONTENT_URI);
             viewUris.add(TracksGesSum.CONTENT_URI);
             viewUris.add(Tracksges.CONTENT_URI);
 
@@ -1483,151 +1481,6 @@ public class MxInfoDBContract {
 
             public Builder setCreated(long value) {
                 mValues.put(Weather.CREATED, value);
-                return this;
-            }
-        }
-
-        static final Set<Uri> VIEW_URIS;
-
-        static {
-            HashSet<Uri> viewUris = new HashSet<>();
-
-
-            VIEW_URIS = Collections.unmodifiableSet(viewUris);
-        }
-    }
-
-    /**
-     * <p>Column definitions and helper methods to work with the Countrycount.</p>
-     */
-    public static class Countrycount implements CountrycountColumns, BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("countrycount").build();
-
-        /**
-         * <p>The content type for a cursor that contains many Countrycount rows.</p>
-         */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.countrycount";
-
-        /**
-         * <p>The content type for a cursor that contains a single Countrycount row.</p>
-         */
-        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.countrycount";
-
-        /**
-         * <p>Builds a Uri with appended id for a row in Countrycount,
-         * eg:- content://info.mx.tracks.sqlite.mxinfodb/countrycount/123.</p>
-         */
-        public static Uri buildUriWithId(long id) {
-            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
-        public static int delete() {
-            return Mechanoid.getContentResolver().delete(Countrycount.CONTENT_URI, null, null);
-        }
-
-        public static int delete(String where, String[] selectionArgs) {
-            return Mechanoid.getContentResolver().delete(Countrycount.CONTENT_URI, where, selectionArgs);
-        }
-
-        /**
-         * <p>Create a new Builder for Countrycount</p>
-         */
-        public static Builder newBuilder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Build and execute insert or update statements for Countrycount.</p>
-         *
-         * <p>Use {@link Countrycount#newBuilder()} to create new builder</p>
-         */
-        public static class Builder extends AbstractValuesBuilder {
-            private Builder() {
-                super(Mechanoid.getApplicationContext(), Countrycount.CONTENT_URI);
-            }
-
-            public Builder setCountry(String value) {
-                mValues.put(Countrycount.COUNTRY, value);
-                return this;
-            }
-
-            public Builder setShow(long value) {
-                mValues.put(Countrycount.SHOW, value);
-                return this;
-            }
-
-            public Builder setCount(String value) {
-                mValues.put(Countrycount.COUNT, value);
-                return this;
-            }
-        }
-
-        static final Set<Uri> VIEW_URIS;
-
-        static {
-            HashSet<Uri> viewUris = new HashSet<>();
-
-
-            VIEW_URIS = Collections.unmodifiableSet(viewUris);
-        }
-    }
-
-    /**
-     * <p>Column definitions and helper methods to work with the Countrysum.</p>
-     */
-    public static class Countrysum implements CountrysumColumns, BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath("countrysum").build();
-
-        /**
-         * <p>The content type for a cursor that contains many Countrysum rows.</p>
-         */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.mxinfodb.countrysum";
-
-        /**
-         * <p>The content type for a cursor that contains a single Countrysum row.</p>
-         */
-        public static final String ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.mxinfodb.countrysum";
-
-        /**
-         * <p>Builds a Uri with appended id for a row in Countrysum,
-         * eg:- content://info.mx.tracks.sqlite.mxinfodb/countrysum/123.</p>
-         */
-        public static Uri buildUriWithId(long id) {
-            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
-        public static int delete() {
-            return Mechanoid.getContentResolver().delete(Countrysum.CONTENT_URI, null, null);
-        }
-
-        public static int delete(String where, String[] selectionArgs) {
-            return Mechanoid.getContentResolver().delete(Countrysum.CONTENT_URI, where, selectionArgs);
-        }
-
-        /**
-         * <p>Create a new Builder for Countrysum</p>
-         */
-        public static Builder newBuilder() {
-            return new Builder();
-        }
-
-        /**
-         * <p>Build and execute insert or update statements for Countrysum.</p>
-         *
-         * <p>Use {@link Countrysum#newBuilder()} to create new builder</p>
-         */
-        public static class Builder extends AbstractValuesBuilder {
-            private Builder() {
-                super(Mechanoid.getApplicationContext(), Countrysum.CONTENT_URI);
-            }
-
-            public Builder setCountry(String value) {
-                mValues.put(Countrysum.COUNTRY, value);
-                return this;
-            }
-
-            public Builder setCount(long value) {
-                mValues.put(Countrysum.COUNT, value);
                 return this;
             }
         }
@@ -2595,8 +2448,6 @@ public class MxInfoDBContract {
         map.put(Tracks.CONTENT_URI, Tracks.VIEW_URIS);
         map.put(Trackstage.CONTENT_URI, Trackstage.VIEW_URIS);
         map.put(Weather.CONTENT_URI, Weather.VIEW_URIS);
-        map.put(Countrycount.CONTENT_URI, Countrycount.VIEW_URIS);
-        map.put(Countrysum.CONTENT_URI, Countrysum.VIEW_URIS);
         map.put(Events2series.CONTENT_URI, Events2series.VIEW_URIS);
         map.put(Picturesum.CONTENT_URI, Picturesum.VIEW_URIS);
         map.put(TracksGesSum.CONTENT_URI, TracksGesSum.VIEW_URIS);
