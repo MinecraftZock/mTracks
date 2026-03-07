@@ -19,17 +19,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import com.robotoworks.mechanoid.db.SQuery
+import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.tracks.R
 import info.mx.tracks.base.ListFragmentBase
-import info.mx.core_generated.sqlite.CountryRecord
 import info.mx.core_generated.sqlite.CountrycountRecord
 import info.mx.core_generated.sqlite.MxInfoDBContract
 import info.mx.core_generated.sqlite.MxInfoDBContract.Countrycount
+import info.mx.tracks.room.MxDatabase
 import info.mx.tracks.util.getDrawableIdentifier
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.Locale
 
 class FragmentFilterCountry : ListFragmentBase(), LoaderManager.LoaderCallbacks<Cursor> {
+
+    val mxDatabase: MxDatabase by inject()
 
     private lateinit var adapter: SimpleCursorAdapter
     private val projection = arrayOf(Countrycount.COUNTRY, Countrycount.COUNTRY, Countrycount.SHOW, Countrycount.COUNT)

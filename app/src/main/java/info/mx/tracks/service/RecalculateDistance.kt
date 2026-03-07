@@ -41,6 +41,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
     val mxDatabase: MxDatabase by inject()
 
     private val mxMemDatabase: MxMemDatabase by inject()
+    private val locationHelper: LocationHelper by inject()
 
     private val notificationID: Int
         get() = NOTIFICATION_ID
@@ -108,11 +109,11 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         if (!MxPreferences.instance.firstTimeLocation) {
             if (countCountries > 2) {
                 if (location.isUSA()) {
-                    LocationHelper.hideEurope(context)
+                    locationHelper.hideEurope(context)
                 } else if (location.isEurope()) {
-                    LocationHelper.hideAmerica(context)
+                    locationHelper.hideAmerica(context)
                 } else {
-                    LocationHelper.hideAmerica(context)
+                    locationHelper.hideAmerica(context)
                 }
                 QueryHelper.resetFilter()
                 MxPreferences.instance.firstTimeLocation = true
