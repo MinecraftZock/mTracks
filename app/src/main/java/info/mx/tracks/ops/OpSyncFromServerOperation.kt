@@ -137,7 +137,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     doFixMissingCounty(context.applicationContext)
                     doHandleTrackStage(context.applicationContext, webClient)
                 }
-                countryResult = doBuildCountryTableMech(context.applicationContext)
+                countryResult = doBuildCountryTableMechanoid(context.applicationContext)
                 imported = 0
                 Thread.sleep(4000)
 
@@ -200,11 +200,18 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 val contentValuesTrackList = ArrayList<ContentValues>()
                 val opName = "Tracks Init"
 
-                zlrInserted = proceedTracks(trackRS, zlrInserted, contentValuesTrackList, opName, 0, true)
+                zlrInserted = proceedTracksMechanoid(trackRS, zlrInserted, contentValuesTrackList, opName, 0, true)
 
                 // clean up
                 if (zlrInserted > 0) {
-                    bulkInsert(operationContext.applicationContext, contentValuesTrackList, Tracks.CONTENT_URI, trackRS.size, opName, 0)
+                    bulkInsertMechanoid(
+                        context = operationContext.applicationContext,
+                        contentValuesList = contentValuesTrackList,
+                        uri = Tracks.CONTENT_URI,
+                        ges = trackRS.size,
+                        was = opName,
+                        previousImported = 0
+                    )
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -277,7 +284,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     @Throws(IOException::class)
     private fun closeFileHandlers(`is`: ZipInputStream?, os: OutputStream?) { // Close output stream
         os?.close()
-        // Closing inputstream also checks for CRC of the the just extracted
+        // Closing inputstream also checks for CRC of the just extracted
         // file. If CRC check has to be skipped (for ex: to cancel the unzip
         // operation, etc) use method is.close(boolean skipCRCCheck) and set the
         // flag, skipCRCCheck to false
@@ -317,7 +324,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 val restId = SQuery.newQuery()
                     .expr(Pictures.REST_ID, Op.EQ, pictureR.id!!)
                     .firstInt(Pictures.CONTENT_URI, Pictures._ID)
-                if (restId == 0) { // neuanlage
+                if (restId == 0) { // new entry
                     zlrInserted++
                     val builderTrack = Pictures.newBuilder()
 
@@ -356,8 +363,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             if (zlrInserted > 0) {
                 doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
             }
-            LoggingHelper.setMessage("") // dies SysncPictures wird auch vom pushImages aufgerufen
-            Timber.i("$opName gesamt ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
+            LoggingHelper.setMessage("") // dies SyncPictures wird auch vom pushImages aufgerufen
+            Timber.i("$opName all ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
         } catch (e: Exception) {
             if (isAdminOrDebug) {
                 Toast.makeText(context.applicationContext, "${this.javaClass.name} ${e.message}", Toast.LENGTH_LONG).show()
@@ -401,7 +408,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val coder = Geocoder(context)
             try {
                 val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
-                if (addresses != null && addresses.isNotEmpty()) {
+                if (!addresses.isNullOrEmpty()) {
                     val country = addresses[0].countryCode
                     Timber.d("${record.trackname}  country:$country")
                     val stage = TrackstageRecord()
@@ -414,12 +421,11 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             } catch (e: IOException) {
                 Timber.e(e)
             }
-
         }
     }
 
     private fun doCleanFromDecline() {
-        // den letzten muss man drinnen lassen
+        // keep the last is required
         val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
         val del = SQuery.newQuery().expr(Tracks.APPROVED, Op.EQ, -1)
             .expr(Tracks.CHANGED, Op.NEQ, maxCreated)
@@ -777,7 +783,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     @SuppressLint("HardwareIds")
     @Throws(Exception::class)
-    private fun doSyncTracksBlock(context: OperationContext, updateProvider: Boolean, vorherImportiert: Int, flavor: String): Int {
+    private fun doSyncTracksBlock(context: OperationContext, updateProvider: Boolean, previousImported: Int, flavor: String): Int {
         val opName = "Tracks"
         val ip: String
         var res: Int
@@ -814,23 +820,24 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
             tracksResponse.checkResponseCodeOk()
 
-            LoggingHelper.setMessage(
-                IMPORT_REC + " " + opName + " " +
-                        vorherImportiert + "/" + (tracksResponse.body()!!.size + vorherImportiert) + " ..."
-            )
+            LoggingHelper.setMessage("$IMPORT_REC $opName $previousImported/${(tracksResponse.body()!!.size + previousImported)} ...")
 
             var zlrInserted = 0
             val contentValuesTrackList = ArrayList<ContentValues>()
             res = tracksResponse.body()!!.size
-            zlrInserted = proceedTracks(tracksResponse.body()!!, zlrInserted, contentValuesTrackList, opName, vorherImportiert, updateProvider)
+            zlrInserted = proceedTracksMechanoid(tracksResponse.body()!!, zlrInserted, contentValuesTrackList, opName, previousImported, updateProvider)
             // clean up
             if (zlrInserted > 0) {
-                bulkInsert(
-                    context.applicationContext, contentValuesTrackList,
-                    Tracks.CONTENT_URI, tracksResponse.body()!!.size, opName, vorherImportiert
+                bulkInsertMechanoid(
+                    context = context.applicationContext,
+                    contentValuesList = contentValuesTrackList,
+                    uri = Tracks.CONTENT_URI,
+                    ges = tracksResponse.body()!!.size,
+                    was = opName,
+                    previousImported = previousImported
                 )
             }
-            Timber.i("$opName overall ${(if (tracksResponse.body() != null) tracksResponse.body()!!.size else 0)}")
+            Timber.i("$opName from $maxCreated overall ${(if (tracksResponse.body() != null) tracksResponse.body()!!.size else 0)}")
 
         } catch (e: SocketTimeoutException) {
             Timber.w("${e.javaClass.simpleName} ${e.message}")
@@ -845,12 +852,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return res
     }
 
-    private fun proceedTracks(
+    private fun proceedTracksMechanoid(
         tracksResponse: List<TrackR>,
         zlrInserted: Int,
         contentValuesTrackList: ArrayList<ContentValues>,
         opName: String,
-        vorherImportiert: Int,
+        previousImported: Int,
         updateProvider: Boolean
     ): Int {
         var trackName = ""
@@ -876,12 +883,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                 if (restId == 0) { // new record
                     zlrInsertedReturn++
-                    if (trackREST.approved == -1 && !oneDeclinedAtLeast) {
+                    if (trackREST.approved == -1) {
                         // wenn der einzige übertragene ein abgelehnter ist, muss man ihn importieren, damit man in keine endlosschleife kommt
                         oneDeclinedAtLeast = true
                     }
 
-                    // skip during inital all approved to speed it up
+                    // skip during initial all approved to speed it up
                     if (trackREST.approved == -1 && initial) {
                         continue
                     }
@@ -963,9 +970,13 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                     // bulk insert
                     if (zlrUpdated > BLOCK_SIZE) {
-                        zlrUpdated = bulkInsert(
-                            operationContext.applicationContext, contentValuesTrackList,
-                            Tracks.CONTENT_URI, tracksResponse.size, opName, vorherImportiert
+                        zlrUpdated = bulkInsertMechanoid(
+                            context = operationContext.applicationContext,
+                            contentValuesList = contentValuesTrackList,
+                            uri = Tracks.CONTENT_URI,
+                            ges = tracksResponse.size,
+                            was = opName,
+                            previousImported = previousImported
                         )
                     }
                 } else {
@@ -1070,7 +1081,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val restId = SQuery.newQuery()
                 .expr(Ratings.REST_ID, Op.EQ, trackREST.id!!)
                 .firstInt(Ratings.CONTENT_URI, Ratings._ID)
-            if (restId == 0) { // neuanlage
+            if (restId == 0) { // new entry
                 zlrInserted++
                 val builderRating = Ratings.newBuilder()
 
@@ -1088,9 +1099,13 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                 // bulk insert
                 if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = bulkInsert(
-                        context.applicationContext, contentValuesRatingsList,
-                        Ratings.CONTENT_URI, ratingsResponse.body()!!.size, opName, 0
+                    zlrUpdated = bulkInsertMechanoid(
+                        context = context.applicationContext,
+                        contentValuesList = contentValuesRatingsList,
+                        uri = Ratings.CONTENT_URI,
+                        ges = ratingsResponse.body()!!.size,
+                        was = opName,
+                        previousImported = 0
                     )
                 }
             } else {
@@ -1110,12 +1125,16 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
         // clean up
         if (zlrInserted > 0) {
-            bulkInsert(
-                context.applicationContext, contentValuesRatingsList,
-                Ratings.CONTENT_URI, ratingsResponse.body()!!.size, opName, 0
+            bulkInsertMechanoid(
+                context = context.applicationContext,
+                contentValuesList = contentValuesRatingsList,
+                uri = Ratings.CONTENT_URI,
+                ges = ratingsResponse.body()!!.size,
+                was = opName,
+                previousImported = 0
             )
         }
-        Timber.i("$opName gesamt ${(if (ratingsResponse.body() != null) ratingsResponse.body()!!.size else 0)} updated $zlrUpdated")
+        Timber.i("$opName all ${(if (ratingsResponse.body() != null) ratingsResponse.body()!!.size else 0)} updated $zlrUpdated")
     }
 
     @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
@@ -1140,7 +1159,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val restId = SQuery.newQuery()
                 .expr(Series.REST_ID, Op.EQ, serieR.id!!)
                 .firstInt(Series.CONTENT_URI, Series._ID)
-            if (restId == 0) { // neuanlage
+            if (restId == 0) { // new entry
                 zlrInserted++
                 val builderTrack = Series.newBuilder()
 
@@ -1168,7 +1187,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         if (zlrInserted > 0) {
             doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
         }
-        Timber.i("$opName gesamt ${(if (seriesResponse.body() != null) seriesResponse.body()!!.size else 0)} updated:$zlrUpdated")
+        Timber.i("$opName all ${(if (seriesResponse.body() != null) seriesResponse.body()!!.size else 0)} updated:$zlrUpdated")
     }
 
     @Throws(ServiceException::class, RemoteException::class, OperationApplicationException::class)
@@ -1192,7 +1211,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             val dbId = SQuery.newQuery()
                 .expr(Events.REST_ID, Op.EQ, trackREST.id)
                 .firstInt(Events.CONTENT_URI, Events._ID)
-            if (dbId == 0) { // neuanlage
+            if (dbId == 0) { // new entry
                 zlrInserted++
                 val builderTrack = Events.newBuilder()
 
@@ -1226,10 +1245,10 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         if (zlrInserted > 0) {
             doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
         }
-        Timber.i("$opName gesamt ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
+        Timber.i("$opName all ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
     }
 
-    private fun doBuildCountryTableMech(context: Context): String {
+    private fun doBuildCountryTableMechanoid(context: Context): String {
         val result = ""
         val deleteCount = SQuery.newQuery().append(
             Country._ID + " in (select " + Countrycount._ID + " from " + AbstractMxInfoDBOpenHelper.Sources.COUNTRYCOUNT + " where " +
@@ -1283,7 +1302,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 locationHelper.hideAmerica(context)
                 MxPreferences.instance.firstTimeCountry = true
             } else {
-                Timber.d("We are not firstTimeCountry, Nothing to do with hide/shwow countries")
+                Timber.d("We are not firstTimeCountry, Nothing to do with hide/show countries")
             }
         } else
             Timber.d("Nothing to do with hide/show countries")
@@ -1331,16 +1350,16 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         const val RECALC_TRACKS = "recalcTracks"
         private var imported = 0
 
-        private fun bulkInsert(
+        private fun bulkInsertMechanoid(
             context: Context,
             contentValuesList: MutableList<ContentValues>,
             uri: Uri,
             ges: Int,
             was: String,
-            vorherImportiert: Int
+            previousImported: Int
         ): Int {
             imported += contentValuesList.size
-            LoggingHelper.setMessage(IMPORT_REC + " " + was + " " + imported + "/" + (ges + vorherImportiert))
+            LoggingHelper.setMessage(IMPORT_REC + " " + was + " " + imported + "/" + (ges + previousImported))
             val contentValues = arrayOfNulls<ContentValues>(contentValuesList.size)
             for ((i, values) in contentValuesList.withIndex()) {
                 contentValues[i] = values
