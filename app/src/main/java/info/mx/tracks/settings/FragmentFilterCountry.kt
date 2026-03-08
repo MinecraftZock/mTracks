@@ -17,13 +17,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import info.mx.tracks.R
-import info.mx.tracks.room.MxDatabase
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class FragmentFilterCountry : Fragment() {
 
-    private val mxDatabase: MxDatabase by inject()
     private val viewModel: CountryFilterViewModel by viewModels()
     private lateinit var adapter: CountryFilterAdapter
     private lateinit var recyclerView: RecyclerView

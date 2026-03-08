@@ -6,6 +6,8 @@ import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.navigation.AppNavigationMenu
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
+import info.mx.tracks.settings.CountryFilterRepository
+import info.mx.tracks.settings.CountryFilterViewModel
 import info.mx.tracks.trackdetail.comment.CommentRepository
 import info.mx.tracks.trackdetail.comment.CommentViewModel
 import info.mx.tracks.trackdetail.detail.TrackDetailRepository
@@ -26,8 +28,9 @@ val appModule = module {
     single { CommentViewModel() }
     single { CommentRepository() }
     single { TrackDetailRepository() }
+    single { CountryFilterViewModel() }
+    single { CountryFilterRepository() }
     single { LocationHelper(get()) }
-
     single { DataManagerApp(get()) }
 
     //factory { MySimplePresenter(get()) }
