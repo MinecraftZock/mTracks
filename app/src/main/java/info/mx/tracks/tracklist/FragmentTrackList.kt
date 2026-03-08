@@ -382,7 +382,10 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                 }
                 if (cursor.count == 0) {
                     val countries = mxDatabase.countryDao().allShown.joinToString(", ") { "\"${it.country}\"" }
-                    val gesAnz = SQuery.newQuery()
+                    val gesAnz = if (countries.isEmpty())
+                        0
+                    else
+                        SQuery.newQuery()
                         // with two databases it needs unfortunately a list, instead of a subquery
                         .append(" " + TracksGesSum.COUNTRY + " IN ($countries)", "1")
 //                        .append(" " + TracksGesSum.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)", "1")
