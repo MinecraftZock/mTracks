@@ -110,21 +110,6 @@ class FragmentTrackListTab : FragmentBase() {
             if (position == 1)
                 tab.setIcon(android.R.drawable.star_off)
         }.attach()
-
-//        tabsAdapter.setOnCallbacksTabsChange(object : TabsAdapter.CallbacksTabsChange {
-//            override fun onTabPageSelected(id: Long) {
-//                callbacks?.onTabPageSelected(id)
-//            }
-//        })
-
-//        if (permissionHelper.hasLocationPermission()) {
-//            addDistanceFragment()
-//        } else {
-//            // remove the last if it is distance tab
-//            if (isDistanceFragmentAvailable) {
-//                binding.tabhost.tabWidget.removeView(binding.tabhost.tabWidget.getChildTabViewAt(binding.tabhost.tabWidget.tabCount - 1))
-//            }
-//        }
         return view
     }
 
@@ -166,7 +151,7 @@ class FragmentTrackListTab : FragmentBase() {
     override fun onPause() {
         try {
             requireActivity().unregisterReceiver(registerDistanceReceiver)
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
         }
 
         super.onPause()
