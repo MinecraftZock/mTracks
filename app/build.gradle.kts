@@ -134,7 +134,7 @@ android {
             //applicationIdSuffix ".debug"
             versionNameSuffix = ".debug"
             buildConfigField("boolean", "FILE_LOGGING", "true")
-            buildConfigField("String", httpLoggingLevel, "\"BODY\"") //NONE, BASIC, HEADERS, BODY
+            buildConfigField("String", httpLoggingLevel, "\"BASIC\"") //NONE, BASIC, HEADERS, BODY
             buildConfigField("int", pushServerSleep, "1000")
         }
         release {
