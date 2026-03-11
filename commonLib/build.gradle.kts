@@ -25,6 +25,6 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0")
 
     api("com.github.matomo-org:matomo-sdk-android:4.4")
-    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.core:core-ktx:1.18.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.10")
 }
