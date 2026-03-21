@@ -78,5 +78,5 @@ dependencies {
     api("com.squareup.okhttp3:logging-interceptor:5.3.2")
     api("commons-io:commons-io:2.21.0")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.3.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.3.20")
 }
