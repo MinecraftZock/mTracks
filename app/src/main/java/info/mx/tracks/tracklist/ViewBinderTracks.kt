@@ -15,17 +15,17 @@ import androidx.core.content.ContextCompat
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import info.hannes.commonlib.DateHelper
 import info.mx.commonlib.LocationHelper.getFormatDistance
-import info.mx.tracks.BuildConfig
-import info.mx.tracks.R
-import info.mx.tracks.common.BitmapHelper
-import info.mx.tracks.common.SecHelper
-import info.mx.tracks.common.setDayLayout
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.sqlite.MxInfoDBContract.TracksGesSum
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.core_generated.sqlite.TracksGesSumRecord
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.core_generated.sqlite.TracksgesRecord
+import info.mx.tracks.BuildConfig
+import info.mx.tracks.R
+import info.mx.tracks.common.BitmapHelper
+import info.mx.tracks.common.SecHelper
+import info.mx.tracks.common.setDayLayout
 import info.mx.tracks.tools.PermissionHelper
 import info.mx.tracks.util.getDrawableIdentifier
 import org.koin.core.component.KoinComponent
@@ -34,7 +34,8 @@ import timber.log.Timber
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) : SimpleCursorAdapter.ViewBinder, KoinComponent {
+class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) :
+    SimpleCursorAdapter.ViewBinder, KoinComponent {
 
     private val shortWeekdays: Array<String> = DateHelper.shortWeekdays
     private val withSum: Boolean
