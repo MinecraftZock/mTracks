@@ -92,9 +92,10 @@ class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: 
                 res = true
             } else if (view.id == R.id.tr_country) {
                 if (tracksGesSumCursor.getString(columnIndex) != null) {
-                    val value = tracksGesSumCursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
-                    val id = context.resources.getDrawableIdentifier(value, context.packageName)
-                    (view as ImageView).setImageResource(id)
+                    val countryIconName = tracksGesSumCursor.getString(columnIndex).lowercase(Locale.getDefault()) + "2x"
+                    Timber.d("countryIcon for $countryIconName '${tracksGesSumCursor.getString(0)}'")
+                    val countryIconId = context.resources.getDrawableIdentifier(countryIconName, context.packageName)
+                    (view as ImageView).setImageResource(countryIconId)
                 }
                 res = true
             } else if (view.id == R.id.tr_ratingBar) {
