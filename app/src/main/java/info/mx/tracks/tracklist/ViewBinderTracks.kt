@@ -34,7 +34,8 @@ import timber.log.Timber
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) : SimpleCursorAdapter.ViewBinder, KoinComponent {
+class ViewBinderTracks(private val context: Context, myLoc: Location?, withSum: Boolean) :
+    SimpleCursorAdapter.ViewBinder, KoinComponent {
 
     private val shortWeekdays: Array<String> = DateHelper.shortWeekdays
     private val withSum: Boolean
