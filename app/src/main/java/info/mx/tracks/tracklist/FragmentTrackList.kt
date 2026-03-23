@@ -186,9 +186,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FILTER)) {
             curFilter = savedInstanceState.getString(FILTER)!!
-            if (searchView != null) {
+            searchView?.let {
                 searchAutoComplete?.setText(curFilter)
-                searchView!!.isIconified = false
+                it.isIconified = false
                 Timber.d("searchView %s", curFilter)
             }
         }
@@ -238,11 +238,12 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
 
         binding.listOverview.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, _, id ->
             val record = TracksGesSumRecord.get(id)
-            if (record != null) {
+            record?.let {
                 LocationHelper.openNavi(
-                    this@FragmentTrackList.requireActivity(), null,
-                    SecHelper.entcryptXtude(record.latitude),
-                    SecHelper.entcryptXtude(record.longitude)
+                    context = this@FragmentTrackList.requireActivity(),
+                    name = null,
+                    latitude = SecHelper.entcryptXtude(it.latitude),
+                    longitude = SecHelper.entcryptXtude(it.longitude)
                 )
             }
             true
@@ -461,9 +462,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                     searchView!!.setIconifiedByDefault(true)
                     searchView!!.setOnQueryTextListener(queryTextListener)
                     if (curFilter.isNotBlank()) {
-                        if (searchAutoComplete != null) {
+                        searchAutoComplete?.let {
                             searchItem.expandActionView()
-                            searchAutoComplete!!.setText(curFilter)
+                            it.setText(curFilter)
                         }
                     }
                 }
@@ -566,8 +567,9 @@ class FragmentTrackList : FragmentBase(), LoaderManager.LoaderCallbacks<Cursor> 
                 if (isAdded) {
                     LocationServices.getFusedLocationProviderClient(requireActivity()).lastLocation
                         .addOnSuccessListener(requireActivity()) { last ->
-                            if (last != null) {
-                                viewBinder?.setMyLocation(last)
+                            last?.let {
+                                it
+                                viewBinder?.setMyLocation(it)
                             }
                         }
                 }
