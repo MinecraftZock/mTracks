@@ -135,4 +135,40 @@ interface TrackDao {
     @Query("SELECT * FROM TracksGesSum WHERE country = :country")
     fun getTracksGesSumByCountry(country: String): Flow<List<TracksGesSum>>
 
+    // Search and filter methods for TracksGesSum with LIMIT to prevent CursorWindow overflow
+    @Query("""
+        SELECT * FROM TracksGesSum 
+        WHERE (:searchText = '' OR trackname LIKE '%' || :searchText || '%' 
+               OR metatext LIKE '%' || :searchText || '%' 
+               OR brands LIKE '%' || :searchText || '%')
+        AND (:countryFilter = '' OR country IN (:countries))
+        ORDER BY 
+            CASE WHEN :orderBy = 'trackname' THEN trackname END ASC,
+            CASE WHEN :orderBy = 'distance2location' THEN distance2location END ASC,
+            CASE WHEN :orderBy = 'approved' THEN approved END DESC
+        LIMIT 1000
+    """)
+    fun searchTracksGesSum(
+        searchText: String,
+        countryFilter: String,
+        countries: List<String>,
+        orderBy: String
+    ): Flow<List<TracksGesSum>>
+
+    @Query("""
+        SELECT tgs.* FROM TracksGesSum tgs
+        INNER JOIN Favorit f ON tgs.id = f.trackId
+        WHERE (:searchText = '' OR tgs.trackname LIKE '%' || :searchText || '%' 
+               OR tgs.metatext LIKE '%' || :searchText || '%' 
+               OR tgs.brands LIKE '%' || :searchText || '%')
+        ORDER BY 
+            CASE WHEN :orderBy = 'trackname' THEN tgs.trackname END ASC,
+            CASE WHEN :orderBy = 'distance2location' THEN tgs.distance2location END ASC
+        LIMIT 1000
+    """)
+    fun searchFavoriteTracksGesSum(
+        searchText: String,
+        orderBy: String
+    ): Flow<List<TracksGesSum>>
+
 }
