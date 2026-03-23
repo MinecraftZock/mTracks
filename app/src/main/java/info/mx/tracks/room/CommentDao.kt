@@ -23,11 +23,23 @@ interface CommentDao {
     @get:Query("SELECT * FROM Comment")
     val all: List<Comment>
 
+    @Query("DELETE FROM Comment where approved = -1")
+    fun deleteNotApproved()
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
+    fun loadByTrackId(trackId: Long): Flowable<List<Comment>>
+
+    @Query("SELECT * FROM Comment WHERE restId = :restId")
+    fun byRestId(restId: Long): Comment?
+
     @Query("SELECT avg(rating) FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
     fun avgByTrackId(trackId: Long): Maybe<Float>
 
     @Query("SELECT avg(rating) FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
     fun avgByTrackIdMT(trackId: Long): Float
+
+    @Query("SELECT max(changed) FROM Comment WHERE restId != -1")
+    fun maxChangedDate(): Long
 
     @Query("SELECT * FROM Comment WHERE trackId = :trackId order by changed desc")
     fun flowableAllByTrackId(trackId: Long): Flowable<List<Comment>>
@@ -53,7 +65,7 @@ interface CommentDao {
     //    @Query("SELECT * FROM Comment WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
     //    User findByName(String first, String last);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCommentsAll(vararg comments: Comment)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
