@@ -57,6 +57,7 @@ import info.mx.tracks.ops.MechanoidHelper.doStagesPushMechanoid
 import info.mx.tracks.ops.MechanoidHelper.doStagesReceiveNewMechanoid
 import info.mx.tracks.ops.MechanoidHelper.proceedTracksMechanoid
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Comment
 import info.mx.tracks.room.entity.Picture
 import info.mx.tracks.room.entity.Track
 import info.mx.tracks.room.entity.TrackStage
@@ -152,6 +153,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 }
 
                 doSyncPictures(context)
+                imported = 0
+                doSyncComments(context)
                 imported = 0
                 doPushNetworkErrorsAtOnce(webClient)
 
@@ -362,7 +365,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
                     // bulk insert
                     if (zlrUpdated > BLOCK_SIZE) {
-                        zlrUpdated = doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                        zlrUpdated = doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, 0)
                     }
                 } else {
                     deleteFile(localPicture.localfile)
@@ -380,7 +383,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             }
             // clean up
             if (zlrInserted > 0) {
-                doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, 0)
             }
             LoggingHelper.setMessage("") // SyncPictures is also called from pushImages, so we need to clear the message here
             Timber.i("$opName all ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
@@ -445,6 +448,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         Timber.d("del approved:%s", del)
         mxDatabase.trackStageDao().deleteNotApproved()
         mxDatabase.pictureDao().deleteNotApproved()
+        mxDatabase.commentDao().deleteNotApproved()
     }
 
     private fun doHandleTrackStage(context: Context, webClient: MxInfo) {
@@ -844,6 +848,75 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return zlrInsertedReturn
     }
 
+    @Throws(Exception::class)
+    private fun doSyncComments(context: OperationContext) {
+        val opName = "Comments"
+        val maxCreated = mxDatabase.commentDao().maxChangedDate()
+
+        val ratingsResponse = dataManagerApp.getRatings(maxCreated / 1000)
+
+        ratingsResponse.checkResponseCodeOk()
+
+        LoggingHelper.setMessage("$DOWNLOAD $opName")
+        var zlrUpdated = 0
+        imported = 0
+        val commentList = mutableListOf<Comment>()
+        for (trackREST in ratingsResponse.body()!!) {
+            if (context.isAborted) {
+                return
+            }
+
+            zlrUpdated++
+
+            mxDatabase.commentDao().byRestId(trackREST.id.toLong())?.let { comment ->
+                comment.restId = trackREST.id.toLong()
+                comment.changed = trackREST.changed.toLong() * 1000
+                comment.country = trackREST.country
+                comment.deleted = trackREST.deleted
+                comment.note = trackREST.note
+                comment.rating = trackREST.rating
+                comment.trackId = trackREST.trackId!!.toLong()
+                comment.username = trackREST.username
+                comment.approved = trackREST.approved
+                comment.androidid = trackREST.androidid
+                mxDatabase.commentDao().update(comment)
+            } ?: run {
+                // new entry
+                val comment = Comment()
+
+                comment.restId = trackREST.id.toLong()
+                comment.changed = trackREST.changed.toLong() * 1000
+                comment.country = trackREST.country
+                comment.deleted = trackREST.deleted
+                comment.note = trackREST.note ?: ""
+                comment.rating = trackREST.rating
+                comment.trackId = trackREST.trackId!!.toLong()
+                comment.username = trackREST.username ?: ""
+                comment.approved = trackREST.approved
+                comment.androidid = trackREST.androidid
+                commentList.add(comment)
+
+                // bulk insert
+                if (zlrUpdated > BLOCK_SIZE) {
+                    zlrUpdated = bulkInsertCommentRoom(
+                        commentList = commentList,
+                        ges = ratingsResponse.body()!!.size,
+                        previousImported = imported
+                    )
+                }
+            }
+        }
+        // clean up
+        if (commentList.isNotEmpty()) {
+            bulkInsertCommentRoom(
+                commentList = commentList,
+                ges = ratingsResponse.body()!!.size,
+                previousImported = imported
+            )
+        }
+        Timber.i("$opName all ${(if (ratingsResponse.body() != null) ratingsResponse.body()!!.size else 0)} updated $zlrUpdated")
+    }
+
     private fun doBuildCountryTableRoom(context: Context): String {
         val result = ""
         val deleteCount = mxDatabase.countryDao().cleanupFromEmptyCounties()
@@ -924,7 +997,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     ): Int {
         val proceedCount = trackList.size
         imported += trackList.size
-        LoggingHelper.setMessage(IMPORT_REC_ROOM + " " + was + " " + imported + "/" + (ges + previousImported))
+        LoggingHelper.setMessage(IMPORT_TRACK_ROOM + " " + was + " " + imported + "/" + (ges + previousImported))
 //        mxDatabase.runInTransaction {
         // for better performance with large lists, *trackList.toTypedArray() converts to a vararg parameter
         // trackList.toTypedArray() - Converts the list to an Array<Track>
@@ -935,12 +1008,31 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return proceedCount
     }
 
+    private fun bulkInsertCommentRoom(
+        commentList: MutableList<Comment>,
+        ges: Int,
+        previousImported: Int
+    ): Int {
+        val proceedCount = commentList.size
+        imported += commentList.size
+        LoggingHelper.setMessage(IMPORT_COMMENT_ROOM + " Comments " + imported + "/" + (ges + previousImported))
+//        mxDatabase.runInTransaction {
+        // for better performance with large lists, *trackList.toTypedArray() converts to a vararg parameter
+        // trackList.toTypedArray() - Converts the list to an Array<Track>
+        // * (spread operator) - Unpacks the array into individual arguments
+        mxDatabase.commentDao().insertCommentsAll(*commentList.toTypedArray())
+//        }
+        commentList.clear()
+        return proceedCount
+    }
+
     companion object {
         var importStatusMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
         var adminImportStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
 
         internal const val IMPORT_REC = "Import"
-        private const val IMPORT_REC_ROOM = "Room Import"
+        private const val IMPORT_TRACK_ROOM = "Room Import track"
+        private const val IMPORT_COMMENT_ROOM = "Room Import comment"
         private const val DOWNLOAD = "Download/Import"
 
         const val COUNTRY_RESULT = "country_result"
@@ -964,13 +1056,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             mxDatabase: MxDatabase,
             listPictures: MutableList<Picture>,
             ges: Int,
-            what: String,
             @Suppress("SameParameterValue") previousImported: Int
         ): Int {
             imported += listPictures.size
             mxDatabase.pictureDao().insertPicturesAll(listPictures)
             val zlr = 0
-            LoggingHelper.setMessage(IMPORT_REC + " " + what + " " + imported + "/" + (ges + previousImported))
+            LoggingHelper.setMessage(IMPORT_REC + " Pictures " + imported + "/" + (ges + previousImported))
             listPictures.clear()
             return zlr
         }
