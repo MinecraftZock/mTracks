@@ -363,7 +363,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             if (zlrInserted > 0) {
                 doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
             }
-            LoggingHelper.setMessage("") // dies SyncPictures wird auch vom pushImages aufgerufen
+            LoggingHelper.setMessage("") // SyncPictures is also called from pushImages, so we need to clear the message here
             Timber.i("$opName all ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
         } catch (e: Exception) {
             if (isAdminOrDebug) {
@@ -487,72 +487,72 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         for (record in records) {
             i++
             LoggingHelper.setMessage("update:" + i + "/" + records.size)
-            val restTrackstage = RESTtrackStage()
-            restTrackstage.androidid = record.androidid
-            restTrackstage.id = record.restId.toInt()
+            val restTrackStage = RESTtrackStage()
+            restTrackStage.androidid = record.androidid
+            restTrackStage.id = record.restId.toInt()
             if (record.trackRestId > 0) {
-                restTrackstage.trackId = record.trackRestId.toInt()
+                restTrackStage.trackId = record.trackRestId.toInt()
             }
             if (record.trackname != null) {
-                restTrackstage.trackname = record.trackname
+                restTrackStage.trackname = record.trackname
             }
             if (record.latitude != 0.0) {
-                restTrackstage.latitude = record.latitude
+                restTrackStage.latitude = record.latitude
             }
             if (record.longitude != 0.0) {
-                restTrackstage.longitude = record.longitude
+                restTrackStage.longitude = record.longitude
             }
-            restTrackstage.country = record.country
-            restTrackstage.changed = record.created.toInt().toLong()
-            restTrackstage.insLatitude = record.insLatitude
-            restTrackstage.insLongitude = record.insLongitude
-            restTrackstage.insDistance = record.insDistance.toInt()
-            restTrackstage.url = record.url
-            restTrackstage.fees = record.fees
-            restTrackstage.phone = record.phone
-            restTrackstage.notes = record.notes
-            restTrackstage.contact = record.contact
-            restTrackstage.licence = record.licence
-            restTrackstage.kidstrack = record.kidstrack.toInt()
-            restTrackstage.openmondays = record.openmondays.toInt()
-            restTrackstage.opentuesdays = record.opentuesdays.toInt()
-            restTrackstage.openwednesday = record.openwednesday.toInt()
-            restTrackstage.openthursday = record.openthursday.toInt()
-            restTrackstage.openfriday = record.openfriday.toInt()
-            restTrackstage.opensaturday = record.opensaturday.toInt()
-            restTrackstage.opensunday = record.opensunday.toInt()
-            restTrackstage.hoursmonday = record.hoursmonday
-            restTrackstage.hourstuesday = record.hourstuesday
-            restTrackstage.hourswednesday = record.hourswednesday
-            restTrackstage.hoursthursday = record.hoursthursday
-            restTrackstage.hoursfriday = record.hoursfriday
-            restTrackstage.hourssaturday = record.hourssaturday
-            restTrackstage.hourssunday = record.hourssunday
-            restTrackstage.tracklength = record.tracklength.toInt()
-            restTrackstage.soiltype = record.soiltype.toInt()
-            restTrackstage.camping = record.camping.toInt()
-            restTrackstage.shower = record.shower.toInt()
-            restTrackstage.cleaning = record.cleaning.toInt()
-            restTrackstage.electricity = record.electricity.toInt()
-            restTrackstage.supercross = record.supercross.toInt()
-            restTrackstage.trackaccess = record.trackaccess
-            restTrackstage.facebook = record.facebook
+            restTrackStage.country = record.country
+            restTrackStage.changed = record.created.toInt().toLong()
+            restTrackStage.insLatitude = record.insLatitude
+            restTrackStage.insLongitude = record.insLongitude
+            restTrackStage.insDistance = record.insDistance.toInt()
+            restTrackStage.url = record.url
+            restTrackStage.fees = record.fees
+            restTrackStage.phone = record.phone
+            restTrackStage.notes = record.notes
+            restTrackStage.contact = record.contact
+            restTrackStage.licence = record.licence
+            restTrackStage.kidstrack = record.kidstrack.toInt()
+            restTrackStage.openmondays = record.openmondays.toInt()
+            restTrackStage.opentuesdays = record.opentuesdays.toInt()
+            restTrackStage.openwednesday = record.openwednesday.toInt()
+            restTrackStage.openthursday = record.openthursday.toInt()
+            restTrackStage.openfriday = record.openfriday.toInt()
+            restTrackStage.opensaturday = record.opensaturday.toInt()
+            restTrackStage.opensunday = record.opensunday.toInt()
+            restTrackStage.hoursmonday = record.hoursmonday
+            restTrackStage.hourstuesday = record.hourstuesday
+            restTrackStage.hourswednesday = record.hourswednesday
+            restTrackStage.hoursthursday = record.hoursthursday
+            restTrackStage.hoursfriday = record.hoursfriday
+            restTrackStage.hourssaturday = record.hourssaturday
+            restTrackStage.hourssunday = record.hourssunday
+            restTrackStage.tracklength = record.tracklength.toInt()
+            restTrackStage.soiltype = record.soiltype.toInt()
+            restTrackStage.camping = record.camping.toInt()
+            restTrackStage.shower = record.shower.toInt()
+            restTrackStage.cleaning = record.cleaning.toInt()
+            restTrackStage.electricity = record.electricity.toInt()
+            restTrackStage.supercross = record.supercross.toInt()
+            restTrackStage.trackaccess = record.trackaccess
+            restTrackStage.facebook = record.facebook
 
-            restTrackstage.adress = record.adress
-            restTrackstage.feescamping = record.feescamping
-            restTrackstage.daysopen = record.daysopen
-            restTrackstage.noiselimit = record.noiselimit
-            restTrackstage.campingrvhookups = record.campingRVhookups.toInt()
-            restTrackstage.singletrack = record.singleTrack.toInt()
-            restTrackstage.mxtrack = record.mxTrack.toInt()
-            restTrackstage.a4x4 = record.a4X4.toInt()
-            restTrackstage.enduro = record.enduro.toInt()
-            restTrackstage.utv = record.utv.toInt()
-            restTrackstage.quad = record.quad.toInt()
-            restTrackstage.trackstatus = record.trackstatus
-            restTrackstage.areatype = record.areatype
-            restTrackstage.schwierigkeit = record.schwierigkeit.toInt()
-            val request = PutTrackstageRequest(record.restId, restTrackstage)
+            restTrackStage.adress = record.adress
+            restTrackStage.feescamping = record.feescamping
+            restTrackStage.daysopen = record.daysopen
+            restTrackStage.noiselimit = record.noiselimit
+            restTrackStage.campingrvhookups = record.campingRVhookups.toInt()
+            restTrackStage.singletrack = record.singleTrack.toInt()
+            restTrackStage.mxtrack = record.mxTrack.toInt()
+            restTrackStage.a4x4 = record.a4X4.toInt()
+            restTrackStage.enduro = record.enduro.toInt()
+            restTrackStage.utv = record.utv.toInt()
+            restTrackStage.quad = record.quad.toInt()
+            restTrackStage.trackstatus = record.trackstatus
+            restTrackStage.areatype = record.areatype
+            restTrackStage.schwierigkeit = record.schwierigkeit.toInt()
+            val request = PutTrackstageRequest(record.restId, restTrackStage)
             val res = webClient.putTrackstage(request)
             res.checkResponseCode(Response.HTTP_NO_CONTENT)
             record.updated = 0
@@ -577,33 +577,33 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         for (recordStage in records) {
             i++
             LoggingHelper.setMessage("push:" + i + "/" + records.size)
-            val restTrackstage = RESTtrackStage()
+            val restTrackStage = RESTtrackStage()
             if (MxCoreApplication.isAdmin && recordStage.androidid != null && recordStage.androidid != androidId) {
                 androidId = recordStage.androidid
             } else if (MxCoreApplication.isAdmin) {
                 androidId = "debug"
             }
-            restTrackstage.androidid = androidId
+            restTrackStage.androidid = androidId
             if (recordStage.trackRestId > 0) {
-                restTrackstage.trackId = recordStage.trackRestId.toInt()
+                restTrackStage.trackId = recordStage.trackRestId.toInt()
             }
             if (recordStage.trackname != null) {
-                restTrackstage.trackname = recordStage.trackname
+                restTrackStage.trackname = recordStage.trackname
             }
             if (recordStage.latitude != 0.0) {
-                restTrackstage.latitude = recordStage.latitude
+                restTrackStage.latitude = recordStage.latitude
             }
             if (recordStage.longitude != 0.0) {
-                restTrackstage.longitude = recordStage.longitude
+                restTrackStage.longitude = recordStage.longitude
             }
             if (recordStage.country == null || recordStage.country == "") {
                 if (recordStage.latitude != 0.0) { // probably new entry
-                    restTrackstage.country = ImportHelper.getShortCountryCoder(
+                    restTrackStage.country = ImportHelper.getShortCountryCoder(
                         recordStage.latitude,
                         recordStage.longitude, context.applicationContext
                     )
                 }
-                if (restTrackstage.country == null) {
+                if (restTrackStage.country == null) {
                     if (recordStage.restId > 0) {
                         val trackId = SQuery.newQuery().expr(Tracks.REST_ID, Op.EQ, recordStage.restId).firstLong(
                             Tracks.CONTENT_URI, Tracks._ID
@@ -612,7 +612,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                         if (origTrack != null) {
                             if (origTrack.country == null || origTrack.country == "") {
                                 if (origTrack.latitude != 0.0) {
-                                    restTrackstage.country = ImportHelper.getShortCountryCoder(
+                                    restTrackStage.country = ImportHelper.getShortCountryCoder(
                                         SecHelper.entcryptXtude(origTrack.latitude),
                                         SecHelper.entcryptXtude(origTrack.longitude), context.applicationContext
                                     )
@@ -622,59 +622,59 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     }
                 }
             } else {
-                restTrackstage.country = recordStage.country
+                restTrackStage.country = recordStage.country
             }
-            restTrackstage.changed = recordStage.created.toInt().toLong()
-            restTrackstage.insLatitude = recordStage.insLatitude
-            restTrackstage.insLongitude = recordStage.insLongitude
-            restTrackstage.insDistance = recordStage.insDistance.toInt()
-            restTrackstage.url = recordStage.url
-            restTrackstage.fees = recordStage.fees
-            restTrackstage.phone = recordStage.phone
-            restTrackstage.notes = recordStage.notes
-            restTrackstage.contact = recordStage.contact
-            restTrackstage.licence = recordStage.licence
-            restTrackstage.kidstrack = recordStage.kidstrack.toInt()
-            restTrackstage.openmondays = recordStage.openmondays.toInt()
-            restTrackstage.opentuesdays = recordStage.opentuesdays.toInt()
-            restTrackstage.openwednesday = recordStage.openwednesday.toInt()
-            restTrackstage.openthursday = recordStage.openthursday.toInt()
-            restTrackstage.openfriday = recordStage.openfriday.toInt()
-            restTrackstage.opensaturday = recordStage.opensaturday.toInt()
-            restTrackstage.opensunday = recordStage.opensunday.toInt()
-            restTrackstage.hoursmonday = recordStage.hoursmonday
-            restTrackstage.hourstuesday = recordStage.hourstuesday
-            restTrackstage.hourswednesday = recordStage.hourswednesday
-            restTrackstage.hoursthursday = recordStage.hoursthursday
-            restTrackstage.hoursfriday = recordStage.hoursfriday
-            restTrackstage.hourssaturday = recordStage.hourssaturday
-            restTrackstage.hourssunday = recordStage.hourssunday
-            restTrackstage.tracklength = recordStage.tracklength.toInt()
-            restTrackstage.soiltype = recordStage.soiltype.toInt()
-            restTrackstage.camping = recordStage.camping.toInt()
-            restTrackstage.shower = recordStage.shower.toInt()
-            restTrackstage.cleaning = recordStage.cleaning.toInt()
-            restTrackstage.electricity = recordStage.electricity.toInt()
-            restTrackstage.supercross = recordStage.supercross.toInt()
-            restTrackstage.trackaccess = recordStage.trackaccess
-            restTrackstage.facebook = recordStage.facebook
+            restTrackStage.changed = recordStage.created.toInt().toLong()
+            restTrackStage.insLatitude = recordStage.insLatitude
+            restTrackStage.insLongitude = recordStage.insLongitude
+            restTrackStage.insDistance = recordStage.insDistance.toInt()
+            restTrackStage.url = recordStage.url
+            restTrackStage.fees = recordStage.fees
+            restTrackStage.phone = recordStage.phone
+            restTrackStage.notes = recordStage.notes
+            restTrackStage.contact = recordStage.contact
+            restTrackStage.licence = recordStage.licence
+            restTrackStage.kidstrack = recordStage.kidstrack.toInt()
+            restTrackStage.openmondays = recordStage.openmondays.toInt()
+            restTrackStage.opentuesdays = recordStage.opentuesdays.toInt()
+            restTrackStage.openwednesday = recordStage.openwednesday.toInt()
+            restTrackStage.openthursday = recordStage.openthursday.toInt()
+            restTrackStage.openfriday = recordStage.openfriday.toInt()
+            restTrackStage.opensaturday = recordStage.opensaturday.toInt()
+            restTrackStage.opensunday = recordStage.opensunday.toInt()
+            restTrackStage.hoursmonday = recordStage.hoursmonday
+            restTrackStage.hourstuesday = recordStage.hourstuesday
+            restTrackStage.hourswednesday = recordStage.hourswednesday
+            restTrackStage.hoursthursday = recordStage.hoursthursday
+            restTrackStage.hoursfriday = recordStage.hoursfriday
+            restTrackStage.hourssaturday = recordStage.hourssaturday
+            restTrackStage.hourssunday = recordStage.hourssunday
+            restTrackStage.tracklength = recordStage.tracklength.toInt()
+            restTrackStage.soiltype = recordStage.soiltype.toInt()
+            restTrackStage.camping = recordStage.camping.toInt()
+            restTrackStage.shower = recordStage.shower.toInt()
+            restTrackStage.cleaning = recordStage.cleaning.toInt()
+            restTrackStage.electricity = recordStage.electricity.toInt()
+            restTrackStage.supercross = recordStage.supercross.toInt()
+            restTrackStage.trackaccess = recordStage.trackaccess
+            restTrackStage.facebook = recordStage.facebook
 
-            restTrackstage.adress = recordStage.adress
-            restTrackstage.feescamping = recordStage.feescamping
-            restTrackstage.daysopen = recordStage.daysopen
-            restTrackstage.noiselimit = recordStage.noiselimit
-            restTrackstage.campingrvhookups = recordStage.campingRVhookups.toInt()
-            restTrackstage.singletrack = recordStage.singleTrack.toInt()
-            restTrackstage.mxtrack = recordStage.mxTrack.toInt()
-            restTrackstage.a4x4 = recordStage.a4X4.toInt()
-            restTrackstage.enduro = recordStage.enduro.toInt()
-            restTrackstage.utv = recordStage.utv.toInt()
-            restTrackstage.quad = recordStage.quad.toInt()
-            restTrackstage.trackstatus = recordStage.trackstatus
-            restTrackstage.areatype = recordStage.areatype
-            restTrackstage.indoor = recordStage.indoor.toInt()
-            restTrackstage.schwierigkeit = recordStage.schwierigkeit.toInt()
-            val request = PostTrackstageIDRequest(restTrackstage)
+            restTrackStage.adress = recordStage.adress
+            restTrackStage.feescamping = recordStage.feescamping
+            restTrackStage.daysopen = recordStage.daysopen
+            restTrackStage.noiselimit = recordStage.noiselimit
+            restTrackStage.campingrvhookups = recordStage.campingRVhookups.toInt()
+            restTrackStage.singletrack = recordStage.singleTrack.toInt()
+            restTrackStage.mxtrack = recordStage.mxTrack.toInt()
+            restTrackStage.a4x4 = recordStage.a4X4.toInt()
+            restTrackStage.enduro = recordStage.enduro.toInt()
+            restTrackStage.utv = recordStage.utv.toInt()
+            restTrackStage.quad = recordStage.quad.toInt()
+            restTrackStage.trackstatus = recordStage.trackstatus
+            restTrackStage.areatype = recordStage.areatype
+            restTrackStage.indoor = recordStage.indoor.toInt()
+            restTrackStage.schwierigkeit = recordStage.schwierigkeit.toInt()
+            val request = PostTrackstageIDRequest(restTrackStage)
             val res = webClient.postTrackstageID(request)
             // res.checkResponseCode(204);
             res.checkResponseCodeOk()
