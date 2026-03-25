@@ -134,7 +134,7 @@ android {
             //applicationIdSuffix ".debug"
             versionNameSuffix = ".debug"
             buildConfigField("boolean", "FILE_LOGGING", "true")
-            buildConfigField("String", httpLoggingLevel, "\"BODY\"") //NONE, BASIC, HEADERS, BODY
+            buildConfigField("String", httpLoggingLevel, "\"BASIC\"") //NONE, BASIC, HEADERS, BODY
             buildConfigField("int", pushServerSleep, "1000")
         }
         release {
@@ -240,6 +240,8 @@ dependencies {
     val work_version = "2.11.1"
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
 
     "adminImplementation"("org.jsoup:jsoup:1.22.1")
     implementation("com.github.hannesa2:android-maps-extensions:3.2.1")
