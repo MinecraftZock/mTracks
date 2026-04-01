@@ -246,7 +246,7 @@ dependencies {
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.7.1")
     implementation("com.github.MikeOrtiz:TouchImageView:3.7.1")
 
-    implementation("androidx.browser:browser:1.9.0")
+    implementation("androidx.browser:browser:1.10.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.2.0")
 
     val room = "2.8.4"
