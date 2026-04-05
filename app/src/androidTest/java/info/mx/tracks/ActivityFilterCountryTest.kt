@@ -17,6 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.settings.ActivityFilterCountry
+import info.mx.tracks.tracklist.ActivityTrackList
 import org.hamcrest.Matchers.anything
 import org.junit.Rule
 import org.junit.Test
@@ -24,10 +25,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityFilterCountryTest : BaseSyncTest() {
-
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityFilterCountry>()
+class ActivityFilterCountryTest : BaseSyncTest<ActivityFilterCountry>() {
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
@@ -36,6 +34,8 @@ class ActivityFilterCountryTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        startActivity<ActivityFilterCountry>()
+
         onView(withId(R.id.action_settings_filter_country)).perform(click())
         Thread.sleep(1000)
 
