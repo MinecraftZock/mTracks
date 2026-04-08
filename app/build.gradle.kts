@@ -266,7 +266,7 @@ dependencies {
     implementation("com.github.hannesa2:android-emulator-detector:1.5")
     implementation("com.google.android.gms:play-services-maps:20.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("com.google.android.libraries.places:places:5.1.1")
+    implementation("com.google.android.libraries.places:places:5.2.0")
     implementation("com.google.maps.android:android-maps-utils:4.1.1")
 
     "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.3.0")
