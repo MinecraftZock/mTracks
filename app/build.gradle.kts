@@ -229,7 +229,7 @@ dependencies {
     implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
     "freeImplementation"("com.google.android.gms:play-services-ads:25.1.0")
 
-    val koinVersion = "4.2.0"
+    val koinVersion = "4.2.1"
     implementation("io.insert-koin:koin-android:$koinVersion")
 
     implementation("io.insert-koin:koin-android-compat:$koinVersion")
