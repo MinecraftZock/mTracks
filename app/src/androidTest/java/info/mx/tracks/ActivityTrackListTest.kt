@@ -19,6 +19,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.gms.location.LocationServices
 import info.mx.tracks.base.BaseSyncTest
+import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.tracklist.ActivityTrackList
 import org.hamcrest.Matchers
 import org.junit.Rule
@@ -27,10 +28,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTrackListTest : BaseSyncTest() {
-
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityTrackList>()
+class ActivityTrackListTest : BaseSyncTest<ActivityTrackList>() {
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
@@ -39,6 +37,8 @@ class ActivityTrackListTest : BaseSyncTest() {
 
     @Test
     fun showTrackListTest() {
+        startActivity<ActivityTrackList>()
+
         val context = ApplicationProvider.getApplicationContext<Context>()
         LocationServices.getFusedLocationProviderClient(context).setMockMode(true)
         val location = Location(LocationManager.GPS_PROVIDER)
@@ -87,6 +87,8 @@ class ActivityTrackListTest : BaseSyncTest() {
 
     @Test
     fun searchTest() {
+        startActivity<ActivityTrackList>()
+
         // This is the first time settings activity with always changed version number
 //        // Espresso.pressBackUnconditionally()
         onView(withId(R.id.menu_search)).perform(click())
@@ -128,6 +130,8 @@ class ActivityTrackListTest : BaseSyncTest() {
 
     @Test
     fun tab() {
+        startActivity<ActivityTrackList>()
+
         val context = ApplicationProvider.getApplicationContext<Context>()
         LocationServices.getFusedLocationProviderClient(context).setMockMode(true)
         val location = Location(LocationManager.GPS_PROVIDER)

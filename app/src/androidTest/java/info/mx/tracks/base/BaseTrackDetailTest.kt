@@ -1,13 +1,11 @@
 package info.mx.tracks.base
 
 import android.Manifest
-import android.content.Intent
 import android.graphics.Bitmap
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -19,14 +17,12 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import info.hannes.timber.DebugFormatTree
-import info.mx.tracks.R
-import info.mx.tracks.common.FragmentUpDown
-import info.mx.tracks.map.MapIdlingResource
 import info.mx.core.ops.google.PictureIdlingResource
+import info.mx.tracks.R
+import info.mx.tracks.map.MapIdlingResource
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import org.hamcrest.Matcher
 import org.junit.After
@@ -39,16 +35,7 @@ import timber.log.Timber
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest() {
-
-    private val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityTrackDetail::class.java).apply {
-        putExtra(FragmentUpDown.CONTENT_URI, "content://info.mx.tracks.sqlite.mxinfodb/tracksGesSum")
-//        putExtra(FragmentUpDown.CONTENT_URI, MxInfoDBContract.Tracksges.CONTENT_URI)
-        putExtra(FragmentUpDown.RECORD_ID_LOCAL, restTrackId)
-    }
-
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityTrackDetail>(intent)
+abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest<ActivityTrackDetail>() {
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
@@ -75,6 +62,11 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
 
     @Test
     fun detailTrack() {
+        startActivity<ActivityTrackDetail>(
+            contentUri = "content://info.mx.tracks.sqlite.mxinfodb/tracksGesSum",
+            restTrackId = restTrackId
+        )
+
         // This is the first time settings activity with always changed version number
         //onView(isRoot()).captureToBitmap().writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-1")
 //        if (pressBack)
