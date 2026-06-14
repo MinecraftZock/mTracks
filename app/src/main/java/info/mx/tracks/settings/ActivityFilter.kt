@@ -11,9 +11,11 @@ import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.RatingBar.OnRatingBarChangeListener
+import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper
 import info.mx.tracks.ActivityBase
@@ -331,23 +333,28 @@ class ActivityFilter : ActivityBase() {
         } else {
             binding.include.tvFilterCount.error = null
         }
-        binding.include.tvFilterCount.requestFocus()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_setting, menu)
-        return true
-    }
+    override fun onStart() {
+        super.onStart()
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var res: Boolean = super.onOptionsItemSelected(item)
-        if (item.itemId == R.id.menu_reset) {
-            QueryHelper.resetFilter()
-            setGui()
-            res = true
-        }
-        return res
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_setting, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_reset -> {
+                        QueryHelper.resetFilter()
+                        setGui()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 
     companion object {
