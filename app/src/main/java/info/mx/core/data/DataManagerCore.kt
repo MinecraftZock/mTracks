@@ -3,7 +3,6 @@ package info.mx.core.data
 import info.mx.comAdminlib.retrofit.service.model.ApproveResponse
 import info.mx.comAdminlib.retrofit.service.model.Approved
 import info.mx.comlib.retrofit.CommApiClient
-import info.mx.comlib.retrofit.service.model.*
 import retrofit2.Response
 import java.io.IOException
 
@@ -17,7 +16,7 @@ open class DataManagerCore(private val commApiClient: CommApiClient) : DataManag
 
     @Throws(IOException::class)
     fun getWeather4TrackSync(trackRestID: Long, unit: String, lang: String): Response<String> {
-        return commApiClient.tracksService.getWeather4Track(trackRestID, unit, lang, basic).execute()
+        return commApiClient.tracksService.getWeather4TrackSync(trackRestID, unit, lang, basic).execute()
     }
 
     @Throws(IOException::class)

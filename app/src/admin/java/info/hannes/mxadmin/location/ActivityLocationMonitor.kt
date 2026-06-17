@@ -76,7 +76,6 @@ class ActivityLocationMonitor : ActivityAdminBase() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         if (!permissionHelper.hasLocationPermission())
             menu.findItem(R.id.action_settings_filter_country).icon = permissionIcon
-
         return super.onPrepareOptionsMenu(menu)
     }
 

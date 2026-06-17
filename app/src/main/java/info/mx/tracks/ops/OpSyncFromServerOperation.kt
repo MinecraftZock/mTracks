@@ -2,7 +2,6 @@ package info.mx.tracks.ops
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -12,7 +11,6 @@ import android.content.res.Resources.NotFoundException
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
@@ -24,8 +22,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.robotoworks.mechanoid.db.SQuery
-import com.robotoworks.mechanoid.db.SQuery.Op
 import com.robotoworks.mechanoid.net.Response
 import com.robotoworks.mechanoid.net.ServiceException
 import com.robotoworks.mechanoid.ops.OperationContext
@@ -38,7 +34,6 @@ import info.mx.core.MxCoreApplication
 import info.mx.core.MxCoreApplication.Companion.isAdminOrDebug
 import info.mx.core.common.ImportStatusMessage
 import info.mx.core.common.LoggingHelper
-import info.mx.core.ops.ImportHelper
 import info.mx.core.ops.ImportIdlingResource
 import info.mx.core.rest.MxInfo
 import info.mx.core.util.LocationHelper
@@ -48,12 +43,24 @@ import info.mx.core.util.checkResponseCodeOk
 import info.mx.core_generated.ops.AbstractOpPostImagesOperation
 import info.mx.core_generated.ops.AbstractOpSyncFromServerOperation
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.core_generated.rest.*
-import info.mx.core_generated.sqlite.*
-import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.core_generated.rest.PostNetworkErrorsRequest
+import info.mx.core_generated.rest.PostNetworkErrorsResult
+import info.mx.core_generated.rest.PutTrackstageRequest
+import info.mx.core_generated.rest.RESTnetworkError
+import info.mx.core_generated.rest.RESTtrackStage
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
 import info.mx.tracks.MxAccessApplication.Companion.aadhresU
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.data.DataManagerApp
+import info.mx.tracks.ops.MechanoidHelper.bulkInsertMechanoid
+import info.mx.tracks.ops.MechanoidHelper.doStagesPushMechanoid
+import info.mx.tracks.ops.MechanoidHelper.doStagesReceiveNewMechanoid
+import info.mx.tracks.ops.MechanoidHelper.proceedTracksMechanoid
+import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.Comment
+import info.mx.tracks.room.entity.Picture
+import info.mx.tracks.room.entity.Track
+import info.mx.tracks.room.entity.TrackStage
 import net.lingala.zip4j.ZipFile
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.util.UnzipUtil
@@ -78,6 +85,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
     private val dataManagerApp: DataManagerApp by inject()
     private val locationHelper: LocationHelper by inject()
+    private val mxDatabase: MxDatabase by inject()
 
     /**
      * Gets addresses from location using modern API (Android 13+) or legacy API (older versions).
@@ -117,7 +125,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         ImportIdlingResource.increment()
 
         try {
-            val trackCount = SQuery.newQuery().count(Tracks.CONTENT_URI)
+            val trackCount = mxDatabase.trackDao().countAll()
             if (trackCount == 0) {
                 doImportInitial()
             }
@@ -125,7 +133,6 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             var countryResult = ""
             if (NetworkHelper.isOnline(context.applicationContext)) {
                 doHandleTrackStage(context.applicationContext, webClient)
-                doPushEvents(webClient)
                 var gesImported = 0
                 var newImported = doSyncTracksBlock(context, args.updateProvider, gesImported, args.flavor)
                 while (newImported > 0) {
@@ -137,7 +144,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     doFixMissingCounty(context.applicationContext)
                     doHandleTrackStage(context.applicationContext, webClient)
                 }
-                countryResult = doBuildCountryTableMechanoid(context.applicationContext)
+                countryResult = doBuildCountryTableRoom(context.applicationContext)
                 imported = 0
                 Thread.sleep(4000)
 
@@ -145,13 +152,10 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     calcDistance(context.applicationContext, lastKnown!!)
                 }
 
-                doSyncPictures(context, args.updateProvider)
+                doSyncPictures(context)
                 imported = 0
-                doSyncRatings(context, args.updateProvider)
+                doSyncComments(context)
                 imported = 0
-                doSyncSeries(context, args.updateProvider)
-                imported = 0
-                doSyncEvents(context, webClient, args.updateProvider)
                 doPushNetworkErrorsAtOnce(webClient)
 
                 val intentM = AbstractOpPostImagesOperation.newIntent()
@@ -196,12 +200,34 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 LoggingHelper.setMessage("prepare data")
                 val trackRS = gson.fromJson<List<TrackR>>(FileReader(it), object : TypeToken<List<TrackR?>?>() {}.type)
                 Timber.i("${trackRS.size}")
-                var zlrInserted = 0
+
                 val contentValuesTrackList = ArrayList<ContentValues>()
-                val opName = "Tracks Init"
+                val trackList = mutableListOf<Track>()
+                var opName = "Tracks Init Room"
 
-                zlrInserted = proceedTracksMechanoid(trackRS, zlrInserted, contentValuesTrackList, opName, 0, true)
+                var zlrInserted = 0
+                zlrInserted = proceedTracksRoom(trackRS, zlrInserted, trackList, opName, 0)
+                if (zlrInserted > 0) {
+                    bulkInsertTrackRoom(
+                        trackList = trackList,
+                        ges = trackRS.size,
+                        was = opName,
+                        previousImported = 0
+                    )
+                }
 
+                opName = "Tracks Init Mechanoid"
+                zlrInserted = 0
+                zlrInserted = proceedTracksMechanoid(
+                    tracksResponse = trackRS,
+                    zlrInserted = zlrInserted,
+                    contentValuesTrackList = contentValuesTrackList,
+                    opName = opName,
+                    previousImported = 0,
+                    updateProvider = true,
+                    operationContext = operationContext,
+                    lastKnown = lastKnown
+                )
                 // clean up
                 if (zlrInserted > 0) {
                     bulkInsertMechanoid(
@@ -294,17 +320,17 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun calcDistance(context: Context, location: Location) {
-        val recalcTracks = Intent(RECALC_TRACKS)
-        recalcTracks.setPackage(context.packageName)
-        recalcTracks.putExtra(LOCATION, location)
-        recalcTracks.putExtra(SOURCE, "Sync")
-        context.sendBroadcast(recalcTracks)
+        val recalculateTracks = Intent(RECALC_TRACKS)
+        recalculateTracks.setPackage(context.packageName)
+        recalculateTracks.putExtra(LOCATION, location)
+        recalculateTracks.putExtra(SOURCE, "Sync")
+        context.sendBroadcast(recalculateTracks)
     }
 
     @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
-    fun doSyncPictures(context: OperationContext, updateProvider: Boolean) {
+    fun doSyncPictures(context: OperationContext) {
         val opName = "Pictures"
-        val maxCreated = SQuery.newQuery().firstInt(Pictures.CONTENT_URI, "max(" + Pictures.CHANGED + ")")
+        val maxCreated = mxDatabase.pictureDao().getNewest()
 
         try {
             val picturesResponse = dataManagerApp.getPictures(maxCreated.toLong())
@@ -314,54 +340,50 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             LoggingHelper.setMessage("$DOWNLOAD $opName")
             var zlrUpdated = 0
             var zlrInserted = 0
-            val opsTracks = ArrayList<ContentProviderOperation>()
+            val opsTracks = mutableListOf<Picture>()
             for (pictureR in picturesResponse.body()!!) {
                 if (context.isAborted) {
                     return
                 }
 
                 zlrUpdated++
-                val restId = SQuery.newQuery()
-                    .expr(Pictures.REST_ID, Op.EQ, pictureR.id!!)
-                    .firstInt(Pictures.CONTENT_URI, Pictures._ID)
-                if (restId == 0) { // new entry
+                val localPicture = mxDatabase.pictureDao().getById(pictureR.id.toLong())
+
+                if (localPicture == null) { // new entry
                     zlrInserted++
-                    val builderTrack = Pictures.newBuilder()
+                    val newPicture = Picture()
 
-                    builderTrack.setRestId(pictureR.id!!.toLong())
-                    builderTrack.setChanged(pictureR.changed!!.toLong())
-                    builderTrack.setApproved(pictureR.approved!!.toLong())
-                    builderTrack.setComment(pictureR.comment)
-                    builderTrack.setDeleted(pictureR.deleted!!.toLong())
-                    builderTrack.setTrackRestId(pictureR.trackId!!.toLong())
-                    builderTrack.setUsername(pictureR.username)
+                    newPicture.id = pictureR.id.toLong()
+                    newPicture.changed = pictureR.changed.toLong()
+                    newPicture.approved = pictureR.approved
+                    newPicture.deleted = pictureR.deleted
+                    newPicture.trackId = pictureR.trackId.toLong()
+                    newPicture.username = pictureR.username
+                    newPicture.androidid = pictureR.androidid
 
-                    opsTracks.add(builderTrack.toInsertOperationBuilder().build())
+                    opsTracks.add(newPicture)
 
                     // bulk insert
                     if (zlrUpdated > BLOCK_SIZE) {
-                        zlrUpdated = doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                        zlrUpdated = doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, 0)
                     }
                 } else {
-                    val recordTrack = PicturesRecord.get(restId.toLong())
-                    deleteFile(recordTrack!!.localfile)
-                    deleteFile(recordTrack.localthumb)
-                    recordTrack.localfile = ""
-                    recordTrack.localthumb = ""
+                    deleteFile(localPicture.localfile)
+                    deleteFile(localPicture.localthumb)
+                    localPicture.localfile = ""
+                    localPicture.localthumb = ""
 
-                    recordTrack.restId = pictureR.id!!.toLong()
-                    recordTrack.changed = pictureR.changed!!.toLong()
-                    recordTrack.approved = pictureR.approved!!.toLong()
-                    recordTrack.comment = pictureR.comment
-                    recordTrack.deleted = pictureR.deleted!!.toLong()
-                    recordTrack.trackRestId = pictureR.trackId!!.toLong()
-                    recordTrack.username = pictureR.username
-                    recordTrack.save(updateProvider)
+                    localPicture.changed = pictureR.changed!!.toLong()
+                    localPicture.approved = pictureR.approved!!
+                    localPicture.deleted = pictureR.deleted!!
+                    localPicture.trackId = pictureR.trackId!!.toLong()
+                    localPicture.username = pictureR.username
+                    mxDatabase.pictureDao().update(localPicture)
                 }
             }
             // clean up
             if (zlrInserted > 0) {
-                doApplyBatch(context, opsTracks, picturesResponse.body()!!.size, opName, 0)
+                doApplyBatchRoom(mxDatabase, opsTracks, picturesResponse.body()!!.size, 0)
             }
             LoggingHelper.setMessage("") // SyncPictures is also called from pushImages, so we need to clear the message here
             Timber.i("$opName all ${(if (picturesResponse.body() != null) picturesResponse.body()!!.size else 0)} updated: $zlrUpdated")
@@ -373,12 +395,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doPushNetworkErrorsAtOnce(webClient: MxInfo) {
-        val networkErrors = SQuery.newQuery().select<NetworkRecord>(Network.CONTENT_URI)
+        val networkErrors = mxDatabase.networkDao().all
 
         val requestList = ArrayList<RESTnetworkError>()
         for (networkError in networkErrors) {
             val requestSingle = RESTnetworkError()
-            requestSingle.changed = networkError.created
+            requestSingle.changed = networkError.changed
             requestSingle.reason = networkError.reason
             requestSingle.tracks = networkError.tracks.toInt()
             requestSingle.androidid = TrackingApplication.androidId
@@ -389,34 +411,29 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         try {
             resultTrack = webClient.postNetworkErrors(requestNetwork)
             if (resultTrack.responseCode == Response.HTTP_NO_CONTENT) {
-                for (networkError in networkErrors) {
-                    networkError.delete(false)
-                }
+                mxDatabase.networkDao().deleteAll()
             } else {
                 Timber.w("Network result code:%s", resultTrack.responseCode)
             }
         } catch (_: ServiceException) {
         }
-
     }
 
     private fun doFixMissingCounty(context: Context) {
-        val tracks = SQuery.newQuery()
-            .expr(Tracks.COUNTRY, Op.EQ, "")
-            .select<TracksRecord>(Tracks.CONTENT_URI)
-        for (record in tracks) {
-            val coder = Geocoder(context)
+        val coder = Geocoder(context)
+        mxDatabase.trackDao().emptyCountry("").forEachIndexed { index, track ->
             try {
-                val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(record.latitude), SecHelper.entcryptXtude(record.longitude), 1)
+                val addresses = getAddressesFromLocation(coder, SecHelper.entcryptXtude(track.latitude), SecHelper.entcryptXtude(track.longitude), 1)
                 if (!addresses.isNullOrEmpty()) {
                     val country = addresses[0].countryCode
-                    Timber.d("${record.trackname}  country:$country")
-                    val stage = TrackstageRecord()
-                    stage.trackRestId = record.restId
+                    Timber.d("${track.trackname} country:$country")
+                    val stage = TrackStage()
+                    stage.trackId = track.id!!
                     stage.country = country
-                    stage.save(false)
-                    record.country = country
-                    record.save(false)
+                    mxDatabase.trackStageDao().insertTrackStagesAll(stage)
+                    track.country = country
+                    mxDatabase.trackDao().update(track)
+                    Timber.d("$index ${track.trackname} country updated:$country")
                 }
             } catch (e: IOException) {
                 Timber.e(e)
@@ -425,360 +442,107 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     private fun doCleanFromDecline() {
-        // keep the last is required
-        val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
-        val del = SQuery.newQuery().expr(Tracks.APPROVED, Op.EQ, -1)
-            .expr(Tracks.CHANGED, Op.NEQ, maxCreated)
-            .delete(Tracks.CONTENT_URI, false)
+        // the last should be kept
+        val maxCreated = mxDatabase.trackDao().latest()
+        val del = mxDatabase.trackDao().deleteNotApproved(maxCreated)
         Timber.d("del approved:%s", del)
-        SQuery.newQuery().expr(Trackstage.APPROVED, Op.EQ, -1).delete(Trackstage.CONTENT_URI)
-        SQuery.newQuery().expr(Pictures.APPROVED, Op.EQ, -1).delete(Pictures.CONTENT_URI)
-        SQuery.newQuery().expr(Ratings.APPROVED, Op.EQ, -1).delete(Ratings.CONTENT_URI)
-    }
-
-    @Throws(ServiceException::class)
-    private fun doPushEvents(webClient: MxInfo) {
-        val eventsNeu = SQuery.newQuery()
-            .expr(Events.REST_ID, Op.LTEQ, 0)
-            .or()
-            .append(Events.REST_ID + " is null")
-            .select<EventsRecord>(Events.CONTENT_URI)
-
-        for (eventDB in eventsNeu) {
-            val eventREST = RESTevent()
-            eventREST.approved = eventDB.approved.toInt()
-            eventREST.changed = eventDB.changed.toInt()
-            eventREST.comment = eventDB.comment
-            eventREST.eventdate = eventDB.eventDate.toInt()
-            eventREST.trackId = eventDB.trackRestId.toInt()
-            eventREST.androidid = TrackingApplication.androidId
-            val request = PostEventRequest(eventREST)
-            val res = webClient.postEvent(request)
-            val response = res.parse()
-            res.checkResponseCodeOk()
-            eventDB.restId = response.baseResponse.id.toLong()
-            eventDB.changed = 1
-            eventDB.save()
-
-        }
+        mxDatabase.trackStageDao().deleteNotApproved()
+        mxDatabase.pictureDao().deleteNotApproved()
+        mxDatabase.commentDao().deleteNotApproved()
     }
 
     private fun doHandleTrackStage(context: Context, webClient: MxInfo) {
         try {
             doStagesUpdate(webClient) //put
-            doStagesPush(context, webClient)
+            doStagesPushMechanoid(context, webClient)
             if (MxCoreApplication.isAdmin) {
-                doStagesReceiveNew(webClient)
+                doStagesReceiveNewMechanoid(webClient)
             }
         } catch (ex: Exception) {
             Timber.e(ex)
         }
-
     }
 
     @Throws(ServiceException::class, NotFoundException::class, InterruptedException::class)
     private fun doStagesUpdate(webClient: MxInfo) {
         // already known on server and updated
-        val records = SQuery.newQuery()
-            .expr(Trackstage.REST_ID, Op.GT, 0)
-            .expr(Trackstage.UPDATED, Op.EQ, 1)
-            .select<TrackstageRecord>(Trackstage.CONTENT_URI, Trackstage._ID)
-        var i = 0
-        for (record in records) {
-            i++
-            LoggingHelper.setMessage("update:" + i + "/" + records.size)
-            val restTrackStage = RESTtrackStage()
-            restTrackStage.androidid = record.androidid
-            restTrackStage.id = record.restId.toInt()
-            if (record.trackRestId > 0) {
-                restTrackStage.trackId = record.trackRestId.toInt()
-            }
-            if (record.trackname != null) {
-                restTrackStage.trackname = record.trackname
-            }
-            if (record.latitude != 0.0) {
-                restTrackStage.latitude = record.latitude
-            }
-            if (record.longitude != 0.0) {
-                restTrackStage.longitude = record.longitude
-            }
-            restTrackStage.country = record.country
-            restTrackStage.changed = record.created.toInt().toLong()
-            restTrackStage.insLatitude = record.insLatitude
-            restTrackStage.insLongitude = record.insLongitude
-            restTrackStage.insDistance = record.insDistance.toInt()
-            restTrackStage.url = record.url
-            restTrackStage.fees = record.fees
-            restTrackStage.phone = record.phone
-            restTrackStage.notes = record.notes
-            restTrackStage.contact = record.contact
-            restTrackStage.licence = record.licence
-            restTrackStage.kidstrack = record.kidstrack.toInt()
-            restTrackStage.openmondays = record.openmondays.toInt()
-            restTrackStage.opentuesdays = record.opentuesdays.toInt()
-            restTrackStage.openwednesday = record.openwednesday.toInt()
-            restTrackStage.openthursday = record.openthursday.toInt()
-            restTrackStage.openfriday = record.openfriday.toInt()
-            restTrackStage.opensaturday = record.opensaturday.toInt()
-            restTrackStage.opensunday = record.opensunday.toInt()
-            restTrackStage.hoursmonday = record.hoursmonday
-            restTrackStage.hourstuesday = record.hourstuesday
-            restTrackStage.hourswednesday = record.hourswednesday
-            restTrackStage.hoursthursday = record.hoursthursday
-            restTrackStage.hoursfriday = record.hoursfriday
-            restTrackStage.hourssaturday = record.hourssaturday
-            restTrackStage.hourssunday = record.hourssunday
-            restTrackStage.tracklength = record.tracklength.toInt()
-            restTrackStage.soiltype = record.soiltype.toInt()
-            restTrackStage.camping = record.camping.toInt()
-            restTrackStage.shower = record.shower.toInt()
-            restTrackStage.cleaning = record.cleaning.toInt()
-            restTrackStage.electricity = record.electricity.toInt()
-            restTrackStage.supercross = record.supercross.toInt()
-            restTrackStage.trackaccess = record.trackaccess
-            restTrackStage.facebook = record.facebook
+        val trackStages = mxDatabase.trackDao().alreadyKnownAndUpdated()
 
-            restTrackStage.adress = record.adress
-            restTrackStage.feescamping = record.feescamping
-            restTrackStage.daysopen = record.daysopen
-            restTrackStage.noiselimit = record.noiselimit
-            restTrackStage.campingrvhookups = record.campingRVhookups.toInt()
-            restTrackStage.singletrack = record.singleTrack.toInt()
-            restTrackStage.mxtrack = record.mxTrack.toInt()
-            restTrackStage.a4x4 = record.a4X4.toInt()
-            restTrackStage.enduro = record.enduro.toInt()
-            restTrackStage.utv = record.utv.toInt()
-            restTrackStage.quad = record.quad.toInt()
-            restTrackStage.trackstatus = record.trackstatus
-            restTrackStage.areatype = record.areatype
-            restTrackStage.schwierigkeit = record.schwierigkeit.toInt()
-            val request = PutTrackstageRequest(record.restId, restTrackStage)
+        var i = 0
+        for (trackStage in trackStages) {
+            i++
+            LoggingHelper.setMessage("update:" + i + "/" + trackStages.size)
+            val restTrackStage = RESTtrackStage()
+            restTrackStage.androidid = trackStage.andoridid
+            restTrackStage.id = trackStage.restId.toInt()
+            if (trackStage.restId > 0) {
+                restTrackStage.trackId = trackStage.restId.toInt()
+            }
+            restTrackStage.trackname = trackStage.trackname
+            if (trackStage.latitude != 0.0) {
+                restTrackStage.latitude = trackStage.latitude
+            }
+            if (trackStage.longitude != 0.0) {
+                restTrackStage.longitude = trackStage.longitude
+            }
+            restTrackStage.country = trackStage.country
+            restTrackStage.changed = trackStage.changed
+            restTrackStage.insLatitude = trackStage.insLatitude
+            restTrackStage.insLongitude = trackStage.insLongitude
+            restTrackStage.insDistance = trackStage.insDistance.toInt()
+            restTrackStage.url = trackStage.url
+            restTrackStage.fees = trackStage.fees
+            restTrackStage.phone = trackStage.phone
+            restTrackStage.notes = trackStage.notes
+            restTrackStage.contact = trackStage.contact
+            restTrackStage.licence = trackStage.licence
+            restTrackStage.kidstrack = trackStage.kidstrack
+            restTrackStage.openmondays = trackStage.openmondays
+            restTrackStage.opentuesdays = trackStage.opentuesdays
+            restTrackStage.openwednesday = trackStage.openwednesday
+            restTrackStage.openthursday = trackStage.openthursday
+            restTrackStage.openfriday = trackStage.openfriday
+            restTrackStage.opensaturday = trackStage.opensaturday
+            restTrackStage.opensunday = trackStage.opensunday
+            restTrackStage.hoursmonday = trackStage.hoursmonday
+            restTrackStage.hourstuesday = trackStage.hourstuesday
+            restTrackStage.hourswednesday = trackStage.hourswednesday
+            restTrackStage.hoursthursday = trackStage.hoursthursday
+            restTrackStage.hoursfriday = trackStage.hoursfriday
+            restTrackStage.hourssaturday = trackStage.hourssaturday
+            restTrackStage.hourssunday = trackStage.hourssunday
+            restTrackStage.tracklength = trackStage.tracklength
+            restTrackStage.soiltype = trackStage.soiltype
+            restTrackStage.camping = trackStage.camping
+            restTrackStage.shower = trackStage.shower
+            restTrackStage.cleaning = trackStage.cleaning
+            restTrackStage.electricity = trackStage.electricity
+            restTrackStage.supercross = trackStage.supercross
+            restTrackStage.trackaccess = trackStage.trackaccess
+            restTrackStage.facebook = trackStage.facebook
+
+            restTrackStage.adress = trackStage.adress
+            restTrackStage.feescamping = trackStage.feescamping
+            restTrackStage.daysopen = trackStage.daysopen
+            restTrackStage.noiselimit = trackStage.noiselimit
+            restTrackStage.campingrvhookups = trackStage.campingrvrvhookup
+            restTrackStage.singletrack = trackStage.singletracks
+            restTrackStage.mxtrack = trackStage.mxtrack
+            restTrackStage.a4x4 = trackStage.a4x4
+            restTrackStage.enduro = trackStage.enduro
+            restTrackStage.utv = trackStage.utv
+            restTrackStage.quad = trackStage.quad
+            restTrackStage.trackstatus = trackStage.trackstatus
+            restTrackStage.areatype = trackStage.areatype
+            restTrackStage.schwierigkeit = trackStage.schwierigkeit
+            val request = PutTrackstageRequest(trackStage.restId, restTrackStage)
             val res = webClient.putTrackstage(request)
             res.checkResponseCode(Response.HTTP_NO_CONTENT)
-            record.updated = 0
-            record.save(false)
+            trackStage.changed = 0
+            mxDatabase.trackStageDao().update(trackStage)
             Wait.delay()
         }
         LoggingHelper.setMessage("")
-    }
-
-    @Throws(ServiceException::class, NotFoundException::class, InterruptedException::class)
-    private fun doStagesPush(context: Context, webClient: MxInfo) {
-        @SuppressLint("HardwareIds")
-        var androidId = Secure.getString(context.applicationContext.contentResolver, Secure.ANDROID_ID)
-        val notPublished = SQuery.newQuery().expr(Trackstage.REST_ID, Op.EQ, 0)
-            .or()
-            .append(Trackstage.REST_ID + " is null")
-        val records = SQuery.newQuery()
-            .expr(notPublished)
-            .expr(Trackstage.UPDATED, Op.NEQ, 1)
-            .select<TrackstageRecord>(Trackstage.CONTENT_URI, Trackstage._ID)
-        var i = 0
-        for (recordStage in records) {
-            i++
-            LoggingHelper.setMessage("push:" + i + "/" + records.size)
-            val restTrackStage = RESTtrackStage()
-            if (MxCoreApplication.isAdmin && recordStage.androidid != null && recordStage.androidid != androidId) {
-                androidId = recordStage.androidid
-            } else if (MxCoreApplication.isAdmin) {
-                androidId = "debug"
-            }
-            restTrackStage.androidid = androidId
-            if (recordStage.trackRestId > 0) {
-                restTrackStage.trackId = recordStage.trackRestId.toInt()
-            }
-            if (recordStage.trackname != null) {
-                restTrackStage.trackname = recordStage.trackname
-            }
-            if (recordStage.latitude != 0.0) {
-                restTrackStage.latitude = recordStage.latitude
-            }
-            if (recordStage.longitude != 0.0) {
-                restTrackStage.longitude = recordStage.longitude
-            }
-            if (recordStage.country == null || recordStage.country == "") {
-                if (recordStage.latitude != 0.0) { // probably new entry
-                    restTrackStage.country = ImportHelper.getShortCountryCoder(
-                        recordStage.latitude,
-                        recordStage.longitude, context.applicationContext
-                    )
-                }
-                if (restTrackStage.country == null) {
-                    if (recordStage.restId > 0) {
-                        val trackId = SQuery.newQuery().expr(Tracks.REST_ID, Op.EQ, recordStage.restId).firstLong(
-                            Tracks.CONTENT_URI, Tracks._ID
-                        )
-                        val origTrack = TracksRecord.get(trackId)
-                        if (origTrack != null) {
-                            if (origTrack.country == null || origTrack.country == "") {
-                                if (origTrack.latitude != 0.0) {
-                                    restTrackStage.country = ImportHelper.getShortCountryCoder(
-                                        SecHelper.entcryptXtude(origTrack.latitude),
-                                        SecHelper.entcryptXtude(origTrack.longitude), context.applicationContext
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                restTrackStage.country = recordStage.country
-            }
-            restTrackStage.changed = recordStage.created.toInt().toLong()
-            restTrackStage.insLatitude = recordStage.insLatitude
-            restTrackStage.insLongitude = recordStage.insLongitude
-            restTrackStage.insDistance = recordStage.insDistance.toInt()
-            restTrackStage.url = recordStage.url
-            restTrackStage.fees = recordStage.fees
-            restTrackStage.phone = recordStage.phone
-            restTrackStage.notes = recordStage.notes
-            restTrackStage.contact = recordStage.contact
-            restTrackStage.licence = recordStage.licence
-            restTrackStage.kidstrack = recordStage.kidstrack.toInt()
-            restTrackStage.openmondays = recordStage.openmondays.toInt()
-            restTrackStage.opentuesdays = recordStage.opentuesdays.toInt()
-            restTrackStage.openwednesday = recordStage.openwednesday.toInt()
-            restTrackStage.openthursday = recordStage.openthursday.toInt()
-            restTrackStage.openfriday = recordStage.openfriday.toInt()
-            restTrackStage.opensaturday = recordStage.opensaturday.toInt()
-            restTrackStage.opensunday = recordStage.opensunday.toInt()
-            restTrackStage.hoursmonday = recordStage.hoursmonday
-            restTrackStage.hourstuesday = recordStage.hourstuesday
-            restTrackStage.hourswednesday = recordStage.hourswednesday
-            restTrackStage.hoursthursday = recordStage.hoursthursday
-            restTrackStage.hoursfriday = recordStage.hoursfriday
-            restTrackStage.hourssaturday = recordStage.hourssaturday
-            restTrackStage.hourssunday = recordStage.hourssunday
-            restTrackStage.tracklength = recordStage.tracklength.toInt()
-            restTrackStage.soiltype = recordStage.soiltype.toInt()
-            restTrackStage.camping = recordStage.camping.toInt()
-            restTrackStage.shower = recordStage.shower.toInt()
-            restTrackStage.cleaning = recordStage.cleaning.toInt()
-            restTrackStage.electricity = recordStage.electricity.toInt()
-            restTrackStage.supercross = recordStage.supercross.toInt()
-            restTrackStage.trackaccess = recordStage.trackaccess
-            restTrackStage.facebook = recordStage.facebook
-
-            restTrackStage.adress = recordStage.adress
-            restTrackStage.feescamping = recordStage.feescamping
-            restTrackStage.daysopen = recordStage.daysopen
-            restTrackStage.noiselimit = recordStage.noiselimit
-            restTrackStage.campingrvhookups = recordStage.campingRVhookups.toInt()
-            restTrackStage.singletrack = recordStage.singleTrack.toInt()
-            restTrackStage.mxtrack = recordStage.mxTrack.toInt()
-            restTrackStage.a4x4 = recordStage.a4X4.toInt()
-            restTrackStage.enduro = recordStage.enduro.toInt()
-            restTrackStage.utv = recordStage.utv.toInt()
-            restTrackStage.quad = recordStage.quad.toInt()
-            restTrackStage.trackstatus = recordStage.trackstatus
-            restTrackStage.areatype = recordStage.areatype
-            restTrackStage.indoor = recordStage.indoor.toInt()
-            restTrackStage.schwierigkeit = recordStage.schwierigkeit.toInt()
-            val request = PostTrackstageIDRequest(restTrackStage)
-            val res = webClient.postTrackstageID(request)
-            // res.checkResponseCode(204);
-            res.checkResponseCodeOk()
-            val resTrackStage = res.parse()
-            if (MxCoreApplication.isAdmin) {
-                recordStage.restId = resTrackStage.insertResponse.id.toLong()
-                recordStage.trackRestId = resTrackStage.insertResponse.trackRestId.toLong()
-                recordStage.approved = 1
-                recordStage.save(false)
-            } else {
-                recordStage.delete(false)
-            }
-            Wait.delay()
-        }
-        LoggingHelper.setMessage("")
-    }
-
-    @Throws(ServiceException::class)
-    private fun doStagesReceiveNew(webClient: MxInfo) {
-        if (MxCoreApplication.isAdmin) {
-            LoggingHelper.setMessage("Stage DOWNLOAD")
-            val maxStageID = SQuery.newQuery().firstInt(Trackstage.CONTENT_URI, "max(" + Trackstage.CREATED + ")").toLong()
-            val requestChanged = GetTracksStageFromRequest(maxStageID)
-            val resChanged = webClient.getTracksStageFrom(requestChanged)
-            LoggingHelper.setMessage("Stage parse")
-            val resultStages = resChanged.parse()
-            resChanged.checkResponseCodeOk()
-            var zlr = 0
-            for (stageNet in resultStages.resTtrackStages) {
-                zlr++
-                LoggingHelper.setMessage("Stage " + zlr + "/" + resultStages.resTtrackStages.size)
-                var stageRec: TrackstageRecord? = SQuery.newQuery().expr(Trackstage.REST_ID, Op.EQ, stageNet.id)
-                    .selectFirst(Trackstage.CONTENT_URI)
-                if (stageRec == null) {
-                    stageRec = TrackstageRecord()
-                }
-
-                //                ContentValues stageContent = stageNet.toContentValues();
-                //                SQuery.newQuery()
-                //                        .expr(PictureStage.REST_ID, Op.GT, 0)
-                //                        .update(PictureStage.CONTENT_URI, valuesImg);
-                //                stageRec.
-                stageRec.restId = stageNet.id.toLong()
-                stageRec.trackRestId = stageNet.trackId.toLong()
-                stageRec.androidid = stageNet.androidid
-                stageRec.approved = stageNet.approved.toLong()
-                stageRec.created = stageNet.changed
-                stageRec.country = stageNet.country
-                stageRec.trackname = stageNet.trackname
-                stageRec.longitude = stageNet.longitude
-                stageRec.latitude = stageNet.latitude
-                stageRec.insLongitude = stageNet.insLongitude
-                stageRec.insLatitude = stageNet.insLatitude
-                stageRec.insDistance = stageNet.insDistance.toLong()
-                stageRec.url = stageNet.url
-                stageRec.phone = stageNet.phone
-                stageRec.notes = stageNet.notes
-                stageRec.contact = stageNet.contact
-                stageRec.licence = stageNet.licence
-                stageRec.kidstrack = stageNet.kidstrack.toLong()
-                stageRec.openmondays = stageNet.openmondays.toLong()
-                stageRec.opentuesdays = stageNet.opentuesdays.toLong()
-                stageRec.openwednesday = stageNet.openwednesday.toLong()
-                stageRec.openthursday = stageNet.openthursday.toLong()
-                stageRec.openfriday = stageNet.openfriday.toLong()
-                stageRec.opensaturday = stageNet.opensaturday.toLong()
-                stageRec.opensunday = stageNet.opensunday.toLong()
-                stageRec.hoursmonday = stageNet.hoursmonday
-                stageRec.hourstuesday = stageNet.hourstuesday
-                stageRec.hourswednesday = stageNet.hourswednesday
-                stageRec.hoursthursday = stageNet.hoursthursday
-                stageRec.hoursfriday = stageNet.hoursfriday
-                stageRec.hourssaturday = stageNet.hourssaturday
-                stageRec.hourssunday = stageNet.hourssunday
-                stageRec.tracklength = stageNet.tracklength.toLong()
-                stageRec.soiltype = stageNet.soiltype.toLong()
-                stageRec.camping = stageNet.camping.toLong()
-                stageRec.shower = stageNet.shower.toLong()
-                stageRec.cleaning = stageNet.cleaning.toLong()
-                stageRec.electricity = stageNet.electricity.toLong()
-                stageRec.supercross = stageNet.supercross.toLong()
-                stageRec.trackaccess = stageNet.trackaccess
-                stageRec.facebook = stageNet.facebook
-                stageRec.fees = stageNet.fees
-                stageRec.adress = stageNet.adress
-                stageRec.feescamping = stageNet.feescamping
-                stageRec.daysopen = stageNet.daysopen
-                stageRec.noiselimit = stageNet.noiselimit
-                // stageRec.setRating (stageNet.getRating ());
-                stageRec.campingRVhookups = stageNet.campingrvhookups.toLong()
-                stageRec.singleTrack = stageNet.singletrack.toLong()
-                stageRec.mxTrack = stageNet.mxtrack.toLong()
-                stageRec.a4X4 = stageNet.a4x4.toLong()
-                stageRec.enduro = stageNet.enduro.toLong()
-                stageRec.utv = stageNet.utv.toLong()
-                stageRec.quad = stageNet.quad.toLong()
-                stageRec.trackstatus = stageNet.trackstatus
-                stageRec.areatype = stageNet.areatype
-                stageRec.schwierigkeit = stageNet.schwierigkeit.toLong()
-                stageRec.indoor = stageNet.indoor.toLong()
-                stageRec.save(false)
-            }
-            LoggingHelper.setMessage("")
-        }
     }
 
     @SuppressLint("HardwareIds")
@@ -789,7 +553,8 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         var res: Int
         operationContext = context
         try {
-            val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
+//            val maxCreated = SQuery.newQuery().firstInt(Tracks.CONTENT_URI, "max(" + Tracks.CHANGED + ")")
+            val maxCreated = mxDatabase.trackDao().getNewest()
 
             if (maxCreated == 0) {
                 LoggingHelper.setMessage("$IMPORT_REC $opName")
@@ -824,14 +589,37 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
             var zlrInserted = 0
             val contentValuesTrackList = ArrayList<ContentValues>()
+            val trackList = mutableListOf<Track>()
             res = tracksResponse.body()!!.size
-            zlrInserted = proceedTracksMechanoid(tracksResponse.body()!!, zlrInserted, contentValuesTrackList, opName, previousImported, updateProvider)
+            zlrInserted = proceedTracksMechanoid(
+                tracksResponse = tracksResponse.body()!!,
+                zlrInserted = zlrInserted,
+                contentValuesTrackList = contentValuesTrackList,
+                opName = opName,
+                previousImported = previousImported,
+                updateProvider = updateProvider,
+                operationContext = operationContext,
+                lastKnown = lastKnown
+            )
+            zlrInserted = proceedTracksRoom(
+                tracksResponse = tracksResponse.body()!!,
+                zlrInserted = zlrInserted,
+                trackList = trackList,
+                opName = opName,
+                previousImported = previousImported
+            )
             // clean up
             if (zlrInserted > 0) {
                 bulkInsertMechanoid(
                     context = context.applicationContext,
                     contentValuesList = contentValuesTrackList,
                     uri = Tracks.CONTENT_URI,
+                    ges = tracksResponse.body()!!.size,
+                    was = opName,
+                    previousImported = previousImported
+                )
+                bulkInsertTrackRoom(
+                    trackList = trackList,
                     ges = tracksResponse.body()!!.size,
                     was = opName,
                     previousImported = previousImported
@@ -852,19 +640,18 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         return res
     }
 
-    private fun proceedTracksMechanoid(
+    private fun proceedTracksRoom(
         tracksResponse: List<TrackR>,
         zlrInserted: Int,
-        contentValuesTrackList: ArrayList<ContentValues>,
+        trackList: MutableList<Track>,
         opName: String,
         previousImported: Int,
-        updateProvider: Boolean
     ): Int {
         var trackName = ""
         var zlrUpdated = 0
         var zlrInsertedReturn = zlrInserted
         try {
-            val initial = SQuery.newQuery().count(Tracks.CONTENT_URI) == 0
+            val initial = mxDatabase.trackDao().countAll() == 0
 
             for (trackREST in tracksResponse) {
                 if (operationContext.isAborted) {
@@ -874,14 +661,12 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                 zlrUpdated++
                 var oneDeclinedAtLeast = false
 
-                var restId = 0
+                var roomId = 0L
                 if (!initial) {
-                    restId = SQuery.newQuery()
-                        .expr(Tracks.REST_ID, Op.EQ, trackREST.id!!)
-                        .firstInt(Tracks.CONTENT_URI, Tracks._ID)
+                    roomId = mxDatabase.trackDao().getIdByRestId(trackREST.id!!.toLong())
                 }
 
-                if (restId == 0) { // new record
+                if (roomId == 0L) { // new record
                     zlrInsertedReturn++
                     if (trackREST.approved == -1) {
                         // wenn der einzige übertragene ein abgelehnter ist, muss man ihn importieren, damit man in keine endlosschleife kommt
@@ -894,161 +679,167 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     }
 
                     if (trackREST.approved > -1 || oneDeclinedAtLeast) {
-                        val builderTrack = Tracks.newBuilder()
+                        val newTrack = Track()
 
-                        builderTrack.setRestId(trackREST.id!!.toLong())
-                        builderTrack.setChanged(trackREST.changed!!.toLong())
-                        builderTrack.setTrackname(trackREST.trackname)
-                        builderTrack.setLongitude(SecHelper.cryptXtude(trackREST.longitude!!))
-                        builderTrack.setLatitude(SecHelper.cryptXtude(trackREST.latitude!!))
-                        builderTrack.setApproved(trackREST.approved!!.toLong())
-                        builderTrack.setCountry(trackREST.country)
-                        builderTrack.setUrl(SecHelper.encryptB64(trackREST.url))
-                        builderTrack.setFacebook(SecHelper.encryptB64(trackREST.facebook))
-                        builderTrack.setFees(trackREST.fees)
-                        builderTrack.setPhone(SecHelper.encryptB64(trackREST.phone))
-                        builderTrack.setNotes(trackREST.notes)
-                        builderTrack.setContact(SecHelper.encryptB64(trackREST.contact))
-                        builderTrack.setMetatext(trackREST.metatext)
-                        builderTrack.setLicence(trackREST.licence)
-                        builderTrack.setKidstrack(trackREST.kidstrack!!.toLong())
-                        builderTrack.setOpenmondays(trackREST.openmondays!!.toLong())
-                        builderTrack.setOpentuesdays(trackREST.opentuesdays!!.toLong())
-                        builderTrack.setOpenwednesday(trackREST.openwednesday!!.toLong())
-                        builderTrack.setOpenthursday(trackREST.openthursday!!.toLong())
-                        builderTrack.setOpenfriday(trackREST.openfriday!!.toLong())
-                        builderTrack.setOpensaturday(trackREST.opensaturday!!.toLong())
-                        builderTrack.setOpensunday(trackREST.opensunday!!.toLong())
-                        builderTrack.setHoursmonday(trackREST.hoursmonday)
-                        builderTrack.setHourstuesday(trackREST.hourstuesday)
-                        builderTrack.setHourswednesday(trackREST.hourswednesday)
-                        builderTrack.setHoursthursday(trackREST.hoursthursday)
-                        builderTrack.setHoursfriday(trackREST.hoursfriday)
-                        builderTrack.setHourssaturday(trackREST.hourssaturday)
-                        builderTrack.setHourssunday(trackREST.hourssunday)
-                        builderTrack.setTracklength(trackREST.tracklength!!.toLong())
-                        builderTrack.setSoiltype(trackREST.soiltype!!.toLong())
-                        builderTrack.setCamping(trackREST.camping!!.toLong())
-                        builderTrack.setShower(trackREST.shower!!.toLong())
-                        builderTrack.setCleaning(trackREST.cleaning!!.toLong())
-                        builderTrack.setElectricity(trackREST.electricity!!.toLong())
-                        builderTrack.setSupercross(trackREST.supercross!!.toLong())
+                        newTrack.restId = trackREST.id!!.toLong()
+                        newTrack.changed = trackREST.changed!!.toLong()
+                        newTrack.trackname = trackREST.trackname
+                        newTrack.longitude = SecHelper.cryptXtude(trackREST.longitude!!)
+                        newTrack.latitude = SecHelper.cryptXtude(trackREST.latitude!!)
+                        newTrack.approved = trackREST.approved!!
+                        trackREST.country?.let {
+                            newTrack.country = it
+                        } ?: run {
+                            ""
+                        }
+                        newTrack.url = SecHelper.encryptB64(trackREST.url)
+                        newTrack.facebook = SecHelper.encryptB64(trackREST.facebook)
+                        newTrack.fees = trackREST.fees
+                        newTrack.phone = SecHelper.encryptB64(trackREST.phone)
+                        newTrack.notes = trackREST.notes
+                        newTrack.contact = SecHelper.encryptB64(trackREST.contact)
+                        newTrack.metatext = trackREST.metatext
+                        newTrack.licence = trackREST.licence
+                        newTrack.kidstrack = trackREST.kidstrack!!
+                        newTrack.openmondays = trackREST.openmondays!!
+                        newTrack.opentuesdays = trackREST.opentuesdays!!
+                        newTrack.openwednesday = trackREST.openwednesday!!
+                        newTrack.openthursday = trackREST.openthursday!!
+                        newTrack.openfriday = trackREST.openfriday!!
+                        newTrack.opensaturday = trackREST.opensaturday!!
+                        newTrack.opensunday = trackREST.opensunday!!
+                        newTrack.hoursmonday = trackREST.hoursmonday
+                        newTrack.hourstuesday = trackREST.hourstuesday
+                        newTrack.hourswednesday = trackREST.hourswednesday
+                        newTrack.hoursthursday = trackREST.hoursthursday
+                        newTrack.hoursfriday = trackREST.hoursfriday
+                        newTrack.hourssaturday = trackREST.hourssaturday
+                        newTrack.hourssunday = trackREST.hourssunday
+                        newTrack.tracklength = trackREST.tracklength!!
+                        newTrack.soiltype = trackREST.soiltype!!
+                        newTrack.camping = trackREST.camping!!
+                        newTrack.shower = trackREST.shower!!
+                        newTrack.cleaning = trackREST.cleaning!!
+                        newTrack.electricity = trackREST.electricity!!
+                        newTrack.supercross = trackREST.supercross!!
 
-                        builderTrack.setFeescamping(trackREST.feescamping)
-                        builderTrack.setDaysopen(trackREST.daysopen)
-                        builderTrack.setNoiselimit(trackREST.noiselimit)
-                        builderTrack.setCampingrvrvhookup(trackREST.campingrvrvhookup!!.toLong())
-                        builderTrack.setSingletracks(trackREST.singletracks!!.toLong())
-                        builderTrack.setMxtrack(trackREST.mxtrack!!.toLong())
-                        builderTrack.setA4x4(trackREST.a4x4!!.toLong())
-                        builderTrack.setEnduro(trackREST.enduro!!.toLong())
-                        builderTrack.setUtv(trackREST.utv!!.toLong())
-                        builderTrack.setQuad(trackREST.quad!!.toLong())
-                        builderTrack.setTrackstatus(trackREST.trackstatus)
-                        builderTrack.setAreatype(trackREST.areatype)
-                        builderTrack.setSchwierigkeit(trackREST.schwierigkeit!!.toLong())
-                        builderTrack.setIndoor(trackREST.indoor!!.toLong())
+                        newTrack.feescamping = trackREST.feescamping
+                        newTrack.daysopen = trackREST.daysopen
+                        newTrack.noiselimit = trackREST.noiselimit
+                        newTrack.campingrvrvhookup = trackREST.campingrvrvhookup!!
+                        newTrack.singletracks = trackREST.singletracks!!
+                        newTrack.mxtrack = trackREST.mxtrack!!
+                        newTrack.a4x4 = trackREST.a4x4!!
+                        newTrack.enduro = trackREST.enduro!!
+                        newTrack.utv = trackREST.utv!!
+                        newTrack.quad = trackREST.quad!!
+                        newTrack.trackstatus = trackREST.trackstatus
+                        newTrack.areatype = trackREST.areatype
+                        newTrack.schwierigkeit = trackREST.schwierigkeit!!
+                        newTrack.indoor = trackREST.indoor!!
 
                         if (trackREST.trackaccess != null) {
-                            builderTrack.setTrackaccess(trackREST.trackaccess)
+                            newTrack.trackaccess = trackREST.trackaccess
                         }
-                        builderTrack.setLogoURL(trackREST.logourl)
-                        builderTrack.setShowroom(trackREST.showroom!!.toLong())
-                        builderTrack.setWorkshop(trackREST.workshop!!.toLong())
-                        builderTrack.setValiduntil(trackREST.validuntil!!.toLong())
-                        builderTrack.setBrands(trackREST.brands)
-                        builderTrack.setAdress(SecHelper.encryptB64(trackREST.adress))
+                        newTrack.logoURL = trackREST.logourl
+                        newTrack.showroom = trackREST.showroom!!
+                        newTrack.workshop = trackREST.workshop!!
+                        newTrack.validuntil = trackREST.validuntil!!
+                        newTrack.brands = trackREST.brands
+                        newTrack.adress = SecHelper.encryptB64(trackREST.adress)
                         if (lastKnown != null) {
                             val locTrack = Location("calc")
                             locTrack.latitude = trackREST.latitude!!
                             locTrack.longitude = trackREST.longitude!!
-                            builderTrack.setDistance2location(lastKnown!!.distanceTo(locTrack).toLong())
+                            newTrack.distance2location = lastKnown!!.distanceTo(locTrack).toInt()
                         }
-
-                        contentValuesTrackList.add(builderTrack.values)
+//                        mxDatabase.trackDao().insertTrack(newTrack) TODO check if this is possible without id and if it is faster than bulk insert
+                        trackList.add(newTrack)
                     }
 
                     // bulk insert
                     if (zlrUpdated > BLOCK_SIZE) {
-                        zlrUpdated = bulkInsertMechanoid(
-                            context = operationContext.applicationContext,
-                            contentValuesList = contentValuesTrackList,
-                            uri = Tracks.CONTENT_URI,
+                        zlrUpdated = bulkInsertTrackRoom(
+                            trackList = trackList,
                             ges = tracksResponse.size,
                             was = opName,
                             previousImported = previousImported
                         )
                     }
                 } else {
-                    val recordTrack = TracksRecord.get(restId.toLong())
-                    recordTrack!!.restId = trackREST.id!!.toLong()
-                    recordTrack.changed = trackREST.changed!!.toLong()
-                    recordTrack.trackname = trackREST.trackname
-                    recordTrack.longitude = SecHelper.cryptXtude(trackREST.longitude!!)
-                    recordTrack.latitude = SecHelper.cryptXtude(trackREST.latitude!!)
-                    recordTrack.approved = trackREST.approved!!.toLong()
-                    recordTrack.country = trackREST.country
-                    recordTrack.url = SecHelper.encryptB64(trackREST.url)
-                    recordTrack.facebook = SecHelper.encryptB64(trackREST.facebook)
-                    recordTrack.fees = trackREST.fees
-                    recordTrack.phone = SecHelper.encryptB64(trackREST.phone)
-                    recordTrack.notes = trackREST.notes
-                    recordTrack.contact = SecHelper.encryptB64(trackREST.contact)
-                    recordTrack.metatext = trackREST.metatext
-                    recordTrack.licence = trackREST.licence
-                    recordTrack.kidstrack = trackREST.kidstrack!!.toLong()
-                    recordTrack.openmondays = trackREST.openmondays!!.toLong()
-                    recordTrack.opentuesdays = trackREST.opentuesdays!!.toLong()
-                    recordTrack.openwednesday = trackREST.openwednesday!!.toLong()
-                    recordTrack.openthursday = trackREST.openthursday!!.toLong()
-                    recordTrack.openfriday = trackREST.openfriday!!.toLong()
-                    recordTrack.opensaturday = trackREST.opensaturday!!.toLong()
-                    recordTrack.opensunday = trackREST.opensunday!!.toLong()
-                    recordTrack.hoursmonday = trackREST.hoursmonday
-                    recordTrack.hourstuesday = trackREST.hourstuesday
-                    recordTrack.hourswednesday = trackREST.hourswednesday
-                    recordTrack.hoursthursday = trackREST.hoursthursday
-                    recordTrack.hoursfriday = trackREST.hoursfriday
-                    recordTrack.hourssaturday = trackREST.hourssaturday
-                    recordTrack.hourssunday = trackREST.hourssunday
-                    recordTrack.tracklength = trackREST.tracklength!!.toLong()
-                    recordTrack.soiltype = trackREST.soiltype!!.toLong()
-                    recordTrack.camping = trackREST.camping!!.toLong()
-                    recordTrack.shower = trackREST.shower!!.toLong()
-                    recordTrack.cleaning = trackREST.cleaning!!.toLong()
-                    recordTrack.electricity = trackREST.electricity!!.toLong()
-                    recordTrack.supercross = trackREST.supercross!!.toLong()
-                    if (trackREST.trackaccess != null) {
-                        recordTrack.trackaccess = trackREST.trackaccess
+                    val currentTrack = mxDatabase.trackDao().getById(roomId)
+//                    currentTrack!!.restId = trackREST.id!!.toLong()
+                    currentTrack!!.changed = trackREST.changed!!.toLong()
+                    currentTrack.trackname = trackREST.trackname
+                    currentTrack.longitude = SecHelper.cryptXtude(trackREST.longitude!!)
+                    currentTrack.latitude = SecHelper.cryptXtude(trackREST.latitude!!)
+                    currentTrack.approved = trackREST.approved!!
+                    trackREST.country?.let {
+                        currentTrack.country = it
+                    } ?: run {
+                        ""
                     }
-                    recordTrack.logoURL = trackREST.logourl
-                    recordTrack.showroom = trackREST.showroom!!.toLong()
-                    recordTrack.workshop = trackREST.workshop!!.toLong()
-                    recordTrack.validuntil = trackREST.validuntil!!.toLong()
-                    recordTrack.brands = trackREST.brands
-                    recordTrack.adress = trackREST.adress
-                    recordTrack.feescamping = trackREST.feescamping
-                    recordTrack.daysopen = trackREST.daysopen
-                    recordTrack.noiselimit = trackREST.noiselimit
-                    recordTrack.campingrvrvhookup = trackREST.campingrvrvhookup!!.toLong()
-                    recordTrack.singletracks = trackREST.singletracks!!.toLong()
-                    recordTrack.mxtrack = trackREST.mxtrack!!.toLong()
-                    recordTrack.a4x4 = trackREST.a4x4!!.toLong()
-                    recordTrack.enduro = trackREST.enduro!!.toLong()
-                    recordTrack.utv = trackREST.utv!!.toLong()
-                    recordTrack.quad = trackREST.quad!!.toLong()
-                    recordTrack.trackstatus = trackREST.trackstatus
-                    recordTrack.areatype = trackREST.areatype
-                    recordTrack.schwierigkeit = trackREST.schwierigkeit!!.toLong()
-                    recordTrack.indoor = trackREST.indoor!!.toLong()
+                    currentTrack.url = SecHelper.encryptB64(trackREST.url)
+                    currentTrack.facebook = SecHelper.encryptB64(trackREST.facebook)
+                    currentTrack.fees = trackREST.fees
+                    currentTrack.phone = SecHelper.encryptB64(trackREST.phone)
+                    currentTrack.notes = trackREST.notes
+                    currentTrack.contact = SecHelper.encryptB64(trackREST.contact)
+                    currentTrack.metatext = trackREST.metatext
+                    currentTrack.licence = trackREST.licence
+                    currentTrack.kidstrack = trackREST.kidstrack!!
+                    currentTrack.openmondays = trackREST.openmondays!!
+                    currentTrack.opentuesdays = trackREST.opentuesdays!!
+                    currentTrack.openwednesday = trackREST.openwednesday!!
+                    currentTrack.openthursday = trackREST.openthursday!!
+                    currentTrack.openfriday = trackREST.openfriday!!
+                    currentTrack.opensaturday = trackREST.opensaturday!!
+                    currentTrack.opensunday = trackREST.opensunday!!
+                    currentTrack.hoursmonday = trackREST.hoursmonday
+                    currentTrack.hourstuesday = trackREST.hourstuesday
+                    currentTrack.hourswednesday = trackREST.hourswednesday
+                    currentTrack.hoursthursday = trackREST.hoursthursday
+                    currentTrack.hoursfriday = trackREST.hoursfriday
+                    currentTrack.hourssaturday = trackREST.hourssaturday
+                    currentTrack.hourssunday = trackREST.hourssunday
+                    currentTrack.tracklength = trackREST.tracklength!!
+                    currentTrack.soiltype = trackREST.soiltype!!
+                    currentTrack.camping = trackREST.camping!!
+                    currentTrack.shower = trackREST.shower!!
+                    currentTrack.cleaning = trackREST.cleaning!!
+                    currentTrack.electricity = trackREST.electricity!!
+                    currentTrack.supercross = trackREST.supercross!!
+                    if (trackREST.trackaccess != null) {
+                        currentTrack.trackaccess = trackREST.trackaccess
+                    }
+                    currentTrack.logoURL = trackREST.logourl
+                    currentTrack.showroom = trackREST.showroom!!
+                    currentTrack.workshop = trackREST.workshop!!
+                    currentTrack.validuntil = trackREST.validuntil!!
+                    currentTrack.brands = trackREST.brands
+                    currentTrack.adress = trackREST.adress
+                    currentTrack.feescamping = trackREST.feescamping
+                    currentTrack.daysopen = trackREST.daysopen
+                    currentTrack.noiselimit = trackREST.noiselimit
+                    currentTrack.campingrvrvhookup = trackREST.campingrvrvhookup!!
+                    currentTrack.singletracks = trackREST.singletracks!!
+                    currentTrack.mxtrack = trackREST.mxtrack!!
+                    currentTrack.a4x4 = trackREST.a4x4!!
+                    currentTrack.enduro = trackREST.enduro!!
+                    currentTrack.utv = trackREST.utv!!
+                    currentTrack.quad = trackREST.quad!!
+                    currentTrack.trackstatus = trackREST.trackstatus
+                    currentTrack.areatype = trackREST.areatype
+                    currentTrack.schwierigkeit = trackREST.schwierigkeit!!
+                    currentTrack.indoor = trackREST.indoor!!
 
                     if (lastKnown != null) {
                         val locTrack = Location("calc")
                         locTrack.latitude = SecHelper.cryptXtude(trackREST.latitude!!)
                         locTrack.longitude = SecHelper.cryptXtude(trackREST.longitude!!)
-                        recordTrack.distance2location = lastKnown!!.distanceTo(locTrack).toLong()
+                        currentTrack.distance2location = lastKnown!!.distanceTo(locTrack).toInt()
                     }
-                    recordTrack.save(updateProvider)
+                    mxDatabase.trackDao().update(currentTrack)
                 }
             }
         } catch (e: Exception) {
@@ -1058,11 +849,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
     }
 
     @Throws(Exception::class)
-    private fun doSyncRatings(context: OperationContext, updateProvider: Boolean) {
-        val opName = "Ratings"
-        val maxCreated = SQuery.newQuery()
-            .expr(Ratings.REST_ID, Op.NEQ, -1)
-            .firstLong(Ratings.CONTENT_URI, "max(" + Ratings.CHANGED + ")")
+    private fun doSyncComments(context: OperationContext) {
+        val opName = "Comments"
+        val maxCreated = mxDatabase.commentDao().maxChangedDate()
 
         val ratingsResponse = dataManagerApp.getRatings(maxCreated / 1000)
 
@@ -1070,213 +859,84 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
 
         LoggingHelper.setMessage("$DOWNLOAD $opName")
         var zlrUpdated = 0
-        var zlrInserted = 0
-        val contentValuesRatingsList = ArrayList<ContentValues>()
+        imported = 0
+        val commentList = mutableListOf<Comment>()
         for (trackREST in ratingsResponse.body()!!) {
             if (context.isAborted) {
                 return
             }
 
             zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Ratings.REST_ID, Op.EQ, trackREST.id!!)
-                .firstInt(Ratings.CONTENT_URI, Ratings._ID)
-            if (restId == 0) { // new entry
-                zlrInserted++
-                val builderRating = Ratings.newBuilder()
 
-                builderRating.setRestId(trackREST.id!!.toLong())
-                builderRating.setChanged(trackREST.changed.toLong() * 1000)
-                builderRating.setCountry(trackREST.country)
-                builderRating.setDeleted(trackREST.deleted!!.toLong())
-                builderRating.setNote(trackREST.note)
-                builderRating.setRating(trackREST.rating!!.toLong())
-                builderRating.setTrackRestId(trackREST.trackId!!.toLong())
-                builderRating.setUsername(trackREST.username)
-                builderRating.setApproved(trackREST.approved!!.toLong())
-                builderRating.setAndroidid(trackREST.androidid)
-                contentValuesRatingsList.add(builderRating.values)
+            mxDatabase.commentDao().byRestId(trackREST.id.toLong())?.let { comment ->
+                comment.restId = trackREST.id.toLong()
+                comment.changed = trackREST.changed.toLong() * 1000
+                comment.country = trackREST.country
+                comment.deleted = trackREST.deleted
+                comment.note = trackREST.note
+                comment.rating = trackREST.rating
+                comment.trackId = trackREST.trackId!!.toLong()
+                comment.username = trackREST.username
+                comment.approved = trackREST.approved
+                comment.androidid = trackREST.androidid
+                mxDatabase.commentDao().update(comment)
+            } ?: run {
+                // new entry
+                val comment = Comment()
+
+                comment.restId = trackREST.id.toLong()
+                comment.changed = trackREST.changed.toLong() * 1000
+                comment.country = trackREST.country
+                comment.deleted = trackREST.deleted
+                comment.note = trackREST.note ?: ""
+                comment.rating = trackREST.rating
+                comment.trackId = trackREST.trackId!!.toLong()
+                comment.username = trackREST.username ?: ""
+                comment.approved = trackREST.approved
+                comment.androidid = trackREST.androidid
+                commentList.add(comment)
 
                 // bulk insert
                 if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = bulkInsertMechanoid(
-                        context = context.applicationContext,
-                        contentValuesList = contentValuesRatingsList,
-                        uri = Ratings.CONTENT_URI,
+                    zlrUpdated = bulkInsertCommentRoom(
+                        commentList = commentList,
                         ges = ratingsResponse.body()!!.size,
-                        was = opName,
-                        previousImported = 0
+                        previousImported = imported
                     )
                 }
-            } else {
-                val recordTrack = RatingsRecord.get(restId.toLong())
-                recordTrack!!.restId = trackREST.id!!.toLong()
-                recordTrack.changed = trackREST.changed.toLong() * 1000
-                recordTrack.country = trackREST.country
-                recordTrack.deleted = trackREST.deleted!!.toLong()
-                recordTrack.note = trackREST.note
-                recordTrack.rating = trackREST.rating!!.toLong()
-                recordTrack.trackRestId = trackREST.trackId!!.toLong()
-                recordTrack.username = trackREST.username
-                recordTrack.approved = trackREST.approved!!.toLong()
-                recordTrack.androidid = trackREST.androidid
-                recordTrack.save(updateProvider)
             }
         }
         // clean up
-        if (zlrInserted > 0) {
-            bulkInsertMechanoid(
-                context = context.applicationContext,
-                contentValuesList = contentValuesRatingsList,
-                uri = Ratings.CONTENT_URI,
+        if (commentList.isNotEmpty()) {
+            bulkInsertCommentRoom(
+                commentList = commentList,
                 ges = ratingsResponse.body()!!.size,
-                was = opName,
-                previousImported = 0
+                previousImported = imported
             )
         }
         Timber.i("$opName all ${(if (ratingsResponse.body() != null) ratingsResponse.body()!!.size else 0)} updated $zlrUpdated")
     }
 
-    @Throws(RemoteException::class, OperationApplicationException::class, IOException::class)
-    private fun doSyncSeries(context: OperationContext, updateProvider: Boolean) {
-        val opName = "Series"
-        val maxCreated = SQuery.newQuery().firstInt(Series.CONTENT_URI, "max(" + Series.CHANGED + ")")
-
-        val seriesResponse = dataManagerApp.getSeries(maxCreated.toLong())
-
-        seriesResponse.checkResponseCodeOk()
-
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (serieR in seriesResponse.body()!!) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val restId = SQuery.newQuery()
-                .expr(Series.REST_ID, Op.EQ, serieR.id!!)
-                .firstInt(Series.CONTENT_URI, Series._ID)
-            if (restId == 0) { // new entry
-                zlrInserted++
-                val builderTrack = Series.newBuilder()
-
-                builderTrack.setRestId(serieR.id!!.toLong())
-                builderTrack.setChanged(serieR.changed!!.toLong())
-                builderTrack.setName(serieR.name)
-                builderTrack.setSeriesUrl(serieR.seriesurl)
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-                }
-            } else {
-                val recordTrack = SeriesRecord.get(restId.toLong())
-                recordTrack!!.restId = serieR.id!!.toLong()
-                recordTrack.changed = serieR.changed!!.toLong()
-                recordTrack.name = serieR.name
-                recordTrack.seriesUrl = serieR.seriesurl
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, seriesResponse.body()!!.size, opName, 0)
-        }
-        Timber.i("$opName all ${(if (seriesResponse.body() != null) seriesResponse.body()!!.size else 0)} updated:$zlrUpdated")
-    }
-
-    @Throws(ServiceException::class, RemoteException::class, OperationApplicationException::class)
-    private fun doSyncEvents(context: OperationContext, webClient: MxInfo, updateProvider: Boolean) {
-        val opName = "Events"
-        val maxCreated = SQuery.newQuery().firstInt(Events.CONTENT_URI, "max(" + Events.CHANGED + ")")
-        val requestTrack = GetEventsFromRequest(maxCreated.toLong())
-        val resultTrack = webClient.getEventsFrom(requestTrack)
-        val resTrack = resultTrack.parse()
-        resultTrack.checkResponseCodeOk()
-        LoggingHelper.setMessage("$DOWNLOAD $opName")
-        var zlrUpdated = 0
-        var zlrInserted = 0
-        val opsTracks = ArrayList<ContentProviderOperation>()
-        for (trackREST in resTrack.resTevents) {
-            if (context.isAborted) {
-                return
-            }
-
-            zlrUpdated++
-            val dbId = SQuery.newQuery()
-                .expr(Events.REST_ID, Op.EQ, trackREST.id)
-                .firstInt(Events.CONTENT_URI, Events._ID)
-            if (dbId == 0) { // new entry
-                zlrInserted++
-                val builderTrack = Events.newBuilder()
-
-                builderTrack.setRestId(trackREST.id.toLong())
-                builderTrack.setChanged(trackREST.changed.toLong())
-                builderTrack.setComment(trackREST.comment)
-                builderTrack.setEventDate(trackREST.eventdate.toLong())
-                builderTrack.setSeriesRestId(trackREST.serieId.toLong())
-                builderTrack.setApproved(trackREST.approved.toLong())
-                builderTrack.setTrackRestId(trackREST.trackId.toLong())
-
-                opsTracks.add(builderTrack.toInsertOperationBuilder().build())
-
-                // bulk insert
-                if (zlrUpdated > BLOCK_SIZE) {
-                    zlrUpdated = doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-                }
-            } else {
-                val recordTrack = EventsRecord.get(dbId.toLong())
-                recordTrack!!.restId = trackREST.id.toLong()
-                recordTrack.changed = trackREST.changed.toLong()
-                recordTrack.comment = trackREST.comment
-                recordTrack.eventDate = trackREST.eventdate.toLong()
-                recordTrack.seriesRestId = trackREST.serieId.toLong()
-                recordTrack.approved = trackREST.approved.toLong()
-                recordTrack.trackRestId = trackREST.trackId.toLong()
-                recordTrack.save(updateProvider)
-            }
-        }
-        // clean up
-        if (zlrInserted > 0) {
-            doApplyBatch(context, opsTracks, resTrack.resTevents.size, opName, 0)
-        }
-        Timber.i("$opName all ${(if (resTrack.resTevents != null) resTrack.resTevents.size else 0)} updated:$zlrUpdated")
-    }
-
-    private fun doBuildCountryTableMechanoid(context: Context): String {
+    private fun doBuildCountryTableRoom(context: Context): String {
         val result = ""
-        val deleteCount = SQuery.newQuery().append(
-            Country._ID + " in (select " + Countrycount._ID + " from " + AbstractMxInfoDBOpenHelper.Sources.COUNTRYCOUNT + " where " +
-                    Countrycount.COUNT + "=0)"
-        ).delete(Country.CONTENT_URI)
+        val deleteCount = mxDatabase.countryDao().cleanupFromEmptyCounties()
         Timber.d("Country deleted $deleteCount")
 
-        val countryGroup = SQuery.newQuery().select<CountrysumRecord>(Countrysum.CONTENT_URI, Countrysum._ID)
-        for (recordC in countryGroup) {
-            val countryExist = SQuery.newQuery()
-                .expr(
-                    Country.COUNTRY, Op.EQ,
-                    if (recordC.country == null || recordC.country == "") "\"\"" else recordC.country
-                )
-                .exists(Country.CONTENT_URI)
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        mxDatabase.trackDao().countrySum.forEach { countrySum ->
+            val countryExist = mxDatabase.countryDao().exists(if (countrySum.country == "") "\"\"" else countrySum.country)
             if (!countryExist) {
-                val rec = CountryRecord()
-                if (!(recordC.country == null || recordC.country == "")) {
-                    rec.country = recordC.country
+                val countryEntity = info.mx.tracks.room.entity.Country()
+                if (countrySum.country != "") {
+                    countryEntity.country = countrySum.country
                 }
                 var country = Locale.getDefault().country
                 if (country.length < 2) {
                     country = "DE"
                 }
-                var showCountry = if (country == recordC.country) 1 else 0
-                val manager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                val isoSim = manager.simCountryIso
-                val isoNetwork = manager.networkCountryIso
+                var showCountry = if (country == countrySum.country) 1 else 0
+                val isoSim = telephonyManager.simCountryIso
+                val isoNetwork = telephonyManager.networkCountryIso
                 if (country == isoSim) {
                     showCountry = 1
                 }
@@ -1284,9 +944,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
                     showCountry = 1
                 }
 
-                rec.show = showCountry.toLong()
-                rec.save()
-                Timber.d("${rec.country} Country added ${rec.show}")
+                countryEntity.show = showCountry
+                mxDatabase.countryDao().insertCountry(countryEntity)
+                Timber.d("${countryEntity.country} Country added ${countryEntity.show}")
             }
         }
 
@@ -1297,9 +957,9 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
             // currently to nothing. Flavor US should handle this
             Timber.d("We are not first time, let's keep America")
         } else if (!MxPreferences.instance.firstTimeCountry) {
-            if (SQuery.newQuery().count(Country.CONTENT_URI) > 2) {
+            if (mxDatabase.countryDao().allShown.size > 2) {
                 Timber.d("We are not firstTimeCountry, hide Europe")
-                locationHelper.hideAmerica(context)
+                locationHelper.hideAmerica()
                 MxPreferences.instance.firstTimeCountry = true
             } else {
                 Timber.d("We are not firstTimeCountry, Nothing to do with hide/show countries")
@@ -1307,14 +967,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         } else
             Timber.d("Nothing to do with hide/show countries")
 
-        val countries = SQuery.newQuery()
-            .expr(Country.COUNTRY, Op.EQ, "zz")
-            .select<CountryRecord>(Country.CONTENT_URI)
-        for (recordC in countries) {
-            SQuery.newQuery()
-                .expr(Country._ID, Op.EQ, recordC.id)
-                .delete(Country.CONTENT_URI, false)
-        }
+        mxDatabase.countryDao().deleteByCountryCode("zz")
         return result
     }
 
@@ -1336,11 +989,50 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
     }
 
+    private fun bulkInsertTrackRoom(
+        trackList: MutableList<Track>,
+        ges: Int,
+        was: String,
+        previousImported: Int
+    ): Int {
+        val proceedCount = trackList.size
+        imported += trackList.size
+        LoggingHelper.setMessage(IMPORT_TRACK_ROOM + " " + was + " " + imported + "/" + (ges + previousImported))
+//        mxDatabase.runInTransaction {
+        // for better performance with large lists, *trackList.toTypedArray() converts to a vararg parameter
+        // trackList.toTypedArray() - Converts the list to an Array<Track>
+        // * (spread operator) - Unpacks the array into individual arguments
+        mxDatabase.trackDao().insertTracksAll(*trackList.toTypedArray())
+//        }
+        trackList.clear()
+        return proceedCount
+    }
+
+    private fun bulkInsertCommentRoom(
+        commentList: MutableList<Comment>,
+        ges: Int,
+        previousImported: Int
+    ): Int {
+        val proceedCount = commentList.size
+        imported += commentList.size
+        LoggingHelper.setMessage(IMPORT_COMMENT_ROOM + " Comments " + imported + "/" + (ges + previousImported))
+//        mxDatabase.runInTransaction {
+        // for better performance with large lists, *trackList.toTypedArray() converts to a vararg parameter
+        // trackList.toTypedArray() - Converts the list to an Array<Track>
+        // * (spread operator) - Unpacks the array into individual arguments
+        mxDatabase.commentDao().insertCommentsAll(*commentList.toTypedArray())
+//        }
+        commentList.clear()
+        return proceedCount
+    }
+
     companion object {
         var importStatusMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
         var adminImportStatusCalMessage: MutableLiveData<ImportStatusMessage> = MutableLiveData()
 
-        private const val IMPORT_REC = "Import"
+        internal const val IMPORT_REC = "Import"
+        private const val IMPORT_TRACK_ROOM = "Room Import track"
+        private const val IMPORT_COMMENT_ROOM = "Room Import comment"
         private const val DOWNLOAD = "Download/Import"
 
         const val COUNTRY_RESULT = "country_result"
@@ -1348,27 +1040,7 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         var SOURCE = "source"
         private const val BLOCK_SIZE = 49
         const val RECALC_TRACKS = "recalcTracks"
-        private var imported = 0
-
-        private fun bulkInsertMechanoid(
-            context: Context,
-            contentValuesList: MutableList<ContentValues>,
-            uri: Uri,
-            ges: Int,
-            was: String,
-            previousImported: Int
-        ): Int {
-            imported += contentValuesList.size
-            LoggingHelper.setMessage(IMPORT_REC + " " + was + " " + imported + "/" + (ges + previousImported))
-            val contentValues = arrayOfNulls<ContentValues>(contentValuesList.size)
-            for ((i, values) in contentValuesList.withIndex()) {
-                contentValues[i] = values
-            }
-            contentValuesList.clear()
-
-            context.contentResolver.bulkInsert(uri, contentValues)
-            return contentValuesList.size
-        }
+        internal var imported = 0
 
         private fun deleteFile(localThumb: String) {
             if (localThumb != "") {
@@ -1380,22 +1052,17 @@ class OpSyncFromServerOperation : AbstractOpSyncFromServerOperation(), KoinCompo
         }
 
         @Throws(RemoteException::class, OperationApplicationException::class)
-        private fun doApplyBatch(
-            context: OperationContext,
-            ops: ArrayList<ContentProviderOperation>,
+        private fun doApplyBatchRoom(
+            mxDatabase: MxDatabase,
+            listPictures: MutableList<Picture>,
             ges: Int,
-            was: String,
             @Suppress("SameParameterValue") previousImported: Int
         ): Int {
-            if (context.isAborted) {
-                return 0
-            }
-
-            imported += ops.size
-            context.applicationContext.contentResolver.applyBatch(CONTENT_AUTHORITY, ops)
+            imported += listPictures.size
+            mxDatabase.pictureDao().insertPicturesAll(listPictures)
             val zlr = 0
-            LoggingHelper.setMessage(IMPORT_REC + " " + was + " " + imported + "/" + (ges + previousImported))
-            ops.clear()
+            LoggingHelper.setMessage(IMPORT_REC + " Pictures " + imported + "/" + (ges + previousImported))
+            listPictures.clear()
             return zlr
         }
     }

@@ -26,17 +26,18 @@ import info.mx.tracks.databinding.ActivityFilterBinding
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService.Companion.restartService
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.CountryRecord
-import info.mx.core_generated.sqlite.MxInfoDBContract.Country
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
+import info.mx.tracks.room.MxDatabase
+import org.koin.android.ext.android.inject
 import timber.log.Timber
+import kotlin.getValue
 
 class ActivityFilter : ActivityBase() {
 
     private lateinit var binding: ActivityFilterBinding
 
     private lateinit var prefs: MxPreferences
-
+    val mxDatabase: MxDatabase by inject()
     private var handlerErrorHandler = Handler(Looper.getMainLooper())
     private var runnableErrorHide = Runnable { binding.include.tvFilterCount.error = null }
 
@@ -305,7 +306,7 @@ class ActivityFilter : ActivityBase() {
 
     private fun setCountryList() {
         var res = StringBuilder()
-        val countries = SQuery.newQuery().expr(Country.SHOW, SQuery.Op.EQ, 1).select<CountryRecord>(Country.CONTENT_URI)
+        val countries = mxDatabase.countryDao().allShown
         for (record in countries) {
             res.append(record.country).append(",")
         }
@@ -317,11 +318,11 @@ class ActivityFilter : ActivityBase() {
 
     private fun setTrackCount() {
         var queryGes = SQuery.newQuery()
-        queryGes = QueryHelper.buildTracksFilterGes(queryGes)
+        queryGes = QueryHelper.buildTracksFilterGes(queryGes, mxDatabase)
         val countRecGes = queryGes.count(Tracksges.CONTENT_URI)
         binding.include.tvFilterCountGes.text = String.format(getString(R.string.tracksfoundges), countRecGes.toString() + "")
         var query = SQuery.newQuery()
-        query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
+        query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES, mxDatabase)
         val countRecords = query.count(Tracksges.CONTENT_URI)
         binding.include.tvFilterCount.text = String.format(getString(R.string.tracksfound), countRecords.toString() + "")
         if (countRecords > 1000) {

@@ -5,6 +5,7 @@ import info.mx.core.MxCoreApplication.Companion.isAdmin
 import info.mx.core_generated.prefs.MxPreferences.Companion.instance
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.core_generated.sqlite.MxInfoDBContract.*
+import info.mx.tracks.room.MxDatabase
 import timber.log.Timber
 
 object QueryHelper {
@@ -43,14 +44,15 @@ object QueryHelper {
         query: SQuery,
         mFilter: String?,
         isFav: Boolean,
-        table: String?
+        table: String?,
+        mxDatabase: MxDatabase,
     ): SQuery {
         var query = query
         val res = query
         if (isFav) {
             query = buildTrackFavorite(query)
         } else {
-            query = buildTracksFilter(query, table)
+            query = buildTracksFilter(query, table, mxDatabase)
         }
         if (mFilter != null && !mFilter.trim { it <= ' ' }.isEmpty()) {
             val token: Array<String?> =
@@ -78,7 +80,7 @@ object QueryHelper {
         return res
     }
 
-    fun buildTracksFilter(query: SQuery, table: String?): SQuery {
+    fun buildTracksFilter(query: SQuery, table: String?, mxDatabase: MxDatabase): SQuery {
         // dealer mit Ablaufdatum filtern
 
         val gueltige = SQuery.newQuery()
@@ -205,11 +207,13 @@ object QueryHelper {
         if (prefs.showDifficult > 0) {
             query.expr(Tracksges.SCHWIERIGKEIT, SQuery.Op.GTEQ, prefs.showDifficult)
         }
-        val anz = SQuery.newQuery().expr(Country.SHOW, SQuery.Op.EQ, 0).count(Country.CONTENT_URI)
+        val anz = mxDatabase.countryDao().all.filter { it.show == 0 }.size
         if (anz > 0) {
+            val countries = mxDatabase.countryDao().allShown.joinToString(", ") { "\"${it.country}\"" }
+            // with two databases it needs unfortunately a list, instead of a subquery
             query.append(
-                " " + Tracksges.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)",
-                "1"
+//                " " + Tracksges.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)",
+                " " + Tracksges.COUNTRY + " IN ($countries)"
             )
         }
         Timber.d("query %s", query.toString())
@@ -217,7 +221,7 @@ object QueryHelper {
         return query
     }
 
-    fun buildTracksFilterGes(query: SQuery): SQuery {
+    fun buildTracksFilterGes(query: SQuery, mxDatabase: MxDatabase): SQuery {
         // dealer mit Ablaufdatum filtern
 
         val validQuery = SQuery.newQuery()
@@ -237,11 +241,13 @@ object QueryHelper {
         // } else if (!MxCoreApplication.isAdmin) {
         // query.expr(Tracksges.APPROVED, Op.GT, -1);
         // }
-        val anz = SQuery.newQuery().expr(Country.SHOW, SQuery.Op.EQ, 0).count(Country.CONTENT_URI)
+        val anz = mxDatabase.countryDao().all.filter { it.show == 0 }.size
         if (anz > 0) {
+            val countries = mxDatabase.countryDao().allShown.joinToString(", ") { "\"${it.country}\"" }
+            // with two databases it needs unfortunately a list, instead of a subquery
             query.append(
-                " " + Tracksges.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)",
-                "1"
+//                " " + Tracksges.COUNTRY + " IN (select " + Country.COUNTRY + " from country where show=?)",
+                " " + Tracksges.COUNTRY + " IN (${countries})"
             )
         }
         Timber.d("Ges query %s", query.toString())

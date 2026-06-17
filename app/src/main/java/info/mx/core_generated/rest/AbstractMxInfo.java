@@ -107,31 +107,7 @@ public abstract class AbstractMxInfo extends ServiceClient {
 		
 		return post(request, parser);
 	}
-	
-	public Response<PostRatingsResult> postRatings(PostRatingsRequest request)
-	  throws ServiceException {
-		
-		Parser<PostRatingsResult> parser = new Parser<PostRatingsResult>() {
-			public PostRatingsResult parse(InputStream inStream) throws IOException {
-				return new PostRatingsResult(getReaderProvider(), inStream);
-			}
-		};
-		
-		return post(request, parser);
-	}
-	
-	public Response<GetEventsFromResult> getEventsFrom(GetEventsFromRequest request)
-	  throws ServiceException {
-		
-		Parser<GetEventsFromResult> parser = new Parser<GetEventsFromResult>() {
-			public GetEventsFromResult parse(InputStream inStream) throws IOException {
-				return new GetEventsFromResult(getReaderProvider(), inStream);
-			}
-		};
-		
-		return get(request, parser);
-	}
-	
+
 	public Response<PostWeatherResult> postWeather(PostWeatherRequest request)
 	  throws ServiceException {
 		

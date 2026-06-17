@@ -4,7 +4,6 @@ service MxInfo {
 	operation opRecalcDistance(double lat, double lon, String provider)
 	operation opSyncFromServer(boolean updateProvider, String flavor)
 	operation opPostTrackAppoved(long trackId, int status)
-	operation opPostRatings()
 	operation opPostImages()
 	operation opResetLocalImages()
 	operation opPushSharedImage(long trackRestId, String uri) unique (trackRestId, uri)
