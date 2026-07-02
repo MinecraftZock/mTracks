@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y exiftool imagemagick xdg-utils libimage-exiftool-perl zsh jq xorg
       #          brew install exiftool imagemagick
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
@@ -138,7 +138,7 @@ jobs:
       matrix:
         os: [ ubuntu-22.04 ]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
@@ -177,7 +177,7 @@ jobs:
         os: [ ubuntu-22.04 ]
         java_version: [ 17 ]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
@@ -209,7 +209,7 @@ jobs:
         os: [ ubuntu-22.04 ]
         java_version: [ 17 ]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
