@@ -33,8 +33,8 @@ object QueryHelper {
         }
         stageFilter = stageFilterPre + stageFilter
         query.append(
-            (Tracksges.REST_ID + " in (select " + Trackstage.TRACK_REST_ID + " from "
-                    + AbstractMxInfoDBOpenHelper.Sources.TRACKSTAGE + stageFilter + ")")
+            ("${Tracksges.REST_ID} in (select ${Trackstage.TRACK_REST_ID} from " +
+                    AbstractMxInfoDBOpenHelper.Sources.TRACKSTAGE + stageFilter + ")")
         )
         return query
     }
@@ -175,7 +175,8 @@ object QueryHelper {
                     prefs.searchOpenMi &&
                     prefs.searchOpenDo &&
                     prefs.searchOpenFr &&
-                    prefs.searchOpenSa && prefs.searchOpenSo)
+                    prefs.searchOpenSa &&
+                    prefs.searchOpenSo)
         ) {
             if (!prefs.searchOpenMo) {
                 query.expr(Tracksges.OPENMONDAYS, SQuery.Op.EQ, 0)
@@ -286,7 +287,9 @@ object QueryHelper {
     val isFiltered: Boolean
         get() {
             val prefs = instance
-            return prefs.debugTrackAnsicht != 2 || prefs.locationView != -1 || prefs.soilView != -1 ||
+            return prefs.debugTrackAnsicht != 2 ||
+                    prefs.locationView != -1 ||
+                    prefs.soilView != -1 ||
                     prefs.onlyOpen ||
                     prefs.onlyApproved ||
                     prefs.showMx ||
@@ -300,6 +303,19 @@ object QueryHelper {
                     prefs.searchWash ||
                     prefs.searchCamping ||
                     prefs.searchElectricity ||
-                    prefs.searchPicture || !prefs.showDealers || !prefs.showEveryone || !prefs.showRace || !prefs.showMember || !prefs.searchOpenMo || !prefs.searchOpenDi || !prefs.searchOpenMi || !prefs.searchOpenDo || !prefs.searchOpenFr || !prefs.searchOpenSa || !prefs.searchOpenSo || prefs.showRating != 0f || prefs.showDifficult != 0f
+                    prefs.searchPicture ||
+                    !prefs.showDealers ||
+                    !prefs.showEveryone ||
+                    !prefs.showRace ||
+                    !prefs.showMember ||
+                    !prefs.searchOpenMo ||
+                    !prefs.searchOpenDi ||
+                    !prefs.searchOpenMi ||
+                    !prefs.searchOpenDo ||
+                    !prefs.searchOpenFr ||
+                    !prefs.searchOpenSa ||
+                    !prefs.searchOpenSo ||
+                    prefs.showRating != 0f ||
+                    prefs.showDifficult != 0f
         }
 }
