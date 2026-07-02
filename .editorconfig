@@ -27,6 +27,7 @@ ktlint_standard_trailing-ktlint_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
 ktlint_standard_trailing-trailing-comma-on-call-site = disabled
 ktlint_standard_final-newline = enabled
+ktlint_standard_package-name = disabled
 ktlint_standard_comment-spacing = disabled
 ktlint_standard_argument-list-wrapping = disabled
 ktlint_standard_indent = disabled

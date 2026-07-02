@@ -73,8 +73,9 @@ object CommentHelper {
         }
         val dlg = builder.create()
         val inflater = dlg.layoutInflater
-        @SuppressLint("InflateParams") val view =
-            inflater.inflate(R.layout.layout_comment_add, null)
+
+        @SuppressLint("InflateParams")
+        val view = inflater.inflate(R.layout.layout_comment_add, null)
         edtComment = view.findViewById<EditText>(R.id.com_note)
         ratingBar = view.findViewById<RatingBar>(R.id.com_rating)
         if (ratingsRecord != null) {
