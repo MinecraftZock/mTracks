@@ -244,7 +244,7 @@ dependencies {
     "adminImplementation"("org.jsoup:jsoup:1.22.1")
     implementation("com.github.hannesa2:android-maps-extensions:3.2.1")
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.7.1")
-    implementation("com.github.MikeOrtiz:TouchImageView:3.7.1")
+    implementation("com.github.MikeOrtiz:TouchImageView:3.7.2")
 
     implementation("androidx.browser:browser:1.10.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.2.0")
