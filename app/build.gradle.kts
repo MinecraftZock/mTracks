@@ -241,7 +241,7 @@ dependencies {
     implementation("androidx.work:work-runtime:$work_version")
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
-    "adminImplementation"("org.jsoup:jsoup:1.22.1")
+    "adminImplementation"("org.jsoup:jsoup:1.22.2")
     implementation("com.github.hannesa2:android-maps-extensions:3.2.1")
     implementation("com.github.hannesa2:AndroidSlidingUpPanel:4.7.1")
     implementation("com.github.MikeOrtiz:TouchImageView:3.7.2")
