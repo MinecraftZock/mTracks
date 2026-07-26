@@ -6,7 +6,7 @@ android {
     namespace = "info.hannes.commonlib"
     defaultConfig {
         minSdk = 24
-        compileSdk = 36
+        compileSdk = 37
     }
     lint {
         abortOnError = false

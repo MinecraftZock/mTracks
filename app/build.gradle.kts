@@ -55,7 +55,7 @@ android {
     }
 
     defaultConfig {
-        compileSdk = 36
+        compileSdk = 37
         targetSdk { version = release(36) }
 
         versionCode = getGitCommitCount(versionOffset)

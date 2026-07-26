@@ -22,7 +22,7 @@ android {
     namespace = "info.mx.rxcommlibrary"
     defaultConfig {
         minSdk = 24
-        compileSdk = 36
+        compileSdk = 37
         consumerProguardFiles.addAll(
             listOf(
                 file("proguard-RxCommLib-consumer.pro")
