@@ -273,7 +273,7 @@ dependencies {
     "androidTestImplementation"("org.hamcrest:hamcrest-integration:1.3")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
     "androidTestImplementation"("androidx.test.ext:junit-ktx:1.2.1")
