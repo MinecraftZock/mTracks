@@ -6,6 +6,8 @@ import android.view.MenuItem
 import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import info.hannes.mxadmin.base.ActivityAdminBase
 import info.mx.tracks.R
 import info.mx.tracks.room.MxDatabase
@@ -56,28 +58,30 @@ class ActivityLocationMonitor : ActivityAdminBase() {
                 .subscribe { locations -> adapterMonitored!!.setLocations(locations) })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.activity_filter_country, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+    override fun onStart() {
+        super.onStart()
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: android.view.MenuInflater) {
+                menuInflater.inflate(R.menu.activity_filter_country, menu)
             }
 
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+            override fun onPrepareMenu(menu: Menu) {
+                if (!permissionHelper.hasLocationPermission())
+                    menu.findItem(R.id.action_settings_filter_country).icon = permissionIcon
+            }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if (!permissionHelper.hasLocationPermission())
-            menu.findItem(R.id.action_settings_filter_country).icon = permissionIcon
-
-        return super.onPrepareOptionsMenu(menu)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 
 }
