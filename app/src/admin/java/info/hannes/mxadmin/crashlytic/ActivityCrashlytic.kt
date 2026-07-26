@@ -31,9 +31,9 @@ class ActivityCrashlytic : AppCompatActivity() {
         binding.containerActivityCrashlytic.buttonException.isEnabled = !MxApplication.isGoogleTests
         binding.containerActivityCrashlytic.buttonException.setOnClickListener {
             if (Timber.forest().first() is CrashlyticsTree) {
-                Toast.makeText(this, "force crash ${info.hannes.logcat.BuildConfig.VERSIONNAME}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "force crash ${info.hannes.logcat.BuildConfig.VERSION_NAME}", Toast.LENGTH_SHORT).show()
                 Handler(Looper.getMainLooper()).postDelayed(
-                    { throw RuntimeException("Test Crash ${info.hannes.logcat.BuildConfig.VERSIONNAME}") },
+                    { throw RuntimeException("Test Crash ${info.hannes.logcat.BuildConfig.VERSION_NAME}") },
                     3000
                 )
             } else
