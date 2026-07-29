@@ -110,7 +110,7 @@ jobs:
           SCREENSHOT_PASSWORD: ${{ secrets.SCREENSHOT_PASSWORD }}
         run: |
           ls -la app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected
-          cp app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected/emulator-5554\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}-${{ matrix.flavor }}
+          cp app/build/outputs/connected_android_test_additional_output/${{ matrix.flavor }}DebugAndroidTest/connected/emulator\(AVD\)\ -\ ${{ matrix.emulatorApi }}/* screenshotsToCompare${{ matrix.emulatorApi }}-${{ matrix.flavor }}
           echo ${{ env.resourceRunID }}
           ./screenShotScript/screenShotCompare.sh ${{ env.resourceRunID }}
       - name: Archive screenshots diffs ${{ matrix.flavor }} ${{ matrix.emulatorApi }}
