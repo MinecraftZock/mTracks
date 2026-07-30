@@ -64,7 +64,7 @@ dependencies {
     implementation(project(":commonLib"))
     implementation("androidx.appcompat:appcompat:1.7.1")
     api(project(":RxCommData"))
-    api("com.google.code.gson:gson:2.13.2")
+    api("com.google.code.gson:gson:2.14.0")
 
     api("io.reactivex.rxjava2:rxandroid:2.1.1")
     api("io.reactivex.rxjava2:rxjava:2.2.21")
