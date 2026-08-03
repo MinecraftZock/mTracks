@@ -3,6 +3,23 @@
  */
 package info.mx.core.ops.google
 
+import android.content.Intent
+import android.os.Build
 import info.mx.core_generated.ops.google.AbstractMxGoogleService
+import timber.log.Timber
 
-class MxGoogleService : AbstractMxGoogleService(false)
+class MxGoogleService : AbstractMxGoogleService(false) {
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                return super.onStartCommand(intent, flags, startId)
+            } catch (e: android.app.ForegroundServiceStartNotAllowedException) {
+                Timber.w("MxGoogleService cannot start foreground from background, stopping")
+                stopSelf()
+                return START_NOT_STICKY
+            }
+        }
+        return super.onStartCommand(intent, flags, startId)
+    }
+}
