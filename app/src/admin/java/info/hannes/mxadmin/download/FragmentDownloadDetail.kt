@@ -79,6 +79,8 @@ class FragmentDownloadDetail : Fragment(), LoaderManager.LoaderCallbacks<Cursor>
             // Load the dummy content specified by the fragment arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             val mId = requireArguments().getLong(ARG_ITEM_ID)
+            if (mId <= 0)
+                return
             val rec = DownLoadSiteRecord.get(mId)
             if (rec != null) {
                 serverUrlGes = rec.url
