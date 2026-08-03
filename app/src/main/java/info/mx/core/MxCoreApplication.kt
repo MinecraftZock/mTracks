@@ -91,11 +91,19 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun doSync(updateProvider: Boolean, force: Boolean, flavor: String) {
             if (MxPreferences.instance.lastSyncTime + SYNC_WAIT < System.currentTimeMillis() || force) {
-                val intentM = AbstractOpPostRatingsOperation.newIntent()
-                Ops.execute(intentM)
+                try {
+                    val intentM = AbstractOpPostRatingsOperation.newIntent()
+                    Ops.execute(intentM)
 
-                val intent = AbstractOpSyncFromServerOperation.newIntent(updateProvider, flavor)
-                Ops.execute(intent)
+                    val intent = AbstractOpSyncFromServerOperation.newIntent(updateProvider, flavor)
+                    Ops.execute(intent)
+                } catch (e: IllegalStateException) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is android.app.ForegroundServiceStartNotAllowedException) {
+                        Timber.w("doSync skipped: foreground service not allowed from background on Android 12+")
+                    } else {
+                        throw e
+                    }
+                }
             }
         }
 
