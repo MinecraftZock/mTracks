@@ -138,7 +138,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
 
         fun trackEvent(category: String, action: String) {
             if (trackApp) {
-                TrackHelper.track().screen(category).title(action).with(appTracker)
+                appTracker?.let { TrackHelper.track().screen(category).title(action).with(it) }
             }
         }
 
@@ -147,7 +147,7 @@ abstract class MxCoreApplication : MxAccessApplication() {
             name = name.replace("Activity", "").replace("Fragment", "")
             if (name != "MenuAdmin" && trackApp) {
                 Timber.d(name)
-                TrackHelper.track().screen("/track/view").title(name).with(appTracker)
+                appTracker?.let { TrackHelper.track().screen("/track/view").title(name).with(it) }
             }
         }
     }
