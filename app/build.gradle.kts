@@ -225,7 +225,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:23.2.0") // (Recommended) Add Analytics
     implementation("com.google.firebase:firebase-crashlytics:20.1.0")
 
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.2")
     implementation("androidx.test.espresso:espresso-idling-resource:3.6.1")
     "freeImplementation"("com.google.android.gms:play-services-ads:25.4.0")
 
