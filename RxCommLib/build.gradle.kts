@@ -62,7 +62,7 @@ android {
 
 dependencies {
     implementation(project(":commonLib"))
-    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
     api(project(":RxCommData"))
     api("com.google.code.gson:gson:2.14.0")
 
