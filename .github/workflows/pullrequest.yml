@@ -64,7 +64,7 @@ jobs:
           echo BRANCH_NAME=${{ needs.env-job.outputs.modified-branch-name }}
           echo GITHUB_RUN_ID=${GITHUB_RUN_ID}
       - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: ${{ matrix.java_version }}
@@ -152,7 +152,7 @@ jobs:
           CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
       - uses: gradle/actions/wrapper-validation@v6.3.0
       - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: 17
@@ -183,7 +183,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: ${{ matrix.java_version }}
@@ -215,7 +215,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
       - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: ${{ matrix.java_version }}
