@@ -19,10 +19,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class UActivityMapTest : BaseSyncTest() {
-
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityMapExtension>()
+class UActivityMapTest : BaseSyncTest<ActivityMapExtension>() {
 
     @Before
     fun startMainActivityFromHomeScreen() {
@@ -36,7 +33,8 @@ class UActivityMapTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
-        Thread.sleep(1000)
+        startActivity<ActivityMapExtension>()
+
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-open") })
     }
