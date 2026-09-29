@@ -105,10 +105,10 @@ open class MxApplication : MxCoreApplication(), KoinComponent {
                     val lastKnown = Location("lastKnown")
                     lastKnown.latitude = lat
                     lastKnown.longitude = lon
-                    RecalculateDistance.calculateDistanceOnTracks(mxMemDatabase, lastKnown)
+                    RecalculateDistance.calculateDistanceOnTracks(mxMemDatabase, lastKnown, mxDatabase)
                 },
                 { Timber.e(it) },
-                { RecalculateDistance.calculateDistanceOnTracks(mxMemDatabase, null) }
+                { RecalculateDistance.calculateDistanceOnTracks(mxMemDatabase, null, mxDatabase) }
             )
     }
 

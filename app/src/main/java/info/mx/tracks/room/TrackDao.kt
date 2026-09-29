@@ -1,0 +1,174 @@
+package info.mx.tracks.room
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import info.mx.tracks.room.entity.CountrySum
+import info.mx.tracks.room.entity.Track
+import info.mx.tracks.room.entity.TrackStage
+import info.mx.tracks.room.entity.TracksGes
+import info.mx.tracks.room.entity.TracksGesSum
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface TrackDao {
+
+//    @Query("SELECT * FROM Track WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
+//    fun getByTrackId(trackId: Long): Flow<List<Track>>
+
+    @get:Query("SELECT * FROM Track")
+    val all: List<Track>
+
+    @Query("SELECT count(*) FROM Track")
+    fun countAll(): Int
+
+    @Query("SELECT * FROM Track WHERE country = :country")
+    fun emptyCountry(country: String): List<Track>
+
+    @Query("SELECT * FROM Trackstage WHERE restId > 0 and changed = 1")
+    fun alreadyKnownAndUpdated(): List<TrackStage>
+
+    @Query("SELECT max(changed) FROM Track")
+    fun latest(): Long
+
+    @Query("DELETE FROM Track where approved = -1 and changed != :maxChanged")
+    fun deleteNotApproved(maxChanged: Long)
+
+    @get:Query("SELECT * FROM CountrySum")
+    val countrySum: List<CountrySum>
+
+//    @Query("SELECT avg(rating) FROM Track WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
+//    fun avgByTrackIdMT(trackId: Long): Float
+//
+//    @Query("SELECT * FROM Track WHERE trackId = :trackId order by changed desc")
+//    fun flowableAllByTrackId(trackId: Long): Flowable<List<Track>>
+//
+//    @Query("SELECT * FROM Track WHERE trackId = :trackId order by changed desc")
+//    fun loadAllByTrackId(trackId: Long): Flow<List<Track>>
+//
+//    @Query("SELECT * FROM Track WHERE id < 0 order by changed desc")
+//    fun commentAllNonPushed(): List<Track>
+//
+//    @Query("SELECT * FROM Track WHERE id < 0 order by changed desc")
+//    fun allNonPushedRx(): Single<List<Track>>
+//
+//    @Query("SELECT count(*) FROM Track WHERE trackId = :trackId and androidid = :androidID and note = :note and deleted != 1 " + "order by changed desc")
+//    fun commentExists(trackId: Long, androidID: String, note: String): Int
+//
+//    @Query("SELECT * FROM Track WHERE id IN (:ids)")
+//    fun loadAllByIds(ids: IntArray): List<Track>
+
+    @Query("SELECT * FROM Track WHERE id = :id")
+    fun loadById(id: Long): Flow<Track>
+
+    @Query("SELECT * FROM Track WHERE restId = :restId")
+    fun loadByRestId(restId: Long): Flow<Track>
+
+    @Query("SELECT * FROM Track WHERE restId = :restId")
+    fun getByRestId(restId: Long): Track?
+
+    @Query("SELECT * FROM Track WHERE id = :id")
+    fun getById(id: Long): Track?
+
+    @Query("SELECT id FROM Track WHERE restId = :restId")
+    fun getIdByRestId(restId: Long): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTracksAll(tracks: List<Track>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTracksAll(vararg tracks: Track)
+
+//    @Query("SELECT * FROM Track WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
+//    User findByName(String first, String last);
+//
+//    @Insert
+//    fun insertTracksAll(vararg comments: Track)
+//
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertTracksAll(comments: List<Track>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTrack(track: Track)
+
+    @Update
+    fun update(track: Track)
+
+    @Query("SELECT max(changed) FROM Track")
+    fun getNewest(): Int
+
+//    @Delete
+//    fun delete(vararg comments: Track)
+//
+//    @Delete
+//    fun delete(comments: List<Track>)
+//
+//    @Transaction
+//    fun updateTrack(commentDelete: Track, commentNew: Track) {
+//        delete(commentDelete)
+//        insertTracksAll(commentNew)
+//    }
+//
+//    @Transaction
+//    fun updateTracks(commentOrigin: List<Track>, commentNew: List<Track>?) {
+//        delete(commentOrigin)
+//        commentNew?.let { insertTracksAll(it) }
+//    }
+
+    @Query("SELECT * FROM TracksGes")
+    fun getAllTracksGes(): Flow<List<TracksGes>>
+
+    @Query("SELECT * FROM TracksGes WHERE id = :trackId")
+    fun getTracksGesById(trackId: Long): Flow<TracksGes?>
+
+    @Query("SELECT * FROM TracksGes WHERE country = :country")
+    fun getTracksGesByCountry(country: String): Flow<List<TracksGes>>
+
+    @Query("SELECT * FROM TracksGesSum")
+    fun getAllTracksGesSum(): Flow<List<TracksGesSum>>
+
+    @Query("SELECT * FROM TracksGesSum WHERE id = :trackId")
+    fun getTracksGesSumById(trackId: Long): Flow<TracksGesSum?>
+
+    @Query("SELECT * FROM TracksGesSum WHERE country = :country")
+    fun getTracksGesSumByCountry(country: String): Flow<List<TracksGesSum>>
+
+    // Search and filter methods for TracksGesSum with LIMIT to prevent CursorWindow overflow
+    @Query("""
+        SELECT * FROM TracksGesSum 
+        WHERE (:searchText = '' OR trackname LIKE '%' || :searchText || '%' 
+               OR metatext LIKE '%' || :searchText || '%' 
+               OR brands LIKE '%' || :searchText || '%')
+        AND (:countryFilter = '' OR country IN (:countries))
+        ORDER BY 
+            CASE WHEN :orderBy = 'trackname' THEN trackname END ASC,
+            CASE WHEN :orderBy = 'distance2location' THEN distance2location END ASC,
+            CASE WHEN :orderBy = 'approved' THEN approved END DESC
+        LIMIT 1000
+    """)
+    fun searchTracksGesSum(
+        searchText: String,
+        countryFilter: String,
+        countries: List<String>,
+        orderBy: String
+    ): Flow<List<TracksGesSum>>
+
+    @Query("""
+        SELECT tgs.* FROM TracksGesSum tgs
+        INNER JOIN Favorit f ON tgs.id = f.trackId
+        WHERE (:searchText = '' OR tgs.trackname LIKE '%' || :searchText || '%' 
+               OR tgs.metatext LIKE '%' || :searchText || '%' 
+               OR tgs.brands LIKE '%' || :searchText || '%')
+        ORDER BY 
+            CASE WHEN :orderBy = 'trackname' THEN tgs.trackname END ASC,
+            CASE WHEN :orderBy = 'distance2location' THEN tgs.distance2location END ASC
+        LIMIT 1000
+    """)
+    fun searchFavoriteTracksGesSum(
+        searchText: String,
+        orderBy: String
+    ): Flow<List<TracksGesSum>>
+
+}

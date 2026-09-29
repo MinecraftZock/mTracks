@@ -15,6 +15,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import info.hannes.changelog.ChangeLog
 import info.hannes.commonlib.utils.setPhoneHasNoOptionsBtn
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.MxApplication
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityDrawerBase
@@ -22,10 +24,8 @@ import info.mx.tracks.common.FragmentEmpty
 import info.mx.tracks.common.FragmentUpDown.Companion.CONTENT_URI
 import info.mx.tracks.common.FragmentUpDown.Companion.RECORD_ID_LOCAL
 import info.mx.tracks.databinding.ActivityTracksListBinding
-import info.mx.core_generated.prefs.MxPreferences
 import info.mx.tracks.service.LocationJobService
 import info.mx.tracks.settings.ActivitySetting
-import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.tracks.trackdetail.ActivityTrackDetail
 import info.mx.tracks.trackdetail.ActivityTrackEdit
 import info.mx.tracks.trackdetail.FragmentTrackDetail
@@ -181,4 +181,5 @@ class ActivityTrackList : ActivityDrawerBase(), FragmentTrackList.Callbacks, Cal
                 .commit()
         }
     }
+
 }

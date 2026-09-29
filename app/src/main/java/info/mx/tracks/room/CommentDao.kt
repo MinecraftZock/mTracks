@@ -1,0 +1,101 @@
+package info.mx.tracks.room
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import info.mx.tracks.room.entity.Comment
+import info.mx.tracks.room.entity.RatingSum
+import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface CommentDao {
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
+    fun getByTrackId(trackId: Long): Flow<List<Comment>>
+
+    @get:Query("SELECT * FROM Comment")
+    val all: List<Comment>
+
+    @Query("DELETE FROM Comment where approved = -1")
+    fun deleteNotApproved()
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 order by changed desc")
+    fun loadByTrackId(trackId: Long): Flowable<List<Comment>>
+
+    @Query("SELECT * FROM Comment WHERE restId = :restId")
+    fun byRestId(restId: Long): Comment?
+
+    @Query("SELECT avg(rating) FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
+    fun avgByTrackId(trackId: Long): Maybe<Float>
+
+    @Query("SELECT avg(rating) FROM Comment WHERE trackId = :trackId and note != '' and deleted != 1 and androidid != \"debug\" order by changed desc")
+    fun avgByTrackIdMT(trackId: Long): Float
+
+    @Query("SELECT max(changed) FROM Comment WHERE restId != -1")
+    fun maxChangedDate(): Long
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId order by changed desc")
+    fun flowableAllByTrackId(trackId: Long): Flowable<List<Comment>>
+
+    @Query("SELECT * FROM Comment WHERE trackId = :trackId order by changed desc")
+    fun loadAllByTrackId(trackId: Long): Flow<List<Comment>>
+
+    @Query("SELECT * FROM Comment WHERE id < 0 order by changed desc")
+    fun commentAllNonPushed(): List<Comment>
+
+    @Query("SELECT * FROM Comment WHERE id < 0 order by changed desc")
+    fun allNonPushedRx(): Single<List<Comment>>
+
+    @Query("SELECT count(*) FROM Comment WHERE trackId = :trackId and androidid = :androidID and note = :note and deleted != 1 " + "order by changed desc")
+    fun commentExists(trackId: Long, androidID: String, note: String): Int
+
+    @Query("SELECT * FROM Comment WHERE id IN (:ids)")
+    fun loadAllByIds(ids: IntArray): List<Comment>
+
+    @Query("SELECT * FROM Comment WHERE id = :id")
+    fun loadById(id: Long): Maybe<Comment>
+
+    //    @Query("SELECT * FROM Comment WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
+    //    User findByName(String first, String last);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCommentsAll(vararg comments: Comment)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCommentsAll(comments: List<Comment>)
+
+    @Update
+    fun update(comment: Comment)
+
+    @Delete
+    fun delete(vararg comments: Comment)
+
+    @Delete
+    fun delete(comments: List<Comment>)
+
+    @Transaction
+    fun updateComment(commentDelete: Comment, commentNew: Comment) {
+        delete(commentDelete)
+        insertCommentsAll(commentNew)
+    }
+
+    @Transaction
+    fun updateComments(commentOrigin: List<Comment>, commentNew: List<Comment>?) {
+        delete(commentOrigin)
+        commentNew?.let { insertCommentsAll(it) }
+    }
+
+    @Query("SELECT * FROM RatingSum WHERE trackId = :trackId")
+    fun getRatingSumByTrackId(trackId: Long): Flow<RatingSum?>
+
+    @Query("SELECT * FROM RatingSum")
+    fun getAllRatingSums(): Flow<List<RatingSum>>
+
+}
