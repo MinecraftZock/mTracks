@@ -222,7 +222,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-core:21.1.1")
     implementation(platform("com.google.firebase:firebase-bom:34.19.0"))
-    implementation("com.google.firebase:firebase-analytics:23.2.0") // (Recommended) Add Analytics
+    implementation("com.google.firebase:firebase-analytics:24.0.0") // (Recommended) Add Analytics
     implementation("com.google.firebase:firebase-crashlytics:21.0.0")
 
     implementation("androidx.constraintlayout:constraintlayout:2.2.2")
