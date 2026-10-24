@@ -73,7 +73,7 @@ internal class OpBrothersLoadOperation : AbstractOpBrothersLoadOperation(), Core
             val filename = context.applicationContext.externalCacheDir.toString() + "/" + FILE_MAIN
             val file = File(filename)
             if (!file.exists()) {
-                // Hole die Länderurl's
+                // get the country url's
                 LoggingHelperAdmin.setMessage("get " + args.url.replace("http://", ""))
                 var httpContent = RetroFileHelper.getFileContent(commApiClient, args.url)
                 LoggingHelperAdmin.setMessage("write $FILE_MAIN")

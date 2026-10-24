@@ -14,11 +14,6 @@ abstract class Command<T> : Consumer<T> {
         Return
     }
 
-    fun setNext(next: Command<T>): Command<T> {
-        mNext = next
-        return this
-    }
-
     override fun accept(t: T) {
         if (process(t) == Result.Return) {
             return

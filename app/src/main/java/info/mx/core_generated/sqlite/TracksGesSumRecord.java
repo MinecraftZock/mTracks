@@ -111,7 +111,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
             TracksGesSum.AREATYPE,
             TracksGesSum.SCHWIERIGKEIT,
             TracksGesSum.INDOOR,
-            TracksGesSum.RATING,
             TracksGesSum.PICTURECOUNT,
             TracksGesSum.EVENTCOUNT
     };
@@ -174,9 +173,8 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         int AREATYPE = 54;
         int SCHWIERIGKEIT = 55;
         int INDOOR = 56;
-        int RATING = 57;
-        int PICTURECOUNT = 58;
-        int EVENTCOUNT = 59;
+        int PICTURECOUNT = 57;
+        int EVENTCOUNT = 58;
     }
 
     private String mTrackname;
@@ -291,8 +289,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
     private boolean mSchwierigkeitDirty;
     private long mIndoor;
     private boolean mIndoorDirty;
-    private String mRating;
-    private boolean mRatingDirty;
     private String mPicturecount;
     private boolean mPicturecountDirty;
     private String mEventcount;
@@ -807,15 +803,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         return mIndoor;
     }
 
-    public void setRating(String rating) {
-        mRating = rating;
-        mRatingDirty = true;
-    }
-
-    public String getRating() {
-        return mRating;
-    }
-
     public void setPicturecount(String picturecount) {
         mPicturecount = picturecount;
         mPicturecountDirty = true;
@@ -899,11 +886,10 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         mAreatype = in.readString();
         mSchwierigkeit = in.readLong();
         mIndoor = in.readLong();
-        mRating = in.readString();
         mPicturecount = in.readString();
         mEventcount = in.readString();
 
-        boolean[] dirtyFlags = new boolean[59];
+        boolean[] dirtyFlags = new boolean[58];
         in.readBooleanArray(dirtyFlags);
         mTracknameDirty = dirtyFlags[0];
         mApprovedDirty = dirtyFlags[1];
@@ -961,9 +947,8 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         mAreatypeDirty = dirtyFlags[53];
         mSchwierigkeitDirty = dirtyFlags[54];
         mIndoorDirty = dirtyFlags[55];
-        mRatingDirty = dirtyFlags[56];
-        mPicturecountDirty = dirtyFlags[57];
-        mEventcountDirty = dirtyFlags[58];
+        mPicturecountDirty = dirtyFlags[56];
+        mEventcountDirty = dirtyFlags[57];
     }
 
     @Override
@@ -1030,7 +1015,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         dest.writeString(mAreatype);
         dest.writeLong(mSchwierigkeit);
         dest.writeLong(mIndoor);
-        dest.writeString(mRating);
         dest.writeString(mPicturecount);
         dest.writeString(mEventcount);
         dest.writeBooleanArray(new boolean[]{
@@ -1090,7 +1074,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
                 mAreatypeDirty,
                 mSchwierigkeitDirty,
                 mIndoorDirty,
-                mRatingDirty,
                 mPicturecountDirty,
                 mEventcountDirty
         });
@@ -1268,9 +1251,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         if (mIndoorDirty) {
             builder.setIndoor(mIndoor);
         }
-        if (mRatingDirty) {
-            builder.setRating(mRating);
-        }
         if (mPicturecountDirty) {
             builder.setPicturecount(mPicturecount);
         }
@@ -1280,7 +1260,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
 
         return builder;
     }
-
     @Override
     public void makeDirty(boolean dirty) {
         mTracknameDirty = dirty;
@@ -1339,7 +1318,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         mAreatypeDirty = dirty;
         mSchwierigkeitDirty = dirty;
         mIndoorDirty = dirty;
-        mRatingDirty = dirty;
         mPicturecountDirty = dirty;
         mEventcountDirty = dirty;
     }
@@ -1403,7 +1381,6 @@ public class TracksGesSumRecord extends ActiveRecord implements Parcelable {
         setAreatype(c.getString(Indices.AREATYPE));
         setSchwierigkeit(c.getLong(Indices.SCHWIERIGKEIT));
         setIndoor(c.getLong(Indices.INDOOR));
-        setRating(c.getString(Indices.RATING));
         setPicturecount(c.getString(Indices.PICTURECOUNT));
         setEventcount(c.getString(Indices.EVENTCOUNT));
     }

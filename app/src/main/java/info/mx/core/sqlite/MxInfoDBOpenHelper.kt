@@ -6,13 +6,11 @@ import com.robotoworks.mechanoid.db.SQLiteMigration
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
 import info.mx.core_generated.sqlite.MxInfoDBContract
-import info.mx.core_generated.sqlite.MxInfoDBContract.Country
 import info.mx.core_generated.sqlite.migrations.DefaultMxInfoDBMigrationV1
 import info.mx.core_generated.sqlite.migrations.DefaultMxInfoDBMigrationV4
 import info.mx.core_generated.sqlite.migrations.DefaultMxInfoDBMigrationV5
 import info.mx.tracks.common.SecHelper
 import timber.log.Timber
-import java.util.Locale
 
 class MxInfoDBOpenHelper(context: Context) : AbstractMxInfoDBOpenHelper(context, getDir(context)) {
     override fun onOpen(db: SQLiteDatabase?) {
@@ -23,25 +21,25 @@ class MxInfoDBOpenHelper(context: Context) : AbstractMxInfoDBOpenHelper(context,
     override fun createMxInfoDBMigrationV1(): SQLiteMigration {
         return object : DefaultMxInfoDBMigrationV1() {
             override fun onAfterUp(db: SQLiteDatabase) {
-                val cvToFilter = Country.newBuilder()
-                    .setCountry("zz")
-                    .setShow(0)
-                    .values
-                db.insert(Sources.COUNTRY, null, cvToFilter)
-                val country = Locale.getDefault().country
-                val defCountry = country.take(if (country.length < 2) country.length else 2)
-                val cvToShow = Country.newBuilder()
-                    .setCountry(if (defCountry == "") "DE" else defCountry) // TODO
-                    .setShow(1)
-                    .values
-                db.insert(Sources.COUNTRY, null, cvToShow)
-                if (defCountry != "DE") {
-                    val cvToDE = Country.newBuilder()
-                        .setCountry(Locale.GERMANY.country)
-                        .setShow(1)
-                        .values
-                    db.insert(Sources.COUNTRY, null, cvToDE)
-                }
+//                val cvToFilter = Country.newBuilder()
+//                    .setCountry("zz")
+//                    .setShow(0)
+//                    .values
+//                db.insert(Sources.COUNTRY, null, cvToFilter)
+//                val country = Locale.getDefault().country
+//                val defCountry = country.take(if (country.length < 2) country.length else 2)
+//                val cvToShow = Country.newBuilder()
+//                    .setCountry(if (defCountry == "") "DE" else defCountry) // TODO
+//                    .setShow(1)
+//                    .values
+//                db.insert(Sources.COUNTRY, null, cvToShow)
+//                if (defCountry != "DE") {
+//                    val cvToDE = Country.newBuilder()
+//                        .setCountry(Locale.GERMANY.country)
+//                        .setShow(1)
+//                        .values
+//                    db.insert(Sources.COUNTRY, null, cvToDE)
+//                }
             }
         }
     }

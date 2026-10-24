@@ -895,13 +895,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun getTracksQuery(bundle: Bundle?, querySource: SQuery): SQuery {
         var query = querySource
-        query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
+        query = QueryHelper.buildTracksFilter(query, AbstractMxInfoDBOpenHelper.Sources.TRACKSGES, mxDatabase)
         if (bundle != null && bundle.containsKey(SEARCH_TEXT)) {
             query = QueryHelper.buildUserTrackSearchFilter(
                 query = query,
                 mFilter = bundle.getString(SEARCH_TEXT),
                 isFav = false,
                 table = AbstractMxInfoDBOpenHelper.Sources.TRACKS_GES_SUM,
+                mxDatabase = mxDatabase,
             )
             searchList!!.adapter = searchAdapter
         } else if (!inPlaceSearch) {
