@@ -11,7 +11,7 @@ env:
 
 jobs:
   env-job:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       modified-branch-name: ${{ steps.env.outputs.MODIFIED_BRANCH_NAME }}
     name: Modify branch name
