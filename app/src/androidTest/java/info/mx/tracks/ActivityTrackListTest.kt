@@ -1,51 +1,54 @@
 package info.mx.tracks
 
-import android.Manifest
-import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
-import android.location.Location
-import android.location.LocationManager
 import android.widget.ListView
-import androidx.test.core.app.ApplicationProvider
+import androidx.cursoradapter.widget.CursorAdapter
 import androidx.test.core.graphics.writeToTestStorage
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.activityScenarioRule
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
-import com.google.android.gms.location.LocationServices
+import com.robotoworks.mechanoid.db.SQuery
+import info.mx.core_generated.prefs.MxPreferences
+import info.mx.core_generated.sqlite.CountryRecord
+import info.mx.core_generated.sqlite.MxInfoDBContract.Country
+import info.mx.core_generated.sqlite.MxInfoDBContract.TracksGesSum
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.tracklist.ActivityTrackList
 import org.hamcrest.Matchers
-import org.junit.Rule
+import org.hamcrest.Matchers.allOf
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityTrackListTest : BaseSyncTest() {
+class ActivityTrackListTest : BaseSyncTest<ActivityTrackList>() {
 
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityTrackList>()
+    @Test
+    fun munichSetupReplacesPreviousCountrySelection() {
+        Country.newBuilder().setShow(0).update(SQuery.newQuery(), true)
+        Country.newBuilder().setShow(1)
+            .update(SQuery.newQuery().expr(Country.COUNTRY, SQuery.Op.EQ, "US"), true)
+        MxPreferences.instance.firstTimeLocation = true
+        MxPreferences.instance.onlyOpen = true
 
-    @get:Rule
-    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
+        prepareMunichCountryFilter()
+
+        assertTrue("Previous track filter must be reset", !MxPreferences.instance.onlyOpen)
+        startActivity<ActivityTrackList>()
+        assertSearchResultsRespectCountries("initial list")
+    }
 
     @Test
     fun showTrackListTest() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        LocationServices.getFusedLocationProviderClient(context).setMockMode(true)
-        val location = Location(LocationManager.GPS_PROVIDER)
-        location.latitude = 42.125
-        location.longitude = 55.123
-
-        LocationServices.getFusedLocationProviderClient(context).setMockLocation(location)
+        startActivity<ActivityTrackList>()
 
         // This is the first time settings activity with always changed version number
         // Espresso.pressBackUnconditionally()
@@ -87,54 +90,25 @@ class ActivityTrackListTest : BaseSyncTest() {
 
     @Test
     fun searchTest() {
-        // This is the first time settings activity with always changed version number
-//        // Espresso.pressBackUnconditionally()
+        startActivity<ActivityTrackList>()
+
         onView(withId(R.id.menu_search)).perform(click())
 
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("aa"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-aa") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("de"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-de") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ee"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ee") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ck"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ck") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("sch"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-sch") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("oo"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-oo") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("tz"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-tz") })
-        onView(withId(R.id.search_src_text)).perform(clearText(), typeText("ff"))
-        Thread.sleep(WAIT_EDIT)
-        onView(isRoot())
-            .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-ff") })
+        for (term in listOf("aa", "de", "ee", "ck", "sch", "oo", "tz", "ff")) {
+            onView(withId(R.id.search_src_text)).perform(clearText(), typeText(term))
+            Espresso.onIdle()
+            assertMunichCountryFilter()
+            assertSearchResultsRespectCountries(term)
+            onView(isRoot()).perform(captureToBitmap { bitmap: Bitmap ->
+                bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-search-$term")
+            })
+        }
     }
 
 
     @Test
     fun tab() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        LocationServices.getFusedLocationProviderClient(context).setMockMode(true)
-        val location = Location(LocationManager.GPS_PROVIDER)
-        location.latitude = 42.125
-        location.longitude = 55.123
-
-        LocationServices.getFusedLocationProviderClient(context).setMockLocation(location)
+        startActivity<ActivityTrackList>()
 
         // This is the first time settings activity with always changed version number
         // Espresso.pressBackUnconditionally()
@@ -151,7 +125,29 @@ class ActivityTrackListTest : BaseSyncTest() {
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-distance") })
     }
 
-    companion object {
-        const val WAIT_EDIT = 200L
+    private fun assertSearchResultsRespectCountries(term: String) {
+        val allowedCountries = SQuery.newQuery().expr(Country.SHOW, SQuery.Op.EQ, 1)
+            .select<CountryRecord>(Country.CONTENT_URI).map { it.country }.toSet()
+        // Check the actual list cursor, including off-screen rows, rather than rebuilding the query.
+        onView(allOf(withId(R.id.list_overview), withParent(isDisplayed()))).check { view, error ->
+            if (error != null) throw error
+            val adapter = (view as ListView).adapter as CursorAdapter
+            val cursor: Cursor = requireNotNull(adapter.cursor) { "Search '$term' has not loaded" }
+            if (term == "de") {
+                assertTrue("Search 'de' must contain results, not just an empty filtered list", cursor.count > 0)
+            }
+            val position = cursor.position
+            try {
+                cursor.moveToPosition(-1)
+                while (cursor.moveToNext()) {
+                    val country = cursor.getString(cursor.getColumnIndexOrThrow(TracksGesSum.COUNTRY))
+                    val track = cursor.getString(cursor.getColumnIndexOrThrow(TracksGesSum.TRACKNAME))
+                    assertTrue("Search '$term' returned US track '$track'", country != "US")
+                    assertTrue("Search '$term' returned excluded country '$country' for '$track'", country in allowedCountries)
+                }
+            } finally {
+                cursor.moveToPosition(position)
+            }
+        }
     }
 }

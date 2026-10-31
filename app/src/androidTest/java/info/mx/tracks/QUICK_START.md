@@ -1,5 +1,28 @@
 # Quick Start: Testing ActivityMapExtension with Location
 
+## Fixed device location for screenshot tests
+
+Tests extending `BaseSyncTest` run with a mock device location in Munich
+(`48.1351, 11.5820`). The setup grants location permissions, waits for the mock
+location tasks and a successful data sync, resets filter preferences, and runs
+the normal distance/location recalculation before launching an activity. It
+checks that Germany is enabled and the USA is disabled. A failed initial sync
+fails setup instead of producing screenshots of incomplete data.
+
+The mock mode and its previous app-op permission are restored after each test.
+Use a device/emulator with Google Play Services and shell access for the mock
+location app-op. The tests still require a working backend for the initial sync.
+
+`startActivity(lat, lon)` changes the **map camera target**, not the device
+location. Map scenarios for New York, Tokyo, etc. still use Munich as the device
+location. The existing automatic filter excludes America; it is not a strict
+geographic Europe-only filter.
+
+`ActivityTrackListTest.searchTest` checks the actual result cursor for every search
+term, including off-screen results: only enabled countries may appear and US
+tracks must not appear. The `de` search must also return at least one result.
+Screenshots will intentionally differ from older US-based baselines.
+
 ## TL;DR - Copy & Paste Template
 
 ```kotlin

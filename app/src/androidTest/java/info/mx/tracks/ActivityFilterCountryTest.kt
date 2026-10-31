@@ -12,7 +12,6 @@ import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import info.mx.tracks.base.BaseSyncTest
@@ -24,10 +23,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ActivityFilterCountryTest : BaseSyncTest() {
-
-    @get:Rule
-    val activityScenarioRule = activityScenarioRule<ActivityFilterCountry>()
+class ActivityFilterCountryTest : BaseSyncTest<ActivityFilterCountry>() {
 
     @get:Rule
     val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
@@ -36,6 +32,8 @@ class ActivityFilterCountryTest : BaseSyncTest() {
 
     @Test
     fun smokeTestSimplyStart() {
+        startActivity<ActivityFilterCountry>()
+
         onView(withId(R.id.action_settings_filter_country)).perform(click())
         Thread.sleep(1000)
 
