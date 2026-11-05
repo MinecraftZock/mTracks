@@ -27,9 +27,13 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_activity_map" />
+        <include
+            android:id="@+id/map_include"
+            layout="@layout/content_activity_map" />
 
-        <include layout="@layout/layout_fab_left" />
+        <include
+            android:id="@+id/left_fab_include"
+            layout="@layout/layout_fab_left" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
