@@ -6,6 +6,14 @@ import info.mx.tracks.data.DataManagerApp
 import info.mx.tracks.navigation.AppNavigationMenu
 import info.mx.tracks.tools.AddMobHelper
 import info.mx.tracks.tools.PermissionHelper
+import info.mx.tracks.settings.CountryFilterRepository
+import info.mx.tracks.settings.CountryFilterViewModel
+import info.mx.tracks.trackdetail.comment.CommentRepository
+import info.mx.tracks.trackdetail.comment.CommentViewModel
+import info.mx.tracks.trackdetail.detail.TrackDetailRepository
+import info.mx.tracks.trackdetail.detail.TrackDetailViewModel
+import info.mx.tracks.trackdetail.event.EventRepository
+import info.mx.tracks.trackdetail.event.EventViewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -14,7 +22,15 @@ val appModule = module {
     single { AppNavigationMenu() }
     single { AddMobHelper(get()) }
     single { LocationHelper(get()) }
-
+    single { EventViewModel() }
+    single { TrackDetailViewModel() }
+    single { EventRepository() }
+    single { CommentViewModel() }
+    single { CommentRepository() }
+    single { TrackDetailRepository() }
+    single { CountryFilterViewModel() }
+    single { CountryFilterRepository() }
+    single { LocationHelper(get()) }
     single { DataManagerApp(get()) }
 
     //factory { MySimplePresenter(get()) }

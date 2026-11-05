@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import info.mx.tracks.R
-import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
+import info.mx.tracks.room.entity.CapturedLatLng
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.text.SimpleDateFormat

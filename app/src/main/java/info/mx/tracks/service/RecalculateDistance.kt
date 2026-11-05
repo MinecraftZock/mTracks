@@ -18,12 +18,11 @@ import info.mx.tracks.common.*
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.core.ops.RecalculateIdlingResource
 import info.mx.core_generated.prefs.MxPreferences
-import info.mx.tracks.room.CapturedLatLng
 import info.mx.tracks.room.MxDatabase
-import info.mx.tracks.room.memory.entity.TracksDistance
+import info.mx.tracks.room.entity.CapturedLatLng
 import info.mx.tracks.room.memory.MxMemDatabase
+import info.mx.tracks.room.memory.entity.TracksDistance
 import info.mx.core_generated.sqlite.AbstractMxInfoDBOpenHelper
-import info.mx.core_generated.sqlite.MxInfoDBContract
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracksges
 import info.mx.core_generated.sqlite.TracksRecord
 import info.mx.tracks.trackdetail.ActivityTrackDetail
@@ -74,7 +73,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         capturedLatLng.time = System.currentTimeMillis()
 
         if (distance > DISTANCE_MIN_TO_RECALC) {
-            val records = calculateDistanceOnTracks(mxMemDatabase, location)
+            val records = calculateDistanceOnTracks(mxMemDatabase, location, mxDatabase)
             if (records.isNotEmpty()) {
                 val trackLoc = Location("track")
                 trackLoc.latitude = records[0].lat
@@ -104,16 +103,16 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         mxDatabase.capturedLatLngDao().insertAll(capturedLatLng)
 
         //reset countries to show
-        val countCountries = SQuery.newQuery().count(MxInfoDBContract.Country.CONTENT_URI)
+        val countCountries = mxDatabase.countryDao().allShown.size
         Timber.i("CountriesShow $countCountries firstTimeLocation=${MxPreferences.instance.firstTimeLocation} USA=${location.isUSA()} Europe=${location.isEurope()} $location")
         if (!MxPreferences.instance.firstTimeLocation) {
             if (countCountries > 2) {
                 if (location.isUSA()) {
-                    locationHelper.hideEurope(context)
+                    locationHelper.hideEurope()
                 } else if (location.isEurope()) {
-                    locationHelper.hideAmerica(context)
+                    locationHelper.hideAmerica()
                 } else {
-                    locationHelper.hideAmerica(context)
+                    locationHelper.hideAmerica()
                 }
                 QueryHelper.resetFilter()
                 MxPreferences.instance.firstTimeLocation = true
@@ -252,7 +251,7 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
 
         notificationManager.notify(notificationID, notification.build())
 
-        MxCoreApplication.trackEvent("vorort", trackRecord.trackname)
+        MxCoreApplication.trackEvent("onSite", trackRecord.trackname)
         return extra
     }
 
@@ -273,12 +272,12 @@ class RecalculateDistance(private val context: Context) : KoinComponent {
         const val DISTANCE_NEW = "distanceNew"
         const val EDIT = "edit"
 
-        fun calculateDistanceOnTracks(mxMemDatabase: MxMemDatabase, location: Location?): List<TracksDistance> {
+        fun calculateDistanceOnTracks(mxMemDatabase: MxMemDatabase, location: Location?, mxDatabase: MxDatabase): List<TracksDistance> {
             val records = ArrayList<TracksDistance>()
             mxMemDatabase.runInTransaction {
                 mxMemDatabase.tracksDistanceDao().deleteAll()
                 val projection = arrayOf(Tracksges._ID, Tracksges.LATITUDE, Tracksges.LONGITUDE)
-                val query = QueryHelper.buildTracksFilter(SQuery.newQuery(), AbstractMxInfoDBOpenHelper.Sources.TRACKSGES)
+                val query = QueryHelper.buildTracksFilter(SQuery.newQuery(), AbstractMxInfoDBOpenHelper.Sources.TRACKSGES, mxDatabase)
                 val cursor = query.select(Tracksges.CONTENT_URI, projection)
                 while (cursor.moveToNext()) {
                     var distance = -1
