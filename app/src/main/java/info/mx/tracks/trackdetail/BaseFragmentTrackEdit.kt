@@ -41,6 +41,7 @@ import info.mx.tracks.common.On3StateClickListener
 import info.mx.tracks.common.SecHelper
 import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.databinding.FragmentTrackEditBinding
+import info.mx.tracks.map.MapIdlingResource
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.map.FragmentMapScroll
 import info.mx.core_generated.ops.AbstractOpGetLatLngOperation
@@ -644,6 +645,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             mapFragment = parentFragmentManager.findFragmentById(R.id.map_edit) as FragmentMapScroll?
         }
         if (map == null && mapFragment != null) {
+            MapIdlingResource.increment()
             mapFragment.getMapAsync { googleMap: GoogleMap ->
                 map = googleMap.apply {
                     mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -659,6 +661,12 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 }
 
                 fillMask(id)
+                map!!.isTrafficEnabled = false
+                map!!.uiSettings.isZoomControlsEnabled = true
+                map!!.uiSettings.isMapToolbarEnabled = false
+                map!!.setOnMarkerDragListener(this@BaseFragmentTrackEdit)
+                map!!.setOnMarkerClickListener(this@BaseFragmentTrackEdit)
+                map!!.setOnMapLoadedCallback { doAfterMapLoaded() }
                 setUpLocationClientIfNeeded()
             }
             id = 0
@@ -677,7 +685,10 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
         }
     }
 
-    protected open fun doAfterMapLoaded() = Unit
+    protected open fun doAfterMapLoaded() {
+        fillMask(id)
+        MapIdlingResource.decrement()
+    }
 
     private fun addMarker(latlng: LatLng) {
         marker?.remove()
