@@ -269,7 +269,7 @@ dependencies {
     implementation("com.google.android.libraries.places:places:6.0.2")
     implementation("com.google.maps.android:android-maps-utils:7.0.0")
 
-    "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.3.0")
+    "androidTestImplementation"("androidx.test.uiautomator:uiautomator:2.4.1")
     "androidTestImplementation"("org.hamcrest:hamcrest-integration:1.3")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.21")
