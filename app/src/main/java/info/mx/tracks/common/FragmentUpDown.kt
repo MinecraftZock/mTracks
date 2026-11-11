@@ -49,8 +49,8 @@ abstract class FragmentUpDown : FragmentBase() {
     }
 
     protected open fun fillNextPrevId(localId: Long) {
-        nextLocalId = SQuery.newQuery().expr("_id", Op.GT, localId).firstLong(contentUri?.toUri(), "_id", "_id asc")
-        prevLocalId = SQuery.newQuery().expr("_id", Op.LT, localId).firstLong(contentUri?.toUri(), "_id", "_id desc")
+        nextLocalId = SQuery.newQuery().expr("_id", Op.GT, localId).firstLong(contentUri?.toUri(), "_id", "_id asc") ?: -1L
+        prevLocalId = SQuery.newQuery().expr("_id", Op.LT, localId).firstLong(contentUri?.toUri(), "_id", "_id desc") ?: -1L
     }
 
     fun moveUp() {
