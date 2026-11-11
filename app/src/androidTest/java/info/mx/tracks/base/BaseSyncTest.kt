@@ -137,6 +137,10 @@ abstract class BaseSyncTest<T : AppCompatActivity> {
         Espresso.onIdle()
         // Foreground-only location permission does not allow this check during setup.
         assertMunichDeviceLocation()
+        // Only verify country filtering if Munich coordinates were used
+        if (lat == MUNICH_LATITUDE && lon == MUNICH_LONGITUDE) {
+            assertMunichCountryFilter()
+        }
     }
 
     fun assertMunichDeviceLocation() {
