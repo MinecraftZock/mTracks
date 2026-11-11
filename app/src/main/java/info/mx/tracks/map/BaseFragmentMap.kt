@@ -481,21 +481,19 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
         }
         map!!.uiSettings.isZoomControlsEnabled = true
         map!!.uiSettings.isMapToolbarEnabled = false
-        map!!.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
-            override fun onMapLoaded() {
-                if (searchView != null) {
-                    searchView!!.visibility = View.VISIBLE
-                }
-                if (isAdded) {
-                    loaderManager.initLoader(LOADER_TRACKS, null, this@BaseFragmentMap)
-                    if (interestLatLng != null) {
-                        zoomToInterestLocation()
-                    }
-                }
-            }
-        })
-
         updateClustering(true)
+    }
+
+    override fun onMapLoaded() {
+        if (searchView != null) {
+            searchView!!.visibility = View.VISIBLE
+        }
+        if (isAdded) {
+            loaderManager.initLoader(LOADER_TRACKS, null, this)
+            if (interestLatLng != null) {
+                zoomToInterestLocation()
+            }
+        }
     }
 
     private fun askForMergeDlg(targetId: Long?, trackstageRecord: TrackstageRecord) {

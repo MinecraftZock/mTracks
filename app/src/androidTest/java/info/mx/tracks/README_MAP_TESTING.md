@@ -95,6 +95,9 @@ See `ActivityMapExtensionLocationTest.kt` for a complete working example with mu
 ## Important Notes
 
 1. **IdlingResource**: The tests register `MapIdlingResource` to wait for the map to load completely.
+   Each map fragment owns at most one pending load. Completion or view destruction releases
+   that load; repeated resumes do not increment it again, and callbacks from destroyed views
+   cannot release another fragment's load.
 
 2. **Thread.sleep()**: Used to allow time for map rendering. In production tests, consider using IdlingResources or ViewMatchers to wait for specific UI elements.
 
@@ -174,9 +177,12 @@ fun testMapZoomAndPan() {
 - Verify internet connectivity on the test device
 
 ### Test times out
-- Increase IdlingResource timeout in `BaseSyncTest`
-- Add longer sleep times for slower devices
 - Check if `MapIdlingResource` is properly registered
+- For `busy resources=MAP-LOAD`, check Google Maps authentication, connectivity, and
+  whether `onMapLoaded()` fires. A live map that never finishes loading remains busy;
+  extending timeouts or resetting the shared counter does not fix the underlying failure.
+- `ActivityMapExtensionLocationTest` also covers view recreation and closing during load
+  to detect pending loads leaking between tests.
 
 ### Location not applied
 - Verify the Intent extras are using the correct keys (`ActivityMapExtension.LAT` and `ActivityMapExtension.LON`)

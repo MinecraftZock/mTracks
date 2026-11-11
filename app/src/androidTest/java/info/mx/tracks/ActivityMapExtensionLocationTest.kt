@@ -1,7 +1,11 @@
 package info.mx.tracks
 
+import android.content.Intent
 import android.graphics.Bitmap
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.graphics.writeToTestStorage
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.captureToBitmap
@@ -11,6 +15,7 @@ import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.map.MapIdlingResource
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,6 +38,28 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
     @After
     fun unregisterMapIdlingResource() {
         IdlingRegistry.getInstance().unregister(MapIdlingResource.countingIdlingResource)
+    }
+
+    @Test
+    fun testMapAfterRecreation() {
+        startActivity<ActivityMapExtension>()
+        val scenario = requireNotNull(activityScenario)
+        scenario.recreate()
+        Espresso.onIdle()
+        scenario.close()
+        activityScenario = null
+        assertTrue("Recreated map leaked a pending load", MapIdlingResource.countingIdlingResource.isIdleNow)
+    }
+
+    @Test
+    fun testMapAfterClosingDuringLoad() {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityMapExtension::class.java)
+        repeat(2) {
+            ActivityScenario.launch<ActivityMapExtension>(intent).use { }
+            assertTrue("Closed map leaked a pending load", MapIdlingResource.countingIdlingResource.isIdleNow)
+        }
+        startActivity<ActivityMapExtension>()
+        assertTrue("New map did not finish loading", MapIdlingResource.countingIdlingResource.isIdleNow)
     }
 
     /**
