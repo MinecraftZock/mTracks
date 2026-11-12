@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.robotoworks.mechanoid.db.SQuery
 import info.hannes.commonlib.DateHelper.getTimeStrFromMinutesDay
 import info.mx.commonlib.LocationHelper.getFormatDistance
+import info.mx.core.MxCoreApplication
 import info.mx.core.rest.google.Routes
 import info.mx.core_generated.prefs.MxPreferences
 import info.mx.core_generated.sqlite.MxInfoDBContract.Tracks
@@ -147,7 +148,9 @@ object DistanceHelper {
             }
             viewDistance.text = getFormatDistance(prefs.unitsKm, distNew)
             if (distanceOld != 0) {
-                viewDistance.alpha = 0.5f
+                if (!MxCoreApplication.isEmulator) {
+                    viewDistance.alpha = 0.5f
+                }
             } else {
                 viewDistance.alpha = 1f
             }
@@ -191,7 +194,9 @@ object DistanceHelper {
             viewDistance.text =
                 getFormatDistance(prefs.unitsKm, distNew)
             if (distanceOld != 0) {
-                viewDistance.alpha = 0.5f
+                if (!MxCoreApplication.isEmulator) {
+                    viewDistance.alpha = 0.5f
+                }
             } else {
                 viewDistance.alpha = 1f
             }
