@@ -944,9 +944,11 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                         if (map === currentMap) {
                             if (batchScreenshotClusters) {
                                 updateClustering(true)
-                                Handler(Looper.getMainLooper()).post {
-                                    finishMapContentLoad()
-                                }
+                                currentMap.snapshot(object : GoogleMap.SnapshotReadyCallback {
+                                    override fun onSnapshotReady(bitmap: android.graphics.Bitmap?) {
+                                        finishMapContentLoad()
+                                    }
+                                })
                             } else {
                                 finishMapContentLoad()
                             }
