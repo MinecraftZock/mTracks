@@ -12,6 +12,8 @@ import timber.log.Timber
 abstract class FragmentMapBase : FragmentBase() {
 
     private var mapFragment: SupportMapFragment? = null
+    private var pendingMapLoad: Any? = null
+    private var mapLoaded = false
     protected var map: GoogleMap? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,19 +34,65 @@ abstract class FragmentMapBase : FragmentBase() {
     }
 
     private fun setUpMapIfNeeded() {
-        if (map == null) {
-            MapIdlingResource.increment()
-//            MapIdlingResource.increment()
-            mapFragment?.getExtendedMapAsync(object : OnMapReadyCallback {
-                override fun onMapReady(googleMap: GoogleMap) {
-                    map = googleMap
-                    MapIdlingResource.decrement()
-                    setUpMap()
-                    // map!!.setOnMapLoadedCallback { MapIdlingResource.decrement() }
+        if (map != null || pendingMapLoad != null) {
+            return
+        }
+        val fragment = checkNotNull(mapFragment) { "Cannot load map without a SupportMapFragment" }
+        val load = Any()
+        pendingMapLoad = load
+        MapIdlingResource.increment()
+        fragment.getExtendedMapAsync(object : OnMapReadyCallback {
+            override fun onMapReady(googleMap: GoogleMap) {
+                if (pendingMapLoad !== load) {
+                    Timber.d("Ignoring map readiness callback for a destroyed view")
+                    return
                 }
-            })
+                map = googleMap
+                if (!MapRenderingMode.screenshotMode) {
+                    googleMap.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
+                        override fun onMapLoaded() {
+                            if (pendingMapLoad !== load) {
+                                return
+                            }
+                            mapLoaded = true
+                            this@FragmentMapBase.onMapLoaded()
+                        }
+                    })
+                }
+                setUpMap()
+                if (MapRenderingMode.screenshotMode) {
+                    mapLoaded = true
+                    this@FragmentMapBase.onMapLoaded()
+                }
+            }
+        })
+    }
+
+    private fun finishMapLoad() {
+        if (pendingMapLoad != null) {
+            pendingMapLoad = null
+            MapIdlingResource.decrement()
         }
     }
+
+    protected fun finishMapContentLoad() {
+        if (mapLoaded) {
+            finishMapLoad()
+        }
+    }
+
+    override fun onDestroyView() {
+        if (pendingMapLoad != null) {
+            Timber.w("Cancelling unfinished map load because its view was destroyed")
+            finishMapLoad()
+        }
+        map = null
+        mapFragment = null
+        mapLoaded = false
+        super.onDestroyView()
+    }
+
+    protected abstract fun onMapLoaded()
 
     protected abstract fun setUpMap()
 }

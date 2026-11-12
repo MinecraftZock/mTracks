@@ -94,9 +94,23 @@ See `ActivityMapExtensionLocationTest.kt` for a complete working example with mu
 
 ## Important Notes
 
-1. **IdlingResource**: The tests register `MapIdlingResource` to wait for the map to load completely.
+1. **IdlingResource**: The tests register `MapIdlingResource` to wait for map readiness and app-owned marker updates.
+   Each map fragment owns at most one pending load. Completion or view destruction releases
+   that load; repeated resumes do not increment it again, and callbacks from destroyed views
+   cannot release another fragment's load.
 
-2. **Thread.sleep()**: Used to allow time for map rendering. In production tests, consider using IdlingResources or ViewMatchers to wait for specific UI elements.
+2. **Deterministic maps**: `BaseSyncTest` enables a debug-only screenshot mode before launch
+   and resets it after activity cleanup. Maps use `MAP_TYPE_NONE`, no traffic or device-location
+   layers, and a fixed initial zoom (12) and default position (Munich). Intent coordinates still
+   select the target, and camera positioning is immediate. App markers, controls, and overlays
+   remain visible. Screenshot readiness does not depend on downloading Google tiles.
+   Track-edit maps also suppress tiles. Normal app launches do not enable this mode.
+   Their marker camera is positioned immediately at zoom 15, and the long-press hint
+   is always shown without changing its usage counter. Screenshot capture waits for
+   edit-map initialization and the renderer's snapshot callback, so marker position
+   and hint do not depend on test order or camera-animation timing.
+   Detail screenshots scroll the edit form directly rather than swiping across the
+   embedded map, which would pan the camera and move the marker between captures.
 
 3. **Screenshots**: Tests automatically capture screenshots for visual verification. Find them in:
    ```
@@ -106,6 +120,28 @@ See `ActivityMapExtensionLocationTest.kt` for a complete working example with mu
 4. **Permissions**: Make sure location permissions are granted if your test requires device location.
 
 5. **Test Isolation**: Each test uses `ActivityScenario.launch().use { }` which ensures proper cleanup after each test.
+
+## Real-map integration (no screenshot comparison)
+
+`RealMapIntegrationTest` is skipped unless explicitly enabled. It uses normal map rendering,
+waits for `onMapLoaded()` and app marker updates, verifies mock device location, and does not
+write screenshots:
+
+```bash
+./gradlew :app:connectedPaidDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=info.mx.tracks.RealMapIntegrationTest \
+  -Pandroid.testInstrumentationRunnerArguments.realMaps=true
+```
+
+Configure `mapKey` in the existing encrypted signing properties. CI now uses this key instead
+of overriding it with `"dummy"`; authorize the CI debug certificate SHA-1 and app package in
+its Android restrictions. The integration test fails explicitly for a missing/dummy key.
+Default CI screenshot runs keep tiles disabled regardless of key availability. To run the
+integration check in CI, use a separate job with the command above and no screenshot comparison
+or baseline-update steps.
+
+The first screenshot-mode run changes map backgrounds and removes the device-location layer.
+Review and update the affected baselines once; subsequent tile/style changes will not affect them.
 
 ## Advanced Testing
 
@@ -174,9 +210,13 @@ fun testMapZoomAndPan() {
 - Verify internet connectivity on the test device
 
 ### Test times out
-- Increase IdlingResource timeout in `BaseSyncTest`
-- Add longer sleep times for slower devices
 - Check if `MapIdlingResource` is properly registered
+- For `busy resources=MAP-LOAD`, check Google Maps authentication, connectivity, and
+  whether `onMapLoaded()` fires in real-map mode. In screenshot mode check map readiness
+  and app marker loading instead. A real map that never finishes loading remains busy;
+  extending timeouts or resetting the shared counter does not fix the underlying failure.
+- `ActivityMapExtensionLocationTest` also covers view recreation and closing during load
+  to detect pending loads leaking between tests.
 
 ### Location not applied
 - Verify the Intent extras are using the correct keys (`ActivityMapExtension.LAT` and `ActivityMapExtension.LON`)

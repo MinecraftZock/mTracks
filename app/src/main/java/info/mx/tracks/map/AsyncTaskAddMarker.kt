@@ -35,16 +35,15 @@ class AsyncTaskAddMarker internal constructor(
      * Call this from a coroutine scope (e.g., lifecycleScope.launch { ... })
      */
     suspend fun execute() {
-        val startTime = System.currentTimeMillis()
-
-        // Prepare tracks on main thread (cursor access)
-        prepareTracks(startTime)
-
-        // Process markers and draw them
-        val resultBuilder = processMarkers()
-
-        // Finalize on main thread
-        finalize(resultBuilder, startTime)
+        MapIdlingResource.increment()
+        try {
+            val startTime = System.currentTimeMillis()
+            prepareTracks(startTime)
+            val resultBuilder = processMarkers()
+            finalize(resultBuilder, startTime)
+        } finally {
+            MapIdlingResource.decrement()
+        }
     }
 
     private fun prepareTracks(startTime: Long) {

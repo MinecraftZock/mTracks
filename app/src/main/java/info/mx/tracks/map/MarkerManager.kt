@@ -10,30 +10,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import info.mx.tracks.R
 import info.mx.tracks.common.BitmapHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * Add filtered markers to the map asynchronously using coroutines.
- * This function launches a coroutine that processes the markers.
+ * Returns after all markers have been drawn, including an empty result.
  *
  * @param tracksCursor Cursor containing track data
  * @param animateTo Whether to animate the camera to show all markers
- * @param scope Optional CoroutineScope to use. If not provided, uses a default IO scope.
  */
-fun GoogleMap.addFilteredMarkersAsync(
+suspend fun GoogleMap.addFilteredMarkersAsync(
     tracksCursor: Cursor,
-    animateTo: Boolean,
-    scope: CoroutineScope? = null
+    animateTo: Boolean
 ) {
     if (tracksCursor.count > 0) {
         val markerTask = AsyncTaskAddMarker(this, animateTo, tracksCursor)
-        // Launch in the provided scope or create a default one
-        val coroutineScope = scope ?: CoroutineScope(Dispatchers.Main)
-        coroutineScope.launch {
-            markerTask.execute()
-        }
+        markerTask.execute()
     }
 }
 

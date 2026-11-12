@@ -127,8 +127,16 @@ abstract class BaseTrackDetailTest(private val restTrackId: Long) : BaseSyncTest
         onView(withId(R.id.menu_track_edit)).perform(click())
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editTop") })
-        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
-        onView(withId(R.id.scrollviewEdit)).perform(swipeDown())
+        onView(withId(R.id.scrollviewEdit)).perform(object : ViewAction {
+            override fun getConstraints(): Matcher<View> = withId(R.id.scrollviewEdit)
+
+            override fun getDescription() = "Scroll edit form to top without panning the embedded map"
+
+            override fun perform(uiController: UiController, view: View) {
+                view.scrollTo(0, 0)
+                uiController.loopMainThreadUntilIdle()
+            }
+        })
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap -> bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-editBottom") })
         Espresso.pressBack()

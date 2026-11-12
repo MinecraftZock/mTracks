@@ -43,6 +43,8 @@ import info.mx.tracks.common.StatusHelper
 import info.mx.tracks.databinding.FragmentTrackEditBinding
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.map.FragmentMapScroll
+import info.mx.tracks.map.MapRenderingMode
+import info.mx.tracks.map.MapIdlingResource
 import info.mx.core_generated.ops.AbstractOpGetLatLngOperation
 import info.mx.core_generated.ops.AbstractOpPostTrackAppovedOperation
 import info.mx.core.ops.OpGetLatLngOperation
@@ -63,6 +65,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     protected var map: GoogleMap? = null
     private var marker: Marker? = null
+    private var pendingScreenshotMap: Any? = null
     private var getMoviesOperationExecutor: OperationExecutor? = null
 
     protected var stageId: Long? = null
@@ -146,6 +149,9 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     }
 
     override fun onDestroyView() {
+        finishScreenshotMap()
+        map = null
+        marker = null
         super.onDestroyView()
         _binding = null
     }
@@ -194,11 +200,7 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             binding.imageToggleBottom.visibility = View.GONE
             params.height = smallRatio
             if (marker != null) {
-                map!!.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        marker!!.position, 15f
-                    )
-                )
+                positionMap(marker!!.position)
             }
         }
         binding.teLayoutMap.layoutParams = params
@@ -644,9 +646,20 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
             mapFragment = parentFragmentManager.findFragmentById(R.id.map_edit) as FragmentMapScroll?
         }
         if (map == null && mapFragment != null) {
+            val load = Any()
+            if (MapRenderingMode.screenshotMode) {
+                if (pendingScreenshotMap != null) {
+                    return
+                }
+                pendingScreenshotMap = load
+                MapIdlingResource.increment()
+            }
             mapFragment.getMapAsync { googleMap: GoogleMap ->
+                if (_binding == null || (MapRenderingMode.screenshotMode && pendingScreenshotMap !== load)) {
+                    return@getMapAsync
+                }
                 map = googleMap.apply {
-                    mapType = GoogleMap.MAP_TYPE_HYBRID
+                    mapType = if (MapRenderingMode.screenshotMode) GoogleMap.MAP_TYPE_NONE else GoogleMap.MAP_TYPE_HYBRID
                     if (permissionHelper.hasLocationPermission()) {
                         isMyLocationEnabled = false
                     }
@@ -655,11 +668,22 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                     uiSettings.isMapToolbarEnabled = false
                     setOnMarkerDragListener(this@BaseFragmentTrackEdit)
                     setOnMarkerClickListener(this@BaseFragmentTrackEdit)
-                    setOnMapLoadedCallback { doAfterMapLoaded() }
+                    if (!MapRenderingMode.screenshotMode) {
+                        setOnMapLoadedCallback { doAfterMapLoaded() }
+                    }
                 }
 
                 fillMask(id)
                 setUpLocationClientIfNeeded()
+                if (MapRenderingMode.screenshotMode) {
+                    doAfterMapLoaded()
+                    googleMap.snapshot {
+                        checkNotNull(it) { "Edit map renderer did not produce a snapshot" }
+                        if (pendingScreenshotMap === load) {
+                            finishScreenshotMap()
+                        }
+                    }
+                }
             }
             id = 0
             if (requireActivity().intent.extras != null && requireActivity().intent.extras!!.containsKey(FragmentUpDown.RECORD_ID_LOCAL)) {
@@ -679,6 +703,22 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     protected open fun doAfterMapLoaded() = Unit
 
+    private fun finishScreenshotMap() {
+        if (pendingScreenshotMap != null) {
+            pendingScreenshotMap = null
+            MapIdlingResource.decrement()
+        }
+    }
+
+    private fun positionMap(position: LatLng) {
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(position, 15f)
+        if (MapRenderingMode.screenshotMode) {
+            map?.moveCamera(cameraUpdate)
+        } else {
+            map?.animateCamera(cameraUpdate)
+        }
+    }
+
     private fun addMarker(latlng: LatLng) {
         marker?.remove()
         map?.let {
@@ -689,12 +729,14 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                     .draggable(true)
             )
             val clickZlr = MxPreferences.instance.markerShowLongClickText
-            if (clickZlr < MAX_MARKER_TEXT_SHOW) {
+            if (MapRenderingMode.screenshotMode || clickZlr < MAX_MARKER_TEXT_SHOW) {
                 marker?.title = requireActivity().getString(R.string.stage_longclick)
-                MxPreferences.instance.edit().putMarkerShowLongClickText(clickZlr + 1).commit()
+                if (!MapRenderingMode.screenshotMode) {
+                    MxPreferences.instance.edit().putMarkerShowLongClickText(clickZlr + 1).commit()
+                }
                 marker?.showInfoWindow()
             }
-            it.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+            positionMap(latlng)
         }
     }
 
