@@ -123,7 +123,7 @@ android {
                 signingConfig = signingConfigs.getByName("debugCI")
                 println("I run on Github and use for 'debug' the DEBUG signing")
                 buildConfigField("boolean", RUN_CI, "true")
-                resValue("string", "GOOGLE_MAP_API_KEY", "dummy")
+                resValue("string", "GOOGLE_MAP_API_KEY", mapKey.toString())
             } else {
                 signingConfig = signingConfigs.getByName("release")
                 println("I use for 'debug' the RELEASE signing. Reason is to run it locally")

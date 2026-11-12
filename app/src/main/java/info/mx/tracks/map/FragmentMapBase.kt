@@ -13,6 +13,7 @@ abstract class FragmentMapBase : FragmentBase() {
 
     private var mapFragment: SupportMapFragment? = null
     private var pendingMapLoad: Any? = null
+    private var mapLoaded = false
     protected var map: GoogleMap? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,16 +48,22 @@ abstract class FragmentMapBase : FragmentBase() {
                     return
                 }
                 map = googleMap
-                googleMap.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
-                    override fun onMapLoaded() {
-                        if (pendingMapLoad !== load) {
-                            return
+                if (!MapRenderingMode.screenshotMode) {
+                    googleMap.setOnMapLoadedCallback(object : GoogleMap.OnMapLoadedCallback {
+                        override fun onMapLoaded() {
+                            if (pendingMapLoad !== load) {
+                                return
+                            }
+                            mapLoaded = true
+                            this@FragmentMapBase.onMapLoaded()
                         }
-                        finishMapLoad()
-                        this@FragmentMapBase.onMapLoaded()
-                    }
-                })
+                    })
+                }
                 setUpMap()
+                if (MapRenderingMode.screenshotMode) {
+                    mapLoaded = true
+                    this@FragmentMapBase.onMapLoaded()
+                }
             }
         })
     }
@@ -68,6 +75,12 @@ abstract class FragmentMapBase : FragmentBase() {
         }
     }
 
+    protected fun finishMapContentLoad() {
+        if (mapLoaded) {
+            finishMapLoad()
+        }
+    }
+
     override fun onDestroyView() {
         if (pendingMapLoad != null) {
             Timber.w("Cancelling unfinished map load because its view was destroyed")
@@ -75,6 +88,7 @@ abstract class FragmentMapBase : FragmentBase() {
         }
         map = null
         mapFragment = null
+        mapLoaded = false
         super.onDestroyView()
     }
 

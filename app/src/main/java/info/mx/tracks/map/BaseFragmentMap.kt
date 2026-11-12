@@ -335,6 +335,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun setMapTypeFromPrefs() {
         if (map != null) {
+            if (MapRenderingMode.screenshotMode) {
+                map!!.mapType = GoogleMap.MAP_TYPE_NONE
+                return
+            }
             when (MxPreferences.instance.mapType) {
                 0 -> map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
                 1 -> map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
@@ -471,7 +475,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 }
             }
         })
-        map!!.isTrafficEnabled = MxPreferences.instance.mapTraffic
+        map!!.isTrafficEnabled = !MapRenderingMode.screenshotMode && MxPreferences.instance.mapTraffic
         if (permissionHelper.hasLocationPermission()) {
             enableMyLocation()
         } else {
@@ -644,7 +648,10 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (permissionHelper.hasLocationPermission() && map != null) {
-            map!!.isMyLocationEnabled = true
+            map!!.isMyLocationEnabled = !MapRenderingMode.screenshotMode
+            if (MapRenderingMode.screenshotMode) {
+                map!!.uiSettings.isMyLocationButtonEnabled = false
+            }
         }
     }
 
@@ -830,7 +837,12 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
 
     private fun zoomToInterestLocation() {
         if (interestLatLng != null && map != null) {
-            map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(interestLatLng!!, MxPreferences.instance.mapZoom))
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(interestLatLng!!, MxPreferences.instance.mapZoom)
+            if (MapRenderingMode.screenshotMode) {
+                map!!.moveCamera(cameraUpdate)
+            } else {
+                map!!.animateCamera(cameraUpdate)
+            }
             Timber.d("animateCameraInterest $interestLatLng ${MxPreferences.instance.mapZoom}")
         }
     }
@@ -919,15 +931,14 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                     }
                 }
 
-                if (!MxPreferences.instance.mapCluster) {
-                    lifecycleScope.launch {
-                        map?.clearTrackMarkers()
-                        map?.addFilteredMarkersAsync(cursor, false)
-                    }
-                } else {
-                    lifecycleScope.launch {
-                        map?.clearTrackMarkers()
-                        map?.addFilteredMarkersAsync(cursor, false)
+                val currentMap = map
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (currentMap != null) {
+                        currentMap.clearTrackMarkers()
+                        currentMap.addFilteredMarkersAsync(cursor, false)
+                        if (map === currentMap) {
+                            finishMapContentLoad()
+                        }
                     }
                 }
 
@@ -1036,7 +1047,7 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
     override fun onMapButtonTrafficClicked() {
         val show = binding.mapButtonsOverlay.toggleTrafficShow()
         if (map != null) {
-            map!!.isTrafficEnabled = show
+            map!!.isTrafficEnabled = !MapRenderingMode.screenshotMode && show
             MxPreferences.instance.edit().putMapTraffic(show).commit()
         }
     }

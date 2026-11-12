@@ -11,6 +11,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.androidmapsextensions.GoogleMap
 import info.mx.tracks.base.BaseSyncTest
 import info.mx.tracks.map.ActivityMapExtension
 import info.mx.tracks.map.MapIdlingResource
@@ -46,9 +47,16 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
         val scenario = requireNotNull(activityScenario)
         scenario.recreate()
         Espresso.onIdle()
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE)
         scenario.close()
         activityScenario = null
         assertTrue("Recreated map leaked a pending load", MapIdlingResource.countingIdlingResource.isIdleNow)
+    }
+
+    @Test
+    fun testScreenshotMapRendering() {
+        startActivity<ActivityMapExtension>()
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE)
     }
 
     @Test
@@ -56,6 +64,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
         val intent = Intent(ApplicationProvider.getApplicationContext(), ActivityMapExtension::class.java)
         repeat(2) {
             ActivityScenario.launch<ActivityMapExtension>(intent).use { }
+            Espresso.onIdle()
             assertTrue("Closed map leaked a pending load", MapIdlingResource.countingIdlingResource.isIdleNow)
         }
         startActivity<ActivityMapExtension>()
@@ -69,6 +78,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
     fun testMapWithNewYorkLocation() {
         // Create intent with specific location (New York City)
         startActivity<ActivityMapExtension>(40.7128, -74.0060)
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE, 40.7128, -74.0060)
 
         // Verify activity is displayed and capture screenshot
         onView(isRoot()).perform(captureToBitmap { bitmap: Bitmap ->
@@ -83,6 +93,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
     fun testMapWithTokyoLocation() {
         // Create intent with specific location (Tokyo)
         startActivity<ActivityMapExtension>(35.6762, 139.6503)
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE, 35.6762, 139.6503)
 
         // Verify activity is displayed and capture screenshot
         onView(isRoot()).perform(captureToBitmap { bitmap: Bitmap ->
@@ -97,6 +108,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
     fun testMapWithBerlinLocation() {
         // Create intent with specific location (Berlin)
         startActivity<ActivityMapExtension>(52.5200, 13.4050)
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE, 52.5200, 13.4050)
 
         // Verify activity is displayed and capture screenshot
         onView(isRoot()).perform(captureToBitmap { bitmap: Bitmap ->
@@ -113,6 +125,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
         startActivity<ActivityMapExtension>()
 
         // Verify activity is displayed and capture screenshot
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE)
         onView(isRoot())
             .perform(captureToBitmap { bitmap: Bitmap ->
                 bitmap.writeToTestStorage("${javaClass.simpleName}_${nameRule.methodName}-mx-track-location")
@@ -130,6 +143,7 @@ class ActivityMapExtensionLocationTest : BaseSyncTest<ActivityMapExtension>() {
     @Test
     fun testMapWithoutLocation() {
         startActivity<ActivityMapExtension>(0.0, 0.0)
+        assertMapRendering(GoogleMap.MAP_TYPE_NONE)
 
         // Verify activity is displayed and capture screenshot
         onView(isRoot())
