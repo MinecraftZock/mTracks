@@ -66,6 +66,9 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
     protected var map: GoogleMap? = null
     private var marker: Marker? = null
     private var pendingScreenshotMap: Any? = null
+    private var pendingScreenshotMapView: View? = null
+    private var pendingScreenshotMapLayoutListener: View.OnLayoutChangeListener? = null
+    private var pendingScreenshotMapAttachListener: View.OnAttachStateChangeListener? = null
     private var getMoviesOperationExecutor: OperationExecutor? = null
 
     protected var stageId: Long? = null
@@ -677,12 +680,8 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
                 setUpLocationClientIfNeeded()
                 if (MapRenderingMode.screenshotMode) {
                     doAfterMapLoaded()
-                    googleMap.snapshot {
-                        checkNotNull(it) { "Edit map renderer did not produce a snapshot" }
-                        if (pendingScreenshotMap === load) {
-                            finishScreenshotMap()
-                        }
-                    }
+                    val mapView = checkNotNull(mapFragment.view) { "Edit map view disappeared before screenshot capture" }
+                    snapshotMapWhenLaidOut(mapView, googleMap, load)
                 }
             }
             id = 0
@@ -703,8 +702,54 @@ abstract class BaseFragmentTrackEdit : FragmentBase(), GoogleMap.OnMarkerDragLis
 
     protected open fun doAfterMapLoaded() = Unit
 
+    private fun snapshotMapWhenLaidOut(mapView: View, googleMap: GoogleMap, load: Any) {
+        fun captureWhenReady() {
+            if (pendingScreenshotMap !== load) {
+                return
+            }
+            if (!mapView.isAttachedToWindow || mapView.width <= 0 || mapView.height <= 0) {
+                return
+            }
+
+            pendingScreenshotMapLayoutListener?.let(mapView::removeOnLayoutChangeListener)
+            pendingScreenshotMapAttachListener?.let(mapView::removeOnAttachStateChangeListener)
+            pendingScreenshotMapView = null
+            pendingScreenshotMapLayoutListener = null
+            pendingScreenshotMapAttachListener = null
+
+            googleMap.snapshot {
+                if (pendingScreenshotMap === load) {
+                    checkNotNull(it) { "Edit map renderer did not produce a snapshot" }
+                    finishScreenshotMap()
+                }
+            }
+        }
+
+        pendingScreenshotMapView = mapView
+        pendingScreenshotMapLayoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            captureWhenReady()
+        }
+        pendingScreenshotMapAttachListener = object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(view: View) {
+                captureWhenReady()
+            }
+
+            override fun onViewDetachedFromWindow(view: View) = Unit
+        }
+        mapView.addOnLayoutChangeListener(pendingScreenshotMapLayoutListener)
+        mapView.addOnAttachStateChangeListener(pendingScreenshotMapAttachListener)
+        captureWhenReady()
+    }
+
     private fun finishScreenshotMap() {
         if (pendingScreenshotMap != null) {
+            pendingScreenshotMapView?.let { view ->
+                pendingScreenshotMapLayoutListener?.let(view::removeOnLayoutChangeListener)
+                pendingScreenshotMapAttachListener?.let(view::removeOnAttachStateChangeListener)
+            }
+            pendingScreenshotMapView = null
+            pendingScreenshotMapLayoutListener = null
+            pendingScreenshotMapAttachListener = null
             pendingScreenshotMap = null
             MapIdlingResource.decrement()
         }
