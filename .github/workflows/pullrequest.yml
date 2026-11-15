@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        flavor: [ "paid" ]
+        flavor: [ "paid", "admin" ]
         api: [ 34 ]
         abi: [ x86_64 ]
         tag: [ 'google_apis' ]
