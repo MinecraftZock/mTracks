@@ -1,6 +1,7 @@
 package info.mx.tracks
 
 import android.graphics.Bitmap
+import android.view.View
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.Espresso.onView
@@ -55,16 +56,25 @@ class TrackEditMarkerTest : BaseSyncTest<ActivityTrackEdit>() {
                 startActivity<ActivityTrackEdit>(restTrackId = track.id)
                 val ready = CountDownLatch(1)
                 val actualMap = AtomicReference<GoogleMap>()
+                val mapView = AtomicReference<View>()
                 requireNotNull(activityScenario).onActivity { activity ->
                     val edit = requireNotNull(activity.supportFragmentManager.findFragmentById(R.id.fragment_container))
                     val fragment = edit.childFragmentManager.findFragmentById(R.id.map_edit) as FragmentMapScroll
+                    mapView.set(fragment.requireView())
                     fragment.getMapAsync {
                         actualMap.set(it)
                         ready.countDown()
                     }
                 }
                 assertTrue("Edit map did not become ready", ready.await(10, TimeUnit.SECONDS))
+                Espresso.onIdle()
                 InstrumentationRegistry.getInstrumentation().runOnMainSync {
+                    val edit = requireNotNull(mapView.get())
+                    assertTrue(
+                        "Edit map view must be attached and measured before capture " +
+                            "(attached=${edit.isAttachedToWindow}, size=${edit.width}x${edit.height})",
+                        edit.isAttachedToWindow && edit.width > 0 && edit.height > 0
+                    )
                     val camera = requireNotNull(actualMap.get()).cameraPosition
                     assertEquals(SecHelper.entcryptXtude(track.latitude), camera.target.latitude, 0.00001)
                     assertEquals(SecHelper.entcryptXtude(track.longitude), camera.target.longitude, 0.00001)
