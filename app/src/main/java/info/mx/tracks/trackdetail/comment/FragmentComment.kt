@@ -8,6 +8,8 @@ import android.view.*
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.app.NavUtils
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import com.robotoworks.mechanoid.db.SQuery
 import com.robotoworks.mechanoid.db.SQuery.Op
 import info.mx.tracks.R
@@ -55,24 +57,24 @@ class FragmentComment : FragmentUpDown(), androidx.loader.app.LoaderManager.Load
 
         loaderManager.initLoader(LOADER_RATINGS, arguments, this)
 
-        return view
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-                NavUtils.navigateUpFromSameTask(requireActivity())
-                return true
+        // Setup menu with modern MenuProvider API
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Menu creation handled by activity
             }
-        }
-        return super.onOptionsItemSelected(item)
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        NavUtils.navigateUpFromSameTask(requireActivity())
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        return view
     }
 
     override fun onCreateLoader(id: Int, bundle: Bundle?): androidx.loader.content.Loader<Cursor> {
