@@ -932,12 +932,26 @@ abstract class BaseFragmentMap : FragmentMapBase(), MapOverlayButtonsListener, L
                 }
 
                 val currentMap = map
+                val batchScreenshotClusters = MapRenderingMode.screenshotMode
+                if (batchScreenshotClusters) {
+                    // Batch marker updates so screenshots see one complete cluster refresh.
+                    updateClustering(false)
+                }
                 viewLifecycleOwner.lifecycleScope.launch {
                     if (currentMap != null) {
                         currentMap.clearTrackMarkers()
                         currentMap.addFilteredMarkersAsync(cursor, false)
                         if (map === currentMap) {
-                            finishMapContentLoad()
+                            if (batchScreenshotClusters) {
+                                updateClustering(true)
+                                currentMap.snapshot(object : GoogleMap.SnapshotReadyCallback {
+                                    override fun onSnapshotReady(bitmap: android.graphics.Bitmap?) {
+                                        finishMapContentLoad()
+                                    }
+                                })
+                            } else {
+                                finishMapContentLoad()
+                            }
                         }
                     }
                 }
