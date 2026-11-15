@@ -1,48 +1,30 @@
 #!/usr/bin/env bash
 
-pwd
+files=(
+   "release.keystore"
+   "debug.keystore"
+   "../app/google-services.json"
+   "Surveilance-playstore.json"
+   "keystore.properties"
+)
 
-if [[ -z "$CRYPT_PASS" ]]
-then
-   read -sp 'Password: ' CRYPT_PASS
-   if [[ -z "$CRYPT_PASS" ]]
-   then
-      echo "\$CRYPT_PASS Still empty"
-      exit 1
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) || exit 1
+cd "$script_dir" || exit 1
+
+has_files=false
+end_options=false
+for arg in "$@"; do
+   if [[ "$end_options" == true ]]; then
+      has_files=true
+   elif [[ "$arg" == "--" ]]; then
+      end_options=true
+   elif [[ "$arg" != "--crypt" && "$arg" != -* ]]; then
+      has_files=true
    fi
+done
+
+if [[ "$has_files" == true ]]; then
+   exec bash "$script_dir/../buildSrc/scripts/decrypt.sh" "$@"
 else
-   echo "\$CRYPT_PASS available"
+   exec bash "$script_dir/../buildSrc/scripts/decrypt.sh" "$@" "${files[@]}"
 fi
-
-openssl version
-
-pushd signing
-
-# to encrypt
-#openssl aes-256-cbc -a -salt -k "$CRYPT_PASS" -in ./signing/release.keystore -out ./signing/release.keystore.enc
-#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ~/.android/debug.keystore -out ./signing/debug.keystore.enc
-#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./app/google-services.json -out ./app/google-services.json.enc
-#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/Surveilance-playstore.json -out ./signing/Surveilance-playstore.json.enc
-#openssl aes-256-cbc -salt -pbkdf2 -k "$CRYPT_PASS" -in ./signing/keystore.properties -out ./signing/keystore.properties.enc
-
-# shellcheck disable=SC2038
-find . -name "*.keystore.enc" | xargs ls -la
-
-# Ubuntu 18.04 (openssl 1.1.0g+) needs -md md5
-# https://askubuntu.com/questions/1067762/unable-to-decrypt-text-files-with-openssl-on-ubuntu-18-04/1076708
-echo release.keystore
-openssl aes-256-cbc -a -d -pbkdf2 -k "$CRYPT_PASS" -in release.keystore.enc -out release.keystore
-echo debug.keystore
-openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in debug.keystore.enc -out debug.keystore
-
-# shellcheck disable=SC2038
-find . -name "*.keystore" | xargs ls -la
-
-echo google-services.json
-openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in ../app/google-services.json.enc -out ../app/google-services.json
-echo Surveilance-playstore.json
-openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in Surveilance-playstore.json.enc -out Surveilance-playstore.json
-echo keystore.properties
-openssl aes-256-cbc -d -pbkdf2 -k "$CRYPT_PASS" -in keystore.properties.enc -out keystore.properties
-
-popd 1>/dev/null
