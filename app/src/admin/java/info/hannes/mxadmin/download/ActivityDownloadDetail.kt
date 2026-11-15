@@ -3,6 +3,8 @@ package info.hannes.mxadmin.download
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import info.mx.tracks.R
 import info.mx.tracks.base.ActivityRx
 
@@ -49,19 +51,24 @@ class ActivityDownloadDetail : ActivityRx() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                // This ID represents the Home or Up button. In the case of this activity, the Up button is shown.
-                // Navigate back to the parent activity.
-                // For more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-                finish()
-                return true
+    override fun onStart() {
+        super.onStart()
+
+        // Setup menu with modern MenuProvider API
+        addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: android.view.Menu, menuInflater: android.view.MenuInflater) {
+                // Menu creation handled by base class or not needed
             }
-        }
-        return super.onOptionsItemSelected(item)
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.STARTED)
     }
 }
